@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["frontend/src/*"],
+      "~/*": ["backend/src/*"]
+    }
+  },
+  "include": ["frontend/**/*", "backend/**/*", "scripts/**/*"],
+  "exclude": ["node_modules", "dist", "build"]
+}
