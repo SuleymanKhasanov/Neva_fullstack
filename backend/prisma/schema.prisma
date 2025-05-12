@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = env("PRISMA_CLIENT_OUTPUT")
 }
 
 datasource db {
@@ -7,9 +8,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Translation {
-  id     Int    @id @default(autoincrement())
-  key    String
-  locale String @default("en")
-  value  String
+model Brand {
+  id          Int       @id @default(autoincrement())
+  categoryId  Int
+  name        String    @unique
+  section     Section
+  category    Category  @relation(fields: [categoryId], references: [id])
+  products    Product[] @relation("ProductToBrand")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  locale      String
+  name        String
+  section     Section
+  brands      Brand[]   @relation
+  products    Product[] @relation("ProductToCategory")
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  brandId     Int?
+  categoryId  Int
+  locale      String
+  name        String
+  image       String?
+  description String
+  section     Section
+  brand       Brand?    @relation("ProductToBrand", fields: [brandId], references: [id])
+  category    Category  @relation("ProductToCategory", fields: [categoryId], references: [id])
+}
+
+enum Section {
+  NEVA
+  X_SOLUTION
 }
