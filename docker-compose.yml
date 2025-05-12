@@ -1,57 +1,43 @@
-# Note: 'version' is obsolete in newer Docker versions, so it's omitted
 services:
   backend:
     build:
-      context: ./
+      context: .
       dockerfile: backend/Dockerfile
     ports:
       - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - images:/app/public/images
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/neva
+      - PRISMA_CLIENT_OUTPUT=/app/generated/prisma
     env_file:
       - backend/.env
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - neva-network
-  # frontend:
-  #   build:
-  #     context: ./
-  #     dockerfile: frontend/Dockerfile
-  #   ports:
-  #     - '3001:3000'
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - neva-network
+    command: ['tail', '-f', '/dev/null']
+
   db:
-    image: postgres:16
+    image: postgres:15
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=neva
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U user -p 5432']
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - neva-network
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
   adminer:
-    image: adminer:4.8.1
+    image: adminer
     ports:
       - '8080:8080'
     depends_on:
       - db
-    environment:
-      - ADMINER_DEFAULT_SERVER=db
-    networks:
-      - neva-network
+
 volumes:
-  postgres_data:
+  images:
+  db_data:
+
 networks:
   neva-network:
     driver: bridge
