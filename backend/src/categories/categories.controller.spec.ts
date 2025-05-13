@@ -1,0 +1,229 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import request from 'supertest';
+import { AppModule } from '../app.module';
+import { PrismaService } from '../../prisma/prisma.service';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
+import { execSync } from 'child_process';
+
+// Очищаем переменные окружения и загружаем .env.test
+process.env = {};
+dotenv.config({
+  path: join(__dirname, '..', '..', '.env.test'),
+  override: true,
+});
+
+describe('CategoriesController (e2e)', () => {
+  let app: INestApplication;
+  let prisma: PrismaService | undefined;
+
+  beforeAll(async () => {
+    // Генерируем Prisma Client перед тестами
+    try {
+      console.log('Generating Prisma Client...');
+      execSync('npx prisma generate', {
+        stdio: 'inherit',
+        cwd: join(__dirname, '..', '..'),
+      });
+      console.log('Prisma Client generated successfully.');
+    } catch (error) {
+      console.error('Failed to generate Prisma Client:', error);
+      throw error;
+    }
+
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    prisma = moduleFixture.get<PrismaService>(PrismaService);
+    console.log('DATABASE_URL in test:', process.env.DATABASE_URL); // Отладка
+    if (prisma) {
+      await prisma.$connect();
+    } else {
+      console.error('PrismaService not initialized.');
+    }
+    await app.init();
+
+    // Очистка и заполнение тестовой БД
+    if (prisma) {
+      await prisma.$executeRaw`TRUNCATE "Category", "Brand" RESTART IDENTITY CASCADE;`;
+      await prisma.category.createMany({
+        data: [
+          {
+            locale: 'uz',
+            name: `Test Category NEVA ${Date.now()}`,
+            section: 'NEVA',
+          },
+          {
+            locale: 'uz',
+            name: `Test Category X_SOLUTION ${Date.now()}`,
+            section: 'X_SOLUTION',
+          },
+          {
+            locale: 'ru',
+            name: `Тестовая Категория NEVA ${Date.now()}`,
+            section: 'NEVA',
+          },
+        ],
+      });
+      await prisma.brand.createMany({
+        data: [
+          {
+            categoryId: 1,
+            name: `Test Brand NEVA ${Date.now()}`,
+            locale: 'uz',
+            section: 'NEVA',
+          },
+          {
+            categoryId: 2,
+            name: `Test Brand X_SOLUTION ${Date.now()}`,
+            locale: 'uz',
+            section: 'X_SOLUTION',
+          },
+          {
+            categoryId: 3,
+            name: `Тестовый Бренд NEVA ${Date.now()}`,
+            locale: 'ru',
+            section: 'NEVA',
+          },
+        ],
+      });
+    }
+  }, 30000);
+
+  beforeEach(async () => {
+    if (prisma) {
+      await prisma.$executeRaw`TRUNCATE "Category", "Brand" RESTART IDENTITY CASCADE;`;
+      await prisma.category.createMany({
+        data: [
+          {
+            locale: 'uz',
+            name: `Test Category NEVA ${Date.now()}`,
+            section: 'NEVA',
+          },
+          {
+            locale: 'uz',
+            name: `Test Category X_SOLUTION ${Date.now()}`,
+            section: 'X_SOLUTION',
+          },
+          {
+            locale: 'ru',
+            name: `Тестовая Категория NEVA ${Date.now()}`,
+            section: 'NEVA',
+          },
+        ],
+      });
+      await prisma.brand.createMany({
+        data: [
+          {
+            categoryId: 1,
+            name: `Test Brand NEVA ${Date.now()}`,
+            locale: 'uz',
+            section: 'NEVA',
+          },
+          {
+            categoryId: 2,
+            name: `Test Brand X_SOLUTION ${Date.now()}`,
+            locale: 'uz',
+            section: 'X_SOLUTION',
+          },
+          {
+            categoryId: 3,
+            name: `Тестовый Бренд NEVA ${Date.now()}`,
+            locale: 'ru',
+            section: 'NEVA',
+          },
+        ],
+      });
+    }
+  });
+
+  afterAll(async () => {
+    if (prisma) {
+      await prisma.$disconnect();
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Задержка 1 секунда
+    }
+    await app.close();
+  });
+
+  it('GET /categories/neva should return categories with brands for uz locale', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/categories/neva')
+      .query({ locale: 'uz', page: 1, limit: 10 })
+      .expect(200);
+
+    expect(response.body).toEqual({
+      data: expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(Number),
+          name: expect.stringContaining('Test Category NEVA'),
+          section: 'NEVA',
+          locale: 'uz',
+          brands: expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(Number),
+              name: expect.stringContaining('Test Brand NEVA'),
+              section: 'NEVA',
+              locale: 'uz',
+            }),
+          ]),
+        }),
+      ]),
+      meta: {
+        total: 1,
+        page: 1,
+        limit: 10,
+        totalPages: 1,
+      },
+    });
+  });
+
+  it('GET /categories/x-solution should return categories for uz locale', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/categories/x-solution')
+      .query({ locale: 'uz', page: 1, limit: 10 })
+      .expect(200);
+
+    expect(response.body.data).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          section: 'X_SOLUTION',
+          name: expect.stringContaining('Test Category X_SOLUTION'),
+        }),
+      ])
+    );
+    expect(response.body.meta.total).toBe(1);
+  });
+
+  it('GET /categories/neva with ru locale should return categories', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/categories/neva')
+      .query({ locale: 'ru', page: 1, limit: 10 })
+      .expect(200);
+
+    expect(response.body.data).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          locale: 'ru',
+          name: expect.stringContaining('Тестовая Категория NEVA'),
+        }),
+      ])
+    );
+    expect(response.body.meta.total).toBe(1);
+  });
+
+  it('GET /categories/neva with invalid locale should return 400', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/categories/neva')
+      .query({ locale: 'invalid', page: 1, limit: 10 })
+      .expect(400);
+
+    expect(response.body).toEqual({
+      statusCode: 400,
+      message: ['locale must be one of the following values: ru, en, kr, uz'],
+      error: 'Bad Request',
+    });
+  });
+});
