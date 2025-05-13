@@ -2,14 +2,7 @@ import { PrismaClient, Section } from '../generated/prisma/client';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import sharp from 'sharp';
-import fetch from 'node-fetch';
-
-const prisma = new PrismaClient({
-  log: ['query', 'info', 'warn', 'error'],
-});
-const INPUT_DIR = path.join(__dirname, '../data');
-const OUTPUT_DIR = path.join(__dirname, '../public/images');
-const LOCALES = ['ru', 'en', 'ko', 'uz'];
+const fetch = require('node-fetch');
 
 // Интерфейсы для JSON
 interface CategoryJson {
@@ -46,9 +39,16 @@ interface ProductJson {
   category_id: number;
   category: string;
   slug: string;
-  description: string;
+  description: string | null;
   image: string[];
 }
+
+const prisma = new PrismaClient({
+  log: ['query', 'info', 'warn', 'error'],
+});
+const INPUT_DIR = path.join(__dirname, '../data');
+const OUTPUT_DIR = path.join(__dirname, '../public/images');
+const LOCALES = ['ru', 'en', 'kr', 'uz'];
 
 // Хранилище для кэширования путей к изображениям
 const imageCache: Map<string, string> = new Map();
@@ -90,9 +90,7 @@ async function processImage(
 
     await fs.mkdir(outputDir, { recursive: true });
 
-    await sharp(buffer)
-      .webp({ quality: 80 })
-      .toFile(imagePath);
+    await sharp(buffer).webp({ quality: 80 }).toFile(imagePath);
 
     const relativePath = `/images/${filename}`;
     imageCache.set(url, relativePath);
@@ -112,8 +110,11 @@ async function processSubcategories(
 ) {
   for (const subcategory of subcategories) {
     const brands = parseBrands(subcategory.description);
-    const productsInCategory = productsJson.find((p) => p.id === subcategory.id);
+    const productsInCategory = productsJson.find(
+      (p) => p.id === subcategory.id
+    );
 
+    // Создаём категорию для текущей локали
     const categoryRecord = await prisma.category.create({
       data: {
         locale,
@@ -121,57 +122,88 @@ async function processSubcategories(
         section,
       },
     });
-    console.log(`Created category: ${subcategory.name} (ID: ${categoryRecord.id}, Section: ${section}, Locale: ${locale})`);
+    console.log(
+      `Created category: ${subcategory.name} (ID: ${categoryRecord.id}, Section: ${section}, Locale: ${locale})`
+    );
 
+    // Обработка брендов
     const brandRecords = await Promise.all(
       brands.map(async (name: string) => {
+        const brandKey = `${name}-${locale}`; // Уникальный ключ для бренда и локали
         const brand = await prisma.brand.upsert({
-          where: { name },
+          where: {
+            name_locale: {
+              name,
+              locale,
+            },
+          },
           update: {},
           create: {
             name,
+            locale,
             categoryId: categoryRecord.id,
             section,
           },
         });
-        console.log(`Upserted brand: ${name} (ID: ${brand.id}, Section: ${section})`);
+        console.log(
+          `Upserted brand: ${name} (ID: ${brand.id}, Section: ${section}, Locale: ${locale})`
+        );
         return brand;
       })
     );
 
+    // Обработка продуктов
     if (productsInCategory && productsInCategory.products.length > 0) {
-      console.log(`Found products for subcategory ID: ${subcategory.id}, Name: ${subcategory.name}, Product count: ${productsInCategory.products.length}, Locale: ${locale}`);
+      console.log(
+        `Found products for subcategory ID: ${subcategory.id}, Name: ${subcategory.name}, Product count: ${productsInCategory.products.length}, Locale: ${locale}`
+      );
       for (const product of productsInCategory.products) {
-        console.log(`Processing product: ${product.name} (Category ID: ${product.category_id}, Locale: ${locale})`);
-        const image = product.image[0] ? await processImage(product.image[0], product.id, OUTPUT_DIR) : null;
+        console.log(
+          `Processing product: ${product.name} (Category ID: ${product.category_id}, Locale: ${locale})`
+        );
+        const image = product.image[0]
+          ? await processImage(product.image[0], product.id, OUTPUT_DIR)
+          : null;
         const productResult = await prisma.product.create({
           data: {
             brandId: brandRecords.length > 0 ? brandRecords[0].id : null,
             categoryId: categoryRecord.id,
             locale,
             name: product.name,
-            description: product.description,
+            description: product.description || '',
             image,
             section,
           },
         });
-        console.log(`Created product: ${product.name} (ID: ${productResult.id}, Section: ${section}, Locale: ${locale})`);
+        console.log(
+          `Created product: ${product.name} (ID: ${productResult.id}, Section: ${section}, Locale: ${locale})`
+        );
       }
     } else {
-      console.warn(`No products found for subcategory ID: ${subcategory.id}, Name: ${subcategory.name}, Locale: ${locale}`);
+      console.warn(
+        `No products found for subcategory ID: ${subcategory.id}, Name: ${subcategory.name}, Locale: ${locale}`
+      );
     }
 
+    // Рекурсивная обработка вложенных подкатегорий
     if (subcategory.subcategories && subcategory.subcategories.length > 0) {
-      await processSubcategories(subcategory.subcategories, section, productsJson, locale);
+      await processSubcategories(
+        subcategory.subcategories,
+        section,
+        productsJson,
+        locale
+      );
     }
   }
 }
 
 async function mergeAndProcessData() {
   try {
+    // Очистка базы данных
     await prisma.$executeRaw`TRUNCATE "Product", "Category", "Brand" RESTART IDENTITY CASCADE;`;
     console.log('Database cleared');
 
+    // Обработка всех локалей
     for (const locale of LOCALES) {
       console.log(`Processing locale: ${locale}`);
 
@@ -190,15 +222,31 @@ async function mergeAndProcessData() {
       const productsRaw = await fs.readFile(productsPath, 'utf-8');
 
       const categoriesJson = JSON.parse(categoriesRaw).data as CategoryJson[];
-      const productsJson = JSON.parse(productsRaw).data as ProductCategoryJson[];
+      const productsJson = JSON.parse(productsRaw)
+        .data as ProductCategoryJson[];
 
-      console.log(`Subcategory IDs from categories_${locale}.json:`, categoriesJson.flatMap(cat => cat.subcategories.map(sub => sub.id)));
-      console.log(`Category IDs from products_${locale}.json:`, productsJson.map(p => p.id));
-      console.log(`Product Category IDs from products_${locale}.json:`, productsJson.flatMap(p => p.products.map(prod => prod.category_id)));
+      console.log(
+        `Subcategory IDs from categories_${locale}.json:`,
+        categoriesJson.flatMap((cat) => cat.subcategories.map((sub) => sub.id))
+      );
+      console.log(
+        `Category IDs from products_${locale}.json:`,
+        productsJson.map((p) => p.id)
+      );
+      console.log(
+        `Product Category IDs from products_${locale}.json:`,
+        productsJson.flatMap((p) => p.products.map((prod) => prod.category_id))
+      );
 
       for (const category of categoriesJson) {
-        const section = category.name === 'Neva' ? Section.NEVA : Section.X_SOLUTION;
-        await processSubcategories(category.subcategories, section, productsJson, locale);
+        const section =
+          category.name === 'Neva' ? Section.NEVA : Section.X_SOLUTION;
+        await processSubcategories(
+          category.subcategories,
+          section,
+          productsJson,
+          locale
+        );
       }
     }
 
