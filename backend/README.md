@@ -30,6 +30,8 @@ neva_fullstack/
 ├── backend/                  # Бэкенд (NestJS)
 │   ├── src/                  # Исходный код
 │   │   ├── products/         # Модуль продуктов (контроллер, сервис, DTO)
+│   │   ├── categories/       # Модуль категорий (контроллер, сервис, DTO)
+│   │   ├── brands/           # Модуль брендов (контроллер, сервис, DTO)
 │   │   ├── prisma/           # Prisma сервис и конфигурация
 │   │   └── app.module.ts     # Главный модуль приложения
 │   ├── scripts/              # Скрипты для обработки данных
@@ -163,6 +165,11 @@ API предоставляет следующие эндпоинты, задок
 | GET   | `/products/all`         | Получить все продукты с пагинацией    | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
 | GET   | `/products/neva`        | Получить продукты секции NEVA         | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
 | GET   | `/products/x-solution`  | Получить продукты секции X_SOLUTION   | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
+| GET   | `/categories/neva`      | Получить категории секции NEVA        | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
+| GET   | `/categories/x-solution`| Получить категории секции X_SOLUTION  | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
+| GET   | `/brands/all`           | Получить все бренды с пагинацией      | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
+| GET   | `/brands/neva`          | Получить бренды секции NEVA           | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
+| GET   | `/brands/x-solution`    | Получить бренды секции X_SOLUTION     | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
 
 ### Пример запроса
 
@@ -265,6 +272,148 @@ Swagger предоставляет:
 - **Category**: Категории с полями `id`, `locale`, `name`, `section`.
 
 Схема определена в `backend/prisma/schema.prisma`.
+
+## Тестирование
+
+Neva API включает набор end-to-end (e2e) тестов для проверки эндпоинтов `/products`, `/categories` и `/brands`. Тесты написаны с использованием **Jest** и **Supertest**, проверяют корректность ответов API, пагинацию и обработку ошибок (например, неверный `locale`). Тесты используют отдельную тестовую базу данных (`neva_test`) для изоляции от основной базы (`neva`).
+
+### Как работают тесты
+
+- **Тестовые файлы**:
+  - `backend/src/products/products.controller.spec.ts`: Проверяет эндпоинты `/products/all`, `/products/neva`, `/products/x-solution`.
+  - `backend/src/categories/categories.controller.spec.ts`: Проверяет `/categories/neva`, `/categories/x-solution`.
+  - `backend/src/brands/brands.controller.spec.ts`: Проверяет `/brands/all`, `/brands/neva`, `/brands/x-solution`.
+- **Изоляция**: Тесты используют тестовую базу `neva_test` (конфигурация в `backend/.env.test`), чтобы не затрагивать основную базу.
+- **Подготовка данных**: Перед каждым тестом база очищается (`TRUNCATE`), и вставляются тестовые данные (`Category`, `Brand`, `Product`) с уникальными именами.
+- **Проверки**: Тесты проверяют HTTP-статусы (200, 400), структуру ответа (`data`, `meta`) и корректность фильтрации по `locale` и `section`.
+
+### Запуск тестов
+
+Тесты запускаются в Docker-контейнере для согласованности с продакшен-окружением. Требуется запущенная тестовая база данных (`test_db`).
+
+1. **Убедись, что тестовая база запущена**:
+
+   ```bash
+   cd neva_fullstack
+   docker-compose up -d test_db
+   ```
+
+2. **Проверь `.env.test`**:
+
+   Убедись, что `backend/.env.test` содержит:
+
+   ```env
+   DATABASE_URL="postgresql://user:password@test_db:5432/neva_test"
+   PRISMA_CLIENT_OUTPUT="/app/backend/generated/prisma/client"
+   ```
+
+3. **Применение миграций для тестовой базы**:
+
+   ```bash
+   docker run -it --rm \
+     --network neva_fullstack_neva-network \
+     -v $(pwd)/backend:/app/backend \
+     -w /app/backend \
+     -e NODE_ENV=test \
+     node:20 \
+     bash -c "./migrate-test.sh"
+   ```
+
+   Скрипт `migrate-test.sh` применяет миграции к `neva_test` с использованием `dotenv-cli`.
+
+4. **Запуск тестов**:
+
+   ```bash
+   docker run -it --rm \
+     --network neva_fullstack_neva-network \
+     -v $(pwd)/backend:/app/backend \
+     -w /app/backend \
+     -e NODE_ENV=test \
+     -e DATABASE_URL="postgresql://user:password@test_db:5432/neva_test" \
+     node:20 \
+     bash -c "yarn install && yarn test"
+   ```
+
+   Флаг `-e DATABASE_URL` явно задаёт тестовую базу, чтобы избежать подключения к основной (`db:5432`).
+
+5. **Проверка покрытия**:
+
+   ```bash
+   docker run -it --rm \
+     --network neva_fullstack_neva-network \
+     -v $(pwd)/backend:/app/backend \
+     -w /app/backend \
+     -e NODE_ENV=test \
+     -e DATABASE_URL="postgresql://user:password@test_db:5432/neva_test" \
+     node:20 \
+     bash -c "yarn install && yarn test:cov"
+   ```
+
+### Устранение неполадок с тестами
+
+- **Ошибка `Can't reach database server at `db:5432``**:
+  - Убедись, что `test_db` запущен:
+
+    ```bash
+    docker ps
+    docker logs neva_fullstack-test_db-1
+    ```
+
+  - Проверь, что `backend/.env.test` указывает на `test_db:5432`:
+
+    ```bash
+    cat backend/.env.test
+    ```
+
+  - Попробуй явно задать `DATABASE_URL` в команде тестов (см. выше).
+
+- **Таймаут тестов**:
+  - Увеличь таймаут в `jest.config.js`:
+
+    ```javascript
+    module.exports = {
+      preset: 'ts-jest',
+      testEnvironment: 'node',
+      testTimeout: 60000, // 60 секунд
+      moduleFileExtensions: ['ts', 'js'],
+      transform: { '^.+\\.ts$': 'ts-jest' },
+      testMatch: ['**/*.spec.ts'],
+    };
+    ```
+
+  - Сохрани:
+
+    ```bash
+    echo -e "module.exports = {\n  preset: 'ts-jest',\n  testEnvironment: 'node',\n  testTimeout: 60000,\n  moduleFileExtensions: ['ts', 'js'],\n  transform: { '^.+\\\\.ts$': 'ts-jest' },\n  testMatch: ['**/*.spec.ts'],\n};" > backend/jest.config.js
+    ```
+
+- **Нарушение уникального ограничения**:
+  - Проверь, что тестовые данные используют уникальные имена (с `Date.now()`):
+
+    ```bash
+    cat backend/src/products/products.controller.spec.ts | grep Date.now
+    ```
+
+  - Убедись, что `TRUNCATE` выполняется перед каждым тестом.
+
+- **Логи для отладки**:
+  - Добавь отладочный вывод в тесты:
+
+    ```bash
+    docker run -it --rm \
+      --network neva_fullstack_neva-network \
+      -v $(pwd)/backend:/app/backend \
+      -w /app/backend \
+      -e NODE_ENV=test \
+      -e DATABASE_URL="postgresql://user:password@test_db:5432/neva_test" \
+      node:20 \
+      bash -c "yarn install && yarn test | grep DATABASE_URL"
+    ```
+
+### Текущие ограничения тестов
+
+- Тесты могут падать из-за проблемы с загрузкой `backend/.env.test`, что приводит к попытке подключения к `db:5432` вместо `test_db:5432`. Для обхода используется явное указание `DATABASE_URL` в команде запуска.
+- Если тесты не работают стабильно, рекомендуется проверить конфигурацию `ConfigModule` в `app.module.ts` и `PrismaService`.
 
 ## Продакшен
 
