@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { GetProductsDto } from './dto/get-products.dto';
 import { Section } from '@prisma/client';
+
+import { PrismaService } from '../../prisma/prisma.service';
+
+import { GetProductsDto } from './dto/get-products.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
   async getAllProducts(dto: GetProductsDto) {
-    const { locale, page, limit = 20 } = dto;
+    const { locale, page } = dto;
+    const limit = 20;
     const skip = (page - 1) * limit;
 
     const [products, total] = await Promise.all([
@@ -24,8 +27,16 @@ export class ProductsService {
       this.prisma.product.count({ where: { locale } }),
     ]);
 
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    const productsWithFullImageUrls = products.map((product) => ({
+      ...product,
+      image: product.image
+        ? `${baseUrl}/public/images/${product.image.split('/images/').pop()}`
+        : null,
+    }));
+
     return {
-      data: products,
+      data: productsWithFullImageUrls,
       meta: {
         total,
         page,
@@ -36,7 +47,8 @@ export class ProductsService {
   }
 
   async getProductsBySection(dto: GetProductsDto, section: Section) {
-    const { locale, page, limit = 20 } = dto;
+    const { locale, page } = dto;
+    const limit = 20;
     const skip = (page - 1) * limit;
 
     const [products, total] = await Promise.all([
@@ -60,8 +72,16 @@ export class ProductsService {
       }),
     ]);
 
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    const productsWithFullImageUrls = products.map((product) => ({
+      ...product,
+      image: product.image
+        ? `${baseUrl}/public/images/${product.image.split('/images/').pop()}`
+        : null,
+    }));
+
     return {
-      data: products,
+      data: productsWithFullImageUrls,
       meta: {
         total,
         page,

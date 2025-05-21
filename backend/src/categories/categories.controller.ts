@@ -1,8 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Section } from '@prisma/client';
+
 import { CategoriesService } from './categories.service';
 import { GetCategoriesDto } from './dto/get-categories.dto';
-import { Section } from '@prisma/client';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Categories')
 @Controller('categories')
