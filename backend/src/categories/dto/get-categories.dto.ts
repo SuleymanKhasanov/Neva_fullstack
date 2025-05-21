@@ -33,5 +33,5 @@ export class GetCategoriesDto {
   @Min(1)
   @Type(() => Number)
   @IsOptional()
-  limit?: number = 20;
+  limit: number = 20;
 }

@@ -10,7 +10,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backend:/app/backend
-      - images:/app/backend/public/images
+      - ./backend/public/images:/app/backend/public/images
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/neva
       - PRISMA_CLIENT_OUTPUT=/app/backend/generated/prisma/client

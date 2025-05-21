@@ -9,7 +9,12 @@ export class CategoriesService {
 
   async getCategoriesBySection(dto: GetCategoriesDto, section: Section) {
     const { locale, page, limit = 20 } = dto;
-    const skip = (page - 1) * limit;
+    const numericLimit = parseInt(limit.toString(), 10);
+    const skip = (page - 1) * numericLimit;
+
+    if (isNaN(numericLimit)) {
+      throw new Error('Limit must be a valid number');
+    }
 
     const [categories, total] = await Promise.all([
       this.prisma.category.findMany({
@@ -18,9 +23,9 @@ export class CategoriesService {
           section,
         },
         skip,
-        take: limit,
+        take: numericLimit,
         include: {
-          brands: true, // Включаем связанные бренды
+          brands: true,
         },
       }),
       this.prisma.category.count({
@@ -36,8 +41,8 @@ export class CategoriesService {
       meta: {
         total,
         page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        limit: numericLimit,
+        totalPages: Math.ceil(total / numericLimit),
       },
     };
   }
