@@ -1,0 +1,59 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type BrandsResponse {
+  brands: [NevaBrand!]!
+}
+
+type CategoriesResponse {
+  categories: [NevaCategory!]!
+}
+
+type NevaBrand {
+  id: Int!
+  locale: String!
+  name: String!
+  section: String!
+}
+
+type NevaCategory {
+  id: Int!
+  locale: String!
+  name: String!
+  section: String!
+}
+
+type NevaProduct {
+  brand: NevaBrand
+  category: NevaCategory!
+  description: String!
+  fullImage: String
+  id: Int!
+  image: String
+  locale: String!
+  name: String!
+  section: String!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+type ProductEdge {
+  cursor: String!
+  node: NevaProduct!
+}
+
+type ProductsResponse {
+  edges: [ProductEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type Query {
+  brands(locale: String!, section: String): BrandsResponse!
+  categories(locale: String!, section: String): CategoriesResponse!
+  products(after: String, brandId: Int, categoryId: Int, first: Int! = 20, locale: String!, section: String): ProductsResponse!
+}

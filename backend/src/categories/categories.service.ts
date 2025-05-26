@@ -1,49 +1,70 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { GetCategoriesDto } from './dto/get-categories.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Injectable, Inject } from '@nestjs/common';
 import { Section } from '@prisma/client';
+import { Cache } from 'cache-manager';
+
+import { PrismaService } from '../../prisma/prisma.service';
+
+import { GetCategoriesDto } from './dto/get-categories.dto';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
 
-  async getCategoriesBySection(dto: GetCategoriesDto, section: Section) {
-    const { locale, page, limit = 20 } = dto;
-    const numericLimit = parseInt(limit.toString(), 10);
-    const skip = (page - 1) * numericLimit;
+  async getCategories(dto: GetCategoriesDto): Promise<{
+    categories: {
+      id: number;
+      name: string;
+      locale: string;
+      section: Section;
+      brands: { id: number; name: string; locale: string; section: Section }[];
+    }[];
+  }> {
+    const { locale, section } = dto;
+    const cacheKey = `categories:locale:${locale}:section:${section || 'all'}`;
+    const cached = await this.cacheManager.get<{
+      categories: {
+        id: number;
+        name: string;
+        locale: string;
+        section: Section;
+        brands: {
+          id: number;
+          name: string;
+          locale: string;
+          section: Section;
+        }[];
+      }[];
+    }>(cacheKey);
+    if (cached) return cached;
 
-    if (isNaN(numericLimit)) {
-      throw new Error('Limit must be a valid number');
-    }
-
-    const [categories, total] = await Promise.all([
-      this.prisma.category.findMany({
-        where: {
-          locale,
-          section,
-        },
-        skip,
-        take: numericLimit,
-        include: {
-          brands: true,
-        },
-      }),
-      this.prisma.category.count({
-        where: {
-          locale,
-          section,
-        },
-      }),
-    ]);
-
-    return {
-      data: categories,
-      meta: {
-        total,
-        page,
-        limit: numericLimit,
-        totalPages: Math.ceil(total / numericLimit),
+    const categories = await this.prisma.category.findMany({
+      where: {
+        locale,
+        ...(section && { section }),
       },
-    };
+      select: {
+        id: true,
+        name: true,
+        locale: true,
+        section: true,
+        brands: {
+          select: {
+            id: true,
+            name: true,
+            locale: true,
+            section: true,
+          },
+        },
+      },
+    });
+
+    const result = { categories };
+    await this.cacheManager.set(cacheKey, result, 300);
+
+    return result;
   }
 }

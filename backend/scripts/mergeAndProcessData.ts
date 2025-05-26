@@ -1,10 +1,11 @@
-import { PrismaClient, Section } from '../generated/prisma/client';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import sharp from 'sharp';
-const fetch = require('node-fetch');
 
-// Интерфейсы для JSON
+import fetch from 'node-fetch';
+import sharp from 'sharp';
+
+import { PrismaClient, Section } from '../generated/prisma/client';
+
 interface CategoryJson {
   id: number;
   name: string;
@@ -51,11 +52,15 @@ const OUTPUT_DIR = path.join(__dirname, '../public/images');
 const LOCALES = ['ru', 'en', 'kr', 'uz'];
 
 // Хранилище для кэширования путей к изображениям
-const imageCache: Map<string, string> = new Map();
+const imageCache: Map<
+  string,
+  { image: string | null; fullImage: string | null }
+> = new Map();
 
 // Функция для парсинга брендов из строки
 function parseBrands(description: string | null): string[] {
   if (!description) return [];
+
   return description
     .split(',')
     .map((brand) => brand.trim())
@@ -72,8 +77,8 @@ async function processImage(
   url: string,
   productId: number,
   outputDir: string
-): Promise<string | null> {
-  if (isSvg(url)) return null;
+): Promise<{ image: string | null; fullImage: string | null }> {
+  if (isSvg(url)) return { image: null, fullImage: null };
 
   if (imageCache.has(url)) {
     return imageCache.get(url)!;
@@ -85,19 +90,32 @@ async function processImage(
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const filename = `product_${productId}_${Date.now()}.webp`;
-    const imagePath = path.join(outputDir, filename);
+    const filename = `product_${productId}_${Date.now()}`;
+    const resizedImagePath = path.join(outputDir, `${filename}_resized.webp`);
+    const fullImagePath = path.join(outputDir, `${filename}_full.webp`);
 
     await fs.mkdir(outputDir, { recursive: true });
 
-    await sharp(buffer).webp({ quality: 80 }).toFile(imagePath);
+    // Миниатюра 400x400
+    await sharp(buffer)
+      .resize(400, 400, { fit: 'cover' })
+      .webp({ quality: 80 })
+      .toFile(resizedImagePath);
 
-    const relativePath = `/images/${filename}`;
-    imageCache.set(url, relativePath);
-    return relativePath;
+    // Полное изображение
+    await sharp(buffer).webp({ quality: 80 }).toFile(fullImagePath);
+
+    const resizedRelativePath = `/images/${filename}_resized.webp`;
+    const fullRelativePath = `/images/${filename}_full.webp`;
+
+    const result = { image: resizedRelativePath, fullImage: fullRelativePath };
+    imageCache.set(url, result);
+
+    return result;
   } catch (error) {
     console.error(`Error processing image ${url}:`, error);
-    return null;
+
+    return { image: null, fullImage: null };
   }
 }
 
@@ -114,7 +132,7 @@ async function processSubcategories(
       (p) => p.id === subcategory.id
     );
 
-    // Создаём категорию для текущей локали
+    // Создаём категорию
     const categoryRecord = await prisma.category.create({
       data: {
         locale,
@@ -129,25 +147,22 @@ async function processSubcategories(
     // Обработка брендов
     const brandRecords = await Promise.all(
       brands.map(async (name: string) => {
-        const brandKey = `${name}-${locale}`; // Уникальный ключ для бренда и локали
         const brand = await prisma.brand.upsert({
           where: {
-            name_locale: {
-              name,
-              locale,
-            },
+            name_locale: { name, locale },
           },
           update: {},
           create: {
             name,
             locale,
-            categoryId: categoryRecord.id,
             section,
+            category: { connect: { id: categoryRecord.id } },
           },
         });
         console.log(
-          `Upserted brand: ${name} (ID: ${brand.id}, Section: ${section}, Locale: ${locale})`
+          `Upserted brand: ${name} (ID: ${brand.id}, Category ID: ${categoryRecord.id}, Section: ${section}, Locale: ${locale})`
         );
+
         return brand;
       })
     );
@@ -157,21 +172,60 @@ async function processSubcategories(
       console.log(
         `Found products for subcategory ID: ${subcategory.id}, Name: ${subcategory.name}, Product count: ${productsInCategory.products.length}, Locale: ${locale}`
       );
+      let brandIndex = 0;
       for (const product of productsInCategory.products) {
         console.log(
           `Processing product: ${product.name} (Category ID: ${product.category_id}, Locale: ${locale})`
         );
-        const image = product.image[0]
+
+        // Извлекаем бренд из имени продукта
+        let brandName = product.name.split(' ')[0].replace(/[^a-zA-Z0-9]/g, '');
+        let brandId: number | null = null;
+
+        // Ищем бренд среди созданных
+        const matchingBrand = brandRecords.find((b) =>
+          product.name.toLowerCase().includes(b.name.toLowerCase())
+        );
+        if (matchingBrand) {
+          brandId = matchingBrand.id;
+        } else if (brandRecords.length > 0) {
+          // Используем бренд из списка по очереди
+          brandId = brandRecords[brandIndex % brandRecords.length].id;
+          brandIndex++;
+        } else if (brandName) {
+          // Создаём новый бренд
+          const brand = await prisma.brand.upsert({
+            where: {
+              name_locale: { name: brandName, locale },
+            },
+            update: {},
+            create: {
+              name: brandName,
+              locale,
+              section,
+              category: { connect: { id: categoryRecord.id } },
+            },
+          });
+          brandId = brand.id;
+          console.log(
+            `Upserted brand for product: ${brandName} (ID: ${brand.id}, Category ID: ${categoryRecord.id})`
+          );
+        }
+
+        const { image, fullImage } = product.image[0]
           ? await processImage(product.image[0], product.id, OUTPUT_DIR)
-          : null;
+          : { image: null, fullImage: null };
+
+        // Создаём продукт
         const productResult = await prisma.product.create({
           data: {
-            brandId: brandRecords.length > 0 ? brandRecords[0].id : null,
+            brandId,
             categoryId: categoryRecord.id,
             locale,
             name: product.name,
             description: product.description || '',
             image,
+            fullImage,
             section,
           },
         });

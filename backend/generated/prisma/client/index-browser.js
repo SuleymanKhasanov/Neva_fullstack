@@ -142,6 +142,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   locale: 'locale',
   name: 'name',
   image: 'image',
+  fullImage: 'fullImage',
   description: 'description',
   section: 'section'
 };

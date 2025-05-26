@@ -16,7 +16,7 @@ model Brand {
   section     Section
   category    Category  @relation(fields: [categoryId], references: [id])
   products    Product[] @relation("ProductToBrand")
-  @@unique([name, locale]) // Уникальность по комбинации name и locale
+  @@unique([name, locale])
 }
 
 model Category {
@@ -35,6 +35,7 @@ model Product {
   locale      String
   name        String
   image       String?
+  fullImage   String?  
   description String
   section     Section
   brand       Brand?    @relation("ProductToBrand", fields: [brandId], references: [id])

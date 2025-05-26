@@ -1,41 +1,46 @@
 import { NestFactory } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Request, Response, NextFunction } from 'express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Router } from 'express';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-  // Включение CORS
   app.enableCors({
-    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    origin: 'http://localhost:3001',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Accept',
     credentials: true,
+    allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
-  // Настройка раздачи статических файлов
-  console.log('Static files path: /app/backend/public');
-  app.useStaticAssets('/app/backend/public', {
-    prefix: '/public/',
-  });
-  app.use('/public', (req: Request, _res: Response, next: NextFunction) => {
-    console.log('Static file request:', req.url);
-    next();
-  });
-
-  // Настройка Swagger
   const config = new DocumentBuilder()
     .setTitle('Neva API')
-    .setDescription('API for Neva products with multilingual support')
+    .setDescription('API for Neva and X-Solution catalog')
     .setVersion('1.0')
-    .addTag('Products', 'Endpoints for retrieving product data')
+    .addTag('Products')
+    .addTag('Categories')
+    .addTag('Brands')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-docs', app, document);
 
   await app.listen(3000);
+
+  const router = app.getHttpAdapter().getInstance()._router as Router;
+  if (router && router.stack) {
+    console.log(
+      'Registered routes:',
+      router.stack
+        .filter((layer) => layer.route)
+        .map((layer) => ({
+          path: layer.route?.path || 'unknown',
+          method: layer.route?.stack[0]?.method || 'unknown',
+        }))
+    );
+  } else {
+    console.log('Router not initialized yet');
+  }
 }
+
 bootstrap();

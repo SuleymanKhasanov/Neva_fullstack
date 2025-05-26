@@ -1,37 +1,23 @@
-import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { Section } from '@prisma/client';
+import { IsEnum, IsString } from 'class-validator';
 
 export class GetCategoriesDto {
   @ApiProperty({
     description: 'Locale for the category and brand data',
     enum: ['ru', 'en', 'kr', 'uz'],
-    example: 'uz',
+    example: 'ru',
   })
   @IsString()
   @IsEnum(['ru', 'en', 'kr', 'uz'])
   locale!: string;
 
   @ApiProperty({
-    description: 'Page number for pagination',
-    minimum: 1,
-    example: 1,
-  })
-  @IsInt()
-  @Min(1)
-  @Type(() => Number)
-  page!: number;
-
-  @ApiProperty({
-    description: 'Number of items per page (optional)',
-    minimum: 1,
-    default: 20,
+    description: 'Section to filter categories',
+    enum: Section,
     required: false,
-    example: 20,
+    example: 'NEVA',
   })
-  @IsInt()
-  @Min(1)
-  @Type(() => Number)
-  @IsOptional()
-  limit: number = 20;
+  @IsEnum(Section)
+  section?: Section;
 }
