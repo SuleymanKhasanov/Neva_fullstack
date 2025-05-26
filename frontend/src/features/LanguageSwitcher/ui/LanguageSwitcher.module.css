@@ -1,0 +1,52 @@
+.switcher {
+  padding: 1rem 3rem 1rem 1rem; /* Увеличиваем padding справа для кастомной стрелки */
+  border-radius: 1.5rem; /* 15px */
+  border: 0.1rem solid var(--border);
+  background-color: var(--secondary);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease;
+  appearance: none; /* Убираем дефолтный вид селекта */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); /* Кастомная стрелка (чёрная для светлой темы) */
+  background-repeat: no-repeat;
+  background-position: right 1rem center; /* Позиционируем стрелку с отступом 1rem справа */
+  background-size: 1.2rem; /* Размер стрелки */
+}
+
+/* Для тёмной темы меняем цвет стрелки на белый */
+:global(.dark) .switcher {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.switcher:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0.5rem var(--ring); /* Добавляем тень при фокусе */
+}
+
+/* Стили для выпадающего списка (опций) */
+.switcher option {
+  background-color: var(--content-box);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  padding: 1rem; /* Отступы внутри опций */
+  border-radius: 0.5rem; /* Закругления для опций */
+}
+
+/* Стили для выпадающего списка при открытии */
+.switcher option:hover {
+  background-color: var(--secondary); /* Цвет фона при наведении */
+}
+
+/* Для тёмной темы меняем цвет фона опций при наведении */
+:global(.dark) .switcher option:hover {
+  background-color: var(--secondary);
+}

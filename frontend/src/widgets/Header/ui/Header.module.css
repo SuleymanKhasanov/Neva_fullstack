@@ -1,0 +1,174 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--acrylic-bg);
+  backdrop-filter: var(--acrylic-blur);
+  z-index: 10;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: calc(100% - 4rem); /* Отступы 2rem с каждой стороны */
+  margin: 0 auto; /* Центрируем контент */
+  padding: 0.5rem;
+  position: relative; /* Для позиционирования ::after */
+}
+
+.headerContent::after {
+  content: '';
+  position: absolute;
+  bottom: -1.2rem; /* Отступ снизу */
+  left: 0;
+  right: 0;
+  height: 0.1rem;
+  background-color: var(--border);
+}
+
+.controlsWrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.dropDownWrapper {
+  display: block;
+}
+
+.searchWrapper {
+  flex: 1;
+  max-width: 40rem;
+  margin: 0 1.6rem;
+  position: relative;
+}
+
+.contactButton {
+  display: block;
+}
+
+.searchButton {
+  display: none; /* Скрыта по умолчанию */
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
+  border-radius: 1.5rem;
+  cursor: pointer;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.searchButton:hover {
+  opacity: 0.9;
+}
+
+.searchIcon {
+  color: var(--foreground);
+  font-size: 2rem;
+}
+
+.categoryButton {
+  display: none; /* Скрыта по умолчанию */
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
+  border-radius: 1.5rem;
+  cursor: pointer;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.categoryButton:hover {
+  opacity: 0.9;
+}
+
+.categoryIcon {
+  color: var(--foreground);
+  font-size: 2rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 0;
+  }
+
+  .headerContent {
+    max-width: calc(100% - 3.2rem); /* Меньшие отступы 1.6rem */
+  }
+
+  .headerContent::after {
+    left: 0;
+    right: 0;
+  }
+
+  .dropDownWrapper {
+    display: none; /* Скрываем DropdownMenu */
+  }
+
+  .searchWrapper > :first-child {
+    display: none; /* Скрываем SearchInput */
+  }
+
+  .contactButton {
+    display: none !important; /* Скрываем кнопку контактов */
+  }
+
+  .controlsWrapper {
+    gap: 1.2rem;
+  }
+
+  .searchButton {
+    display: flex; /* Показываем кнопку поиска */
+  }
+
+  .categoryButton {
+    display: flex; /* Показываем кнопку категорий */
+  }
+}
+
+@media (min-width: 769px) {
+  .searchWrapper > :first-child {
+    display: block;
+  }
+
+  .searchButton {
+    display: none !important; /* Гарантируем, что кнопка поиска скрыта */
+  }
+}
+
+@media (min-width: 1024px) {
+  .header {
+    padding: 1.2rem 0;
+  }
+
+  .headerContent {
+    max-width: calc(100% - 6.4rem); /* Большие отступы 3.2rem для десктопов */
+  }
+
+  .headerContent::after {
+    left: 0;
+    right: 0;
+  }
+
+  .controlsWrapper {
+    gap: 2.4rem;
+  }
+}

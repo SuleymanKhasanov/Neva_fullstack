@@ -1,0 +1,19 @@
+.input {
+  padding: 1rem 1.6rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.4rem;
+  color: var(--foreground);
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
+  border-radius: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  border-color: var(--ring); /* #e31e24 */
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--muted-foreground);
+}

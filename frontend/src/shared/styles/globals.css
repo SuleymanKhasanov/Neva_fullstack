@@ -1,0 +1,39 @@
+@import url(./palette.css);
+html {
+  font-size: 62.5%; /* 1rem = 10px */
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.6rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.acrylic {
+  background: var(--acrylic-bg);
+  backdrop-filter: var(--acrylic-blur);
+  -webkit-backdrop-filter: var(--acrylic-blur);
+  border: 0.1rem solid var(--border);
+  box-shadow: var(--shadow-content);
+}
+
+@layer base {
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    overflow: hidden;
+  }
+
+  * {
+    scrollbar-width: none;
+    -moz-scrollbar-width: none;
+    border-color: var(--border);
+    outline-color: var(--ring);
+  }
+}
