@@ -1,0 +1,64 @@
+:root {
+  --radius: 2rem;
+  --background: #f2f2f2;
+  --content-box: #ffffff;
+  --card: #ededed;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #e31e24;
+  --primary-foreground: #ffffff;
+  --primary-hover: #ff3333; /* Новая переменная для ховера */
+  --secondary: #f0f0f0;
+  --secondary-foreground: #000000;
+  --muted: #f0f0f0;
+  --muted-foreground: #848484;
+  --accent: #e31e24;
+  --accent-foreground: #000000;
+  --destructive: #ff3333;
+  --border: #d7d7d7;
+  --input: #d7d7d7;
+  --image-border: #d7d7d7; /* Новая переменная для светлой темы */
+  --ring: #e31e24;
+  --shadow-content: rgba(0, 0, 0, 0.1);
+  --shadow-card: rgba(0, 0, 0, 0.1);
+  --foreground: #000000;
+  --text-secondary: #848484;
+  --acrylic-bg: rgba(255, 255, 255, 0.7);
+  --acrylic-blur: blur(1rem);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.dark {
+  --background: #1a1a22; /* Глубокий черно-серый с холодным подтоном */
+  --content-box: #262630; /* Чуть светлее фона для контейнеров */
+  --card: #24242e; /* Темно-серый для карточек */
+  --card-foreground: #e0e0e5; /* Мягкий бело-серый для текста на карточках */
+  --popover: #262630; /* Темный фон для поповеров */
+  --popover-foreground: #e0e0e5; /* Мягкий белый для текста */
+  --primary: #e31e24; /* Оставляем красный для кнопок */
+  --primary-foreground: #ffffff; /* Белый текст на кнопках */
+  --primary-hover: #ff3333; /* Чуть светлее для ховера */
+  --secondary: #2c2c38; /* Глубокий серо-синий для вторичных элементов */
+  --secondary-foreground: #e0e0e5; /* Мягкий белый для текста */
+  --muted: #2c2c38; /* То же, что secondary, для приглушенных элементов */
+  --muted-foreground: #a0a0a5; /* Вторичный текст */
+  --accent: #b0b0c0; /* Металлический серебристый для акцентов */
+  --accent-foreground: #e0e0e5; /* Мягкий белый для текста на акцентах */
+  --destructive: #cc0000; /* Темнее красный для деструктивных действий */
+  --border: #3a3a44; /* Темно-серый с металлическим оттенком */
+  --input: #3a3a44; /* То же для инпутов */
+  --image-border: #4a4a54; /* Чуть светлее для обводки изображений */
+  --ring: #e31e24; /* Красный для фокуса */
+  --shadow-content: rgba(0, 0, 10, 0.3); /* Темная тень */
+  --shadow-card: rgba(0, 0, 10, 0.2); /* Чуть мягче */
+  --foreground: #e0e0e5; /* Мягкий бело-серый для основного текста */
+  --text-secondary: #a0a0a5; /* Приглушенный серый */
+  --acrylic-bg: rgba(38, 38, 48, 0.9) /* Темный акрил, совпадающий с фоном */
+    --acrylic-blur: blur(1rem);
+}

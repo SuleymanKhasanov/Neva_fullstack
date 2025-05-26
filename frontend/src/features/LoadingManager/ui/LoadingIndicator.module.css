@@ -1,0 +1,37 @@
+.loadingBar {
+  position: absolute;
+  bottom: -1rem; /* Совпадает с ::after */
+  left: 0;
+  right: 0;
+  max-width: 100%; /* Синхронизировано с .headerContent */
+  margin: 0 auto; /* Центрируем как .headerContent */
+  height: 0.2rem; /* Толщина полоски */
+  z-index: 20; /* Выше ::after */
+}
+
+.loadingProgress {
+  height: 100%;
+  background-color: var(--ring); /* Красный цвет (#e31e24) */
+  animation: loading 1s ease-in-out forwards;
+}
+
+@keyframes loading {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  50% {
+    width: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .loadingBar {
+    width: calc(100% - 4rem); /* Сохраняем отступы на мобильных */
+  }
+}

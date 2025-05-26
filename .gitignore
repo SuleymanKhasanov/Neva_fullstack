@@ -6,7 +6,6 @@ build/
 
 *.log
 backend/generated/
-frontend/
 
 # Next.js
 .next/

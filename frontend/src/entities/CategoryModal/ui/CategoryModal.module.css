@@ -1,0 +1,174 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal {
+  background-color: var(--content-box);
+  border-radius: var(--radius);
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.4rem 1.6rem var(--shadow-content);
+  width: calc(100% - 3.2rem);
+  max-width: 40rem;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem;
+  border-bottom: 0.1rem solid var(--border);
+}
+
+.modalTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.closeButton {
+  padding: 0.8rem;
+  border-radius: 1rem;
+}
+
+.closeIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--foreground);
+}
+
+.modalContent {
+  padding: 1.6rem;
+}
+
+.section {
+  margin-bottom: 1.6rem;
+}
+
+.sectionButton {
+  width: 100%;
+  justify-content: space-between;
+  padding: 1.2rem 1.6rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border-radius: 1rem;
+}
+
+.sectionArrow {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--foreground);
+  transition: transform 0.3s ease;
+}
+
+.arrowOpen {
+  transform: rotate(-180deg);
+}
+
+.categoryList {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.categoryItem {
+  width: 100%;
+}
+
+.categoryButton {
+  width: 100%;
+  justify-content: space-between;
+  padding: 1rem 1.4rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  border-radius: 1rem;
+}
+
+.arrowIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--foreground);
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.4rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.backArrow {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--foreground);
+  transform: rotate(180deg);
+}
+
+.brandList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.brandItem {
+  padding: 1rem 1.4rem;
+  font-size: 1.4rem;
+  color: var(--foreground);
+  border-radius: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.brandItem:hover {
+  background-color: var(--secondary);
+}
+
+.empty,
+.error {
+  padding: 1.6rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 1.6rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(2rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
