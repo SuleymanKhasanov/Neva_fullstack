@@ -1,108 +1,126 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+  ApiProperty,
+} from '@nestjs/swagger';
 import { Section } from '@prisma/client';
 
 import { CategoriesService } from './categories.service';
 import { GetCategoriesDto } from './dto/get-categories.dto';
+
+class CategoryResponse {
+  @ApiProperty({ description: 'Category ID', example: 1 })
+  id?: number;
+
+  @ApiProperty({ description: 'Category name', example: 'Ноутбуки' })
+  name?: string;
+
+  @ApiProperty({ description: 'Locale', example: 'ru' })
+  locale?: string;
+
+  @ApiProperty({ description: 'Section', example: 'NEVA' })
+  section?: Section;
+
+  @ApiProperty({
+    description: 'List of brands in the category',
+    type: () => [BrandResponse],
+  })
+  brands?: BrandResponse[];
+}
+
+class BrandResponse {
+  @ApiProperty({ description: 'Brand ID', example: 1 })
+  id?: number;
+
+  @ApiProperty({ description: 'Brand name', example: 'ASUS' })
+  name?: string;
+
+  @ApiProperty({ description: 'Locale', example: 'ru' })
+  locale?: string;
+
+  @ApiProperty({ description: 'Section', example: 'NEVA' })
+  section?: Section;
+}
+
+class CategoriesResponse {
+  @ApiProperty({
+    description: 'List of categories',
+    type: () => [CategoryResponse],
+  })
+  data?: CategoryResponse[];
+}
 
 @ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @ApiOperation({
-    summary: 'Get categories in NEVA section with related brands',
+  @Get('all')
+  @ApiOperation({ summary: 'Get all categories with brands' })
+  @ApiQuery({
+    name: 'locale',
+    required: true,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
   })
-  @ApiQuery({ type: GetCategoriesDto })
   @ApiResponse({
     status: 200,
-    description: 'List of NEVA categories with pagination metadata and brands',
-    schema: {
-      example: {
-        data: [
-          {
-            id: 170,
-            locale: 'uz',
-            name: 'Asus, Lenovo, Acer, HP',
-            section: 'NEVA',
-            brands: [
-              {
-                id: 130,
-                name: 'Noutbuklar',
-                locale: 'uz',
-                section: 'NEVA',
-                categoryId: 170,
-              },
-            ],
-          },
-        ],
-        meta: {
-          total: 50,
-          page: 1,
-          limit: 20,
-          totalPages: 3,
-        },
-      },
-    },
+    description: 'List of all categories with brands',
+    type: CategoriesResponse,
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid locale or parameters',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: ['locale must be one of the following values: ru, en, kr, uz'],
-        error: 'Bad Request',
-      },
-    },
-  })
-  @Get('neva')
-  async getNevaCategories(@Query() dto: GetCategoriesDto) {
-    return this.categoriesService.getCategoriesBySection(dto, Section.NEVA);
+  @ApiResponse({ status: 400, description: 'Invalid locale' })
+  async getAllCategories(@Query() dto: GetCategoriesDto) {
+    const result = await this.categoriesService.getCategories(dto);
+
+    return { data: result.categories };
   }
 
-  @ApiOperation({
-    summary: 'Get categories in X_SOLUTION section with related brands',
+  @Get('neva')
+  @ApiOperation({ summary: 'Get NEVA categories with brands' })
+  @ApiQuery({
+    name: 'locale',
+    required: true,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
   })
-  @ApiQuery({ type: GetCategoriesDto })
   @ApiResponse({
     status: 200,
-    description:
-      'List of X_SOLUTION categories with pagination metadata and brands',
-    schema: {
-      example: {
-        data: [
-          {
-            id: 171,
-            locale: 'uz',
-            name: 'Other Category',
-            section: 'X_SOLUTION',
-            brands: [
-              {
-                id: 131,
-                name: 'Some Brand',
-                locale: 'uz',
-                section: 'X_SOLUTION',
-                categoryId: 171,
-              },
-            ],
-          },
-        ],
-        meta: {
-          total: 30,
-          page: 1,
-          limit: 20,
-          totalPages: 2,
-        },
-      },
-    },
+    description: 'List of NEVA categories with brands',
+    type: CategoriesResponse,
   })
-  @ApiResponse({ status: 400, description: 'Invalid locale or parameters' })
+  @ApiResponse({ status: 400, description: 'Invalid locale' })
+  async getNevaCategories(@Query() dto: GetCategoriesDto) {
+    const result = await this.categoriesService.getCategories({
+      ...dto,
+      section: Section.NEVA,
+    });
+
+    return { data: result.categories };
+  }
+
   @Get('x-solution')
+  @ApiOperation({ summary: 'Get X_SOLUTION categories with brands' })
+  @ApiQuery({
+    name: 'locale',
+    required: true,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of X_SOLUTION categories with brands',
+    type: CategoriesResponse,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid locale' })
   async getXSolutionCategories(@Query() dto: GetCategoriesDto) {
-    return this.categoriesService.getCategoriesBySection(
-      dto,
-      Section.X_SOLUTION
-    );
+    const result = await this.categoriesService.getCategories({
+      ...dto,
+      section: Section.X_SOLUTION,
+    });
+
+    return { data: result.categories };
   }
 }

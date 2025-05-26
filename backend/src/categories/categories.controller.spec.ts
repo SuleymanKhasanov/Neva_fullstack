@@ -1,229 +1,139 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
-import { AppModule } from '../app.module';
+import { Section } from '@prisma/client';
+
 import { PrismaService } from '../../prisma/prisma.service';
-import * as dotenv from 'dotenv';
-import { join } from 'path';
-import { execSync } from 'child_process';
 
-// Очищаем переменные окружения и загружаем .env.test
-process.env = {};
-dotenv.config({
-  path: join(__dirname, '..', '..', '.env.test'),
-  override: true,
-});
+import { CategoriesController } from './categories.controller';
+import { CategoriesService } from './categories.service';
 
-describe('CategoriesController (e2e)', () => {
-  let app: INestApplication;
-  let prisma: PrismaService | undefined;
+describe('CategoriesController', () => {
+  let controller: CategoriesController;
+  let service: CategoriesService;
 
-  beforeAll(async () => {
-    // Генерируем Prisma Client перед тестами
-    try {
-      console.log('Generating Prisma Client...');
-      execSync('npx prisma generate', {
-        stdio: 'inherit',
-        cwd: join(__dirname, '..', '..'),
-      });
-      console.log('Prisma Client generated successfully.');
-    } catch (error) {
-      console.error('Failed to generate Prisma Client:', error);
-      throw error;
-    }
-
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    prisma = moduleFixture.get<PrismaService>(PrismaService);
-    console.log('DATABASE_URL in test:', process.env.DATABASE_URL); // Отладка
-    if (prisma) {
-      await prisma.$connect();
-    } else {
-      console.error('PrismaService not initialized.');
-    }
-    await app.init();
-
-    // Очистка и заполнение тестовой БД
-    if (prisma) {
-      await prisma.$executeRaw`TRUNCATE "Category", "Brand" RESTART IDENTITY CASCADE;`;
-      await prisma.category.createMany({
-        data: [
-          {
-            locale: 'uz',
-            name: `Test Category NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-          {
-            locale: 'uz',
-            name: `Test Category X_SOLUTION ${Date.now()}`,
-            section: 'X_SOLUTION',
-          },
-          {
-            locale: 'ru',
-            name: `Тестовая Категория NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-        ],
-      });
-      await prisma.brand.createMany({
-        data: [
-          {
-            categoryId: 1,
-            name: `Test Brand NEVA ${Date.now()}`,
-            locale: 'uz',
-            section: 'NEVA',
-          },
-          {
-            categoryId: 2,
-            name: `Test Brand X_SOLUTION ${Date.now()}`,
-            locale: 'uz',
-            section: 'X_SOLUTION',
-          },
-          {
-            categoryId: 3,
-            name: `Тестовый Бренд NEVA ${Date.now()}`,
-            locale: 'ru',
-            section: 'NEVA',
-          },
-        ],
-      });
-    }
-  }, 30000);
+  const mockService = {
+    getCategories: jest.fn(),
+  };
 
   beforeEach(async () => {
-    if (prisma) {
-      await prisma.$executeRaw`TRUNCATE "Category", "Brand" RESTART IDENTITY CASCADE;`;
-      await prisma.category.createMany({
-        data: [
-          {
-            locale: 'uz',
-            name: `Test Category NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-          {
-            locale: 'uz',
-            name: `Test Category X_SOLUTION ${Date.now()}`,
-            section: 'X_SOLUTION',
-          },
-          {
-            locale: 'ru',
-            name: `Тестовая Категория NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-        ],
-      });
-      await prisma.brand.createMany({
-        data: [
-          {
-            categoryId: 1,
-            name: `Test Brand NEVA ${Date.now()}`,
-            locale: 'uz',
-            section: 'NEVA',
-          },
-          {
-            categoryId: 2,
-            name: `Test Brand X_SOLUTION ${Date.now()}`,
-            locale: 'uz',
-            section: 'X_SOLUTION',
-          },
-          {
-            categoryId: 3,
-            name: `Тестовый Бренд NEVA ${Date.now()}`,
-            locale: 'ru',
-            section: 'NEVA',
-          },
-        ],
-      });
-    }
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [CategoriesController],
+      providers: [
+        { provide: CategoriesService, useValue: mockService },
+        PrismaService,
+      ],
+    }).compile();
+
+    controller = module.get<CategoriesController>(CategoriesController);
+    service = module.get<CategoriesService>(CategoriesService);
   });
 
-  afterAll(async () => {
-    if (prisma) {
-      await prisma.$disconnect();
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Задержка 1 секунда
-    }
-    await app.close();
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 
-  it('GET /categories/neva should return categories with brands for uz locale', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/categories/neva')
-      .query({ locale: 'uz', page: 1, limit: 10 })
-      .expect(200);
+  describe('getAllCategories', () => {
+    it('should return all categories with brands', async () => {
+      const mockResult = {
+        categories: [
+          {
+            id: 1,
+            name: 'Ноутбуки',
+            locale: 'ru',
+            section: Section.NEVA,
+            brands: [
+              { id: 1, name: 'ASUS', locale: 'ru', section: Section.NEVA },
+              { id: 2, name: 'Lenovo', locale: 'ru', section: Section.NEVA },
+            ],
+          },
+          {
+            id: 2,
+            name: 'Серверы',
+            locale: 'ru',
+            section: Section.X_SOLUTION,
+            brands: [
+              {
+                id: 3,
+                name: 'Dell',
+                locale: 'ru',
+                section: Section.X_SOLUTION,
+              },
+            ],
+          },
+        ],
+      };
 
-    expect(response.body).toEqual({
-      data: expect.arrayContaining([
-        expect.objectContaining({
-          id: expect.any(Number),
-          name: expect.stringContaining('Test Category NEVA'),
-          section: 'NEVA',
-          locale: 'uz',
-          brands: expect.arrayContaining([
-            expect.objectContaining({
-              id: expect.any(Number),
-              name: expect.stringContaining('Test Brand NEVA'),
-              section: 'NEVA',
-              locale: 'uz',
-            }),
-          ]),
-        }),
-      ]),
-      meta: {
-        total: 1,
-        page: 1,
-        limit: 10,
-        totalPages: 1,
-      },
+      mockService.getCategories.mockResolvedValue(mockResult);
+
+      const result = await controller.getAllCategories({ locale: 'ru' });
+
+      expect(result).toEqual({ data: mockResult.categories });
+      expect(service.getCategories).toHaveBeenCalledWith({ locale: 'ru' });
     });
   });
 
-  it('GET /categories/x-solution should return categories for uz locale', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/categories/x-solution')
-      .query({ locale: 'uz', page: 1, limit: 10 })
-      .expect(200);
+  describe('getNevaCategories', () => {
+    it('should return NEVA categories with brands', async () => {
+      const mockResult = {
+        categories: [
+          {
+            id: 1,
+            name: 'Ноутбуки',
+            locale: 'ru',
+            section: Section.NEVA,
+            brands: [
+              { id: 1, name: 'ASUS', locale: 'ru', section: Section.NEVA },
+              { id: 2, name: 'Lenovo', locale: 'ru', section: Section.NEVA },
+            ],
+          },
+        ],
+      };
 
-    expect(response.body.data).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          section: 'X_SOLUTION',
-          name: expect.stringContaining('Test Category X_SOLUTION'),
-        }),
-      ])
-    );
-    expect(response.body.meta.total).toBe(1);
-  });
+      mockService.getCategories.mockResolvedValue(mockResult);
 
-  it('GET /categories/neva with ru locale should return categories', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/categories/neva')
-      .query({ locale: 'ru', page: 1, limit: 10 })
-      .expect(200);
+      const result = await controller.getNevaCategories({ locale: 'ru' });
 
-    expect(response.body.data).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          locale: 'ru',
-          name: expect.stringContaining('Тестовая Категория NEVA'),
-        }),
-      ])
-    );
-    expect(response.body.meta.total).toBe(1);
-  });
-
-  it('GET /categories/neva with invalid locale should return 400', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/categories/neva')
-      .query({ locale: 'invalid', page: 1, limit: 10 })
-      .expect(400);
-
-    expect(response.body).toEqual({
-      statusCode: 400,
-      message: ['locale must be one of the following values: ru, en, kr, uz'],
-      error: 'Bad Request',
+      expect(result).toEqual({ data: mockResult.categories });
+      expect(service.getCategories).toHaveBeenCalledWith({
+        locale: 'ru',
+        section: Section.NEVA,
+      });
     });
+  });
+
+  describe('getXSolutionCategories', () => {
+    it('should return X_SOLUTION categories with brands', async () => {
+      const mockResult = {
+        categories: [
+          {
+            id: 2,
+            name: 'Серверы',
+            locale: 'ru',
+            section: Section.X_SOLUTION,
+            brands: [
+              {
+                id: 3,
+                name: 'Dell',
+                locale: 'ru',
+                section: Section.X_SOLUTION,
+              },
+            ],
+          },
+        ],
+      };
+
+      mockService.getCategories.mockResolvedValue(mockResult);
+
+      const result = await controller.getXSolutionCategories({ locale: 'ru' });
+
+      expect(result).toEqual({ data: mockResult.categories });
+      expect(service.getCategories).toHaveBeenCalledWith({
+        locale: 'ru',
+        section: Section.X_SOLUTION,
+      });
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 });

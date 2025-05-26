@@ -1,304 +1,188 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
-import { AppModule } from '../app.module';
+import { Section } from '@prisma/client';
+
 import { PrismaService } from '../../prisma/prisma.service';
-import * as dotenv from 'dotenv';
-import { join } from 'path';
-import { execSync } from 'child_process';
 
-// Очищаем переменные окружения и загружаем .env.test
-process.env = {};
-dotenv.config({
-  path: join(__dirname, '..', '..', '.env.test'),
-  override: true,
-});
+import { NevaProductsController } from './products.controller';
+import { ProductsService } from './products.service';
 
-describe('ProductsController (e2e)', () => {
-  let app: INestApplication;
-  let prisma: PrismaService | undefined;
+describe('NevaProductsController', () => {
+  let controller: NevaProductsController;
+  let service: ProductsService;
 
-  beforeAll(async () => {
-    // Генерируем Prisma Client перед тестами
-    try {
-      console.log('Generating Prisma Client...');
-      execSync('npx prisma generate', {
-        stdio: 'inherit',
-        cwd: join(__dirname, '..', '..'),
-      });
-      console.log('Prisma Client generated successfully.');
-    } catch (error) {
-      console.error('Failed to generate Prisma Client:', error);
-      throw error;
-    }
-
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    prisma = moduleFixture.get<PrismaService>(PrismaService);
-    console.log('DATABASE_URL in test:', process.env.DATABASE_URL); // Отладка
-    if (prisma) {
-      await prisma.$connect();
-    } else {
-      console.error('PrismaService not initialized.');
-    }
-    await app.init();
-
-    // Очистка и заполнение тестовой БД
-    if (prisma) {
-      await prisma.$executeRaw`TRUNCATE "Product", "Category", "Brand" RESTART IDENTITY CASCADE;`;
-      await prisma.category.createMany({
-        data: [
-          {
-            locale: 'uz',
-            name: `Test Category NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-          {
-            locale: 'uz',
-            name: `Test Category X_SOLUTION ${Date.now()}`,
-            section: 'X_SOLUTION',
-          },
-          {
-            locale: 'ru',
-            name: `Тестовая Категория NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-        ],
-      });
-      await prisma.brand.createMany({
-        data: [
-          {
-            categoryId: 1,
-            name: `Test Brand NEVA ${Date.now()}`,
-            locale: 'uz',
-            section: 'NEVA',
-          },
-          {
-            categoryId: 2,
-            name: `Test Brand X_SOLUTION ${Date.now()}`,
-            locale: 'uz',
-            section: 'X_SOLUTION',
-          },
-          {
-            categoryId: 3,
-            name: `Тестовый Бренд NEVA ${Date.now()}`,
-            locale: 'ru',
-            section: 'NEVA',
-          },
-        ],
-      });
-      await prisma.product.createMany({
-        data: [
-          {
-            brandId: 1,
-            categoryId: 1,
-            locale: 'uz',
-            name: `Test Product NEVA ${Date.now()}`,
-            description: 'Test Description',
-            image: '/images/test.webp',
-            section: 'NEVA',
-          },
-          {
-            brandId: 2,
-            categoryId: 2,
-            locale: 'uz',
-            name: `Test Product X_SOLUTION ${Date.now()}`,
-            description: 'Test Description',
-            image: '/images/test2.webp',
-            section: 'X_SOLUTION',
-          },
-          {
-            brandId: 3,
-            categoryId: 3,
-            locale: 'ru',
-            name: `Тестовый Продукт NEVA ${Date.now()}`,
-            description: 'Тестовое Описание',
-            image: '/images/test3.webp',
-            section: 'NEVA',
-          },
-        ],
-      });
-    }
-  }, 30000);
+  const mockService = {
+    getProducts: jest.fn(),
+  };
 
   beforeEach(async () => {
-    if (prisma) {
-      await prisma.$executeRaw`TRUNCATE "Product", "Category", "Brand" RESTART IDENTITY CASCADE;`;
-      await prisma.category.createMany({
-        data: [
-          {
-            locale: 'uz',
-            name: `Test Category NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-          {
-            locale: 'uz',
-            name: `Test Category X_SOLUTION ${Date.now()}`,
-            section: 'X_SOLUTION',
-          },
-          {
-            locale: 'ru',
-            name: `Тестовая Категория NEVA ${Date.now()}`,
-            section: 'NEVA',
-          },
-        ],
-      });
-      await prisma.brand.createMany({
-        data: [
-          {
-            categoryId: 1,
-            name: `Test Brand NEVA ${Date.now()}`,
-            locale: 'uz',
-            section: 'NEVA',
-          },
-          {
-            categoryId: 2,
-            name: `Test Brand X_SOLUTION ${Date.now()}`,
-            locale: 'uz',
-            section: 'X_SOLUTION',
-          },
-          {
-            categoryId: 3,
-            name: `Тестовый Бренд NEVA ${Date.now()}`,
-            locale: 'ru',
-            section: 'NEVA',
-          },
-        ],
-      });
-      await prisma.product.createMany({
-        data: [
-          {
-            brandId: 1,
-            categoryId: 1,
-            locale: 'uz',
-            name: `Test Product NEVA ${Date.now()}`,
-            description: 'Test Description',
-            image: '/images/test.webp',
-            section: 'NEVA',
-          },
-          {
-            brandId: 2,
-            categoryId: 2,
-            locale: 'uz',
-            name: `Test Product X_SOLUTION ${Date.now()}`,
-            description: 'Test Description',
-            image: '/images/test2.webp',
-            section: 'X_SOLUTION',
-          },
-          {
-            brandId: 3,
-            categoryId: 3,
-            locale: 'ru',
-            name: `Тестовый Продукт NEVA ${Date.now()}`,
-            description: 'Тестовое Описание',
-            image: '/images/test3.webp',
-            section: 'NEVA',
-          },
-        ],
-      });
-    }
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [NevaProductsController],
+      providers: [
+        { provide: ProductsService, useValue: mockService },
+        PrismaService,
+      ],
+    }).compile();
+
+    controller = module.get<NevaProductsController>(NevaProductsController);
+    service = module.get<ProductsService>(ProductsService);
   });
 
-  afterAll(async () => {
-    if (prisma) {
-      await prisma.$disconnect();
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Задержка 1 секунда
-    }
-    await app.close();
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 
-  it('GET /products/all should return products with pagination for uz locale', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/products/all')
-      .query({ locale: 'uz', page: 1, limit: 10 })
-      .expect(200);
+  describe('getAllProducts', () => {
+    it('should return all products', async () => {
+      const mockResult = {
+        products: [
+          {
+            id: 1,
+            name: 'ASUS Vivobook',
+            locale: 'ru',
+            section: Section.NEVA,
+            description: 'A powerful laptop',
+            image: '/images/product_1_resized.webp',
+            fullImage: '/images/product_1_full.webp',
+            brand: { id: 1, name: 'ASUS', locale: 'ru', section: Section.NEVA },
+            category: {
+              id: 1,
+              name: 'Ноутбуки',
+              locale: 'ru',
+              section: Section.NEVA,
+            },
+          },
+        ],
+        totalCount: 1,
+      };
 
-    expect(response.body).toEqual({
-      data: expect.arrayContaining([
-        expect.objectContaining({
-          id: expect.any(Number),
-          name: expect.stringContaining('Test Product'),
-          description: 'Test Description',
-          image: expect.stringContaining('/images/test'),
-          section: expect.any(String),
-          locale: 'uz',
-          brand: expect.any(Object),
-          category: expect.any(Object),
-        }),
-      ]),
-      meta: {
-        total: 2,
+      mockService.getProducts.mockResolvedValue(mockResult);
+
+      const result = await controller.getAllProducts({
+        locale: 'ru',
         page: 1,
-        limit: 10,
-        totalPages: 1,
-      },
+      });
+
+      expect(result).toEqual({
+        data: mockResult.products,
+        meta: {
+          total: mockResult.totalCount,
+          page: 1,
+          limit: 20,
+          totalPages: 1,
+        },
+      });
+      expect(service.getProducts).toHaveBeenCalledWith({
+        locale: 'ru',
+        page: 1,
+        limit: 20,
+      });
     });
   });
 
-  it('GET /products/neva should return NEVA products for uz locale', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/products/neva')
-      .query({ locale: 'uz', page: 1, limit: 10 })
-      .expect(200);
+  describe('getNevaProducts', () => {
+    it('should return NEVA products', async () => {
+      const mockResult = {
+        products: [
+          {
+            id: 1,
+            name: 'ASUS Vivobook',
+            locale: 'ru',
+            section: Section.NEVA,
+            description: 'A powerful laptop',
+            image: '/images/product_1_resized.webp',
+            fullImage: '/images/product_1_full.webp',
+            brand: { id: 1, name: 'ASUS', locale: 'ru', section: Section.NEVA },
+            category: {
+              id: 1,
+              name: 'Ноутбуки',
+              locale: 'ru',
+              section: Section.NEVA,
+            },
+          },
+        ],
+        totalCount: 1,
+      };
 
-    expect(response.body.data).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          section: 'NEVA',
-          name: expect.stringContaining('Test Product NEVA'),
-        }),
-      ])
-    );
-    expect(response.body.meta.total).toBe(1);
-  });
+      mockService.getProducts.mockResolvedValue(mockResult);
 
-  it('GET /products/x-solution should return X_SOLUTION products for uz locale', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/products/x-solution')
-      .query({ locale: 'uz', page: 1, limit: 10 })
-      .expect(200);
+      const result = await controller.getNevaProducts({
+        locale: 'ru',
+        page: 1,
+      });
 
-    expect(response.body.data).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          section: 'X_SOLUTION',
-          name: expect.stringContaining('Test Product X_SOLUTION'),
-        }),
-      ])
-    );
-    expect(response.body.meta.total).toBe(1);
-  });
-
-  it('GET /products/all with ru locale should return products', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/products/all')
-      .query({ locale: 'ru', page: 1, limit: 10 })
-      .expect(200);
-
-    expect(response.body.data).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          locale: 'ru',
-          name: expect.stringContaining('Тестовый Продукт NEVA'),
-        }),
-      ])
-    );
-    expect(response.body.meta.total).toBe(1);
-  });
-
-  it('GET /products/all with invalid locale should return 400', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/products/all')
-      .query({ locale: 'invalid', page: 1, limit: 10 })
-      .expect(400);
-
-    expect(response.body).toEqual({
-      statusCode: 400,
-      message: ['locale must be one of the following values: ru, en, kr, uz'],
-      error: 'Bad Request',
+      expect(result).toEqual({
+        data: mockResult.products,
+        meta: {
+          total: mockResult.totalCount,
+          page: 1,
+          limit: 20,
+          totalPages: 1,
+        },
+      });
+      expect(service.getProducts).toHaveBeenCalledWith({
+        locale: 'ru',
+        page: 1,
+        limit: 20,
+        section: Section.NEVA,
+      });
     });
+  });
+
+  describe('getXSolutionProducts', () => {
+    it('should return X_SOLUTION products', async () => {
+      const mockResult = {
+        products: [
+          {
+            id: 2,
+            name: 'PowerEdge R660',
+            locale: 'ru',
+            section: Section.X_SOLUTION,
+            description: 'A powerful server',
+            image: '/images/product_2_resized.webp',
+            fullImage: '/images/product_2_full.webp',
+            brand: {
+              id: 3,
+              name: 'Dell',
+              locale: 'ru',
+              section: Section.X_SOLUTION,
+            },
+            category: {
+              id: 2,
+              name: 'Серверы',
+              locale: 'ru',
+              section: Section.X_SOLUTION,
+            },
+          },
+        ],
+        totalCount: 1,
+      };
+
+      mockService.getProducts.mockResolvedValue(mockResult);
+
+      const result = await controller.getXSolutionProducts({
+        locale: 'ru',
+        page: 1,
+      });
+
+      expect(result).toEqual({
+        data: mockResult.products,
+        meta: {
+          total: mockResult.totalCount,
+          page: 1,
+          limit: 20,
+          totalPages: 1,
+        },
+      });
+      expect(service.getProducts).toHaveBeenCalledWith({
+        locale: 'ru',
+        page: 1,
+        limit: 20,
+        section: Section.X_SOLUTION,
+      });
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 });

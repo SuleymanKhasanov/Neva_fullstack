@@ -3414,6 +3414,7 @@ export namespace Prisma {
     locale: string | null
     name: string | null
     image: string | null
+    fullImage: string | null
     description: string | null
     section: $Enums.Section | null
   }
@@ -3425,6 +3426,7 @@ export namespace Prisma {
     locale: string | null
     name: string | null
     image: string | null
+    fullImage: string | null
     description: string | null
     section: $Enums.Section | null
   }
@@ -3436,6 +3438,7 @@ export namespace Prisma {
     locale: number
     name: number
     image: number
+    fullImage: number
     description: number
     section: number
     _all: number
@@ -3461,6 +3464,7 @@ export namespace Prisma {
     locale?: true
     name?: true
     image?: true
+    fullImage?: true
     description?: true
     section?: true
   }
@@ -3472,6 +3476,7 @@ export namespace Prisma {
     locale?: true
     name?: true
     image?: true
+    fullImage?: true
     description?: true
     section?: true
   }
@@ -3483,6 +3488,7 @@ export namespace Prisma {
     locale?: true
     name?: true
     image?: true
+    fullImage?: true
     description?: true
     section?: true
     _all?: true
@@ -3581,6 +3587,7 @@ export namespace Prisma {
     locale: string
     name: string
     image: string | null
+    fullImage: string | null
     description: string
     section: $Enums.Section
     _count: ProductCountAggregateOutputType | null
@@ -3611,6 +3618,7 @@ export namespace Prisma {
     locale?: boolean
     name?: boolean
     image?: boolean
+    fullImage?: boolean
     description?: boolean
     section?: boolean
     brand?: boolean | Product$brandArgs<ExtArgs>
@@ -3624,6 +3632,7 @@ export namespace Prisma {
     locale?: boolean
     name?: boolean
     image?: boolean
+    fullImage?: boolean
     description?: boolean
     section?: boolean
     brand?: boolean | Product$brandArgs<ExtArgs>
@@ -3637,6 +3646,7 @@ export namespace Prisma {
     locale?: boolean
     name?: boolean
     image?: boolean
+    fullImage?: boolean
     description?: boolean
     section?: boolean
     brand?: boolean | Product$brandArgs<ExtArgs>
@@ -3650,11 +3660,12 @@ export namespace Prisma {
     locale?: boolean
     name?: boolean
     image?: boolean
+    fullImage?: boolean
     description?: boolean
     section?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "brandId" | "categoryId" | "locale" | "name" | "image" | "description" | "section", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "brandId" | "categoryId" | "locale" | "name" | "image" | "fullImage" | "description" | "section", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     brand?: boolean | Product$brandArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -3681,6 +3692,7 @@ export namespace Prisma {
       locale: string
       name: string
       image: string | null
+      fullImage: string | null
       description: string
       section: $Enums.Section
     }, ExtArgs["result"]["product"]>
@@ -4114,6 +4126,7 @@ export namespace Prisma {
     readonly locale: FieldRef<"Product", 'String'>
     readonly name: FieldRef<"Product", 'String'>
     readonly image: FieldRef<"Product", 'String'>
+    readonly fullImage: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
     readonly section: FieldRef<"Product", 'Section'>
   }
@@ -4591,6 +4604,7 @@ export namespace Prisma {
     locale: 'locale',
     name: 'name',
     image: 'image',
+    fullImage: 'fullImage',
     description: 'description',
     section: 'section'
   };
@@ -4812,6 +4826,7 @@ export namespace Prisma {
     locale?: StringFilter<"Product"> | string
     name?: StringFilter<"Product"> | string
     image?: StringNullableFilter<"Product"> | string | null
+    fullImage?: StringNullableFilter<"Product"> | string | null
     description?: StringFilter<"Product"> | string
     section?: EnumSectionFilter<"Product"> | $Enums.Section
     brand?: XOR<BrandNullableScalarRelationFilter, BrandWhereInput> | null
@@ -4825,6 +4840,7 @@ export namespace Prisma {
     locale?: SortOrder
     name?: SortOrder
     image?: SortOrderInput | SortOrder
+    fullImage?: SortOrderInput | SortOrder
     description?: SortOrder
     section?: SortOrder
     brand?: BrandOrderByWithRelationInput
@@ -4841,6 +4857,7 @@ export namespace Prisma {
     locale?: StringFilter<"Product"> | string
     name?: StringFilter<"Product"> | string
     image?: StringNullableFilter<"Product"> | string | null
+    fullImage?: StringNullableFilter<"Product"> | string | null
     description?: StringFilter<"Product"> | string
     section?: EnumSectionFilter<"Product"> | $Enums.Section
     brand?: XOR<BrandNullableScalarRelationFilter, BrandWhereInput> | null
@@ -4854,6 +4871,7 @@ export namespace Prisma {
     locale?: SortOrder
     name?: SortOrder
     image?: SortOrderInput | SortOrder
+    fullImage?: SortOrderInput | SortOrder
     description?: SortOrder
     section?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -4873,6 +4891,7 @@ export namespace Prisma {
     locale?: StringWithAggregatesFilter<"Product"> | string
     name?: StringWithAggregatesFilter<"Product"> | string
     image?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    fullImage?: StringNullableWithAggregatesFilter<"Product"> | string | null
     description?: StringWithAggregatesFilter<"Product"> | string
     section?: EnumSectionWithAggregatesFilter<"Product"> | $Enums.Section
   }
@@ -4991,6 +5010,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
     brand?: BrandCreateNestedOneWithoutProductsInput
@@ -5004,6 +5024,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
   }
@@ -5012,6 +5033,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
     brand?: BrandUpdateOneWithoutProductsNestedInput
@@ -5025,6 +5047,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
   }
@@ -5036,6 +5059,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
   }
@@ -5044,6 +5068,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
   }
@@ -5055,6 +5080,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
   }
@@ -5272,6 +5298,7 @@ export namespace Prisma {
     locale?: SortOrder
     name?: SortOrder
     image?: SortOrder
+    fullImage?: SortOrder
     description?: SortOrder
     section?: SortOrder
   }
@@ -5289,6 +5316,7 @@ export namespace Prisma {
     locale?: SortOrder
     name?: SortOrder
     image?: SortOrder
+    fullImage?: SortOrder
     description?: SortOrder
     section?: SortOrder
   }
@@ -5300,6 +5328,7 @@ export namespace Prisma {
     locale?: SortOrder
     name?: SortOrder
     image?: SortOrder
+    fullImage?: SortOrder
     description?: SortOrder
     section?: SortOrder
   }
@@ -5721,6 +5750,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
     category: CategoryCreateNestedOneWithoutProductsInput
@@ -5732,6 +5762,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
   }
@@ -5798,6 +5829,7 @@ export namespace Prisma {
     locale?: StringFilter<"Product"> | string
     name?: StringFilter<"Product"> | string
     image?: StringNullableFilter<"Product"> | string | null
+    fullImage?: StringNullableFilter<"Product"> | string | null
     description?: StringFilter<"Product"> | string
     section?: EnumSectionFilter<"Product"> | $Enums.Section
   }
@@ -5831,6 +5863,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
     brand?: BrandCreateNestedOneWithoutProductsInput
@@ -5842,6 +5875,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
   }
@@ -5997,6 +6031,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
   }
@@ -6005,6 +6040,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
@@ -6016,6 +6052,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
   }
@@ -6026,6 +6063,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
   }
@@ -6043,6 +6081,7 @@ export namespace Prisma {
     locale: string
     name: string
     image?: string | null
+    fullImage?: string | null
     description: string
     section: $Enums.Section
   }
@@ -6073,6 +6112,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
     brand?: BrandUpdateOneWithoutProductsNestedInput
@@ -6084,6 +6124,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
   }
@@ -6094,6 +6135,7 @@ export namespace Prisma {
     locale?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    fullImage?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
     section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
   }

@@ -1,155 +1,222 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { GetProductsDto } from './dto/get-products.dto';
+import {
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+  ApiProperty,
+} from '@nestjs/swagger';
 import { Section } from '@prisma/client';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+import { GetProductsDto } from './dto/get-products.dto';
+import { ProductsService } from './products.service';
+
+class BrandResponse {
+  @ApiProperty({ description: 'Brand ID', example: 1 })
+  id?: number;
+
+  @ApiProperty({ description: 'Brand name', example: 'ASUS' })
+  name?: string;
+
+  @ApiProperty({ description: 'Locale', example: 'ru' })
+  locale?: string;
+
+  @ApiProperty({ description: 'Section', example: 'NEVA' })
+  section?: Section;
+}
+
+class CategoryResponse {
+  @ApiProperty({ description: 'Category ID', example: 1 })
+  id?: number;
+
+  @ApiProperty({ description: 'Category name', example: 'Ноутбуки' })
+  name?: string;
+
+  @ApiProperty({ description: 'Locale', example: 'ru' })
+  locale?: string;
+
+  @ApiProperty({ description: 'Section', example: 'NEVA' })
+  section?: Section;
+}
+
+class PaginationMeta {
+  @ApiProperty({ description: 'Total number of products', example: 100 })
+  total?: number;
+
+  @ApiProperty({ description: 'Current page', example: 1 })
+  page?: number;
+
+  @ApiProperty({ description: 'Items per page', example: 20 })
+  limit?: number;
+
+  @ApiProperty({ description: 'Total pages', example: 5 })
+  totalPages?: number;
+}
+
+class ProductResponse {
+  @ApiProperty({ description: 'Product ID', example: 1 })
+  id?: number;
+
+  @ApiProperty({ description: 'Product name', example: 'ASUS Vivobook' })
+  name?: string;
+
+  @ApiProperty({ description: 'Locale', example: 'ru' })
+  locale?: string;
+
+  @ApiProperty({ description: 'Section', example: 'NEVA' })
+  section?: Section;
+
+  @ApiProperty({ description: 'Description', example: 'A powerful laptop' })
+  description?: string;
+
+  @ApiProperty({
+    description: 'Image URL',
+    example: '/images/product_1_resized.webp',
+  })
+  image?: string;
+
+  @ApiProperty({
+    description: 'Full image URL',
+    example: '/images/product_1_full.webp',
+  })
+  fullImage?: string;
+
+  @ApiProperty({ description: 'Brand', type: () => BrandResponse })
+  brand?: BrandResponse;
+
+  @ApiProperty({ description: 'Category', type: () => CategoryResponse })
+  category?: CategoryResponse;
+}
+
+class ProductsResponse {
+  @ApiProperty({
+    description: 'List of products',
+    type: () => [ProductResponse],
+  })
+  data?: ProductResponse[];
+
+  @ApiProperty({
+    description: 'Metadata for pagination',
+    type: () => PaginationMeta,
+  })
+  meta?: PaginationMeta;
+}
 
 @ApiTags('Products')
 @Controller('products')
-export class ProductsController {
+export class NevaProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @ApiOperation({ summary: 'Get all products with pagination' })
-  @ApiQuery({ type: GetProductsDto })
-  @ApiResponse({
-    status: 200,
-    description: 'List of products with pagination metadata',
-    schema: {
-      example: {
-        data: [
-          {
-            id: 1099,
-            name: 'ASUS Vivobook 15',
-            image: '/images/product_4_1747056565657.webp',
-            description:
-              'Intel Core i5-1235U/ DDR4 8GB/ SSD 512GB/ 15.6» FHD IPS/ Intel UHD Graphics/ NoOS/ RU',
-            section: 'NEVA',
-            locale: 'uz',
-            brand: {
-              id: 130,
-              name: 'Noutbuklar',
-              locale: 'uz',
-              section: 'NEVA',
-            },
-            category: {
-              id: 170,
-              name: 'Asus, Lenovo, Acer, HP',
-              locale: 'uz',
-              section: 'NEVA',
-            },
-          },
-        ],
-        meta: {
-          total: 366,
-          page: 1,
-          limit: 20,
-          totalPages: 19,
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid locale or parameters',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: ['locale must be one of the following values: ru, en, kr, uz'],
-        error: 'Bad Request',
-      },
-    },
-  })
   @Get('all')
+  @ApiOperation({ summary: 'Get all products' })
+  @ApiQuery({
+    name: 'locale',
+    required: true,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
+  })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'categoryId', required: false, type: Number })
+  @ApiQuery({ name: 'brandId', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'List of products',
+    type: ProductsResponse,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid parameters' })
   async getAllProducts(@Query() dto: GetProductsDto) {
-    return this.productsService.getAllProducts(dto);
+    const result = await this.productsService.getProducts({
+      locale: dto.locale,
+      page: dto.page,
+      limit: 20,
+      categoryId: dto.categoryId,
+      brandId: dto.brandId,
+    });
+
+    return {
+      data: result.products,
+      meta: {
+        total: result.totalCount,
+        page: dto.page,
+        limit: 20,
+        totalPages: Math.ceil(result.totalCount / 20),
+      },
+    };
   }
 
-  @ApiOperation({ summary: 'Get products in NEVA section' })
-  @ApiQuery({ type: GetProductsDto })
-  @ApiResponse({
-    status: 200,
-    description: 'List of NEVA products with pagination metadata',
-    schema: {
-      example: {
-        data: [
-          {
-            id: 1099,
-            name: 'ASUS Vivobook 15',
-            image: '/images/product_4_1747056565657.webp',
-            description:
-              'Intel Core i5-1235U/ DDR4 8GB/ SSD 512GB/ 15.6» FHD IPS/ Intel UHD Graphics/ NoOS/ RU',
-            section: 'NEVA',
-            locale: 'uz',
-            brand: {
-              id: 130,
-              name: 'Noutbuklar',
-              locale: 'uz',
-              section: 'NEVA',
-            },
-            category: {
-              id: 170,
-              name: 'Asus, Lenovo, Acer, HP',
-              locale: 'uz',
-              section: 'NEVA',
-            },
-          },
-        ],
-        meta: {
-          total: 100,
-          page: 1,
-          limit: 10,
-          totalPages: 10,
-        },
-      },
-    },
-  })
-  @ApiResponse({ status: 400, description: 'Invalid locale or parameters' })
   @Get('neva')
-  async getNevaProducts(@Query() dto: GetProductsDto) {
-    return this.productsService.getProductsBySection(dto, Section.NEVA);
-  }
-
-  @ApiOperation({ summary: 'Get products in X_SOLUTION section' })
-  @ApiQuery({ type: GetProductsDto })
+  @ApiOperation({ summary: 'Get NEVA products' })
+  @ApiQuery({
+    name: 'locale',
+    required: true,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
+  })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'categoryId', required: false, type: Number })
+  @ApiQuery({ name: 'brandId', required: false, type: Number })
   @ApiResponse({
     status: 200,
-    description: 'List of X_SOLUTION products with pagination metadata',
-    schema: {
-      example: {
-        data: [
-          {
-            id: 1100,
-            name: 'Some X_Solution Product',
-            image: '/images/product_5_1747056565658.webp',
-            description: 'Description of X_Solution product',
-            section: 'X_SOLUTION',
-            locale: 'uz',
-            brand: {
-              id: 131,
-              name: 'Some Brand',
-              locale: 'uz',
-              section: 'X_SOLUTION',
-            },
-            category: {
-              id: 171,
-              name: 'Other Category',
-              locale: 'uz',
-              section: 'X_SOLUTION',
-            },
-          },
-        ],
-        meta: {
-          total: 50,
-          page: 1,
-          limit: 10,
-          totalPages: 5,
-        },
-      },
-    },
+    description: 'List of NEVA products',
+    type: ProductsResponse,
   })
-  @ApiResponse({ status: 400, description: 'Invalid locale or parameters' })
+  @ApiResponse({ status: 400, description: 'Invalid parameters' })
+  async getNevaProducts(@Query() dto: GetProductsDto) {
+    const result = await this.productsService.getProducts({
+      locale: dto.locale,
+      page: dto.page,
+      limit: 20,
+      section: Section.NEVA,
+      categoryId: dto.categoryId,
+      brandId: dto.brandId,
+    });
+
+    return {
+      data: result.products,
+      meta: {
+        total: result.totalCount,
+        page: dto.page,
+        limit: 20,
+        totalPages: Math.ceil(result.totalCount / 20),
+      },
+    };
+  }
+
   @Get('x-solution')
+  @ApiOperation({ summary: 'Get X_SOLUTION products' })
+  @ApiQuery({
+    name: 'locale',
+    required: true,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
+  })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'categoryId', required: false, type: Number })
+  @ApiQuery({ name: 'brandId', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'List of X_SOLUTION products',
+    type: ProductsResponse,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid parameters' })
   async getXSolutionProducts(@Query() dto: GetProductsDto) {
-    return this.productsService.getProductsBySection(dto, Section.X_SOLUTION);
+    const result = await this.productsService.getProducts({
+      locale: dto.locale,
+      page: dto.page,
+      limit: 20,
+      section: Section.X_SOLUTION,
+      categoryId: dto.categoryId,
+      brandId: dto.brandId,
+    });
+
+    return {
+      data: result.products,
+      meta: {
+        total: result.totalCount,
+        page: dto.page,
+        limit: 20,
+        totalPages: Math.ceil(result.totalCount / 20),
+      },
+    };
   }
 }
