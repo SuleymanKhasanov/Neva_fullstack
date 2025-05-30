@@ -1,5 +1,5 @@
-import { ProductList } from '@/widgets/ProductList';
 import { getRequestConfig } from '@/shared/config/i18n/i18n';
+import ProductListPage from '@/pages/ProductListPage/ProductListPage';
 
 type PageProps = {
   params: { locale: string };
@@ -10,10 +10,10 @@ export default async function Home({ params }: PageProps) {
     locale: params.locale,
   });
   const { messages } = await getRequestConfig({ locale });
-  const section = 'all'; // or 'neva' based on your requirements
+
   return (
     <div>
-      <ProductList locale={locale} section={section} messages={messages} />
+      <ProductListPage locale={locale} messages={messages} />
     </div>
   );
 }

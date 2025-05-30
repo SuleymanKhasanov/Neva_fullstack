@@ -2,32 +2,32 @@
 
 import { ReactNode, useRef } from 'react';
 import styles from './MainContentBox.module.css';
-import { TranslationType } from '@/shared/config/i18n/types';
+import { useScrollStore } from '@/shared/store/useScrollStore';
 
 interface MainContentBoxProps {
-  locale: string;
-  messages: TranslationType;
   children: ReactNode;
-  isLoading?: boolean; // Новый пропс для свечения
 }
 
-const MainContentBox = ({ children, isLoading }: MainContentBoxProps) => {
+const MainContentBox = ({ children }: MainContentBoxProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { isScrollEnd, isLoadingNext } = useScrollStore();
 
   return (
     <main className={styles.contentBox}>
       <div className={styles.container} ref={containerRef}>
         {children}
       </div>
-      {isLoading && (
+      {(isScrollEnd || isLoadingNext) && (
         <div
           className={styles.glowEffect}
           style={{
-            opacity: 0.4,
-            filter: 'blur(20px)',
-            transform: 'scaleY(0.8)',
+            opacity: isScrollEnd ? 0.7 : 0.4,
+            filter: isScrollEnd ? 'blur(30px)' : 'blur(20px)',
+            transform: isScrollEnd ? 'scaleY(1)' : 'scaleY(0.8)',
+            transition:
+              'opacity 0.5s ease, filter 0.5s ease, transform 0.5s ease',
           }}
-        ></div>
+        />
       )}
     </main>
   );

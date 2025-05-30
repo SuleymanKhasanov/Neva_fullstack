@@ -28,7 +28,18 @@ export class ProductsResolver {
     @Args('brandId', { type: () => Int, nullable: true }) brandId?: number
   ): Promise<ProductsResponse> {
     const sectionEnum: Section | undefined =
-      section === 'NEVA' || section === 'X_SOLUTION' ? section : undefined;
+      section && ['NEVA', 'X_SOLUTION'].includes(section.toUpperCase())
+        ? (section.toUpperCase() as Section)
+        : undefined;
+
+    console.log('ProductsResolver.products:', {
+      locale,
+      first,
+      after,
+      section: sectionEnum,
+      categoryId,
+      brandId,
+    });
 
     const result: ProductsResult = await this.productsService.getProducts({
       locale,
@@ -63,7 +74,14 @@ export class ProductsResolver {
     @Args('section', { type: () => String, nullable: true }) section?: string
   ) {
     const sectionEnum: Section | undefined =
-      section === 'NEVA' || section === 'X_SOLUTION' ? section : undefined;
+      section && ['NEVA', 'X_SOLUTION'].includes(section.toUpperCase())
+        ? (section.toUpperCase() as Section)
+        : undefined;
+
+    console.log('ProductsResolver.categories:', {
+      locale,
+      section: sectionEnum,
+    });
 
     const categories = await this.productsService.getCategories(
       locale,
@@ -79,9 +97,15 @@ export class ProductsResolver {
     @Args('section', { type: () => String, nullable: true }) section?: string
   ) {
     const sectionEnum: Section | undefined =
-      section === 'NEVA' || section === 'X_SOLUTION' ? section : undefined;
+      section && ['NEVA', 'X_SOLUTION'].includes(section.toUpperCase())
+        ? (section.toUpperCase() as Section)
+        : undefined;
+
+    console.log('ProductsResolver.brands:', { locale, section: sectionEnum });
 
     const brands = await this.productsService.getBrands(locale, sectionEnum);
+
+    console.log('ProductsResolver.brands response:', brands);
 
     return { brands };
   }

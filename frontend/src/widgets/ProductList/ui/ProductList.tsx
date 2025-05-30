@@ -1,112 +1,89 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { fetchProducts } from '@/shared/services/api/fetchProducts';
-import { ProductsResponse } from '@/shared/types/product';
+import { useEffect, useRef } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCTS } from '../lib/queries';
 import ProductCard from '@/features/ProductCard/ui/ProductCard';
 import ProductCardSkeleton from '@/features/ProductCard/ui/ProductCardSkeleton';
 import styles from './ProductList.module.css';
 import { TranslationType } from '@/shared/config/i18n/types';
+import { useScrollStore } from '@/shared/store/useScrollStore';
+import { useFilterStore } from '@/shared/store/useFilterStore';
 
 interface ProductListProps {
   locale: string;
-  section?: string;
   messages: TranslationType;
 }
 
-export default function ProductList({
-  locale,
-  section,
-  messages,
-}: ProductListProps) {
-  const [products, setProducts] = useState<ProductsResponse['data']>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
-
-  const loadProducts = async () => {
-    if (!hasMore || loading) {
-      console.log('Skipping loadProducts:', { hasMore, loading });
-      return;
-    }
-    setLoading(true);
-
-    try {
-      console.log(
-        `Loading products: page ${page}, section: ${section || 'all'}, locale: ${locale}`
-      );
-      const response = await fetchProducts({
-        locale,
-        page,
-        limit: 20,
-        section: section as 'neva' | 'x_solution' | 'all' | undefined,
-      });
-
-      console.log('Fetch products response:', {
-        data: response.data,
-        meta: response.meta,
-        dataLength: response.data?.length,
-      });
-
-      if (!response.data || !Array.isArray(response.data)) {
-        console.warn('No valid products data received:', response);
-        setHasMore(false);
-        setError('Получены некорректные данные о продуктах');
-        return;
-      }
-
-      if (response.data.length === 0) {
-        console.log('Empty products data received');
-        setHasMore(false);
-        return;
-      }
-
-      if (page > 1) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-
-      setProducts((prev) => [...prev, ...response.data]);
-      setHasMore(response.meta?.page < response.meta?.totalPages);
-      setPage((prev) => prev + 1);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Неизвестная ошибка';
-      console.error('Failed to load products:', errorMessage, err);
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-      setInitialLoading(false);
-      console.log('Loading states updated:', {
-        loading: false,
-        initialLoading: false,
-      });
-    }
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  image: string | null;
+  brand: {
+    id: number;
+    name: string;
   };
+}
+
+interface ProductsResponse {
+  products: {
+    edges: { node: Product; cursor: string }[];
+    pageInfo: { hasNextPage: boolean; endCursor: string | null };
+    totalCount: number;
+  };
+}
+
+export default function ProductList({ locale, messages }: ProductListProps) {
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const { isScrollEnd, setIsScrollEnd, isLoadingNext, setIsLoadingNext } =
+    useScrollStore();
+  const { section, brandId } = useFilterStore();
+
+  const validLocale = locale || 'ru';
+  const { data, loading, error, fetchMore, networkStatus, refetch } =
+    useQuery<ProductsResponse>(GET_PRODUCTS, {
+      variables: {
+        locale: validLocale,
+        first: 20,
+        section: section === 'all' ? null : section, // Используем section напрямую
+        brandId,
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'network-only',
+      skip: !validLocale,
+    });
 
   useEffect(() => {
-    console.log('ProductList props:', { locale, section, messages });
-    if (section && !['neva', 'x_solution', 'all'].includes(section)) {
-      console.error(`Invalid section: ${section}`);
-      setError('Неверная секция');
-      setLoading(false);
-      setInitialLoading(false);
+    console.log('FilterStore state:', useFilterStore.getState());
+    console.log('ProductList variables:', {
+      locale: validLocale,
+      section,
+      brandId,
+    });
+    console.log('GET_PRODUCTS response:', data);
+  }, [validLocale, section, brandId, data]);
+
+  useEffect(() => {
+    if (
+      !data?.products.pageInfo.hasNextPage ||
+      loading ||
+      isLoadingNext ||
+      !triggerRef.current
+    ) {
+      console.log('Skipping IntersectionObserver:', {
+        hasNextPage: data?.products.pageInfo.hasNextPage,
+        loading,
+        isLoadingNext,
+      });
       return;
     }
-    setInitialLoading(true);
-    loadProducts();
-  }, [locale, section]);
-
-  useEffect(() => {
-    if (!hasMore || loading || !triggerRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !loading) {
-          console.log('IntersectionObserver triggered, loading more products');
-          loadProducts();
+        if (entries[0].isIntersecting && !isLoadingNext) {
+          console.log('IntersectionObserver triggered, showing glow effect');
+          setIsScrollEnd(true);
         }
       },
       { rootMargin: '100px' }
@@ -119,23 +96,89 @@ export default function ProductList({
         observer.unobserve(triggerRef.current);
       }
     };
-  }, [hasMore, loading]);
+  }, [data?.products.pageInfo.hasNextPage, loading, isLoadingNext]);
+
+  useEffect(() => {
+    if (isScrollEnd && data?.products.pageInfo.hasNextPage && !isLoadingNext) {
+      console.log('Triggering next page fetch after glow effect');
+      const timer = setTimeout(() => {
+        console.log('Loading next page');
+        setIsLoadingNext(true);
+        fetchMore({
+          variables: {
+            after: data.products.pageInfo.endCursor,
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prev;
+            console.log('fetchMoreResult:', fetchMoreResult);
+            const existingIds = new Set(
+              prev.products.edges.map((edge) => edge.node.id)
+            );
+            const newEdges = fetchMoreResult.products.edges.filter(
+              (edge) => !existingIds.has(edge.node.id)
+            );
+            return {
+              products: {
+                ...fetchMoreResult.products,
+                edges: [...prev.products.edges, ...newEdges],
+              },
+            };
+          },
+        }).then(() => setIsLoadingNext(false));
+        setIsScrollEnd(false);
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [
+    isScrollEnd,
+    data?.products.pageInfo.hasNextPage,
+    isLoadingNext,
+    fetchMore,
+  ]);
+
+  useEffect(() => {
+    console.log('Resetting scroll state due to filter change:', {
+      locale: validLocale,
+      section,
+      brandId,
+    });
+    setIsScrollEnd(false);
+    setIsLoadingNext(false);
+    refetch();
+  }, [validLocale, section, brandId, refetch]);
 
   if (error) {
-    console.log('Rendering error state:', error);
-    return <div className={styles.error}>Ошибка: {error}</div>;
+    console.error('Error in ProductList:', error);
+    return (
+      <div className={styles.error}>
+        Ошибка: {error.message || 'Неизвестная ошибка'}
+      </div>
+    );
   }
+
+  const products = data?.products.edges.map((edge) => edge.node) ?? [];
+
+  const uniqueProducts = Array.from(
+    new Map(products.map((product) => [product.id, product])).values()
+  );
+
+  console.log('Rendering products:', {
+    productCount: uniqueProducts.length,
+    hasNextPage: data?.products.pageInfo.hasNextPage,
+    networkStatus,
+  });
 
   return (
     <div className={styles.mainContentBox}>
       <div className={styles.productGrid}>
-        {initialLoading && !products.length
+        {loading && !uniqueProducts.length
           ? Array.from({ length: 10 }).map((_, index) => (
               <ProductCardSkeleton key={`skeleton-initial-${index}`} />
             ))
-          : products.map((product) => (
+          : uniqueProducts.map((product, index) => (
               <ProductCard
-                key={product.id}
+                key={`${product.id}-${index}`}
                 product={{
                   image: product.image,
                   name: product.name,
@@ -144,14 +187,14 @@ export default function ProductList({
                 messages={messages}
               />
             ))}
-        {loading &&
-          products.length > 0 &&
+        {isLoadingNext &&
+          uniqueProducts.length > 0 &&
           Array.from({ length: 10 }).map((_, index) => (
             <ProductCardSkeleton key={`skeleton-more-${index}`} />
           ))}
       </div>
       <div ref={triggerRef} style={{ height: '1px' }} />
-      {!hasMore && products.length > 0 && (
+      {!data?.products.pageInfo.hasNextPage && uniqueProducts.length > 0 && (
         <div className={styles.noMore}>Больше продуктов нет</div>
       )}
     </div>
