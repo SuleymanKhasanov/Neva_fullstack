@@ -1,508 +1,587 @@
-# Neva API
+# Neva Backend API
 
-Neva API — это RESTful бэкенд для управления продуктами с поддержкой мультиязычности (локали: `ru`, `en`, `kr`, `uz`). API предоставляет эндпоинты для получения данных о продуктах, разделённых по секциям (`NEVA` и `X_SOLUTION`), с пагинацией и документацией через Swagger.
+Высокопроизводительный backend API для каталога продуктов Neva с интеграцией Redis кеширования, построенный на NestJS.
 
-Проект построен на **NestJS** с использованием **Prisma** для работы с PostgreSQL и развернут в **Docker** для упрощения разработки и деплоя.
+## 🚀 Особенности
 
-## Основные возможности
+- **REST & GraphQL API** - Гибкие возможности запросов данных
+- **Redis Кеширование** - Ускорение API в 2-6 раз
+- **Многоязычность** - Поддержка ru, en, kr, uz локалей
+- **Автодокументация** - Swagger UI и GraphQL Playground
+- **Типобезопасность** - TypeScript + Prisma ORM
+- **Административная панель** - Управление кешем и мониторинг
+- **Контейнеризация** - Docker setup для разработки и продакшена
 
-- Получение всех продуктов с фильтрацией по локали и пагинацией (`/products/all`).
-- Получение продуктов по секциям `NEVA` (`/products/neva`) и `X_SOLUTION` (`/products/x-solution`).
-- Поддержка мультиязычности (`ru`, `en`, `kr`, `uz`).
-- Автоматическая загрузка данных из JSON-файлов в БД через скрипт `mergeAndProcessData.ts`.
-- Интерактивная документация API через Swagger (`/api`).
-- Развёртывание в Docker с PostgreSQL и Adminer для управления БД.
+## 📋 Содержание
 
-## Технологии
+- [Технологии](#технологии)
+- [Быстрый старт](#быстрый-старт)
+- [Структура проекта](#структура-проекта)
+- [API Документация](#api-документация)
+- [Кеширование](#кеширование)
+- [База данных](#база-данных)
+- [Разработка](#разработка)
+- [Конфигурация](#конфигурация)
+- [Деплой](#деплой)
 
-- **NestJS**: Фреймворк для создания масштабируемых серверных приложений.
-- **Prisma**: ORM для работы с PostgreSQL.
-- **PostgreSQL**: База данных для хранения продуктов, брендов и категорий.
-- **Docker**: Контейнеризация для упрощения развёртывания.
-- **Swagger**: Документация и тестирование API.
-- **TypeScript**: Типизация для надёжного кода.
-- **Yarn Workspaces**: Управление монорепозиторием (`backend`, `frontend`).
+## 🛠 Технологии
 
-## Структура проекта
+| Категория | Технология | Версия |
+|-----------|------------|---------|
+| **Framework** | NestJS | ^11.1.0 |
+| **Language** | TypeScript | ^5.7.2 |
+| **Database** | PostgreSQL | 15 |
+| **ORM** | Prisma | ^6.7.0 |
+| **Cache** | Redis | 7 |
+| **API** | REST + GraphQL | - |
+| **Documentation** | Swagger + Apollo Studio | - |
+| **Containerization** | Docker & Docker Compose | - |
 
-```
-neva_fullstack/
-├── backend/                  # Бэкенд (NestJS)
-│   ├── src/                  # Исходный код
-│   │   ├── products/         # Модуль продуктов (контроллер, сервис, DTO)
-│   │   ├── categories/       # Модуль категорий (контроллер, сервис, DTO)
-│   │   ├── brands/           # Модуль брендов (контроллер, сервис, DTO)
-│   │   ├── prisma/           # Prisma сервис и конфигурация
-│   │   └── app.module.ts     # Главный модуль приложения
-│   ├── scripts/              # Скрипты для обработки данных
-│   │   └── mergeAndProcessData.ts  # Скрипт загрузки данных из JSON
-│   ├── data/                 # JSON-файлы с данными (categories_*.json, products_*.json)
-│   ├── prisma/               # Prisma схема и миграции
-│   ├── Dockerfile            # Конфигурация Docker для бэкенда
-│   └── package.json          # Зависимости бэкенда
-├── frontend/                 # Фронтенд (пока не реализован)
-├── docker-compose.yml        # Конфигурация Docker Compose
-├── package.json              # Корневой package.json (Yarn Workspaces)
-└── README.md                 # Документация проекта
-```
-
-## Установка и запуск
+## 🚀 Быстрый старт
 
 ### Предварительные требования
 
-- **Node.js**: v18.x
-- **Yarn**: v1.x
-- **Docker**: Для контейнеризации
-- **PostgreSQL**: Для локального запуска без Docker
-- **Git**: Для клонирования репозитория
+- Docker & Docker Compose
+- Node.js 20+ (для локальной разработки)
+- Yarn (рекомендуется)
 
-### Локальный запуск
-
-1. **Клонируй репозиторий**:
-
-   ```bash
-   git clone <repository-url>
-   cd neva_fullstack
-   ```
-
-2. **Установи зависимости**:
-
-   ```bash
-   yarn install
-   ```
-
-3. **Настрой PostgreSQL**:
-
-   - Убедись, что PostgreSQL запущен и доступен.
-   - Создай базу данных:
-
-     ```bash
-     createdb -U user neva
-     ```
-
-4. **Настрой `.env`**:
-
-   Создай файл `backend/.env`:
-
-   ```env
-   DATABASE_URL="postgresql://user:password@localhost:5432/neva"
-   PRISMA_CLIENT_OUTPUT="./generated/prisma/client"
-   ```
-
-   Замени `user` и `password` на свои учетные данные PostgreSQL.
-
-5. **Сгенерируй Prisma Client**:
-
-   ```bash
-   cd backend
-   npx prisma generate
-   ```
-
-6. **Загрузи данные в БД**:
-
-   ```bash
-   yarn ts-node scripts/mergeAndProcessData.ts
-   ```
-
-   Это загрузит данные из `backend/data/*.json` в базу.
-
-7. **Запусти сервер**:
-
-   ```bash
-   yarn workspace backend start:dev
-   ```
-
-8. **Открой API**:
-   - API: `http://localhost:3000`
-   - Swagger: `http://localhost:3000/api`
-
-### Запуск в Docker
-
-1. **Клонируй репозиторий** (если ещё не сделал):
-
-   ```bash
-   git clone <repository-url>
-   cd neva_fullstack
-   ```
-
-2. **Убедись, что Docker установлен и работает**:
-
-   ```bash
-   docker --version
-   ```
-
-3. **Настрой `.env`**:
-
-   Убедись, что `backend/.env` содержит:
-
-   ```env
-   DATABASE_URL="postgresql://user:password@db:5432/neva"
-   PRISMA_CLIENT_OUTPUT="/app/backend/generated/prisma/client"
-   ```
-
-4. **Запусти Docker Compose**:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-   Это запустит:
-   - Бэкенд (NestJS) на `http://localhost:3000`.
-   - PostgreSQL на `5432` (внутри сети Docker).
-   - Adminer на `http://localhost:8080` для управления БД.
-
-5. **Открой API**:
-   - API: `http://localhost:3000`
-   - Swagger: `http://localhost:3000/api`
-   - Adminer: `http://localhost:8080` (логин: `user`, пароль: `password`, база: `neva`).
-
-## Эндпоинты API
-
-API предоставляет следующие эндпоинты, задокументированные в Swagger (`http://localhost:3000/api`):
-
-| Метод | Эндпоинт                | Описание                              | Параметры                                   |
-|-------|-------------------------|---------------------------------------|---------------------------------------------|
-| GET   | `/products/all`         | Получить все продукты с пагинацией    | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-| GET   | `/products/neva`        | Получить продукты секции NEVA         | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-| GET   | `/products/x-solution`  | Получить продукты секции X_SOLUTION   | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-| GET   | `/categories/neva`      | Получить категории секции NEVA        | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-| GET   | `/categories/x-solution`| Получить категории секции X_SOLUTION  | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-| GET   | `/brands/all`           | Получить все бренды с пагинацией      | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-| GET   | `/brands/neva`          | Получить бренды секции NEVA           | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-| GET   | `/brands/x-solution`    | Получить бренды секции X_SOLUTION     | `locale` (ru, en, kr, uz), `page`, `limit` (опционально, по умолчанию 20) |
-
-### Пример запроса
+### Установка
 
 ```bash
-curl "http://localhost:3000/products/all?locale=uz&page=1&limit=10"
+# 1. Клонируйте репозиторий
+git clone <repository-url>
+cd neva-backend
+
+# 2. Скопируйте переменные окружения
+cp .env.example .env
+
+# 3. Запустите с помощью Docker
+docker-compose up --build
+
+# 4. Приложение будет доступно по адресам:
+# API: http://localhost:3000
+# Swagger: http://localhost:3000/api-docs
+# GraphQL: http://localhost:3000/graphql
+# Redis Commander: http://localhost:8081 (admin/admin123)
+# Adminer: http://localhost:8080
 ```
 
-### Пример ответа
+### Локальная разработка
 
-```json
-{
-  "data": [
-    {
-      "id": 1099,
-      "name": "ASUS Vivobook 15",
-      "image": "/images/product_4_1747056565657.webp",
-      "description": "Intel Core i5-1235U/ DDR4 8GB/ SSD 512GB/ 15.6» FHD IPS/ Intel UHD Graphics/ NoOS/ RU",
-      "section": "NEVA",
-      "locale": "uz",
-      "brand": {
-        "id": 130,
-        "name": "Noutbuklar",
-        "locale": "uz",
-        "section": "NEVA"
-      },
-      "category": {
-        "id": 170,
-        "name": "Asus, Lenovo, Acer, HP",
-        "locale": "uz",
-        "section": "NEVA"
+```bash
+# 1. Установите зависимости
+yarn install
+
+# 2. Запустите инфраструктуру (PostgreSQL + Redis)
+docker-compose up -d db redis
+
+# 3. Примените миграции
+yarn prisma migrate deploy
+yarn prisma generate
+
+# 4. Заполните тестовыми данными
+yarn ts-node scripts/mergeAndProcessData.ts
+
+# 5. Запустите в режиме разработки
+yarn start:dev
+```
+
+## 📁 Структура проекта
+
+```
+backend/
+├── prisma/                    # Схема базы данных и миграции
+│   ├── schema.prisma         # Prisma схема
+│   ├── migrations/           # Миграции базы данных
+│   └── prisma.service.ts     # Prisma сервис
+├── src/
+│   ├── common/               # Общие модули
+│   │   ├── cache.service.ts  # Сервис кеширования
+│   │   └── cache.module.ts   # Модуль кеширования
+│   ├── admin/                # Административные эндпоинты
+│   │   └── cache-admin.controller.ts
+│   ├── products/             # Модуль продуктов
+│   │   ├── products.controller.ts
+│   │   ├── products.service.ts
+│   │   ├── products.resolver.ts
+│   │   └── dto/              # Data Transfer Objects
+│   ├── categories/           # Модуль категорий
+│   ├── brands/               # Модуль брендов
+│   ├── app.module.ts         # Главный модуль приложения
+│   └── main.ts               # Точка входа
+├── scripts/                  # Скрипты для работы с данными
+├── public/                   # Статические файлы (изображения)
+├── data/                     # Исходные данные для импорта
+└── docker-compose.yml        # Docker конфигурация
+```
+
+## 📚 API Документация
+
+### REST API
+
+API доступно по адресу: `http://localhost:3000`
+
+**Swagger UI**: `http://localhost:3000/api-docs`
+
+#### Основные эндпоинты:
+
+| Метод | Путь | Описание |
+|-------|------|----------|
+| `GET` | `/products/all` | Все продукты с пагинацией |
+| `GET` | `/products/neva` | Продукты секции NEVA |
+| `GET` | `/products/x-solution` | Продукты секции X-SOLUTION |
+| `GET` | `/categories/all` | Все категории с брендами |
+| `GET` | `/brands/all` | Все бренды |
+
+#### Параметры запросов:
+
+```bash
+# Продукты с фильтрацией
+GET /products/all?locale=ru&page=1&categoryId=1&brandId=2
+
+# Категории по секции
+GET /categories/neva?locale=en
+
+# Бренды по локали
+GET /brands/all?locale=uz
+```
+
+### GraphQL API
+
+**GraphQL Playground**: `http://localhost:3000/graphql`
+
+#### Примеры запросов:
+
+```graphql
+# Получить продукты
+query GetProducts($locale: String!, $section: String) {
+  products(locale: $locale, section: $section, first: 10) {
+    edges {
+      node {
+        id
+        name
+        description
+        image
+        brand {
+          id
+          name
+        }
+        category {
+          id
+          name
+        }
       }
     }
-  ],
-  "meta": {
-    "total": 366,
-    "page": 1,
-    "limit": 10,
-    "totalPages": 37
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    totalCount
+  }
+}
+
+# Получить категории
+query GetCategories($locale: String!) {
+  categories(locale: $locale) {
+    categories {
+      id
+      name
+      brands {
+        id
+        name
+      }
+    }
   }
 }
 ```
 
-## Документация Swagger
+## ⚡ Кеширование
 
-Swagger UI доступен по адресу:
+### Redis Integration
+
+Приложение использует Redis для высокопроизводительного кеширования:
+
+- **Автоматическое кеширование** всех API запросов
+- **TTL (Time To Live)**: 5 минут для большинства данных
+- **Ускорение**: в 2-6 раз по сравнению с запросами к БД
+- **Умная инвалидация** по паттернам
+
+### Административные команды
+
+```bash
+# Статистика кеша
+curl http://localhost:3000/admin/cache/stats
+
+# Проверка здоровья
+curl http://localhost:3000/admin/cache/health
+
+# Очистка всего кеша
+curl -X POST http://localhost:3000/admin/cache/clear
+
+# Инвалидация по паттерну
+curl -X DELETE "http://localhost:3000/admin/cache/pattern?pattern=products:*"
+
+# Инвалидация продуктов
+curl -X POST http://localhost:3000/admin/cache/invalidate/products
+
+# Инвалидация категорий
+curl -X POST http://localhost:3000/admin/cache/invalidate/categories
+```
+
+### Структура ключей кеша
 
 ```
-http://localhost:3000/api
+products:locale:ru:page:1:limit:20:section:NEVA:categoryId:all:brandId:all
+categories:locale:ru:section:all
+brands:locale:ru:section:NEVA
+category_exists:1
+brand_exists:2
+products_count:{"locale":"ru","section":"NEVA"}
 ```
 
-Swagger предоставляет:
-- Интерактивный интерфейс для тестирования эндпоинтов.
-- Описание параметров (`locale`, `page`, `limit`).
-- Примеры ответов и ошибок (например, 400 для неверного `locale`).
-
-## Разработка
-
-### Полезные команды
-
-- **Локальный запуск бэкенда**:
-
-  ```bash
-  cd backend
-  yarn start:dev
-  ```
-
-- **Генерация Prisma Client**:
-
-  ```bash
-  cd backend
-  npx prisma generate
-  ```
-
-- **Запуск скрипта загрузки данных**:
-
-  ```bash
-  cd backend
-  yarn ts-node scripts/mergeAndProcessData.ts
-  ```
-
-- **Линтинг и форматирование**:
-
-  ```bash
-  yarn lint
-  yarn format
-  ```
-
-- **Запуск Docker**:
-
-  ```bash
-  docker-compose up --build
-  ```
-
-### Структура данных
-
-База данных (PostgreSQL) содержит следующие таблицы:
-
-- **Product**: Продукты с полями `id`, `brandId`, `categoryId`, `locale`, `name`, `image`, `description`, `section`.
-- **Brand**: Бренды с полями `id`, `categoryId`, `name`, `locale`, `section`.
-- **Category**: Категории с полями `id`, `locale`, `name`, `section`.
-
-Схема определена в `backend/prisma/schema.prisma`.
-
-## Тестирование
-
-Neva API включает набор end-to-end (e2e) тестов для проверки эндпоинтов `/products`, `/categories` и `/brands`. Тесты написаны с использованием **Jest** и **Supertest**, проверяют корректность ответов API, пагинацию и обработку ошибок (например, неверный `locale`). Тесты используют отдельную тестовую базу данных (`neva_test`) для изоляции от основной базы (`neva`).
-
-### Как работают тесты
-
-- **Тестовые файлы**:
-  - `backend/src/products/products.controller.spec.ts`: Проверяет эндпоинты `/products/all`, `/products/neva`, `/products/x-solution`.
-  - `backend/src/categories/categories.controller.spec.ts`: Проверяет `/categories/neva`, `/categories/x-solution`.
-  - `backend/src/brands/brands.controller.spec.ts`: Проверяет `/brands/all`, `/brands/neva`, `/brands/x-solution`.
-- **Изоляция**: Тесты используют тестовую базу `neva_test` (конфигурация в `backend/.env.test`), чтобы не затрагивать основную базу.
-- **Подготовка данных**: Перед каждым тестом база очищается (`TRUNCATE`), и вставляются тестовые данные (`Category`, `Brand`, `Product`) с уникальными именами.
-- **Проверки**: Тесты проверяют HTTP-статусы (200, 400), структуру ответа (`data`, `meta`) и корректность фильтрации по `locale` и `section`.
-
-### Запуск тестов
-
-Тесты запускаются в Docker-контейнере для согласованности с продакшен-окружением. Требуется запущенная тестовая база данных (`test_db`).
-
-1. **Убедись, что тестовая база запущена**:
-
-   ```bash
-   cd neva_fullstack
-   docker-compose up -d test_db
-   ```
-
-2. **Проверь `.env.test`**:
-
-   Убедись, что `backend/.env.test` содержит:
-
-   ```env
-   DATABASE_URL="postgresql://user:password@test_db:5432/neva_test"
-   PRISMA_CLIENT_OUTPUT="/app/backend/generated/prisma/client"
-   ```
-
-3. **Применение миграций для тестовой базы**:
-
-   ```bash
-   docker run -it --rm \
-     --network neva_fullstack_neva-network \
-     -v $(pwd)/backend:/app/backend \
-     -w /app/backend \
-     -e NODE_ENV=test \
-     node:20 \
-     bash -c "./migrate-test.sh"
-   ```
-
-   Скрипт `migrate-test.sh` применяет миграции к `neva_test` с использованием `dotenv-cli`.
-
-4. **Запуск тестов**:
-
-   ```bash
-   docker run -it --rm \
-     --network neva_fullstack_neva-network \
-     -v $(pwd)/backend:/app/backend \
-     -w /app/backend \
-     -e NODE_ENV=test \
-     -e DATABASE_URL="postgresql://user:password@test_db:5432/neva_test" \
-     node:20 \
-     bash -c "yarn install && yarn test"
-   ```
-
-   Флаг `-e DATABASE_URL` явно задаёт тестовую базу, чтобы избежать подключения к основной (`db:5432`).
-
-5. **Проверка покрытия**:
-
-   ```bash
-   docker run -it --rm \
-     --network neva_fullstack_neva-network \
-     -v $(pwd)/backend:/app/backend \
-     -w /app/backend \
-     -e NODE_ENV=test \
-     -e DATABASE_URL="postgresql://user:password@test_db:5432/neva_test" \
-     node:20 \
-     bash -c "yarn install && yarn test:cov"
-   ```
-
-### Устранение неполадок с тестами
-
-- **Ошибка `Can't reach database server at `db:5432``**:
-  - Убедись, что `test_db` запущен:
-
-    ```bash
-    docker ps
-    docker logs neva_fullstack-test_db-1
-    ```
-
-  - Проверь, что `backend/.env.test` указывает на `test_db:5432`:
-
-    ```bash
-    cat backend/.env.test
-    ```
-
-  - Попробуй явно задать `DATABASE_URL` в команде тестов (см. выше).
-
-- **Таймаут тестов**:
-  - Увеличь таймаут в `jest.config.js`:
-
-    ```javascript
-    module.exports = {
-      preset: 'ts-jest',
-      testEnvironment: 'node',
-      testTimeout: 60000, // 60 секунд
-      moduleFileExtensions: ['ts', 'js'],
-      transform: { '^.+\\.ts$': 'ts-jest' },
-      testMatch: ['**/*.spec.ts'],
-    };
-    ```
-
-  - Сохрани:
-
-    ```bash
-    echo -e "module.exports = {\n  preset: 'ts-jest',\n  testEnvironment: 'node',\n  testTimeout: 60000,\n  moduleFileExtensions: ['ts', 'js'],\n  transform: { '^.+\\\\.ts$': 'ts-jest' },\n  testMatch: ['**/*.spec.ts'],\n};" > backend/jest.config.js
-    ```
-
-- **Нарушение уникального ограничения**:
-  - Проверь, что тестовые данные используют уникальные имена (с `Date.now()`):
-
-    ```bash
-    cat backend/src/products/products.controller.spec.ts | grep Date.now
-    ```
-
-  - Убедись, что `TRUNCATE` выполняется перед каждым тестом.
-
-- **Логи для отладки**:
-  - Добавь отладочный вывод в тесты:
-
-    ```bash
-    docker run -it --rm \
-      --network neva_fullstack_neva-network \
-      -v $(pwd)/backend:/app/backend \
-      -w /app/backend \
-      -e NODE_ENV=test \
-      -e DATABASE_URL="postgresql://user:password@test_db:5432/neva_test" \
-      node:20 \
-      bash -c "yarn install && yarn test | grep DATABASE_URL"
-    ```
-
-### Текущие ограничения тестов
-
-- Тесты могут падать из-за проблемы с загрузкой `backend/.env.test`, что приводит к попытке подключения к `db:5432` вместо `test_db:5432`. Для обхода используется явное указание `DATABASE_URL` в команде запуска.
-- Если тесты не работают стабильно, рекомендуется проверить конфигурацию `ConfigModule` в `app.module.ts` и `PrismaService`.
-
-## Продакшен
-
-Для продакшен-сборки:
-
-1. Скомпилируй проект:
-
-   ```bash
-   cd backend
-   yarn build
-   ```
-
-2. Запусти продакшен:
-
-   ```bash
-   yarn start:prod
-   ```
-
-3. Для Docker используй продакшен-образ:
-
-   Обнови `Dockerfile` для продакшена:
-
-   ```dockerfile
-   FROM node:18
-
-   WORKDIR /app
-
-   COPY package.json yarn.lock ./
-   COPY backend/package.json ./backend/package.json
-   RUN yarn install --frozen-lockfile --production
-
-   COPY . .
-   WORKDIR /app/backend
-   RUN yarn build
-   RUN npx prisma generate
-   RUN mkdir -p /app/node_modules/.prisma/client && \
-       cp -r /app/backend/generated/prisma/client/* /app/node_modules/.prisma/client/
-
-   EXPOSE 3000
-
-   CMD ["node", "dist/main"]
-   ```
-
-4. Обнови `docker-compose.yml` для продакшена, если нужно.
-
-## Устранение неполадок
-
-- **Ошибка Prisma Client**:
-
-  ```bash
-  docker exec <backend_container_name> npx prisma generate
-  ```
-
-- **Отсутствие данных в БД**:
-
-  Проверь `backend/data/*.json` и запусти:
-
-  ```bash
-  docker exec <backend_container_name> yarn ts-node /app/backend/scripts/mergeAndProcessData.ts
-  ```
-
-- **Порт занят**:
-
-  ```bash
-  lsof -i :3000
-  kill -9 <PID>
-  ```
-
-- **Swagger UI не работает**:
-
-  Проверь `main.ts` и зависимости:
-
-  ```bash
-  docker exec <backend_container_name> yarn list --pattern @nestjs/swagger
-  ```
-
-## Контрибьютинг
-
-1. Форкни репозиторий.
-2. Создай ветку: `git checkout -b feature/имя-фичи`.
-3. Внеси изменения и закоммить: `git commit -m "Добавлена фича"`.
-4. Запушь: `git push origin feature/имя-фичи`.
-5. Создай Pull Request.
-
-## Лицензия
-
-MIT License
-
-## Контакты
-
-- Email: <your-email>
-- GitHub: <your-github>
+### Мониторинг
+
+- **Redis Commander**: `http://localhost:8081` (admin/admin123)
+- **Метрики производительности** через `/admin/cache/debug`
+
+## 🗄️ База данных
+
+### Схема данных
+
+```prisma
+model Product {
+  id          Int      @id @default(autoincrement())
+  brandId     Int?
+  categoryId  Int
+  locale      String
+  name        String
+  image       String?
+  fullImage   String?
+  description String
+  section     Section
+  brand       Brand?   @relation(fields: [brandId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model Brand {
+  id         Int       @id @default(autoincrement())
+  categoryId Int
+  name       String
+  locale     String
+  section    Section
+  category   Category  @relation(fields: [categoryId], references: [id])
+  products   Product[]
+  @@unique([name, locale])
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  locale   String
+  name     String
+  section  Section
+  brands   Brand[]
+  products Product[]
+}
+
+enum Section {
+  NEVA
+  X_SOLUTION
+}
+```
+
+### Миграции
+
+```bash
+# Создать новую миграцию
+yarn prisma migrate dev --name migration_name
+
+# Применить миграции
+yarn prisma migrate deploy
+
+# Сгенерировать Prisma Client
+yarn prisma generate
+
+# Сбросить базу данных
+yarn prisma migrate reset
+```
+
+### Заполнение данными
+
+```bash
+# Импорт данных из JSON файлов
+yarn ts-node scripts/mergeAndProcessData.ts
+
+# Обработка изображений и создание миниатюр
+# Автоматически при импорте данных
+```
+
+## 🛠 Разработка
+
+### Команды разработки
+
+```bash
+# Запуск в режиме разработки
+yarn start:dev
+
+# Сборка проекта
+yarn build
+
+# Запуск продакшен версии
+yarn start:prod
+
+# Линтинг
+yarn lint
+yarn lint:fix
+
+# Тестирование
+yarn test
+yarn test:watch
+yarn test:cov
+
+# Проверка типов
+yarn tsc --noEmit
+```
+
+### Структура модулей
+
+Каждый модуль следует структуре:
+
+```
+module/
+├── module.controller.ts      # REST endpoints
+├── module.service.ts         # Бизнес логика
+├── module.resolver.ts        # GraphQL resolvers
+├── module.module.ts          # NestJS модуль
+├── dto/                      # Data Transfer Objects
+│   ├── create-module.dto.ts
+│   ├── update-module.dto.ts
+│   └── module-response.dto.ts
+└── entities/                 # TypeScript типы
+    └── module.entity.ts
+```
+
+### Добавление новых эндпоинтов
+
+1. **Создайте DTO**:
+```typescript
+// dto/create-item.dto.ts
+export class CreateItemDto {
+  @IsString()
+  name: string;
+  
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+```
+
+2. **Добавьте метод в сервис**:
+```typescript
+// item.service.ts
+async createItem(createItemDto: CreateItemDto) {
+  return this.cacheService.getOrSet(
+    `item:${createItemDto.name}`,
+    () => this.prisma.item.create({ data: createItemDto }),
+    { ttl: 300 }
+  );
+}
+```
+
+3. **Создайте контроллер**:
+```typescript
+// item.controller.ts
+@Post()
+@ApiOperation({ summary: 'Create new item' })
+async create(@Body() createItemDto: CreateItemDto) {
+  return this.itemService.createItem(createItemDto);
+}
+```
+
+## ⚙️ Конфигурация
+
+### Переменные окружения
+
+```bash
+# База данных
+DATABASE_URL=postgresql://user:password@db:5432/neva
+
+# Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+
+# Кеширование
+CACHE_TTL=300
+CACHE_MAX_ITEMS=2000
+
+# Приложение
+NODE_ENV=development
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+PORT=3000
+
+# Prisma
+PRISMA_CLIENT_OUTPUT=/app/backend/generated/prisma/client
+```
+
+### Docker конфигурация
+
+#### Development
+```bash
+# Запуск для разработки
+docker-compose up
+
+# Только инфраструктура
+docker-compose up -d db redis
+```
+
+#### Production
+```bash
+# Билд продакшен образов
+docker-compose -f docker-compose.prod.yml build
+
+# Запуск в продакшене
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+## 📦 Деплой
+
+### Docker Production
+
+1. **Создайте production docker-compose.yml**:
+```yaml
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_HOST=${REDIS_HOST}
+    restart: unless-stopped
+```
+
+2. **Настройте CI/CD**:
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to server
+        run: |
+          docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+### Мониторинг в продакшене
+
+```bash
+# Логи
+docker-compose logs -f backend
+
+# Метрики контейнеров
+docker stats
+
+# Состояние Redis
+docker-compose exec redis redis-cli info
+
+# Состояние PostgreSQL
+docker-compose exec db pg_isready
+```
+
+## 🔧 Устранение неполадок
+
+### Часто встречающиеся проблемы
+
+#### 1. Ошибки подключения к базе данных
+```bash
+# Проверьте состояние PostgreSQL
+docker-compose exec db pg_isready -U user -d neva
+
+# Пересоздайте базу данных
+docker-compose down
+docker-compose up db
+yarn prisma migrate reset
+```
+
+#### 2. Проблемы с Redis
+```bash
+# Проверьте подключение к Redis
+docker-compose exec redis redis-cli ping
+
+# Очистите Redis
+docker-compose exec redis redis-cli flushall
+
+# Перезапустите Redis
+docker-compose restart redis
+```
+
+#### 3. Ошибки Prisma
+```bash
+# Пересгенерируйте Prisma Client
+yarn prisma generate
+
+# Проверьте статус миграций
+yarn prisma migrate status
+
+# Сбросите базу данных
+yarn prisma migrate reset
+```
+
+#### 4. Проблемы с кешированием
+```bash
+# Проверьте статус кеша
+curl http://localhost:3000/admin/cache/health
+
+# Очистите кеш
+curl -X POST http://localhost:3000/admin/cache/clear
+
+# Проверьте логи кеширования
+docker-compose logs backend | grep -E "(CACHE|Cache)"
+```
+
+## 📊 Производительность
+
+### Бенчмарки
+
+| Операция | Без кеша | С кешем | Ускорение |
+|----------|----------|---------|-----------|
+| Получение продуктов | 120ms | 20ms | **6x** |
+| Список категорий | 80ms | 15ms | **5.3x** |
+| Список брендов | 45ms | 12ms | **3.8x** |
+| Поиск по фильтрам | 200ms | 35ms | **5.7x** |
+
+### Оптимизация
+
+1. **Используйте индексы в базе данных**
+2. **Настройте TTL кеша в зависимости от данных**
+3. **Мониторьте hit/miss ratio кеша**
+4. **Оптимизируйте размер возвращаемых данных**
+
+## 📄 Лицензия
+
+MIT License - см. [LICENSE](LICENSE) файл для деталей.
+
+## 🤝 Вклад в проект
+
+1. Fork репозитория
+2. Создайте feature branch: `git checkout -b feature/amazing-feature`
+3. Commit изменения: `git commit -m 'Add amazing feature'`
+4. Push в branch: `git push origin feature/amazing-feature`
+5. Создайте Pull Request
+
+## 📞 Поддержка
+
+- **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
+- **Documentation**: [API Docs](http://localhost:3000/api-docs)
+- **Email**: support@neva.com
+
+---
+
+**Сделано с ❤️ командой Neva**

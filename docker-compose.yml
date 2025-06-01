@@ -9,16 +9,20 @@ services:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
     volumes:
       - ./backend:/app/backend
       - ./backend/public/images:/app/backend/public/images
-      - ./backend/public/thumbnails:/app/backend/public/thumbnails # Для миниатюр
+      - ./backend/public/thumbnails:/app/backend/public/thumbnails
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/neva
       - PRISMA_CLIENT_OUTPUT=/app/backend/generated/prisma/client
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - CACHE_TTL=300
+      - CACHE_MAX_ITEMS=2000
+      - NODE_ENV=development
+      - NEXT_PUBLIC_BASE_URL=http://localhost:3000
     env_file:
       - backend/.env
     command: >
@@ -29,6 +33,7 @@ services:
              yarn start:dev"
     networks:
       - neva-network
+    restart: unless-stopped
 
   db:
     image: postgres:15
@@ -40,20 +45,63 @@ services:
       - '5432:5432'
     volumes:
       - db_data:/var/lib/postgresql/data
+    command: >
+      postgres 
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c maintenance_work_mem=64MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U user -d neva']
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - neva-network
+    restart: unless-stopped
 
   redis:
-    image: redis:7
+    image: redis:7-alpine
     ports:
       - '6379:6379'
     volumes:
       - redis_data:/data
+    command: >
+      redis-server
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --appendonly yes
+      --appendfsync everysec
+      --tcp-keepalive 300
+      --timeout 300
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+    networks:
+      - neva-network
+    restart: unless-stopped
+
+  # Redis Commander для мониторинга (только для разработки)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=admin123
+    ports:
+      - '8081:8081'
+    depends_on:
+      - redis
     networks:
       - neva-network
 
@@ -69,7 +117,9 @@ services:
 volumes:
   images:
   db_data:
-  redis_data: # Для Redis
+    driver: local
+  redis_data:
+    driver: local
 
 networks:
   neva-network:
