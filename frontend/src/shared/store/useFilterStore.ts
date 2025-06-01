@@ -10,13 +10,12 @@ interface FilterState {
 export const useFilterStore = create<FilterState>((set) => ({
   section: 'all',
   brandId: null,
-  setSection: (section) => {
-    const normalizedSection = section === 'all' ? 'all' : section; // Уже в верхнем регистре
-    console.log('Setting section in store:', normalizedSection);
-    set({ section: normalizedSection, brandId: null });
+  setSection: (section: string) => {
+    console.log('Setting section:', section);
+    set({ section, brandId: null }); // Сбрасываем brandId при смене секции
   },
-  setBrandId: (brandId) => {
-    console.log('Setting brandId in store:', brandId);
+  setBrandId: (brandId: number | null) => {
+    console.log('Setting brandId:', brandId);
     set({ brandId });
   },
 }));

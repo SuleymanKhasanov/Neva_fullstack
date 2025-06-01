@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 import { Button } from '@/shared/ui/Button/Button';
+import { ButtonSkeleton } from '@/entities/ButtonSkeleton';
 import styles from './FilterWidget.module.css';
 import { TranslationType } from '@/shared/config/i18n/types';
 import { GET_BRANDS } from '../lib/queries';
@@ -31,28 +32,36 @@ export default function FilterWidget({ locale, messages }: FilterWidgetProps) {
   const { section, setSection, setBrandId } = useFilterStore();
 
   const validLocale = locale || 'ru';
+
   const { data, loading, error } = useQuery<BrandsResponse>(GET_BRANDS, {
     variables: {
       locale: validLocale,
-      section: section === 'all' ? null : section, // Используем section напрямую
+      section: section === 'all' ? null : section,
     },
     skip: !validLocale,
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
   });
 
-  const handleSectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSection = event.target.value;
-    console.log('Section changed:', newSection);
-    setSection(newSection);
-    setSelectedBrandId(null);
-  };
+  const handleSectionChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const newSection = event.target.value;
+      console.log('Section changed:', newSection);
+      setSection(newSection);
+      setSelectedBrandId(null);
+      setBrandId(null);
+    },
+    [setSection, setBrandId]
+  );
 
-  const handleBrandClick = (brandId: number) => {
-    const newBrandId = selectedBrandId === brandId ? null : brandId;
-    console.log('Brand selected:', newBrandId);
-    setSelectedBrandId(newBrandId);
-    setBrandId(newBrandId);
-  };
+  const handleBrandClick = useCallback(
+    (brandId: number) => {
+      const newBrandId = selectedBrandId === brandId ? null : brandId;
+      console.log('Brand selected:', newBrandId);
+      setSelectedBrandId(newBrandId);
+      setBrandId(newBrandId);
+    },
+    [selectedBrandId, setBrandId]
+  );
 
   if (error) {
     console.error('Error fetching brands:', {
@@ -102,22 +111,19 @@ export default function FilterWidget({ locale, messages }: FilterWidgetProps) {
       <div className={styles.divider} />
       <div className={styles.categoriesContainer}>
         {loading ? (
-          Array.from({ length: 5 }).map((_, index) => (
-            <Button
+          Array.from({ length: 10 }).map((_, index) => (
+            <ButtonSkeleton
               key={`skeleton-${index}`}
               variant="secondary"
               className={styles.categoryButton}
-              disabled
-            >
-              Загрузка...
-            </Button>
+            />
           ))
         ) : brands.length === 0 && !loading ? (
           <div className={styles.noBrands}>
             {messages.filters?.noBrands || 'Нет доступных брендов'}
           </div>
         ) : (
-          brands.map((brand) => (
+          brands.map((brand: Brand) => (
             <Button
               key={brand.id}
               variant={selectedBrandId === brand.id ? 'primary' : 'secondary'}

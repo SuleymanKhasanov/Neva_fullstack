@@ -1,26 +1,47 @@
+/* ProductList.module.css */
+.mainContentBox {
+  width: 100%;
+  /* Убираем все границы, отступы и фоны */
+  /* ProductList теперь просто контент внутри MainContentBox */
+}
+
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
   width: 100%;
-  height: auto;
-  box-sizing: border-box;
+  /* Убираем padding, margin - все отступы управляет MainContentBox */
 }
 
-@media (max-width: 1440px) {
-  .productGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--error-text, #dc2626);
+  background-color: var(--error-bg, #fef2f2);
+  border: 1px solid var(--error-border, #fecaca);
+  border-radius: var(--radius, 8px);
+  margin: 2rem 0;
 }
 
+.noMore {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted, #6b7280);
+  font-size: 1.1rem;
+  margin: 2rem 0;
+}
+
+/* Медиа-запросы для адаптивности */
 @media (max-width: 768px) {
   .productGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .productGrid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }

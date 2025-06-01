@@ -37,8 +37,8 @@
   height: 4rem;
   background: linear-gradient(
     to top,
-    rgba(0, 191, 255, 0.8) 0%,
-    rgba(147, 51, 234, 0.8) 50%,
+    rgba(0, 191, 255, 1) 0%,
+    rgba(147, 51, 234, 1) 50%,
     transparent 100%
   );
   z-index: 10;

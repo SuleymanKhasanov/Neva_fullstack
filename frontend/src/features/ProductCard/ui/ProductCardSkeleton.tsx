@@ -1,6 +1,7 @@
+import React, { memo } from 'react';
 import styles from './ProductCard.module.css';
 
-const ProductCardSkeleton = () => {
+const ProductCardSkeleton = memo(() => {
   return (
     <div className={`${styles.productCard} ${styles.skeleton}`}>
       <div className={`${styles.imageContainer} ${styles.skeletonImage}`}></div>
@@ -15,6 +16,8 @@ const ProductCardSkeleton = () => {
       </div>
     </div>
   );
-};
+});
+
+ProductCardSkeleton.displayName = 'ProductCardSkeleton';
 
 export default ProductCardSkeleton;
