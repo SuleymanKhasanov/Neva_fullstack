@@ -1,9 +1,8 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Injectable, Inject, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Section } from '@prisma/client';
-import { Cache } from 'cache-manager';
 
 import { PrismaService } from '../../prisma/prisma.service';
+import { CacheService } from '../common/cache.service';
 
 import { NevaProduct } from './dto/product.dto';
 
@@ -19,7 +18,7 @@ export class ProductsService {
 
   constructor(
     private prisma: PrismaService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    private cacheService: CacheService
   ) {}
 
   async getProducts(params: {
@@ -39,37 +38,68 @@ export class ProductsService {
       ? parseInt(String(params.brandId), 10)
       : undefined;
 
-    const cacheKey = `products:locale:${locale}:page:${page}:limit:${limit}:after:${after || 'null'}:section:${section || 'all'}:categoryId:${categoryId || 'all'}:brandId:${brandId || 'all'}`;
+    // Создаем уникальный ключ кеша
+    const cacheKey = this.buildProductsCacheKey({
+      locale,
+      page,
+      limit,
+      after,
+      section,
+      categoryId,
+      brandId,
+    });
 
     try {
-      const cached = await this.cacheManager.get<ProductsResult>(cacheKey);
-      if (cached) {
-        this.logger.log(`Cache hit for ${cacheKey}`);
+      console.log(`🔍 Checking cache for key: ${cacheKey}`);
 
+      // Пытаемся получить из кеша
+      const cached = await this.cacheService.get<ProductsResult>(cacheKey);
+      if (cached) {
+        console.log(`🎯 CACHE HIT for products: ${cacheKey}`);
+        this.logger.log(`🎯 CACHE HIT for products: ${cacheKey}`);
         return cached;
       }
 
-      this.logger.log(
-        `Validating categoryId: ${categoryId}, brandId: ${brandId}`
+      console.log(
+        `🔍 CACHE MISS for products: ${cacheKey} - fetching from database`
       );
+      this.logger.log(
+        `🔍 CACHE MISS for products: ${cacheKey} - fetching from database`
+      );
+
+      // Валидация categoryId и brandId с кешированием
       if (categoryId && !isNaN(categoryId)) {
-        const categoryExists = await this.prisma.category.findUnique({
-          where: { id: categoryId },
-        });
+        const categoryExists = await this.cacheService.getOrSet(
+          `category_exists:${categoryId}`,
+          async () => {
+            const category = await this.prisma.category.findUnique({
+              where: { id: categoryId },
+            });
+            return !!category;
+          },
+          { ttl: 600 } // 10 минут
+        );
+
         if (!categoryExists) {
           this.logger.warn(`Category ID ${categoryId} not found`);
-
           return { products: [], hasNextPage: false, totalCount: 0 };
         }
       }
 
       if (brandId && !isNaN(brandId)) {
-        const brandExists = await this.prisma.brand.findUnique({
-          where: { id: brandId },
-        });
+        const brandExists = await this.cacheService.getOrSet(
+          `brand_exists:${brandId}`,
+          async () => {
+            const brand = await this.prisma.brand.findUnique({
+              where: { id: brandId },
+            });
+            return !!brand;
+          },
+          { ttl: 600 } // 10 минут
+        );
+
         if (!brandExists) {
           this.logger.warn(`Brand ID ${brandId} not found`);
-
           return { products: [], hasNextPage: false, totalCount: 0 };
         }
       }
@@ -77,6 +107,7 @@ export class ProductsService {
       const afterId = after
         ? parseInt(Buffer.from(after, 'base64').toString(), 10)
         : undefined;
+
       const where = {
         locale,
         ...(section && { section }),
@@ -92,6 +123,9 @@ export class ProductsService {
       const skip = afterId ? undefined : (page - 1) * limit;
       const take = limit;
 
+      const startTime = Date.now();
+
+      // Параллельно выполняем запросы к БД
       const [products, totalCount] = await Promise.all([
         this.prisma.product.findMany({
           where,
@@ -107,8 +141,16 @@ export class ProductsService {
             },
           },
         }),
-        this.prisma.product.count({ where }),
+        // Кешируем общий счетчик отдельно для переиспользования
+        this.cacheService.getOrSet(
+          `products_count:${JSON.stringify(where)}`,
+          () => this.prisma.product.count({ where }),
+          { ttl: 180 } // 3 минуты для счетчика
+        ),
       ]);
+
+      const dbTime = Date.now() - startTime;
+      console.log(`⏱️ Database query took: ${dbTime}ms`);
 
       const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
@@ -143,8 +185,14 @@ export class ProductsService {
         totalCount,
       };
 
-      await this.cacheManager.set(cacheKey, result, 300);
-      this.logger.log(`Cached products for ${cacheKey}`);
+      // Кешируем результат
+      await this.cacheService.set(cacheKey, result, { ttl: 300 });
+      console.log(
+        `💾 CACHED products result: ${cacheKey} (${result.products.length} items)`
+      );
+      this.logger.log(
+        `💾 CACHED products result: ${cacheKey} (${result.products.length} items)`
+      );
 
       return result;
     } catch (error: unknown) {
@@ -156,91 +204,101 @@ export class ProductsService {
   }
 
   async getCategories(locale: string, section?: Section) {
-    const cacheKey = `categories:locale:${locale}:section:${section || 'all'}`;
-    try {
-      const cacheStore = (this.cacheManager as any).store;
-      if (cacheStore.keys) {
-        const keys = await cacheStore.keys();
-        for (const key of keys) {
-          if (key.startsWith('categories:')) {
-            await this.cacheManager.del(key);
-          }
-        }
-        this.logger.log('Cleared category cache keys');
-      }
+    const cacheKey = `categories:${locale}:${section || 'all'}`;
 
-      const cached = await this.cacheManager.get(cacheKey);
-      if (cached) {
-        this.logger.log(`Cache hit for ${cacheKey}`);
-
-        return cached;
-      }
-
-      const categories = await this.prisma.category.findMany({
-        where: {
-          locale,
-          ...(section && { section }),
-        },
-        select: {
-          id: true,
-          name: true,
-          locale: true,
-          section: true,
-          brands: {
-            select: {
-              id: true,
-              name: true,
-              locale: true,
-              section: true,
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const categories = await this.prisma.category.findMany({
+          where: {
+            locale,
+            ...(section && { section }),
+          },
+          select: {
+            id: true,
+            name: true,
+            locale: true,
+            section: true,
+            brands: {
+              select: {
+                id: true,
+                name: true,
+                locale: true,
+                section: true,
+              },
             },
           },
-        },
-      });
+        });
 
-      await this.cacheManager.set(cacheKey, { categories }, 300);
-      this.logger.log(`Cached categories for ${cacheKey}`);
-
-      return { categories };
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
-      this.logger.error(`Failed to fetch categories: ${message}`, stack);
-      throw new Error(message);
-    }
+        return { categories };
+      },
+      { ttl: 300 }
+    );
   }
 
   async getBrands(locale: string, section?: Section) {
-    const cacheKey = `brands:locale:${locale}:section:${section || 'all'}`;
-    try {
-      const cached = await this.cacheManager.get(cacheKey);
-      if (cached) {
-        this.logger.log(`Cache hit for ${cacheKey}`);
+    const cacheKey = `brands:${locale}:${section || 'all'}`;
 
-        return cached;
-      }
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const brands = await this.prisma.brand.findMany({
+          where: {
+            locale,
+            ...(section && { section }),
+          },
+          select: {
+            id: true,
+            name: true,
+            locale: true,
+            section: true,
+          },
+          orderBy: {
+            name: 'asc',
+          },
+        });
 
-      const brands = await this.prisma.brand.findMany({
-        where: {
-          locale,
-          ...(section && { section }),
-        },
-        select: {
-          id: true,
-          name: true,
-          locale: true,
-          section: true,
-        },
-      });
+        return brands;
+      },
+      { ttl: 300 }
+    );
+  }
 
-      await this.cacheManager.set(cacheKey, brands, 300);
-      this.logger.log(`Cached brands for ${cacheKey}`);
+  // Инвалидация кеша продуктов
+  async invalidateProductsCache(locale?: string, section?: Section) {
+    const patterns = [
+      'products:*',
+      'products_count:*',
+      locale ? `*:${locale}:*` : '*',
+      section ? `*:${section}*` : '*',
+    ];
 
-      return brands;
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
-      this.logger.error(`Failed to fetch brands: ${message}`, stack);
-      throw new Error(message);
+    for (const pattern of patterns) {
+      await this.cacheService.invalidateByPattern(pattern);
     }
+  }
+
+  // Приватный метод для создания ключа кеша продуктов
+  private buildProductsCacheKey(params: {
+    locale: string;
+    page?: number;
+    limit?: number;
+    after?: string;
+    section?: Section;
+    categoryId?: number;
+    brandId?: number;
+  }): string {
+    const parts = [
+      'products',
+      `locale:${params.locale}`,
+      `page:${params.page || 1}`,
+      `limit:${params.limit || 20}`,
+      `after:${params.after || 'null'}`,
+      `section:${params.section || 'all'}`,
+      `categoryId:${params.categoryId || 'all'}`,
+      `brandId:${params.brandId || 'all'}`,
+    ];
+
+    return parts.join(':');
   }
 }
