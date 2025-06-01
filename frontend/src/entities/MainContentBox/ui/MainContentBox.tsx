@@ -3,14 +3,19 @@
 import { ReactNode, useRef } from 'react';
 import styles from './MainContentBox.module.css';
 import { useScrollStore } from '@/shared/store/useScrollStore';
+import { TranslationType } from '@/shared/config/i18n/types';
 
 interface MainContentBoxProps {
   children: ReactNode;
+  locale: string;
+  messages: TranslationType;
 }
 
 const MainContentBox = ({ children }: MainContentBoxProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isScrollEnd, isLoadingNext } = useScrollStore();
+
+  console.log('💫 MainContentBox glow state:', { isScrollEnd, isLoadingNext });
 
   return (
     <main className={styles.contentBox}>
