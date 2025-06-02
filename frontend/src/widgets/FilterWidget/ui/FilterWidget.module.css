@@ -1,43 +1,93 @@
 .filterContainer {
   display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  margin-top: 6rem; /* Отступ сверху для соответствия макету */
+  align-items: center;
+  gap: 2rem;
+  margin-top: 6rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  position: relative; /* Для позиционирования разделителя */
-}
-
-.sectionSelect {
-  color: var(--foreground);
-  cursor: pointer;
-  border: none;
-  font-size: inherit;
-  background-color: transparent;
   position: relative;
 }
 
-.sectionSelect:focus {
-  outline: none;
-}
-
-.sectionSelect::after {
-  content: '';
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg); /* Центрируем и поворачиваем */
-  border: solid var(--foreground);
-  border-width: 0 3px 3px 0; /* Увеличиваем толщину */
-  padding: 5px; /* Увеличиваем размер стрелки */
-  pointer-events: none; /* Не мешает взаимодействию */
+.divider {
+  width: 1px;
+  height: 2rem;
+  background-color: var(--border);
+  flex-shrink: 0;
 }
 
 .categoriesContainer {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  flex: 1;
+  position: relative;
+  padding-left: 1rem;
+  /* Градиентная маска для плавного fade-out на краях */
+  mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 2rem,
+    black calc(100% - 1rem),
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 1rem,
+    black calc(100% - 2rem),
+    transparent 100%
+  );
+}
+
+/* Псевдоэлементы для дополнительного градиентного свечения */
+.categoriesContainer::before,
+.categoriesContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4rem;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.categoriesContainer::before {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    var(--content-box) 0%,
+    rgba(255, 255, 255, 0.8) 30%,
+    transparent 100%
+  );
+}
+
+.categoriesContainer::after {
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 70%,
+    var(--content-box) 100%
+  );
+}
+
+/* Темная тема - градиенты */
+:global(.dark) .categoriesContainer::before {
+  background: linear-gradient(
+    90deg,
+    var(--content-box) 0%,
+    rgba(38, 38, 48, 0.8) 30%,
+    transparent 100%
+  );
+}
+
+:global(.dark) .categoriesContainer::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(38, 38, 48, 0.8) 70%,
+    var(--content-box) 100%
+  );
 }
 
 .categoriesContainer::-webkit-scrollbar {
@@ -46,4 +96,52 @@
 
 .categoryButton {
   flex-shrink: 0;
+}
+
+.error {
+  color: var(--error-text, #dc2626);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.noBrands {
+  color: var(--muted-foreground);
+  font-size: 1.4rem;
+  font-style: italic;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .filterContainer {
+    gap: 1.5rem;
+    margin-top: 6rem;
+    padding: 0.8rem;
+  }
+
+  .divider {
+    height: 1.5rem;
+  }
+
+  /* Уменьшенные градиенты на мобильных */
+  .categoriesContainer {
+    mask: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent 100%
+    );
+  }
+
+  .categoriesContainer::before,
+  .categoriesContainer::after {
+    width: 3rem;
+  }
 }

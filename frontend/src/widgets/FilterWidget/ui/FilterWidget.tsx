@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 import { Button } from '@/shared/ui/Button/Button';
 import { ButtonSkeleton } from '@/entities/ButtonSkeleton';
+import { SectionSelect } from '@/features/SectionSelect';
 import styles from './FilterWidget.module.css';
 import { TranslationType } from '@/shared/config/i18n/types';
 import { GET_BRANDS } from '../lib/queries';
@@ -43,8 +44,7 @@ export default function FilterWidget({ locale, messages }: FilterWidgetProps) {
   });
 
   const handleSectionChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const newSection = event.target.value;
+    (newSection: string) => {
       console.log('Section changed:', newSection);
       setSection(newSection);
       setSelectedBrandId(null);
@@ -72,21 +72,13 @@ export default function FilterWidget({ locale, messages }: FilterWidgetProps) {
     });
     return (
       <div className={styles.filterContainer}>
-        <select
-          className={styles.sectionSelect}
+        <SectionSelect
           value={section}
           onChange={handleSectionChange}
-        >
-          <option value="all">{messages.filters?.all || 'All'}</option>
-          <option value="NEVA">{messages.filters?.neva || 'Neva'}</option>
-          <option value="X_SOLUTION">
-            {messages.filters?.xSolution || 'X-Solution'}
-          </option>
-        </select>
+          messages={messages}
+        />
         <div className={styles.divider} />
-        <div className={styles.error}>
-          {messages.errors?.brands || 'Ошибка загрузки брендов'}
-        </div>
+        <div className={styles.error}>{messages.errors.brands}</div>
       </div>
     );
   }
@@ -97,21 +89,15 @@ export default function FilterWidget({ locale, messages }: FilterWidgetProps) {
 
   return (
     <div className={styles.filterContainer}>
-      <select
-        className={styles.sectionSelect}
+      <SectionSelect
         value={section}
         onChange={handleSectionChange}
-      >
-        <option value="all">{messages.filters?.all || 'All'}</option>
-        <option value="NEVA">{messages.filters?.neva || 'Neva'}</option>
-        <option value="X_SOLUTION">
-          {messages.filters?.xSolution || 'X-Solution'}
-        </option>
-      </select>
+        messages={messages}
+      />
       <div className={styles.divider} />
       <div className={styles.categoriesContainer}>
         {loading ? (
-          Array.from({ length: 10 }).map((_, index) => (
+          Array.from({ length: 20 }).map((_, index) => (
             <ButtonSkeleton
               key={`skeleton-${index}`}
               variant="secondary"
@@ -119,9 +105,7 @@ export default function FilterWidget({ locale, messages }: FilterWidgetProps) {
             />
           ))
         ) : brands.length === 0 && !loading ? (
-          <div className={styles.noBrands}>
-            {messages.filters?.noBrands || 'Нет доступных брендов'}
-          </div>
+          <div className={styles.noBrands}>{messages.filters.noBrands}</div>
         ) : (
           brands.map((brand: Brand) => (
             <Button

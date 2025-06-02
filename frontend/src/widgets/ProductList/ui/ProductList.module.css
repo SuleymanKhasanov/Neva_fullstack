@@ -1,16 +1,14 @@
 /* ProductList.module.css */
 .mainContentBox {
   width: 100%;
-  /* Убираем все границы, отступы и фоны */
-  /* ProductList теперь просто контент внутри MainContentBox */
+  margin-top: 1rem;
 }
 
 .productGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
   width: 100%;
-  /* Убираем padding, margin - все отступы управляет MainContentBox */
 }
 
 .error {
@@ -35,13 +33,11 @@
 @media (max-width: 768px) {
   .productGrid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .productGrid {
     grid-template-columns: 1fr;
-    gap: 1rem;
   }
 }

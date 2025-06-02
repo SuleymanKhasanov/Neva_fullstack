@@ -16,10 +16,10 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: calc(100% - 4rem); /* Отступы 2rem с каждой стороны */
+  max-width: calc(100% - 1rem); /* Отступы 2rem с каждой стороны */
   margin: 0 auto; /* Центрируем контент */
   padding: 0.5rem;
-  position: relative; /* Для позиционирования ::after */
+  position: relative;
 }
 
 .headerContent::after {

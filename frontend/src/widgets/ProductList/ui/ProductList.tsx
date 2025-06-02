@@ -224,7 +224,7 @@ export default function ProductList({ locale, messages }: ProductListProps) {
     console.error('💥 ProductList error:', error);
     return (
       <div className={styles.error}>
-        Ошибка: {error.message || 'Неизвестная ошибка'}
+        {messages.errors.unknown}: {error.message}
       </div>
     );
   }
@@ -268,7 +268,7 @@ export default function ProductList({ locale, messages }: ProductListProps) {
 
       {/* Сообщение о конце списка */}
       {!hasNextPage && uniqueProducts.length > 0 && (
-        <div className={styles.noMore}>Больше продуктов нет</div>
+        <div className={styles.noMore}>{messages.products.noMore}</div>
       )}
     </div>
   );

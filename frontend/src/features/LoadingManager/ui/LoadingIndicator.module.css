@@ -1,6 +1,6 @@
 .loadingBar {
   position: absolute;
-  bottom: -1rem; /* Совпадает с ::after */
+  bottom: -1.2rem; /* Совпадает с ::after */
   left: 0;
   right: 0;
   max-width: 100%; /* Синхронизировано с .headerContent */

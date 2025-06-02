@@ -12,6 +12,20 @@ export async function loadTranslations(
     card: {
       more_details: 'More details',
     },
+    filters: {
+      all: 'All',
+      neva: 'Neva',
+      xSolution: 'X-Solution',
+      noBrands: 'No brands available',
+    },
+    products: {
+      noMore: 'No more products',
+      loading: 'Loading products...',
+    },
+    errors: {
+      brands: 'Error loading brands',
+      unknown: 'Unknown error occurred',
+    },
   };
 
   try {
@@ -29,9 +43,33 @@ export async function loadTranslations(
       () => defaultTranslations.card
     );
 
+    const filtersTranslations = await import(
+      `@/shared/locales/${locale}/filters.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.filters
+    );
+
+    const productsTranslations = await import(
+      `@/shared/locales/${locale}/products.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.products
+    );
+
+    const errorsTranslations = await import(
+      `@/shared/locales/${locale}/errors.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.errors
+    );
+
     return {
       header: headerTranslations,
       card: cardTranslations,
+      filters: filtersTranslations,
+      products: productsTranslations,
+      errors: errorsTranslations,
     };
   } catch (error) {
     console.error(
