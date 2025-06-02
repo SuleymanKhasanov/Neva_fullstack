@@ -1,3 +1,4 @@
+// backend/src/app.module.ts - обновленная версия
 import { join } from 'path';
 
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -13,6 +14,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { BrandsModule } from './brands/brands.module';
 import { CategoriesModule } from './categories/categories.module';
 import { NevaProductsModule } from './products/products.module';
+import { ProductModule } from './product/product.module'; // Новый модуль
 import { CacheServiceModule } from './common/cache.module';
 import { CacheAdminController } from './admin/cache-admin.controller';
 
@@ -74,9 +76,10 @@ import { CacheAdminController } from './admin/cache-admin.controller';
       rootPath: join(__dirname, '..', '..', 'public'),
       serveRoot: '/public',
     }),
-    // Импорт нашего модуля кеширования
+    // Импорт всех модулей
     CacheServiceModule,
-    NevaProductsModule,
+    NevaProductsModule, // Существующий модуль для списка продуктов (GraphQL + REST)
+    ProductModule, // Новый модуль для отдельного продукта (только REST)
     CategoriesModule,
     BrandsModule,
   ],
@@ -91,5 +94,14 @@ export class AppModule {
       port: process.env.REDIS_PORT || 6379,
       ttl: process.env.CACHE_TTL || 300,
     });
+    console.log('📦 Available modules:');
+    console.log(
+      '   - NevaProductsModule: /products/* (GraphQL + REST для списков)'
+    );
+    console.log(
+      '   - ProductModule: /product/* (REST для отдельного продукта)'
+    );
+    console.log('   - CategoriesModule: /categories/*');
+    console.log('   - BrandsModule: /brands/*');
   }
 }
