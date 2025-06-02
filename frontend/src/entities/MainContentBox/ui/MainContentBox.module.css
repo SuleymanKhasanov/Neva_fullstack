@@ -1,7 +1,7 @@
 /* MainContentBox.module.css */
 .contentBox {
-  width: calc(100% - 4rem); /* Отступы 2rem с каждой стороны */
-  height: 95vh; /* Высота зависит от контента */
+  width: calc(100% - 2rem); /* Отступы 2rem с каждой стороны */
+  height: 98vh; /* Высота зависит от контента */
   background-color: var(--content-box);
   position: fixed;
   top: 50%;
@@ -19,7 +19,7 @@
 .container {
   width: 100%;
   height: 100%;
-  padding: 3rem; /* Увеличенный отступ */
+  padding: 2rem; /* Увеличенный отступ */
   overflow-y: auto; /* Прокрутка только при необходимости */
   box-sizing: border-box;
   scrollbar-width: none; /* Скрытие полосы прокрутки */
@@ -74,12 +74,6 @@
 
 /* Медиа-запросы для адаптивности */
 @media (max-width: 768px) {
-  .contentBox {
-    width: calc(100% - 2rem); /* Меньшие отступы на мобильных */
-    max-height: 95vh; /* Уменьшенная высота */
-    box-shadow: 0 0.2rem 0.8rem var(--shadow-content); /* Мягкая тень */
-  }
-
   .container {
     padding: 1.5rem; /* Уменьшенный отступ */
   }
@@ -91,11 +85,6 @@
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-  .contentBox {
-    width: calc(100% - 3rem); /* Средние отступы */
-    height: 95vh;
-  }
-
   .container {
     padding: 2.5rem;
   }

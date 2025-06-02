@@ -1,66 +1,57 @@
 /* Основной контейнер */
-.switcher {
+.sectionSelect {
   position: relative;
   display: inline-block;
   font-family: 'Inter', sans-serif;
 }
 
-/* Кнопка-триггер */
+/* Триггер (кнопка) */
 .trigger {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
-  padding: 1.2rem 1.4rem;
-  min-width: 80px;
-  border-radius: 1.5rem;
-  border: 0.1rem solid var(--border);
-  background-color: var(--secondary);
-  color: var(--foreground);
-  font-family: inherit;
-  font-size: 1.4rem;
-  font-weight: 600;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--foreground);
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+.trigger:hover {
+  color: var(--primary);
 }
 
 .trigger:focus {
   outline: none;
-  border-color: var(--ring);
-  box-shadow: 0 0 0 0.3rem rgba(227, 30, 36, 0.2);
+  color: var(--primary);
 }
 
-.trigger.open {
-  border-color: var(--ring);
-  box-shadow: 0 0 0 0.3rem rgba(227, 30, 36, 0.1);
-}
-
-/* Выбранный элемент */
-.selected {
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
-.trigger:hover .name {
-  text-shadow: 0 0 0.2rem rgba(227, 30, 36, 0.3);
-}
-
-.name {
-  font-weight: 600;
-  color: var(--foreground);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+/* Текст */
+.label {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: inherit;
+  user-select: none;
 }
 
 /* Стрелка */
 .arrow {
   color: var(--muted-foreground);
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
 .arrow.rotated {
   transform: rotate(180deg);
+  color: var(--primary);
+}
+
+.trigger:hover .arrow {
+  color: var(--primary);
 }
 
 /* Выпадающий список */
@@ -68,8 +59,8 @@
   position: absolute;
   top: calc(100% + 1rem);
   left: 0;
-  right: 0;
   z-index: 50;
+  min-width: 140px;
   background-color: var(--content-box);
   border: 0.1rem solid var(--border);
   border-radius: 1rem;
@@ -94,7 +85,7 @@
   }
 }
 
-/* Список опций */
+/* Список */
 .list {
   list-style: none;
   margin: 0;
@@ -110,12 +101,12 @@
   border-radius: 0.6rem;
   cursor: pointer;
   transition: all 0.15s ease;
-  position: relative;
-  overflow: hidden;
   font-size: 1.4rem;
   font-weight: 500;
   color: var(--foreground);
   user-select: none;
+  position: relative;
+  overflow: hidden;
 }
 
 .option::before {
@@ -187,24 +178,6 @@
   );
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-  .trigger {
-    min-width: 70px;
-    padding: 1rem 1.2rem;
-    font-size: 1.3rem;
-  }
-
-  .dropdown {
-    left: -0.5rem;
-    right: -0.5rem;
-  }
-
-  .option {
-    padding: 1.2rem 1rem;
-  }
-}
-
 /* Плавное появление опций */
 .option {
   opacity: 0;
@@ -219,9 +192,6 @@
 }
 .option:nth-child(3) {
   animation-delay: 80ms;
-}
-.option:nth-child(4) {
-  animation-delay: 120ms;
 }
 
 @keyframes fadeInUp {
@@ -238,4 +208,21 @@
 /* Активное состояние */
 .option:active {
   transform: translateX(0.1rem) scale(0.98);
+}
+
+/* Улучшенные hover эффекты */
+.trigger:hover .label {
+  text-shadow: 0 0 0.2rem rgba(227, 30, 36, 0.3);
+}
+
+/* Accessibility improvements */
+.trigger:focus-visible {
+  outline: 0.2rem solid var(--primary);
+  outline-offset: 0.2rem;
+  border-radius: 0.4rem;
+}
+
+.option:focus-visible {
+  outline: 0.2rem solid var(--primary);
+  outline-offset: -0.2rem;
 }
