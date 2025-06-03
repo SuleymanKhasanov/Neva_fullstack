@@ -25,7 +25,7 @@
   --foreground: #000000;
   --text-secondary: #848484;
   --acrylic-bg: rgba(255, 255, 255, 0.7);
-  --acrylic-blur: blur(1rem);
+  --acrylic-blur: blur(3rem);
   transition:
     background-color 0.3s ease,
     color 0.3s ease,

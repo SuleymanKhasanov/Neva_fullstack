@@ -110,7 +110,7 @@ export default function ProductList({ locale, messages }: ProductListProps) {
       console.error('💥 LoadNext error:', error);
     } finally {
       setIsLoadingNext(false);
-      setIsScrollEnd(false); // Убираем свечение после загрузки
+      setIsScrollEnd(false);
     }
   }, [data, fetchMore, setIsLoadingNext, setIsScrollEnd]);
 
@@ -127,7 +127,6 @@ export default function ProductList({ locale, messages }: ProductListProps) {
         console.log('🎯 Reached end of list, showing glow...');
         setIsScrollEnd(true);
 
-        // Запускаем загрузку через небольшую задержку для показа свечения
         setTimeout(() => {
           loadNextPage();
         }, 800);
@@ -140,13 +139,11 @@ export default function ProductList({ locale, messages }: ProductListProps) {
   useEffect(() => {
     const triggerElement = triggerRef.current;
 
-    // Очищаем предыдущий observer
     if (observerRef.current) {
       observerRef.current.disconnect();
       observerRef.current = null;
     }
 
-    // Создаем observer только если есть триггер и следующая страница
     if (
       triggerElement &&
       data?.products.pageInfo.hasNextPage &&
@@ -187,7 +184,6 @@ export default function ProductList({ locale, messages }: ProductListProps) {
     setIsScrollEnd(false);
     setIsLoadingNext(false);
 
-    // Отключаем observer при изменении фильтров
     if (observerRef.current) {
       observerRef.current.disconnect();
       observerRef.current = null;
@@ -244,11 +240,13 @@ export default function ProductList({ locale, messages }: ProductListProps) {
           <MemoizedProductCard
             key={product.id}
             product={{
+              id: product.id, // Добавляем id для ссылки
               image: product.image,
               name: product.name,
               description: product.description,
             }}
             messages={messages}
+            locale={validLocale} // Передаем locale
           />
         ))}
       </div>
