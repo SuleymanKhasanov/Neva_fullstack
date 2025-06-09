@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma, Section } from '@prisma/client';
+import { Section } from '@prisma/client';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService } from '../common/cache.service';
@@ -24,9 +24,22 @@ export class BrandsService {
         return cached;
       }
 
-      const where: Prisma.BrandWhereInput = { locale };
+      // Строим WHERE условие для поиска брендов с переводами
+      const where: any = {
+        translations: {
+          some: {
+            locale: locale as any,
+          },
+        },
+      };
+
+      // Если указана секция, ищем бренды через CategoryBrand
       if (section) {
-        where.section = section;
+        where.categoryBrands = {
+          some: {
+            section,
+          },
+        };
       }
 
       this.logger.log(
@@ -35,24 +48,38 @@ export class BrandsService {
 
       const brands = await this.prisma.brand.findMany({
         where,
-        select: {
-          id: true,
-          name: true,
-          locale: true,
-          section: true,
+        include: {
+          translations: {
+            where: { locale: locale as any },
+          },
         },
         orderBy: {
-          name: 'asc',
+          id: 'asc',
         },
       });
 
-      console.log('Fetched brands:', brands);
+      // Форматируем результат
+      const formattedBrands = brands
+        .filter((brand) => brand.translations.length > 0)
+        .map((brand) => {
+          // Получаем секцию из CategoryBrand если она есть
+          const brandSection = section || Section.NEVA; // Fallback только если секция не указана
+
+          return {
+            id: brand.id,
+            name: brand.translations[0].name,
+            locale: brand.translations[0].locale,
+            section: brandSection,
+          };
+        });
+
+      console.log('Fetched brands:', formattedBrands);
 
       // Кешируем результат на 5 минут
-      await this.cacheService.set(cacheKey, brands, { ttl: 300 });
+      await this.cacheService.set(cacheKey, formattedBrands, { ttl: 300 });
       this.logger.log(`Cached brands for: ${cacheKey}`);
 
-      return brands;
+      return formattedBrands;
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;

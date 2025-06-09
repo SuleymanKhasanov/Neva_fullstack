@@ -1,16 +1,17 @@
 # Neva Backend API
 
-Высокопроизводительный backend API для каталога продуктов Neva с интеграцией Redis кеширования, построенный на NestJS.
+Высокопроизводительный backend API для каталога продуктов Neva с мультиязычной поддержкой, Redis кешированием и админ панелью, построенный на NestJS.
 
 ## 🚀 Особенности
 
 - **REST & GraphQL API** - Гибкие возможности запросов данных
-- **Redis Кеширование** - Ускорение API в 2-6 раз
-- **Многоязычность** - Поддержка ru, en, kr, uz локалей
+- **Мультиязычность** - Полная поддержка 4 языков (ru, en, kr, uz) через таблицы переводов
+- **Redis Кеширование** - Ускорение API в 3-6 раз с умной инвалидацией
+- **Админ панель** - Полное управление продуктами, категориями, брендами и кешем
+- **Обработка изображений** - Автоматическое сжатие в WebP с созданием миниатюр
 - **Автодокументация** - Swagger UI и GraphQL Playground
-- **Типобезопасность** - TypeScript + Prisma ORM
-- **Административная панель** - Управление кешем и мониторинг
-- **Контейнеризация** - Docker setup для разработки и продакшена
+- **Типобезопасность** - TypeScript + Prisma ORM с нормализованной схемой
+- **Контейнеризация** - Docker setup с PostgreSQL, Redis и Adminer
 
 ## 📋 Содержание
 
@@ -18,24 +19,26 @@
 - [Быстрый старт](#быстрый-старт)
 - [Структура проекта](#структура-проекта)
 - [API Документация](#api-документация)
+- [Админ панель](#админ-панель)
+- [Мультиязычность](#мультиязычность)
 - [Кеширование](#кеширование)
 - [База данных](#база-данных)
 - [Разработка](#разработка)
-- [Конфигурация](#конфигурация)
 - [Деплой](#деплой)
 
 ## 🛠 Технологии
 
-| Категория | Технология | Версия |
-|-----------|------------|---------|
-| **Framework** | NestJS | ^11.1.0 |
-| **Language** | TypeScript | ^5.7.2 |
-| **Database** | PostgreSQL | 15 |
-| **ORM** | Prisma | ^6.7.0 |
-| **Cache** | Redis | 7 |
-| **API** | REST + GraphQL | - |
-| **Documentation** | Swagger + Apollo Studio | - |
-| **Containerization** | Docker & Docker Compose | - |
+| Категория            | Технология              | Версия  |
+| -------------------- | ----------------------- | ------- |
+| **Framework**        | NestJS                  | ^11.1.0 |
+| **Language**         | TypeScript              | ^5.7.2  |
+| **Database**         | PostgreSQL              | 15      |
+| **ORM**              | Prisma                  | ^6.7.0  |
+| **Cache**            | Redis                   | 7       |
+| **API**              | REST + GraphQL          | -       |
+| **Image Processing** | Sharp                   | ^0.34.1 |
+| **Documentation**    | Swagger + Apollo Studio | -       |
+| **Containerization** | Docker & Docker Compose | -       |
 
 ## 🚀 Быстрый старт
 
@@ -45,7 +48,7 @@
 - Node.js 20+ (для локальной разработки)
 - Yarn (рекомендуется)
 
-### Установка
+### Установка и запуск
 
 ```bash
 # 1. Клонируйте репозиторий
@@ -62,28 +65,15 @@ docker-compose up --build
 # API: http://localhost:3000
 # Swagger: http://localhost:3000/api-docs
 # GraphQL: http://localhost:3000/graphql
+# Adminer: http://localhost:8080 (db/user/password/neva)
 # Redis Commander: http://localhost:8081 (admin/admin123)
-# Adminer: http://localhost:8080
 ```
 
-### Локальная разработка
+### Заполнение тестовыми данными
 
 ```bash
-# 1. Установите зависимости
-yarn install
-
-# 2. Запустите инфраструктуру (PostgreSQL + Redis)
-docker-compose up -d db redis
-
-# 3. Примените миграции
-yarn prisma migrate deploy
-yarn prisma generate
-
-# 4. Заполните тестовыми данными
-yarn ts-node scripts/mergeAndProcessData.ts
-
-# 5. Запустите в режиме разработки
-yarn start:dev
+# Выполните после запуска контейнеров
+docker-compose exec backend yarn prisma:seed
 ```
 
 ## 📁 Структура проекта
@@ -91,27 +81,36 @@ yarn start:dev
 ```
 backend/
 ├── prisma/                    # Схема базы данных и миграции
-│   ├── schema.prisma         # Prisma схема
+│   ├── schema.prisma         # Prisma схема с переводами
 │   ├── migrations/           # Миграции базы данных
 │   └── prisma.service.ts     # Prisma сервис
 ├── src/
 │   ├── common/               # Общие модули
-│   │   ├── cache.service.ts  # Сервис кеширования
-│   │   └── cache.module.ts   # Модуль кеширования
-│   ├── admin/                # Административные эндпоинты
-│   │   └── cache-admin.controller.ts
-│   ├── products/             # Модуль продуктов
-│   │   ├── products.controller.ts
-│   │   ├── products.service.ts
-│   │   ├── products.resolver.ts
-│   │   └── dto/              # Data Transfer Objects
+│   │   ├── cache.service.ts  # Умный сервис кеширования
+│   │   └── cache.module.ts   # Глобальный модуль кеширования
+│   ├── admin/                # Админ панель
+│   │   ├── admin-products.controller.ts    # Управление продуктами
+│   │   ├── admin-categories.controller.ts  # Управление категориями
+│   │   ├── admin-brands.controller.ts      # Управление брендами
+│   │   ├── cache-admin.controller.ts       # Управление кешем
+│   │   ├── image.service.ts               # Обработка изображений
+│   │   └── dto/                           # DTO для админки
+│   ├── products/             # Публичные API продуктов
+│   │   ├── products.controller.ts         # REST endpoints
+│   │   ├── products.service.ts            # Бизнес логика с кешем
+│   │   ├── products.resolver.ts           # GraphQL resolvers
+│   │   └── dto/                           # Response DTOs
+│   ├── product/              # Индивидуальные продукты
+│   │   ├── product.controller.ts          # Детальная информация
+│   │   └── product.service.ts             # SEO и детали
 │   ├── categories/           # Модуль категорий
 │   ├── brands/               # Модуль брендов
 │   ├── app.module.ts         # Главный модуль приложения
 │   └── main.ts               # Точка входа
 ├── scripts/                  # Скрипты для работы с данными
-├── public/                   # Статические файлы (изображения)
-├── data/                     # Исходные данные для импорта
+│   └── seed-data.ts          # Заполнение тестовыми данными
+├── public/                   # Статические файлы
+│   └── images/               # Обработанные изображения (WebP)
 └── docker-compose.yml        # Docker конфигурация
 ```
 
@@ -125,25 +124,72 @@ API доступно по адресу: `http://localhost:3000`
 
 #### Основные эндпоинты:
 
-| Метод | Путь | Описание |
-|-------|------|----------|
-| `GET` | `/products/all` | Все продукты с пагинацией |
-| `GET` | `/products/neva` | Продукты секции NEVA |
-| `GET` | `/products/x-solution` | Продукты секции X-SOLUTION |
-| `GET` | `/categories/all` | Все категории с брендами |
-| `GET` | `/brands/all` | Все бренды |
+| Метод | Путь                          | Описание                        |
+| ----- | ----------------------------- | ------------------------------- |
+| `GET` | `/products/all`               | Все продукты с пагинацией       |
+| `GET` | `/products/neva`              | Продукты секции NEVA            |
+| `GET` | `/products/x-solution`        | Продукты секции X-SOLUTION      |
+| `GET` | `/product/:locale/:id`        | Детальная информация о продукте |
+| `GET` | `/product/:locale/:id/exists` | Проверка существования          |
+| `GET` | `/categories/all`             | Все категории с брендами        |
+| `GET` | `/categories/neva`            | Категории NEVA                  |
+| `GET` | `/categories/x-solution`      | Категории X-SOLUTION            |
+| `GET` | `/brands/all`                 | Все бренды                      |
+| `GET` | `/brands/neva`                | Бренды NEVA                     |
+| `GET` | `/brands/x-solution`          | Бренды X-SOLUTION               |
 
 #### Параметры запросов:
 
 ```bash
-# Продукты с фильтрацией
-GET /products/all?locale=ru&page=1&categoryId=1&brandId=2
+# Продукты с фильтрацией и пагинацией
+GET /products/neva?locale=ru&page=1&categoryId=1&brandId=2
 
-# Категории по секции
+# Детальная информация о продукте
+GET /product/ru/1
+
+# Категории с брендами по секции
 GET /categories/neva?locale=en
 
-# Бренды по локали
-GET /brands/all?locale=uz
+# Бренды по секции и локали
+GET /brands/x-solution?locale=uz
+```
+
+#### Примеры ответов:
+
+**Список продуктов:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "ASUS VivoBook 15",
+      "locale": "ru",
+      "section": "NEVA",
+      "description": "Мощный ноутбук для работы",
+      "image": "http://localhost:3000/public/images/laptop_small.webp",
+      "fullImage": "http://localhost:3000/public/images/laptop_large.webp",
+      "brand": {
+        "id": 1,
+        "name": "ASUS",
+        "locale": "ru",
+        "section": "NEVA"
+      },
+      "category": {
+        "id": 1,
+        "name": "Ноутбуки",
+        "locale": "ru",
+        "section": "NEVA"
+      }
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "limit": 20,
+    "totalPages": 1
+  }
+}
 ```
 
 ### GraphQL API
@@ -153,7 +199,7 @@ GET /brands/all?locale=uz
 #### Примеры запросов:
 
 ```graphql
-# Получить продукты
+# Получить продукты с курсор-пагинацией
 query GetProducts($locale: String!, $section: String) {
   products(locale: $locale, section: $section, first: 10) {
     edges {
@@ -171,6 +217,7 @@ query GetProducts($locale: String!, $section: String) {
           name
         }
       }
+      cursor
     }
     pageInfo {
       hasNextPage
@@ -180,9 +227,9 @@ query GetProducts($locale: String!, $section: String) {
   }
 }
 
-# Получить категории
-query GetCategories($locale: String!) {
-  categories(locale: $locale) {
+# Получить категории с брендами
+query GetCategories($locale: String!, $section: String) {
+  categories(locale: $locale, section: $section) {
     categories {
       id
       name
@@ -193,6 +240,205 @@ query GetCategories($locale: String!) {
     }
   }
 }
+
+# Получить бренды
+query GetBrands($locale: String!, $section: String) {
+  brands(locale: $locale, section: $section) {
+    brands {
+      id
+      name
+    }
+  }
+}
+```
+
+## 🔧 Админ панель
+
+### Управление продуктами
+
+| Метод    | Путь                                  | Описание              |
+| -------- | ------------------------------------- | --------------------- |
+| `GET`    | `/admin/products`                     | Список всех продуктов |
+| `GET`    | `/admin/products/:id`                 | Детали продукта       |
+| `POST`   | `/admin/products`                     | Создать продукт       |
+| `PUT`    | `/admin/products/:id`                 | Обновить продукт      |
+| `DELETE` | `/admin/products/:id`                 | Удалить продукт       |
+| `POST`   | `/admin/products/:id/images`          | Загрузить изображения |
+| `DELETE` | `/admin/products/:id/images/:imageId` | Удалить изображение   |
+
+#### Создание продукта:
+
+```bash
+curl -X POST "http://localhost:3000/admin/products" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "section": "NEVA",
+    "categoryId": 1,
+    "brandId": 1,
+    "isActive": true,
+    "translations": [
+      {
+        "locale": "ru",
+        "name": "ASUS VivoBook 15",
+        "description": "Мощный ноутбук для работы",
+        "marketingDescription": "Идеальный выбор для профессионалов"
+      },
+      {
+        "locale": "en",
+        "name": "ASUS VivoBook 15",
+        "description": "Powerful laptop for work",
+        "marketingDescription": "Perfect choice for professionals"
+      }
+    ],
+    "specifications": [
+      {
+        "key": "processor",
+        "translations": [
+          {
+            "locale": "ru",
+            "name": "Процессор",
+            "value": "Intel Core i5-12500H"
+          },
+          {
+            "locale": "en",
+            "name": "Processor",
+            "value": "Intel Core i5-12500H"
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+### Управление категориями
+
+| Метод  | Путь                    | Описание          |
+| ------ | ----------------------- | ----------------- |
+| `GET`  | `/admin/categories`     | Список категорий  |
+| `GET`  | `/admin/categories/:id` | Детали категории  |
+| `POST` | `/admin/categories`     | Создать категорию |
+
+#### Создание категории:
+
+```bash
+curl -X POST "http://localhost:3000/admin/categories" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "section": "NEVA",
+    "translations": [
+      {
+        "locale": "ru",
+        "name": "Ноутбуки"
+      },
+      {
+        "locale": "en",
+        "name": "Laptops"
+      },
+      {
+        "locale": "kr",
+        "name": "노트북"
+      },
+      {
+        "locale": "uz",
+        "name": "Noutbuklar"
+      }
+    ]
+  }'
+```
+
+### Управление брендами
+
+| Метод  | Путь                               | Описание                   |
+| ------ | ---------------------------------- | -------------------------- |
+| `GET`  | `/admin/brands`                    | Список брендов             |
+| `GET`  | `/admin/brands/:id`                | Детали бренда              |
+| `POST` | `/admin/brands`                    | Создать бренд              |
+| `POST` | `/admin/brands/category-relations` | Связать бренд с категорией |
+
+#### Создание бренда:
+
+```bash
+curl -X POST "http://localhost:3000/admin/brands" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "translations": [
+      {
+        "locale": "ru",
+        "name": "ASUS"
+      },
+      {
+        "locale": "en",
+        "name": "ASUS"
+      },
+      {
+        "locale": "kr",
+        "name": "ASUS"
+      },
+      {
+        "locale": "uz",
+        "name": "ASUS"
+      }
+    ]
+  }'
+```
+
+#### Связывание бренда с категорией:
+
+```bash
+curl -X POST "http://localhost:3000/admin/brands/category-relations" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "categoryId": 1,
+    "brandId": 1,
+    "section": "NEVA"
+  }'
+```
+
+### Загрузка изображений
+
+```bash
+# Загрузка изображений продукта (до 5 файлов)
+curl -X POST "http://localhost:3000/admin/products/1/images" \
+  -F "images=@laptop1.jpg" \
+  -F "images=@laptop2.png"
+```
+
+**Поддерживаемые форматы**: JPG, JPEG, PNG, WebP
+**Максимальный размер**: 10MB на файл
+**Автоматическая обработка**: Сжатие в WebP + создание миниатюр 400x400px
+
+## 🌍 Мультиязычность
+
+### Поддерживаемые языки
+
+| Код  | Язык    | Описание      |
+| ---- | ------- | ------------- |
+| `ru` | Русский | Основной язык |
+| `en` | English | Английский    |
+| `kr` | 한국어  | Корейский     |
+| `uz` | O'zbek  | Узбекский     |
+
+### Структура переводов
+
+Все локализованные данные хранятся в отдельных таблицах:
+
+- `BrandTranslation` - переводы брендов
+- `CategoryTranslation` - переводы категорий
+- `ProductTranslation` - переводы продуктов (название, описание, маркетинговое описание)
+- `ProductSpecificationTranslation` - переводы характеристик
+
+### Работа с переводами
+
+```bash
+# Получение данных на разных языках
+curl "http://localhost:3000/products/neva?locale=ru"    # Русский
+curl "http://localhost:3000/products/neva?locale=en"    # Английский
+curl "http://localhost:3000/products/neva?locale=kr"    # Корейский
+curl "http://localhost:3000/products/neva?locale=uz"    # Узбекский
+
+# Детали продукта на конкретном языке
+curl "http://localhost:3000/product/uz/1"               # Узбекский
+curl "http://localhost:3000/product/kr/1"               # Корейский
 ```
 
 ## ⚡ Кеширование
@@ -201,118 +447,200 @@ query GetCategories($locale: String!) {
 
 Приложение использует Redis для высокопроизводительного кеширования:
 
-- **Автоматическое кеширование** всех API запросов
-- **TTL (Time To Live)**: 5 минут для большинства данных
-- **Ускорение**: в 2-6 раз по сравнению с запросами к БД
-- **Умная инвалидация** по паттернам
-
-### Административные команды
-
-```bash
-# Статистика кеша
-curl http://localhost:3000/admin/cache/stats
-
-# Проверка здоровья
-curl http://localhost:3000/admin/cache/health
-
-# Очистка всего кеша
-curl -X POST http://localhost:3000/admin/cache/clear
-
-# Инвалидация по паттерну
-curl -X DELETE "http://localhost:3000/admin/cache/pattern?pattern=products:*"
-
-# Инвалидация продуктов
-curl -X POST http://localhost:3000/admin/cache/invalidate/products
-
-# Инвалидация категорий
-curl -X POST http://localhost:3000/admin/cache/invalidate/categories
-```
+- **Автоматическое кеширование** всех API запросов с учетом локали
+- **TTL (Time To Live)**: 5 минут для данных, 3 минуты для счетчиков
+- **Ускорение**: в 3-6 раз по сравнению с запросами к БД
+- **Умная инвалидация** по паттернам и связям
 
 ### Структура ключей кеша
 
 ```
-products:locale:ru:page:1:limit:20:section:NEVA:categoryId:all:brandId:all
-categories:locale:ru:section:all
-brands:locale:ru:section:NEVA
+# Продукты с учетом всех параметров
+products:locale:ru:page:1:limit:20:after:null:section:NEVA:categoryId:all:brandId:all
+
+# Категории по локали и секции
+categories:locale:ru:section:NEVA
+
+# Бренды по локали и секции
+brands:locale:ru:section:X_SOLUTION
+
+# Индивидуальные продукты
+product:1:ru
+
+# Проверки существования
+product_exists:1:ru
 category_exists:1
 brand_exists:2
-products_count:{"locale":"ru","section":"NEVA"}
+
+# Счетчики
+products_count:{"isActive":true,"translations":{"some":{"locale":"ru"}},"section":"NEVA"}
 ```
 
-### Мониторинг
+### Административные команды кеша
+
+| Метод    | Путь                                      | Описание                |
+| -------- | ----------------------------------------- | ----------------------- |
+| `GET`    | `/admin/cache/stats`                      | Статистика кеша         |
+| `GET`    | `/admin/cache/health`                     | Проверка здоровья       |
+| `GET`    | `/admin/cache/debug`                      | Отладочная информация   |
+| `POST`   | `/admin/cache/clear`                      | Очистка всего кеша      |
+| `DELETE` | `/admin/cache/pattern?pattern=products:*` | Инвалидация по паттерну |
+| `POST`   | `/admin/cache/invalidate/products`        | Инвалидация продуктов   |
+| `POST`   | `/admin/cache/invalidate/categories`      | Инвалидация категорий   |
+| `POST`   | `/admin/cache/invalidate/brands`          | Инвалидация брендов     |
+
+```bash
+# Примеры использования
+curl "http://localhost:3000/admin/cache/stats"
+curl -X POST "http://localhost:3000/admin/cache/clear"
+curl -X DELETE "http://localhost:3000/admin/cache/pattern?pattern=products:*"
+```
+
+### Мониторинг кеша
 
 - **Redis Commander**: `http://localhost:8081` (admin/admin123)
 - **Метрики производительности** через `/admin/cache/debug`
+- **Логирование** всех операций кеша в консоли
 
 ## 🗄️ База данных
 
-### Схема данных
+### Нормализованная схема
 
 ```prisma
-model Product {
-  id          Int      @id @default(autoincrement())
-  brandId     Int?
-  categoryId  Int
-  locale      String
-  name        String
-  image       String?
-  fullImage   String?
-  description String
-  section     Section
-  brand       Brand?   @relation(fields: [brandId], references: [id])
-  category    Category @relation(fields: [categoryId], references: [id])
-}
-
+// Основные таблицы
 model Brand {
-  id         Int       @id @default(autoincrement())
-  categoryId Int
-  name       String
-  locale     String
-  section    Section
-  category   Category  @relation(fields: [categoryId], references: [id])
-  products   Product[]
-  @@unique([name, locale])
+  id               Int                @id @default(autoincrement())
+  translations     BrandTranslation[]
+  products         Product[]
+  categoryBrands   CategoryBrand[]
 }
 
 model Category {
-  id       Int       @id @default(autoincrement())
-  locale   String
+  id               Int                   @id @default(autoincrement())
+  section          Section
+  translations     CategoryTranslation[]
+  products         Product[]
+  categoryBrands   CategoryBrand[]
+}
+
+model Product {
+  id               Int                      @id @default(autoincrement())
+  brandId          Int?
+  categoryId       Int
+  section          Section
+  slug             String?
+  isActive         Boolean                  @default(true)
+  translations     ProductTranslation[]
+  images           ProductImage[]
+  specifications   ProductSpecification[]
+}
+
+// Таблицы переводов
+model BrandTranslation {
+  id       Int     @id @default(autoincrement())
+  brandId  Int
+  locale   Locale
   name     String
-  section  Section
-  brands   Brand[]
-  products Product[]
+  brand    Brand   @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  @@unique([brandId, locale])
+}
+
+model CategoryTranslation {
+  id         Int      @id @default(autoincrement())
+  categoryId Int
+  locale     Locale
+  name       String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  @@unique([categoryId, locale])
+}
+
+model ProductTranslation {
+  id                   Int     @id @default(autoincrement())
+  productId            Int
+  locale               Locale
+  name                 String
+  description          String?
+  marketingDescription String?
+  metaTitle            String?
+  metaDescription      String?
+  product              Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  @@unique([productId, locale])
+}
+
+// Изображения и характеристики
+model ProductImage {
+  id               Int     @id @default(autoincrement())
+  productId        Int
+  originalFilename String
+  imageSmall       String  // WebP 400x400
+  imageLarge       String  // WebP оригинальный размер
+  altText          String?
+  sortOrder        Int     @default(0)
+  isPrimary        Boolean @default(false)
+  product          Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductSpecification {
+  id           Int                               @id @default(autoincrement())
+  productId    Int
+  specKey      String
+  sortOrder    Int                               @default(0)
+  product      Product                           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  translations ProductSpecificationTranslation[]
+  @@unique([productId, specKey])
+}
+
+// Связь многие-ко-многим для категорий и брендов
+model CategoryBrand {
+  id         Int      @id @default(autoincrement())
+  categoryId Int
+  brandId    Int
+  section    Section
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  brand      Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  @@unique([categoryId, brandId, section])
 }
 
 enum Section {
   NEVA
   X_SOLUTION
 }
+
+enum Locale {
+  ru
+  en
+  kr
+  uz
+}
 ```
 
-### Миграции
+### Управление миграциями
 
 ```bash
 # Создать новую миграцию
 yarn prisma migrate dev --name migration_name
 
-# Применить миграции
+# Применить миграции в продакшене
 yarn prisma migrate deploy
 
 # Сгенерировать Prisma Client
 yarn prisma generate
 
-# Сбросить базу данных
+# Сбросить базу данных (только для разработки)
 yarn prisma migrate reset
+
+# Проверить статус миграций
+yarn prisma migrate status
 ```
 
 ### Заполнение данными
 
 ```bash
-# Импорт данных из JSON файлов
-yarn ts-node scripts/mergeAndProcessData.ts
+# Заполнение тестовыми данными
+yarn prisma:seed
 
-# Обработка изображений и создание миниатюр
-# Автоматически при импорте данных
+# Или внутри контейнера
+docker-compose exec backend yarn prisma:seed
 ```
 
 ## 🛠 Разработка
@@ -340,229 +668,250 @@ yarn test:cov
 
 # Проверка типов
 yarn tsc --noEmit
+
+# Prisma команды
+yarn prisma:generate
+yarn prisma:migrate
+yarn prisma:seed
+```
+
+### Локальная разработка
+
+```bash
+# 1. Установите зависимости
+yarn install
+
+# 2. Запустите только инфраструктуру
+docker-compose up -d db redis adminer
+
+# 3. Настройте базу данных
+yarn prisma migrate deploy
+yarn prisma generate
+yarn prisma:seed
+
+# 4. Запустите в режиме разработки
+yarn start:dev
 ```
 
 ### Структура модулей
 
-Каждый модуль следует структуре:
+Каждый модуль следует чистой архитектуре:
 
 ```
 module/
 ├── module.controller.ts      # REST endpoints
-├── module.service.ts         # Бизнес логика
-├── module.resolver.ts        # GraphQL resolvers
+├── module.service.ts         # Бизнес логика + кеширование
+├── module.resolver.ts        # GraphQL resolvers (если нужно)
 ├── module.module.ts          # NestJS модуль
 ├── dto/                      # Data Transfer Objects
 │   ├── create-module.dto.ts
 │   ├── update-module.dto.ts
 │   └── module-response.dto.ts
-└── entities/                 # TypeScript типы
-    └── module.entity.ts
+└── module.controller.spec.ts # Тесты
 ```
 
-### Добавление новых эндпоинтов
+### Добавление нового API
 
-1. **Создайте DTO**:
+1. **Создайте DTO с валидацией**:
+
 ```typescript
 // dto/create-item.dto.ts
 export class CreateItemDto {
   @IsString()
-  name: string;
-  
+  @IsNotEmpty()
+  name!: string;
+
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsEnum(Locale)
+  locale!: Locale;
 }
 ```
 
-2. **Добавьте метод в сервис**:
+2. **Добавьте метод в сервис с кешированием**:
+
 ```typescript
 // item.service.ts
 async createItem(createItemDto: CreateItemDto) {
-  return this.cacheService.getOrSet(
-    `item:${createItemDto.name}`,
-    () => this.prisma.item.create({ data: createItemDto }),
-    { ttl: 300 }
-  );
+  const cacheKey = `item:${createItemDto.name}:${createItemDto.locale}`;
+
+  const result = await this.prisma.item.create({
+    data: createItemDto,
+    include: { translations: true }
+  });
+
+  // Инвалидируем связанный кеш
+  await this.cacheService.invalidateByPattern('items:*');
+
+  return result;
 }
 ```
 
-3. **Создайте контроллер**:
+3. **Создайте контроллер с документацией**:
+
 ```typescript
 // item.controller.ts
-@Post()
-@ApiOperation({ summary: 'Create new item' })
-async create(@Body() createItemDto: CreateItemDto) {
-  return this.itemService.createItem(createItemDto);
+@ApiTags('Items')
+@Controller('items')
+export class ItemController {
+  @Post()
+  @ApiOperation({ summary: 'Create new item' })
+  @ApiResponse({ status: 201, description: 'Item created successfully' })
+  async create(@Body() createItemDto: CreateItemDto) {
+    return this.itemService.createItem(createItemDto);
+  }
 }
 ```
 
-## ⚙️ Конфигурация
+## 📊 Производительность
 
-### Переменные окружения
+### Бенчмарки кеширования
 
-```bash
-# База данных
-DATABASE_URL=postgresql://user:password@db:5432/neva
+| Операция             | Без кеша | С кешем | Ускорение |
+| -------------------- | -------- | ------- | --------- |
+| Список продуктов     | 150ms    | 25ms    | **6x**    |
+| Категории с брендами | 90ms     | 18ms    | **5x**    |
+| Детали продукта      | 120ms    | 20ms    | **6x**    |
+| Поиск по фильтрам    | 200ms    | 40ms    | **5x**    |
+| Список брендов       | 60ms     | 15ms    | **4x**    |
 
-# Redis
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_PASSWORD=
-REDIS_DB=0
+### Оптимизации
 
-# Кеширование
-CACHE_TTL=300
-CACHE_MAX_ITEMS=2000
-
-# Приложение
-NODE_ENV=development
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
-PORT=3000
-
-# Prisma
-PRISMA_CLIENT_OUTPUT=/app/backend/generated/prisma/client
-```
-
-### Docker конфигурация
-
-#### Development
-```bash
-# Запуск для разработки
-docker-compose up
-
-# Только инфраструктура
-docker-compose up -d db redis
-```
-
-#### Production
-```bash
-# Билд продакшен образов
-docker-compose -f docker-compose.prod.yml build
-
-# Запуск в продакшене
-docker-compose -f docker-compose.prod.yml up -d
-```
+- **Индексы БД** на часто запрашиваемые поля
+- **Курсор-пагинация** для больших списков
+- **Lazy loading** связанных данных
+- **Сжатие изображений** в WebP
+- **Умная инвалидация** кеша по связям
 
 ## 📦 Деплой
 
 ### Docker Production
 
-1. **Создайте production docker-compose.yml**:
 ```yaml
+# docker-compose.prod.yml
 services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
 ```
 
-2. **Настройте CI/CD**:
+### CI/CD Pipeline
+
 ```yaml
 # .github/workflows/deploy.yml
-name: Deploy
+name: Deploy to Production
 on:
   push:
     branches: [main]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy to server
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and deploy
         run: |
-          docker-compose -f docker-compose.prod.yml up -d --build
-```
+          docker-compose -f docker-compose.prod.yml build
+          docker-compose -f docker-compose.prod.yml up -d
 
-### Мониторинг в продакшене
-
-```bash
-# Логи
-docker-compose logs -f backend
-
-# Метрики контейнеров
-docker stats
-
-# Состояние Redis
-docker-compose exec redis redis-cli info
-
-# Состояние PostgreSQL
-docker-compose exec db pg_isready
+      - name: Run migrations
+        run: |
+          docker-compose -f docker-compose.prod.yml exec -T backend yarn prisma migrate deploy
 ```
 
 ## 🔧 Устранение неполадок
 
-### Часто встречающиеся проблемы
+### Частые проблемы
 
-#### 1. Ошибки подключения к базе данных
+#### 1. Ошибки базы данных
+
 ```bash
-# Проверьте состояние PostgreSQL
+# Проверка состояния
 docker-compose exec db pg_isready -U user -d neva
 
-# Пересоздайте базу данных
-docker-compose down
-docker-compose up db
-yarn prisma migrate reset
+# Пересоздание БД
+docker-compose down -v
+docker-compose up -d db
+docker-compose exec backend yarn prisma migrate deploy
 ```
 
-#### 2. Проблемы с Redis
+#### 2. Проблемы с кешем
+
 ```bash
-# Проверьте подключение к Redis
-docker-compose exec redis redis-cli ping
+# Очистка Redis
+curl -X POST "http://localhost:3000/admin/cache/clear"
 
-# Очистите Redis
-docker-compose exec redis redis-cli flushall
-
-# Перезапустите Redis
-docker-compose restart redis
+# Проверка здоровья
+curl "http://localhost:3000/admin/cache/health"
 ```
 
-#### 3. Ошибки Prisma
+#### 3. Проблемы с изображениями
+
 ```bash
-# Пересгенерируйте Prisma Client
-yarn prisma generate
+# Проверка папки изображений
+docker-compose exec backend ls -la public/images/
 
-# Проверьте статус миграций
-yarn prisma migrate status
-
-# Сбросите базу данных
-yarn prisma migrate reset
+# Права доступа
+docker-compose exec backend chmod -R 755 public/images/
 ```
 
-#### 4. Проблемы с кешированием
+#### 4. Ошибки переводов
+
 ```bash
-# Проверьте статус кеша
-curl http://localhost:3000/admin/cache/health
+# Проверка данных переводов
+curl "http://localhost:3000/admin/categories"
+curl "http://localhost:3000/admin/brands"
 
-# Очистите кеш
-curl -X POST http://localhost:3000/admin/cache/clear
-
-# Проверьте логи кеширования
-docker-compose logs backend | grep -E "(CACHE|Cache)"
+# Пересоздание тестовых данных
+docker-compose exec backend yarn prisma migrate reset
+docker-compose exec backend yarn prisma:seed
 ```
 
-## 📊 Производительность
+## 🔗 Полезные ссылки
 
-### Бенчмарки
-
-| Операция | Без кеша | С кешем | Ускорение |
-|----------|----------|---------|-----------|
-| Получение продуктов | 120ms | 20ms | **6x** |
-| Список категорий | 80ms | 15ms | **5.3x** |
-| Список брендов | 45ms | 12ms | **3.8x** |
-| Поиск по фильтрам | 200ms | 35ms | **5.7x** |
-
-### Оптимизация
-
-1. **Используйте индексы в базе данных**
-2. **Настройте TTL кеша в зависимости от данных**
-3. **Мониторьте hit/miss ratio кеша**
-4. **Оптимизируйте размер возвращаемых данных**
+- **API документация**: http://localhost:3000/api-docs
+- **GraphQL Playground**: http://localhost:3000/graphql
+- **База данных**: http://localhost:8080 (Adminer)
+- **Мониторинг Redis**: http://localhost:8081
+- **Официальная документация NestJS**: https://docs.nestjs.com
+- **Prisma документация**: https://www.prisma.io/docs
 
 ## 📄 Лицензия
 
@@ -575,13 +924,3 @@ MIT License - см. [LICENSE](LICENSE) файл для деталей.
 3. Commit изменения: `git commit -m 'Add amazing feature'`
 4. Push в branch: `git push origin feature/amazing-feature`
 5. Создайте Pull Request
-
-## 📞 Поддержка
-
-- **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
-- **Documentation**: [API Docs](http://localhost:3000/api-docs)
-- **Email**: support@neva.com
-
----
-
-**Сделано с ❤️ командой Neva**

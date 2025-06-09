@@ -1,22 +1,27 @@
-// backend/src/app.module.ts - обновленная версия
+// backend/src/app.module.ts
 import { join } from 'path';
-
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CacheModule } from '@nestjs/cache-manager';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as redisStore from 'cache-manager-redis-store';
 
 import { PrismaService } from '../prisma/prisma.service';
 
+// Существующие модули
 import { BrandsModule } from './brands/brands.module';
 import { CategoriesModule } from './categories/categories.module';
 import { NevaProductsModule } from './products/products.module';
-import { ProductModule } from './product/product.module'; // Новый модуль
+import { ProductModule } from './product/product.module';
 import { CacheServiceModule } from './common/cache.module';
-import { CacheAdminController } from './admin/cache-admin.controller';
+
+// Новый админ модуль
+import { AdminModule } from './admin/admin.module';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -27,42 +32,16 @@ import { CacheAdminController } from './admin/cache-admin.controller';
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        const config: any = {
-          store: redisStore,
-          host: configService.get('REDIS_HOST', 'redis'),
-          port: parseInt(configService.get('REDIS_PORT', '6379')),
-          ttl: parseInt(configService.get('CACHE_TTL', '300')),
-          max: parseInt(configService.get('CACHE_MAX_ITEMS', '1000')),
-          // Основные настройки для совместимости
-          retryDelayOnFailover: 100,
-          maxRetriesPerRequest: 3,
-          lazyConnect: true,
-        };
-
-        // Добавляем пароль только если он задан
-        const password = configService.get('REDIS_PASSWORD');
-        if (password) {
-          config.password = password;
-        }
-
-        // Добавляем номер БД только если он задан
-        const db = configService.get('REDIS_DB');
-        if (db) {
-          config.db = parseInt(db);
-        }
-
-        console.log('🔧 Redis Cache Config:', {
-          host: config.host,
-          port: config.port,
-          ttl: config.ttl,
-          max: config.max,
-          hasPassword: !!password,
-          db: db || 0,
-        });
-
-        return config;
-      },
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get('REDIS_HOST', 'redis'),
+        port: parseInt(configService.get('REDIS_PORT', '6379')),
+        ttl: parseInt(configService.get('CACHE_TTL', '300')),
+        max: parseInt(configService.get('CACHE_MAX_ITEMS', '1000')),
+        retryDelayOnFailover: 100,
+        maxRetriesPerRequest: 3,
+        lazyConnect: true,
+      }),
       inject: [ConfigService],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -76,32 +55,28 @@ import { CacheAdminController } from './admin/cache-admin.controller';
       rootPath: join(__dirname, '..', '..', 'public'),
       serveRoot: '/public',
     }),
-    // Импорт всех модулей
+
+    // Модули
     CacheServiceModule,
-    NevaProductsModule, // Существующий модуль для списка продуктов (GraphQL + REST)
-    ProductModule, // Новый модуль для отдельного продукта (только REST)
+    NevaProductsModule,
+    ProductModule,
     CategoriesModule,
     BrandsModule,
+    AdminModule, // 🆕 Чистый админ модуль
   ],
-  controllers: [CacheAdminController],
-  providers: [PrismaService],
+  controllers: [AppController],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {
   constructor() {
-    console.log('✅ AppModule initialized with Redis caching');
-    console.log('🔧 Cache configuration:', {
-      host: process.env.REDIS_HOST || 'redis',
-      port: process.env.REDIS_PORT || 6379,
-      ttl: process.env.CACHE_TTL || 300,
-    });
-    console.log('📦 Available modules:');
-    console.log(
-      '   - NevaProductsModule: /products/* (GraphQL + REST для списков)'
-    );
-    console.log(
-      '   - ProductModule: /product/* (REST для отдельного продукта)'
-    );
-    console.log('   - CategoriesModule: /categories/*');
-    console.log('   - BrandsModule: /brands/*');
+    console.log('✅ Clean AppModule initialized');
+    console.log('📦 Modules:');
+    console.log('   - Products (Public API)');
+    console.log('   - Categories & Brands');
+    console.log('   - 🆕 Admin Panel (Clean Architecture)');
+    console.log('');
+    console.log('🔗 Admin API:');
+    console.log('   http://localhost:3000/admin/products');
+    console.log('   http://localhost:3000/api-docs');
   }
 }

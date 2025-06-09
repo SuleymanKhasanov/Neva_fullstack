@@ -122,29 +122,97 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.BrandScalarFieldEnum = {
   id: 'id',
-  categoryId: 'categoryId',
-  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BrandTranslationScalarFieldEnum = {
+  id: 'id',
+  brandId: 'brandId',
   locale: 'locale',
-  section: 'section'
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
+  section: 'section',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CategoryTranslationScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
   locale: 'locale',
   name: 'name',
-  section: 'section'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CategoryBrandScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  brandId: 'brandId',
+  section: 'section',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   brandId: 'brandId',
   categoryId: 'categoryId',
+  section: 'section',
+  slug: 'slug',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductTranslationScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
   locale: 'locale',
   name: 'name',
-  image: 'image',
-  fullImage: 'fullImage',
   description: 'description',
-  section: 'section'
+  marketingDescription: 'marketingDescription',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductImageScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  originalFilename: 'originalFilename',
+  imageSmall: 'imageSmall',
+  imageLarge: 'imageLarge',
+  altText: 'altText',
+  sortOrder: 'sortOrder',
+  isPrimary: 'isPrimary',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductSpecificationScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  specKey: 'specKey',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductSpecificationTranslationScalarFieldEnum = {
+  id: 'id',
+  specificationId: 'specificationId',
+  locale: 'locale',
+  name: 'name',
+  value: 'value',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -161,6 +229,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Locale = exports.$Enums.Locale = {
+  ru: 'ru',
+  en: 'en',
+  kr: 'kr',
+  uz: 'uz'
+};
+
 exports.Section = exports.$Enums.Section = {
   NEVA: 'NEVA',
   X_SOLUTION: 'X_SOLUTION'
@@ -168,8 +243,15 @@ exports.Section = exports.$Enums.Section = {
 
 exports.Prisma.ModelName = {
   Brand: 'Brand',
+  BrandTranslation: 'BrandTranslation',
   Category: 'Category',
-  Product: 'Product'
+  CategoryTranslation: 'CategoryTranslation',
+  CategoryBrand: 'CategoryBrand',
+  Product: 'Product',
+  ProductTranslation: 'ProductTranslation',
+  ProductImage: 'ProductImage',
+  ProductSpecification: 'ProductSpecification',
+  ProductSpecificationTranslation: 'ProductSpecificationTranslation'
 };
 
 /**

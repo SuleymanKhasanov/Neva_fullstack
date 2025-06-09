@@ -1,3 +1,4 @@
+// backend/src/admin/cache-admin.controller.ts
 import { Controller, Get, Post, Delete, Query, Param } from '@nestjs/common';
 import {
   ApiTags,
@@ -8,62 +9,79 @@ import {
 } from '@nestjs/swagger';
 import { CacheService } from '../common/cache.service';
 
-@ApiTags('Cache Administration')
+@ApiTags('Admin - Cache')
 @Controller('admin/cache')
 export class CacheAdminController {
   constructor(private readonly cacheService: CacheService) {}
 
   @Get('stats')
-  @ApiOperation({ summary: 'Get cache statistics' })
-  @ApiResponse({ status: 200, description: 'Cache statistics' })
+  @ApiOperation({ summary: 'Получить статистику кеша' })
+  @ApiResponse({ status: 200, description: 'Статистика кеша' })
   async getCacheStats() {
     return await this.cacheService.getStats();
   }
 
   @Post('clear')
-  @ApiOperation({ summary: 'Clear all cache' })
-  @ApiResponse({ status: 200, description: 'Cache cleared successfully' })
+  @ApiOperation({ summary: 'Очистить весь кеш' })
+  @ApiResponse({ status: 200, description: 'Кеш очищен успешно' })
   async clearAllCache() {
     try {
       await this.cacheService.reset();
-      return { message: 'Cache cleared successfully' };
+      return {
+        success: true,
+        message: 'Кеш очищен успешно',
+      };
     } catch (error) {
       return {
-        message: 'Failed to clear cache',
+        success: false,
+        message: 'Не удалось очистить кеш',
         error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
 
   @Delete('key/:key')
-  @ApiOperation({ summary: 'Delete specific cache key' })
-  @ApiParam({ name: 'key', description: 'Cache key to delete' })
-  @ApiResponse({ status: 200, description: 'Cache key deleted' })
+  @ApiOperation({ summary: 'Удалить конкретный ключ кеша' })
+  @ApiParam({ name: 'key', description: 'Ключ кеша для удаления' })
+  @ApiResponse({ status: 200, description: 'Ключ кеша удален' })
   async deleteCacheKey(@Param('key') key: string) {
     await this.cacheService.del(key);
-    return { message: `Cache key '${key}' deleted successfully` };
+    return {
+      success: true,
+      message: `Ключ кеша '${key}' удален успешно`,
+    };
   }
 
   @Delete('pattern')
-  @ApiOperation({ summary: 'Delete cache keys by pattern' })
+  @ApiOperation({ summary: 'Удалить ключи кеша по паттерну' })
   @ApiQuery({
     name: 'pattern',
-    description: 'Pattern to match cache keys (supports * and ?)',
+    description: 'Паттерн для поиска ключей кеша (поддерживает * и ?)',
+    example: 'products:*',
   })
-  @ApiResponse({ status: 200, description: 'Cache keys deleted by pattern' })
+  @ApiResponse({ status: 200, description: 'Ключи кеша удалены по паттерну' })
   async deleteCacheByPattern(@Query('pattern') pattern: string) {
     const deletedCount = await this.cacheService.invalidateByPattern(pattern);
     return {
-      message: `Deleted ${deletedCount} cache keys matching pattern '${pattern}'`,
+      success: true,
+      message: `Удалено ${deletedCount} ключей кеша по паттерну '${pattern}'`,
       deletedCount,
     };
   }
 
   @Post('invalidate/products')
-  @ApiOperation({ summary: 'Invalidate products cache' })
-  @ApiQuery({ name: 'locale', required: false, description: 'Locale filter' })
-  @ApiQuery({ name: 'section', required: false, description: 'Section filter' })
-  @ApiResponse({ status: 200, description: 'Products cache invalidated' })
+  @ApiOperation({ summary: 'Инвалидировать кеш продуктов' })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    description: 'Фильтр по локали',
+  })
+  @ApiQuery({
+    name: 'section',
+    required: false,
+    description: 'Фильтр по секции',
+  })
+  @ApiResponse({ status: 200, description: 'Кеш продуктов инвалидирован' })
   async invalidateProductsCache(
     @Query('locale') locale?: string,
     @Query('section') section?: string
@@ -71,6 +89,8 @@ export class CacheAdminController {
     const patterns: string[] = [
       'products:*',
       'products_count:*',
+      'product:*',
+      'product_exists:*',
       ...(locale ? [`*:${locale}:*`] : []),
       ...(section ? [`*:${section}*`] : []),
     ];
@@ -82,17 +102,26 @@ export class CacheAdminController {
     }
 
     return {
-      message: 'Products cache invalidated',
+      success: true,
+      message: 'Кеш продуктов инвалидирован',
       deletedCount: totalDeleted,
       patterns,
     };
   }
 
   @Post('invalidate/categories')
-  @ApiOperation({ summary: 'Invalidate categories cache' })
-  @ApiQuery({ name: 'locale', required: false, description: 'Locale filter' })
-  @ApiQuery({ name: 'section', required: false, description: 'Section filter' })
-  @ApiResponse({ status: 200, description: 'Categories cache invalidated' })
+  @ApiOperation({ summary: 'Инвалидировать кеш категорий' })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    description: 'Фильтр по локали',
+  })
+  @ApiQuery({
+    name: 'section',
+    required: false,
+    description: 'Фильтр по секции',
+  })
+  @ApiResponse({ status: 200, description: 'Кеш категорий инвалидирован' })
   async invalidateCategoriesCache(
     @Query('locale') locale?: string,
     @Query('section') section?: string
@@ -101,17 +130,26 @@ export class CacheAdminController {
     const deletedCount = await this.cacheService.invalidateByPattern(pattern);
 
     return {
-      message: 'Categories cache invalidated',
+      success: true,
+      message: 'Кеш категорий инвалидирован',
       deletedCount,
       pattern,
     };
   }
 
   @Post('invalidate/brands')
-  @ApiOperation({ summary: 'Invalidate brands cache' })
-  @ApiQuery({ name: 'locale', required: false, description: 'Locale filter' })
-  @ApiQuery({ name: 'section', required: false, description: 'Section filter' })
-  @ApiResponse({ status: 200, description: 'Brands cache invalidated' })
+  @ApiOperation({ summary: 'Инвалидировать кеш брендов' })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    description: 'Фильтр по локали',
+  })
+  @ApiQuery({
+    name: 'section',
+    required: false,
+    description: 'Фильтр по секции',
+  })
+  @ApiResponse({ status: 200, description: 'Кеш брендов инвалидирован' })
   async invalidateBrandsCache(
     @Query('locale') locale?: string,
     @Query('section') section?: string
@@ -120,15 +158,16 @@ export class CacheAdminController {
     const deletedCount = await this.cacheService.invalidateByPattern(pattern);
 
     return {
-      message: 'Brands cache invalidated',
+      success: true,
+      message: 'Кеш брендов инвалидирован',
       deletedCount,
       pattern,
     };
   }
 
   @Get('health')
-  @ApiOperation({ summary: 'Check cache health' })
-  @ApiResponse({ status: 200, description: 'Cache health status' })
+  @ApiOperation({ summary: 'Проверить здоровье кеша' })
+  @ApiResponse({ status: 200, description: 'Статус здоровья кеша' })
   async getCacheHealth() {
     try {
       // Простой тест записи/чтения
@@ -161,8 +200,8 @@ export class CacheAdminController {
   }
 
   @Get('debug')
-  @ApiOperation({ summary: 'Get cache debug information' })
-  @ApiResponse({ status: 200, description: 'Cache debug info' })
+  @ApiOperation({ summary: 'Получить отладочную информацию кеша' })
+  @ApiResponse({ status: 200, description: 'Отладочная информация кеша' })
   async getCacheDebug() {
     try {
       const stats = await this.cacheService.getStats();

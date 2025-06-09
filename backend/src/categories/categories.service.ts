@@ -55,26 +55,53 @@ export class CategoriesService {
 
       const categories = await this.prisma.category.findMany({
         where: {
-          locale,
           ...(section && { section }),
+          translations: {
+            some: {
+              locale: locale as any,
+            },
+          },
         },
-        select: {
-          id: true,
-          name: true,
-          locale: true,
-          section: true,
-          brands: {
-            select: {
-              id: true,
-              name: true,
-              locale: true,
-              section: true,
+        include: {
+          translations: {
+            where: { locale: locale as any },
+          },
+          categoryBrands: {
+            where: {
+              ...(section && { section }),
+            },
+            include: {
+              brand: {
+                include: {
+                  translations: {
+                    where: { locale: locale as any },
+                  },
+                },
+              },
             },
           },
         },
       });
 
-      const result = { categories };
+      // Форматируем результат
+      const formattedCategories = categories
+        .filter((category) => category.translations.length > 0)
+        .map((category) => ({
+          id: category.id,
+          name: category.translations[0].name,
+          locale: category.translations[0].locale,
+          section: category.section,
+          brands: category.categoryBrands
+            .filter((cb) => cb.brand.translations.length > 0)
+            .map((cb) => ({
+              id: cb.brand.id,
+              name: cb.brand.translations[0].name,
+              locale: cb.brand.translations[0].locale,
+              section: cb.section,
+            })),
+        }));
+
+      const result = { categories: formattedCategories };
 
       // Кешируем результат на 5 минут
       await this.cacheService.set(cacheKey, result, { ttl: 300 });
