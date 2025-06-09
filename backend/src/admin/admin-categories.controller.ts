@@ -1,4 +1,4 @@
-// backend/src/admin/admin-categories.controller.ts
+// 🔒 backend/src/admin/admin-categories.controller.ts
 import {
   Controller,
   Get,
@@ -7,39 +7,35 @@ import {
   Param,
   ParseIntPipe,
   Logger,
-  ValidationPipe,
-  UsePipes,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { PrismaService } from '../../prisma/prisma.service';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Section, Locale } from '@prisma/client';
+
+import { Auth } from '../auth/decorators/auth.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { PrismaService } from '../../prisma/prisma.service';
 
 interface CreateCategoryDto {
   section: Section;
-  translations: {
-    locale: Locale;
-    name: string;
-  }[];
+  translations: { locale: Locale; name: string }[];
 }
 
 @ApiTags('Admin - Categories')
 @Controller('admin/categories')
-@UsePipes(new ValidationPipe({ transform: true }))
 export class AdminCategoriesController {
   private readonly logger = new Logger(AdminCategoriesController.name);
 
   constructor(private readonly prisma: PrismaService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Получить все категории для админ панели' })
-  async getAllCategories() {
+  @Auth()
+  @ApiOperation({ summary: 'Получить все категории' })
+  async getAllCategories(@CurrentUser() user: any) {
+    this.logger.log(`Admin ${user.username} requesting all categories`);
     const categories = await this.prisma.category.findMany({
-      include: {
-        translations: true,
-      },
+      include: { translations: true },
       orderBy: { createdAt: 'desc' },
     });
-
     return categories.map((category) => ({
       id: category.id,
       section: category.section,
@@ -49,61 +45,23 @@ export class AdminCategoriesController {
     }));
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Получить категорию по ID' })
-  async getCategory(@Param('id', ParseIntPipe) id: number) {
-    const category = await this.prisma.category.findUnique({
-      where: { id },
-      include: {
-        translations: true,
-      },
-    });
-
-    if (!category) {
-      throw new Error(`Category with ID ${id} not found`);
-    }
-
-    return {
-      id: category.id,
-      section: category.section,
-      createdAt: category.createdAt,
-      updatedAt: category.updatedAt,
-      translations: category.translations,
-    };
-  }
-
   @Post()
-  @ApiOperation({ summary: 'Создать новую категорию' })
-  @ApiResponse({ status: 201, description: 'Категория создана' })
-  async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
+  @Auth()
+  @ApiOperation({ summary: 'Создать категорию' })
+  async createCategory(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @CurrentUser() user: any
+  ) {
     this.logger.log(
-      'Creating category:',
-      createCategoryDto.translations[0]?.name
+      `Admin ${user.username} creating category: ${createCategoryDto.translations[0]?.name}`
     );
-
     const category = await this.prisma.category.create({
       data: {
         section: createCategoryDto.section,
-        translations: {
-          create: createCategoryDto.translations,
-        },
+        translations: { create: createCategoryDto.translations },
       },
-      include: {
-        translations: true,
-      },
+      include: { translations: true },
     });
-
-    this.logger.log(`Created category ID: ${category.id}`);
-    return {
-      success: true,
-      message: 'Категория создана',
-      data: {
-        id: category.id,
-        section: category.section,
-        createdAt: category.createdAt,
-        updatedAt: category.updatedAt,
-        translations: category.translations,
-      },
-    };
+    return { success: true, message: 'Категория создана', data: category };
   }
 }

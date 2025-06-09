@@ -1,15 +1,16 @@
 # Neva Backend API
 
-Высокопроизводительный backend API для каталога продуктов Neva с мультиязычной поддержкой, Redis кешированием и админ панелью, построенный на NestJS.
+Высокопроизводительный backend API для каталога продуктов Neva с мультиязычной поддержкой, Redis кешированием, JWT авторизацией и защищенной админ панелью, построенный на NestJS.
 
 ## 🚀 Особенности
 
 - **REST & GraphQL API** - Гибкие возможности запросов данных
+- **🔐 JWT авторизация** - Безопасная защита админ панели без базы пользователей
 - **Мультиязычность** - Полная поддержка 4 языков (ru, en, kr, uz) через таблицы переводов
 - **Redis Кеширование** - Ускорение API в 3-6 раз с умной инвалидацией
-- **Админ панель** - Полное управление продуктами, категориями, брендами и кешем
+- **🔒 Защищенная админ панель** - Полное управление продуктами, категориями, брендами и кешем
 - **Обработка изображений** - Автоматическое сжатие в WebP с созданием миниатюр
-- **Автодокументация** - Swagger UI и GraphQL Playground
+- **Автодокументация** - Swagger UI и GraphQL Playground с интеграцией авторизации
 - **Типобезопасность** - TypeScript + Prisma ORM с нормализованной схемой
 - **Контейнеризация** - Docker setup с PostgreSQL, Redis и Adminer
 
@@ -17,9 +18,10 @@
 
 - [Технологии](#технологии)
 - [Быстрый старт](#быстрый-старт)
+- [🔐 JWT Авторизация](#-jwt-авторизация)
 - [Структура проекта](#структура-проекта)
 - [API Документация](#api-документация)
-- [Админ панель](#админ-панель)
+- [🔒 Защищенная админ панель](#-защищенная-админ-панель)
 - [Мультиязычность](#мультиязычность)
 - [Кеширование](#кеширование)
 - [База данных](#база-данных)
@@ -28,17 +30,18 @@
 
 ## 🛠 Технологии
 
-| Категория            | Технология              | Версия  |
-| -------------------- | ----------------------- | ------- |
-| **Framework**        | NestJS                  | ^11.1.0 |
-| **Language**         | TypeScript              | ^5.7.2  |
-| **Database**         | PostgreSQL              | 15      |
-| **ORM**              | Prisma                  | ^6.7.0  |
-| **Cache**            | Redis                   | 7       |
-| **API**              | REST + GraphQL          | -       |
-| **Image Processing** | Sharp                   | ^0.34.1 |
-| **Documentation**    | Swagger + Apollo Studio | -       |
-| **Containerization** | Docker & Docker Compose | -       |
+| Категория             | Технология              | Версия      |
+| --------------------- | ----------------------- | ----------- |
+| **Framework**         | NestJS                  | ^11.1.0     |
+| **Language**          | TypeScript              | ^5.7.2      |
+| **Database**          | PostgreSQL              | 15          |
+| **ORM**               | Prisma                  | ^6.7.0      |
+| **Cache**             | Redis                   | 7           |
+| **API**               | REST + GraphQL          | -           |
+| **🔐 Authentication** | **JWT + Passport**      | **^10.2.0** |
+| **Image Processing**  | Sharp                   | ^0.34.1     |
+| **Documentation**     | Swagger + Apollo Studio | -           |
+| **Containerization**  | Docker & Docker Compose | -           |
 
 ## 🚀 Быстрый старт
 
@@ -58,10 +61,15 @@ cd neva-backend
 # 2. Скопируйте переменные окружения
 cp .env.example .env
 
-# 3. Запустите с помощью Docker
+# 3. Настройте переменные авторизации в .env
+# JWT_SECRET="neva-super-secret-jwt-key-2024"
+# ADMIN_USERNAME="admin"
+# ADMIN_PASSWORD="admin123"
+
+# 4. Запустите с помощью Docker
 docker-compose up --build
 
-# 4. Приложение будет доступно по адресам:
+# 5. Приложение будет доступно по адресам:
 # API: http://localhost:3000
 # Swagger: http://localhost:3000/api-docs
 # GraphQL: http://localhost:3000/graphql
@@ -76,6 +84,131 @@ docker-compose up --build
 docker-compose exec backend yarn prisma:seed
 ```
 
+### 🔑 Первый вход в админ панель
+
+```bash
+# Логин в админ панель (данные по умолчанию)
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}'
+
+# Или через Swagger UI: http://localhost:3000/api-docs
+# 1. Найдите раздел "Authentication"
+# 2. Используйте POST /auth/login
+# 3. Скопируйте access_token и нажмите "Authorize"
+```
+
+## 🔐 JWT Авторизация
+
+### Особенности авторизации
+
+- **Без базы пользователей** - Логин/пароль хранятся в переменных окружения
+- **JWT токены** - Access token (24ч) + Refresh token (7 дней)
+- **Автоматическая защита** - Все `/admin/*` роуты защищены
+- **Публичные API** - Каталог продуктов остается открытым
+- **Swagger интеграция** - Удобное тестирование в UI
+
+### Переменные окружения
+
+```bash
+# JWT Configuration
+JWT_SECRET="neva-super-secret-jwt-key-2024-change-in-production"
+JWT_EXPIRES_IN="24h"
+JWT_REFRESH_SECRET="neva-super-secret-refresh-key-2024-change-in-production"
+JWT_REFRESH_EXPIRES_IN="7d"
+
+# Admin Credentials
+ADMIN_USERNAME="admin"
+ADMIN_PASSWORD="admin123"
+```
+
+### Эндпойнты авторизации
+
+| Метод  | Путь            | Описание                   | Защищен |
+| ------ | --------------- | -------------------------- | ------- |
+| `POST` | `/auth/login`   | Вход в систему             | ❌ Нет  |
+| `POST` | `/auth/refresh` | Обновление токена          | ❌ Нет  |
+| `GET`  | `/auth/profile` | Профиль администратора     | ✅ Да   |
+| `GET`  | `/auth/check`   | Проверка валидности токена | ✅ Да   |
+
+### Примеры использования
+
+#### 1. Логин администратора
+
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "password": "admin123"
+  }'
+```
+
+**Ответ:**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "username": "admin",
+    "role": "admin"
+  }
+}
+```
+
+#### 2. Доступ к защищенным ресурсам
+
+```bash
+# Сохраните токен
+export TOKEN="your_access_token_here"
+
+# Используйте в заголовках
+curl -X GET http://localhost:3000/admin/products \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+#### 3. Обновление токена
+
+```bash
+curl -X POST http://localhost:3000/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{"refresh_token": "your_refresh_token_here"}'
+```
+
+### Клиентская интеграция
+
+```javascript
+// Пример для фронтенда
+class AuthService {
+  async login(username, password) {
+    const response = await fetch('/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.json();
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token);
+    return data;
+  }
+
+  async makeAuthenticatedRequest(url, options = {}) {
+    const token = localStorage.getItem('access_token');
+
+    return fetch(url, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+  }
+}
+```
+
 ## 📁 Структура проекта
 
 ```
@@ -85,10 +218,23 @@ backend/
 │   ├── migrations/           # Миграции базы данных
 │   └── prisma.service.ts     # Prisma сервис
 ├── src/
+│   ├── auth/                 # 🔐 JWT авторизация
+│   │   ├── auth.module.ts            # Модуль авторизации
+│   │   ├── auth.service.ts           # Логика авторизации
+│   │   ├── auth.controller.ts        # API авторизации
+│   │   ├── jwt.strategy.ts           # JWT стратегия Passport
+│   │   ├── guards/                   # Guard'ы для защиты роутов
+│   │   │   └── jwt-auth.guard.ts     # JWT Guard
+│   │   ├── decorators/               # Декораторы
+│   │   │   ├── auth.decorator.ts     # @Auth() декоратор
+│   │   │   ├── current-user.decorator.ts  # @CurrentUser() декоратор
+│   │   │   └── public.decorator.ts   # @Public() декоратор
+│   │   └── dto/                      # DTO для авторизации
+│   │       └── auth.dto.ts           # LoginDto, AuthResponseDto
 │   ├── common/               # Общие модули
 │   │   ├── cache.service.ts  # Умный сервис кеширования
 │   │   └── cache.module.ts   # Глобальный модуль кеширования
-│   ├── admin/                # Админ панель
+│   ├── admin/                # 🔒 Защищенная админ панель
 │   │   ├── admin-products.controller.ts    # Управление продуктами
 │   │   ├── admin-categories.controller.ts  # Управление категориями
 │   │   ├── admin-brands.controller.ts      # Управление брендами
@@ -120,41 +266,63 @@ backend/
 
 API доступно по адресу: `http://localhost:3000`
 
-**Swagger UI**: `http://localhost:3000/api-docs`
+**Swagger UI**: `http://localhost:3000/api-docs` (с поддержкой авторизации)
 
-#### Основные эндпоинты:
+#### 🔐 Эндпойнты авторизации:
 
-| Метод | Путь                          | Описание                        |
-| ----- | ----------------------------- | ------------------------------- |
-| `GET` | `/products/all`               | Все продукты с пагинацией       |
-| `GET` | `/products/neva`              | Продукты секции NEVA            |
-| `GET` | `/products/x-solution`        | Продукты секции X-SOLUTION      |
-| `GET` | `/product/:locale/:id`        | Детальная информация о продукте |
-| `GET` | `/product/:locale/:id/exists` | Проверка существования          |
-| `GET` | `/categories/all`             | Все категории с брендами        |
-| `GET` | `/categories/neva`            | Категории NEVA                  |
-| `GET` | `/categories/x-solution`      | Категории X-SOLUTION            |
-| `GET` | `/brands/all`                 | Все бренды                      |
-| `GET` | `/brands/neva`                | Бренды NEVA                     |
-| `GET` | `/brands/x-solution`          | Бренды X-SOLUTION               |
+| Метод  | Путь            | Описание                 | Защищен |
+| ------ | --------------- | ------------------------ | ------- |
+| `POST` | `/auth/login`   | Вход в админ панель      | ❌      |
+| `POST` | `/auth/refresh` | Обновление access токена | ❌      |
+| `GET`  | `/auth/profile` | Профиль администратора   | 🔒      |
+| `GET`  | `/auth/check`   | Проверка авторизации     | 🔒      |
+
+#### 📦 Публичные эндпойнты продуктов:
+
+| Метод | Путь                          | Описание                        | Защищен |
+| ----- | ----------------------------- | ------------------------------- | ------- |
+| `GET` | `/products/all`               | Все продукты с пагинацией       | ❌      |
+| `GET` | `/products/neva`              | Продукты секции NEVA            | ❌      |
+| `GET` | `/products/x-solution`        | Продукты секции X-SOLUTION      | ❌      |
+| `GET` | `/product/:locale/:id`        | Детальная информация о продукте | ❌      |
+| `GET` | `/product/:locale/:id/exists` | Проверка существования          | ❌      |
+| `GET` | `/categories/all`             | Все категории с брендами        | ❌      |
+| `GET` | `/categories/neva`            | Категории NEVA                  | ❌      |
+| `GET` | `/categories/x-solution`      | Категории X-SOLUTION            | ❌      |
+| `GET` | `/brands/all`                 | Все бренды                      | ❌      |
+| `GET` | `/brands/neva`                | Бренды NEVA                     | ❌      |
+| `GET` | `/brands/x-solution`          | Бренды X-SOLUTION               | ❌      |
 
 #### Параметры запросов:
 
 ```bash
-# Продукты с фильтрацией и пагинацией
+# Продукты с фильтрацией и пагинацией (публично)
 GET /products/neva?locale=ru&page=1&categoryId=1&brandId=2
 
-# Детальная информация о продукте
+# Детальная информация о продукте (публично)
 GET /product/ru/1
 
-# Категории с брендами по секции
+# Категории с брендами по секции (публично)
 GET /categories/neva?locale=en
 
-# Бренды по секции и локали
+# Бренды по секции и локали (публично)
 GET /brands/x-solution?locale=uz
 ```
 
 #### Примеры ответов:
+
+**Успешная авторизация:**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "username": "admin",
+    "role": "admin"
+  }
+}
+```
 
 **Список продуктов:**
 
@@ -199,7 +367,7 @@ GET /brands/x-solution?locale=uz
 #### Примеры запросов:
 
 ```graphql
-# Получить продукты с курсор-пагинацией
+# Получить продукты с курсор-пагинацией (публично)
 query GetProducts($locale: String!, $section: String) {
   products(locale: $locale, section: $section, first: 10) {
     edges {
@@ -227,7 +395,7 @@ query GetProducts($locale: String!, $section: String) {
   }
 }
 
-# Получить категории с брендами
+# Получить категории с брендами (публично)
 query GetCategories($locale: String!, $section: String) {
   categories(locale: $locale, section: $section) {
     categories {
@@ -241,7 +409,7 @@ query GetCategories($locale: String!, $section: String) {
   }
 }
 
-# Получить бренды
+# Получить бренды (публично)
 query GetBrands($locale: String!, $section: String) {
   brands(locale: $locale, section: $section) {
     brands {
@@ -252,24 +420,40 @@ query GetBrands($locale: String!, $section: String) {
 }
 ```
 
-## 🔧 Админ панель
+## 🔒 Защищенная админ панель
+
+### Требования авторизации
+
+Все эндпойнты `/admin/*` защищены JWT авторизацией:
+
+```http
+Authorization: Bearer <access_token>
+```
 
 ### Управление продуктами
 
-| Метод    | Путь                                  | Описание              |
-| -------- | ------------------------------------- | --------------------- |
-| `GET`    | `/admin/products`                     | Список всех продуктов |
-| `GET`    | `/admin/products/:id`                 | Детали продукта       |
-| `POST`   | `/admin/products`                     | Создать продукт       |
-| `PUT`    | `/admin/products/:id`                 | Обновить продукт      |
-| `DELETE` | `/admin/products/:id`                 | Удалить продукт       |
-| `POST`   | `/admin/products/:id/images`          | Загрузить изображения |
-| `DELETE` | `/admin/products/:id/images/:imageId` | Удалить изображение   |
+| Метод    | Путь                                  | Описание              | Защищен |
+| -------- | ------------------------------------- | --------------------- | ------- |
+| `GET`    | `/admin/products`                     | Список всех продуктов | 🔒      |
+| `GET`    | `/admin/products/:id`                 | Детали продукта       | 🔒      |
+| `POST`   | `/admin/products`                     | Создать продукт       | 🔒      |
+| `PUT`    | `/admin/products/:id`                 | Обновить продукт      | 🔒      |
+| `DELETE` | `/admin/products/:id`                 | Удалить продукт       | 🔒      |
+| `POST`   | `/admin/products/:id/images`          | Загрузить изображения | 🔒      |
+| `DELETE` | `/admin/products/:id/images/:imageId` | Удалить изображение   | 🔒      |
 
-#### Создание продукта:
+#### Создание продукта с авторизацией:
 
 ```bash
+# Сначала получите токен
+TOKEN=$(curl -s -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}' | \
+  grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
+
+# Создайте продукт
 curl -X POST "http://localhost:3000/admin/products" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "section": "NEVA",
@@ -312,16 +496,17 @@ curl -X POST "http://localhost:3000/admin/products" \
 
 ### Управление категориями
 
-| Метод  | Путь                    | Описание          |
-| ------ | ----------------------- | ----------------- |
-| `GET`  | `/admin/categories`     | Список категорий  |
-| `GET`  | `/admin/categories/:id` | Детали категории  |
-| `POST` | `/admin/categories`     | Создать категорию |
+| Метод  | Путь                    | Описание          | Защищен |
+| ------ | ----------------------- | ----------------- | ------- |
+| `GET`  | `/admin/categories`     | Список категорий  | 🔒      |
+| `GET`  | `/admin/categories/:id` | Детали категории  | 🔒      |
+| `POST` | `/admin/categories`     | Создать категорию | 🔒      |
 
-#### Создание категории:
+#### Создание категории с авторизацией:
 
 ```bash
 curl -X POST "http://localhost:3000/admin/categories" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "section": "NEVA",
@@ -348,17 +533,18 @@ curl -X POST "http://localhost:3000/admin/categories" \
 
 ### Управление брендами
 
-| Метод  | Путь                               | Описание                   |
-| ------ | ---------------------------------- | -------------------------- |
-| `GET`  | `/admin/brands`                    | Список брендов             |
-| `GET`  | `/admin/brands/:id`                | Детали бренда              |
-| `POST` | `/admin/brands`                    | Создать бренд              |
-| `POST` | `/admin/brands/category-relations` | Связать бренд с категорией |
+| Метод  | Путь                               | Описание                   | Защищен |
+| ------ | ---------------------------------- | -------------------------- | ------- |
+| `GET`  | `/admin/brands`                    | Список брендов             | 🔒      |
+| `GET`  | `/admin/brands/:id`                | Детали бренда              | 🔒      |
+| `POST` | `/admin/brands`                    | Создать бренд              | 🔒      |
+| `POST` | `/admin/brands/category-relations` | Связать бренд с категорией | 🔒      |
 
-#### Создание бренда:
+#### Создание бренда с авторизацией:
 
 ```bash
 curl -X POST "http://localhost:3000/admin/brands" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "translations": [
@@ -382,23 +568,29 @@ curl -X POST "http://localhost:3000/admin/brands" \
   }'
 ```
 
-#### Связывание бренда с категорией:
+### Управление кешем
+
+| Метод    | Путь                                      | Описание                | Защищен |
+| -------- | ----------------------------------------- | ----------------------- | ------- |
+| `GET`    | `/admin/cache/stats`                      | Статистика кеша         | 🔒      |
+| `GET`    | `/admin/cache/health`                     | Проверка здоровья       | 🔒      |
+| `GET`    | `/admin/cache/debug`                      | Отладочная информация   | 🔒      |
+| `POST`   | `/admin/cache/clear`                      | Очистка всего кеша      | 🔒      |
+| `DELETE` | `/admin/cache/pattern?pattern=products:*` | Инвалидация по паттерну | 🔒      |
+| `POST`   | `/admin/cache/invalidate/products`        | Инвалидация продуктов   | 🔒      |
 
 ```bash
-curl -X POST "http://localhost:3000/admin/brands/category-relations" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "categoryId": 1,
-    "brandId": 1,
-    "section": "NEVA"
-  }'
+# Примеры использования с авторизацией
+curl -H "Authorization: Bearer $TOKEN" "http://localhost:3000/admin/cache/stats"
+curl -X POST -H "Authorization: Bearer $TOKEN" "http://localhost:3000/admin/cache/clear"
 ```
 
 ### Загрузка изображений
 
 ```bash
-# Загрузка изображений продукта (до 5 файлов)
+# Загрузка изображений продукта (до 5 файлов) с авторизацией
 curl -X POST "http://localhost:3000/admin/products/1/images" \
+  -H "Authorization: Bearer $TOKEN" \
   -F "images=@laptop1.jpg" \
   -F "images=@laptop2.png"
 ```
@@ -430,13 +622,13 @@ curl -X POST "http://localhost:3000/admin/products/1/images" \
 ### Работа с переводами
 
 ```bash
-# Получение данных на разных языках
+# Получение данных на разных языках (публично)
 curl "http://localhost:3000/products/neva?locale=ru"    # Русский
 curl "http://localhost:3000/products/neva?locale=en"    # Английский
 curl "http://localhost:3000/products/neva?locale=kr"    # Корейский
 curl "http://localhost:3000/products/neva?locale=uz"    # Узбекский
 
-# Детали продукта на конкретном языке
+# Детали продукта на конкретном языке (публично)
 curl "http://localhost:3000/product/uz/1"               # Узбекский
 curl "http://localhost:3000/product/kr/1"               # Корейский
 ```
@@ -476,35 +668,38 @@ brand_exists:2
 products_count:{"isActive":true,"translations":{"some":{"locale":"ru"}},"section":"NEVA"}
 ```
 
-### Административные команды кеша
-
-| Метод    | Путь                                      | Описание                |
-| -------- | ----------------------------------------- | ----------------------- |
-| `GET`    | `/admin/cache/stats`                      | Статистика кеша         |
-| `GET`    | `/admin/cache/health`                     | Проверка здоровья       |
-| `GET`    | `/admin/cache/debug`                      | Отладочная информация   |
-| `POST`   | `/admin/cache/clear`                      | Очистка всего кеша      |
-| `DELETE` | `/admin/cache/pattern?pattern=products:*` | Инвалидация по паттерну |
-| `POST`   | `/admin/cache/invalidate/products`        | Инвалидация продуктов   |
-| `POST`   | `/admin/cache/invalidate/categories`      | Инвалидация категорий   |
-| `POST`   | `/admin/cache/invalidate/brands`          | Инвалидация брендов     |
+### 🔒 Административные команды кеша (требуют авторизации)
 
 ```bash
-# Примеры использования
-curl "http://localhost:3000/admin/cache/stats"
-curl -X POST "http://localhost:3000/admin/cache/clear"
-curl -X DELETE "http://localhost:3000/admin/cache/pattern?pattern=products:*"
+# Все команды требуют JWT токен
+export TOKEN="your_access_token"
+
+# Статистика кеша
+curl -H "Authorization: Bearer $TOKEN" "http://localhost:3000/admin/cache/stats"
+
+# Очистка кеша
+curl -X POST -H "Authorization: Bearer $TOKEN" "http://localhost:3000/admin/cache/clear"
+
+# Инвалидация по паттерну
+curl -X DELETE -H "Authorization: Bearer $TOKEN" \
+  "http://localhost:3000/admin/cache/pattern?pattern=products:*"
+
+# Специализированная инвалидация
+curl -X POST -H "Authorization: Bearer $TOKEN" \
+  "http://localhost:3000/admin/cache/invalidate/products"
 ```
 
 ### Мониторинг кеша
 
 - **Redis Commander**: `http://localhost:8081` (admin/admin123)
-- **Метрики производительности** через `/admin/cache/debug`
+- **🔒 Метрики производительности** через `/admin/cache/debug` (требует авторизации)
 - **Логирование** всех операций кеша в консоли
 
 ## 🗄️ База данных
 
-### Нормализованная схема
+### Схема без таблицы пользователей
+
+Авторизация использует переменные окружения, БД содержит только бизнес-данные:
 
 ```prisma
 // Основные таблицы
@@ -648,6 +843,10 @@ docker-compose exec backend yarn prisma:seed
 ### Команды разработки
 
 ```bash
+# Установка JWT зависимостей
+yarn add @nestjs/jwt @nestjs/passport passport passport-jwt
+yarn add -D @types/passport-jwt
+
 # Запуск в режиме разработки
 yarn start:dev
 
@@ -689,20 +888,27 @@ yarn prisma migrate deploy
 yarn prisma generate
 yarn prisma:seed
 
-# 4. Запустите в режиме разработки
+# 4. Настройте JWT переменные в .env
+echo "JWT_SECRET=neva-local-secret" >> .env
+echo "ADMIN_USERNAME=admin" >> .env
+echo "ADMIN_PASSWORD=admin123" >> .env
+
+# 5. Запустите в режиме разработки
 yarn start:dev
 ```
 
-### Структура модулей
+### Структура модулей с авторизацией
 
 Каждый модуль следует чистой архитектуре:
 
 ```
 module/
-├── module.controller.ts      # REST endpoints
+├── module.controller.ts      # REST endpoints с @Auth() декораторами
 ├── module.service.ts         # Бизнес логика + кеширование
 ├── module.resolver.ts        # GraphQL resolvers (если нужно)
 ├── module.module.ts          # NestJS модуль
+├── guards/                   # Защита роутов
+│   └── jwt-auth.guard.ts     # JWT Guard для админ панели
 ├── dto/                      # Data Transfer Objects
 │   ├── create-module.dto.ts
 │   ├── update-module.dto.ts
@@ -710,7 +916,7 @@ module/
 └── module.controller.spec.ts # Тесты
 ```
 
-### Добавление нового API
+### Добавление защищенного API
 
 1. **Создайте DTO с валидацией**:
 
@@ -749,17 +955,25 @@ async createItem(createItemDto: CreateItemDto) {
 }
 ```
 
-3. **Создайте контроллер с документацией**:
+3. **Создайте защищенный контроллер**:
 
 ```typescript
 // item.controller.ts
+import { Auth } from '../auth/decorators/auth.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+
 @ApiTags('Items')
-@Controller('items')
+@Controller('admin/items') // Защищенные роуты в /admin/*
 export class ItemController {
   @Post()
+  @Auth() // 🔒 Защищено JWT
   @ApiOperation({ summary: 'Create new item' })
   @ApiResponse({ status: 201, description: 'Item created successfully' })
-  async create(@Body() createItemDto: CreateItemDto) {
+  async create(
+    @Body() createItemDto: CreateItemDto,
+    @CurrentUser() user: any // Получаем данные администратора
+  ) {
+    console.log(`Admin ${user.username} creating item`);
     return this.itemService.createItem(createItemDto);
   }
 }
@@ -776,6 +990,14 @@ export class ItemController {
 | Детали продукта      | 120ms    | 20ms    | **6x**    |
 | Поиск по фильтрам    | 200ms    | 40ms    | **5x**    |
 | Список брендов       | 60ms     | 15ms    | **4x**    |
+
+### Безопасность
+
+- **JWT токены** с коротким временем жизни (24ч)
+- **Refresh токены** для продления сессий (7 дней)
+- **Автоматическая защита** всех админских роутов
+- **Публичные API** остаются открытыми для каталога
+- **Логирование** всех попыток авторизации
 
 ### Оптимизации
 
@@ -801,6 +1023,11 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      # 🔐 JWT Production Settings
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     restart: unless-stopped
     depends_on:
       - db
@@ -828,6 +1055,33 @@ volumes:
   redis_data:
 ```
 
+### Переменные окружения для продакшена
+
+```bash
+# .env.production
+NODE_ENV=production
+
+# Database
+DATABASE_URL=postgresql://user:secure_password@db:5432/neva
+
+# Redis
+REDIS_HOST=redis
+REDIS_PASSWORD=secure_redis_password
+
+# 🔐 JWT Security (ОБЯЗАТЕЛЬНО ИЗМЕНИТЕ!)
+JWT_SECRET="ваш-очень-сложный-уникальный-ключ-для-production-минимум-32-символа"
+JWT_REFRESH_SECRET="ваш-очень-сложный-уникальный-refresh-ключ-для-production-минимум-32-символа"
+JWT_EXPIRES_IN="8h"
+JWT_REFRESH_EXPIRES_IN="3d"
+
+# Admin Credentials (ОБЯЗАТЕЛЬНО ИЗМЕНИТЕ!)
+ADMIN_USERNAME="your_admin_username"
+ADMIN_PASSWORD="your_very_secure_admin_password"
+
+# App
+NEXT_PUBLIC_BASE_URL=https://your-domain.com
+```
+
 ### CI/CD Pipeline
 
 ```yaml
@@ -847,6 +1101,11 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Build and deploy
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: |
           docker-compose -f docker-compose.prod.yml build
           docker-compose -f docker-compose.prod.yml up -d
@@ -860,7 +1119,24 @@ jobs:
 
 ### Частые проблемы
 
-#### 1. Ошибки базы данных
+#### 1. Ошибки авторизации
+
+```bash
+# Проверка переменных окружения
+docker-compose exec backend env | grep JWT
+docker-compose exec backend env | grep ADMIN
+
+# Тест логина
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}'
+
+# Проверка Swagger авторизации
+# Откройте http://localhost:3000/api-docs
+# Используйте раздел Authentication -> POST /auth/login
+```
+
+#### 2. Ошибки базы данных
 
 ```bash
 # Проверка состояния
@@ -872,17 +1148,24 @@ docker-compose up -d db
 docker-compose exec backend yarn prisma migrate deploy
 ```
 
-#### 2. Проблемы с кешем
+#### 3. Проблемы с кешем
 
 ```bash
-# Очистка Redis
-curl -X POST "http://localhost:3000/admin/cache/clear"
+# Очистка Redis (требует авторизации)
+TOKEN=$(curl -s -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}' | \
+  grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
+
+curl -X POST -H "Authorization: Bearer $TOKEN" \
+  "http://localhost:3000/admin/cache/clear"
 
 # Проверка здоровья
-curl "http://localhost:3000/admin/cache/health"
+curl -H "Authorization: Bearer $TOKEN" \
+  "http://localhost:3000/admin/cache/health"
 ```
 
-#### 3. Проблемы с изображениями
+#### 4. Проблемы с изображениями
 
 ```bash
 # Проверка папки изображений
@@ -892,17 +1175,52 @@ docker-compose exec backend ls -la public/images/
 docker-compose exec backend chmod -R 755 public/images/
 ```
 
-#### 4. Ошибки переводов
+#### 5. Ошибки переводов
 
 ```bash
-# Проверка данных переводов
-curl "http://localhost:3000/admin/categories"
-curl "http://localhost:3000/admin/brands"
+# Проверка данных переводов (требует авторизации)
+curl -H "Authorization: Bearer $TOKEN" "http://localhost:3000/admin/categories"
+curl -H "Authorization: Bearer $TOKEN" "http://localhost:3000/admin/brands"
 
 # Пересоздание тестовых данных
 docker-compose exec backend yarn prisma migrate reset
 docker-compose exec backend yarn prisma:seed
 ```
+
+## 🧪 Тестирование авторизации
+
+### Быстрая проверка
+
+```bash
+# 1. Проверка сервера
+curl http://localhost:3000/
+
+# 2. Тест публичных API (без авторизации)
+curl "http://localhost:3000/products/neva?locale=ru&page=1"
+
+# 3. Тест авторизации
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}'
+
+# 4. Тест защищенного API
+TOKEN="ваш_токен_здесь"
+curl -H "Authorization: Bearer $TOKEN" \
+  "http://localhost:3000/admin/products"
+
+# 5. Тест блокировки без токена (должно вернуть 401)
+curl "http://localhost:3000/admin/products"
+```
+
+### Swagger тестирование
+
+1. Откройте: `http://localhost:3000/api-docs`
+2. Найдите раздел **"Authentication"**
+3. Используйте `POST /auth/login` с данными: `admin` / `admin123`
+4. Скопируйте `access_token` из ответа
+5. Нажмите кнопку **"Authorize"** вверху страницы
+6. Вставьте токен в формате: `Bearer ваш_токен`
+7. Тестируйте защищенные эндпойнты `/admin/*`
 
 ## 🔗 Полезные ссылки
 
@@ -910,8 +1228,10 @@ docker-compose exec backend yarn prisma:seed
 - **GraphQL Playground**: http://localhost:3000/graphql
 - **База данных**: http://localhost:8080 (Adminer)
 - **Мониторинг Redis**: http://localhost:8081
+- **🔐 Учетные данные по умолчанию**: admin / admin123
 - **Официальная документация NestJS**: https://docs.nestjs.com
 - **Prisma документация**: https://www.prisma.io/docs
+- **JWT документация**: https://jwt.io/
 
 ## 📄 Лицензия
 
@@ -924,3 +1244,13 @@ MIT License - см. [LICENSE](LICENSE) файл для деталей.
 3. Commit изменения: `git commit -m 'Add amazing feature'`
 4. Push в branch: `git push origin feature/amazing-feature`
 5. Создайте Pull Request
+
+---
+
+**⚠️ Важно для продакшена:**
+
+- Обязательно измените JWT секретные ключи
+- Используйте сложный пароль администратора
+- Настройте HTTPS для защиты токенов
+- Регулярно обновляйте зависимости
+- Мониторьте логи авторизации
