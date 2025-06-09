@@ -108,8 +108,14 @@ export class ProductsService {
         ? parseInt(Buffer.from(after, 'base64').toString(), 10)
         : undefined;
 
-      const where = {
-        locale,
+      // Строим WHERE условие с учетом переводов
+      const where: any = {
+        isActive: true,
+        translations: {
+          some: {
+            locale: locale as any,
+          },
+        },
         ...(section && { section }),
         ...(categoryId && !isNaN(categoryId) && { categoryId }),
         ...(brandId && !isNaN(brandId) && { brandId }),
@@ -133,11 +139,26 @@ export class ProductsService {
           take,
           orderBy: { id: 'asc' },
           include: {
+            translations: {
+              where: { locale: locale as any },
+            },
             category: {
-              select: { id: true, name: true, locale: true, section: true },
+              include: {
+                translations: {
+                  where: { locale: locale as any },
+                },
+              },
             },
             brand: {
-              select: { id: true, name: true, locale: true, section: true },
+              include: {
+                translations: {
+                  where: { locale: locale as any },
+                },
+              },
+            },
+            images: {
+              where: { isPrimary: true },
+              take: 1,
             },
           },
         }),
@@ -154,30 +175,43 @@ export class ProductsService {
 
       const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-      const productsWithUrls = products.map((product) => {
-        const imageFileName = product.image
-          ? product.image.split('/').pop()
-          : null;
-        const fullImageFileName = product.fullImage
-          ? product.fullImage.split('/').pop()
-          : null;
 
-        return {
-          id: product.id,
-          name: product.name,
-          locale: product.locale,
-          section: product.section,
-          description: product.description,
-          image: imageFileName
-            ? `${baseUrl}/public/images/${imageFileName}`
-            : null,
-          fullImage: fullImageFileName
-            ? `${baseUrl}/public/images/${fullImageFileName}`
-            : null,
-          brand: product.brand,
-          category: product.category,
-        };
-      });
+      const productsWithUrls = products
+        .filter((product) => product.translations.length > 0) // Только с переводами
+        .map((product) => {
+          const translation = product.translations[0];
+          const brandTranslation = product.brand?.translations[0];
+          const categoryTranslation = product.category?.translations[0];
+          const primaryImage = product.images[0];
+
+          return {
+            id: product.id,
+            name: translation.name,
+            locale: translation.locale,
+            section: product.section,
+            description: translation.description || '',
+            image: primaryImage
+              ? `${baseUrl}/public/images/${primaryImage.imageSmall}`
+              : null,
+            fullImage: primaryImage
+              ? `${baseUrl}/public/images/${primaryImage.imageLarge}`
+              : null,
+            brand: brandTranslation
+              ? {
+                  id: product.brand!.id,
+                  name: brandTranslation.name,
+                  locale: brandTranslation.locale,
+                  section: product.section, // Используем секцию продукта
+                }
+              : null,
+            category: {
+              id: product.category.id,
+              name: categoryTranslation?.name || 'Unknown',
+              locale: categoryTranslation?.locale || locale,
+              section: product.category.section,
+            },
+          };
+        });
 
       const result: ProductsResult = {
         products: productsWithUrls,
@@ -211,26 +245,52 @@ export class ProductsService {
       async () => {
         const categories = await this.prisma.category.findMany({
           where: {
-            locale,
             ...(section && { section }),
+            translations: {
+              some: {
+                locale: locale as any,
+              },
+            },
           },
-          select: {
-            id: true,
-            name: true,
-            locale: true,
-            section: true,
-            brands: {
-              select: {
-                id: true,
-                name: true,
-                locale: true,
-                section: true,
+          include: {
+            translations: {
+              where: { locale: locale as any },
+            },
+            categoryBrands: {
+              where: {
+                ...(section && { section }),
+              },
+              include: {
+                brand: {
+                  include: {
+                    translations: {
+                      where: { locale: locale as any },
+                    },
+                  },
+                },
               },
             },
           },
         });
 
-        return { categories };
+        const formattedCategories = categories
+          .filter((cat) => cat.translations.length > 0)
+          .map((category) => ({
+            id: category.id,
+            name: category.translations[0].name,
+            locale: category.translations[0].locale,
+            section: category.section,
+            brands: category.categoryBrands
+              .filter((cb) => cb.brand.translations.length > 0)
+              .map((cb) => ({
+                id: cb.brand.id,
+                name: cb.brand.translations[0].name,
+                locale: cb.brand.translations[0].locale,
+                section: cb.section,
+              })),
+          }));
+
+        return { categories: formattedCategories };
       },
       { ttl: 300 }
     );
@@ -244,21 +304,37 @@ export class ProductsService {
       async () => {
         const brands = await this.prisma.brand.findMany({
           where: {
-            locale,
-            ...(section && { section }),
+            translations: {
+              some: {
+                locale: locale as any,
+              },
+            },
+            ...(section && {
+              categoryBrands: {
+                some: {
+                  section,
+                },
+              },
+            }),
           },
-          select: {
-            id: true,
-            name: true,
-            locale: true,
-            section: true,
+          include: {
+            translations: {
+              where: { locale: locale as any },
+            },
           },
           orderBy: {
-            name: 'asc',
+            id: 'asc',
           },
         });
 
-        return brands;
+        return brands
+          .filter((brand) => brand.translations.length > 0)
+          .map((brand) => ({
+            id: brand.id,
+            name: brand.translations[0].name,
+            locale: brand.translations[0].locale,
+            section: section || Section.NEVA, // Используем переданную секцию или fallback
+          }));
       },
       { ttl: 300 }
     );

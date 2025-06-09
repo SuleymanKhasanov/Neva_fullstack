@@ -14,6 +14,7 @@ services:
       - ./backend:/app/backend
       - ./backend/public/images:/app/backend/public/images
       - ./backend/public/thumbnails:/app/backend/public/thumbnails
+      - backend_node_modules:/app/backend/node_modules
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/neva
       - PRISMA_CLIENT_OUTPUT=/app/backend/generated/prisma/client
@@ -27,13 +28,21 @@ services:
       - backend/.env
     command: >
       sh -c "cd /app/backend &&
+             echo '🔧 Generating Prisma client...' &&
              npx prisma generate &&
+             echo '🔧 Running database migrations...' &&
              npx prisma migrate deploy &&
-             yarn ts-node scripts/mergeAndProcessData.ts &&
+             echo '🚀 Starting development server...' &&
              yarn start:dev"
     networks:
       - neva-network
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   db:
     image: postgres:15
@@ -91,7 +100,21 @@ services:
       - neva-network
     restart: unless-stopped
 
-  # Redis Commander для мониторинга (только для разработки)
+  # ✅ ИСПРАВЛЕНО: Adminer теперь всегда запускается
+  adminer:
+    image: adminer
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      - ADMINER_DEFAULT_SERVER=db
+      - ADMINER_DESIGN=pepa-linha
+    networks:
+      - neva-network
+    restart: unless-stopped
+
+  # Redis Commander для мониторинга (опционально)
   redis-commander:
     image: rediscommander/redis-commander:latest
     environment:
@@ -104,18 +127,11 @@ services:
       - redis
     networks:
       - neva-network
-
-  adminer:
-    image: adminer
-    ports:
-      - '8080:8080'
-    depends_on:
-      - db
-    networks:
-      - neva-network
+    profiles:
+      - tools # Опциональный сервис
 
 volumes:
-  images:
+  backend_node_modules:
   db_data:
     driver: local
   redis_data:

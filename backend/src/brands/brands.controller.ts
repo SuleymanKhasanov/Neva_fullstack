@@ -11,7 +11,13 @@ export class BrandsController {
 
   @Get('all')
   @ApiOperation({ summary: 'Get all brands' })
-  @ApiQuery({ name: 'locale', required: false, type: String })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
+    example: 'ru',
+  })
   @ApiResponse({ status: 200, description: 'List of brands' })
   async getAllBrands(@Query('locale') locale?: string) {
     return this.brandsService.getBrands(locale || 'ru'); // Фоллбэк для locale
@@ -19,7 +25,13 @@ export class BrandsController {
 
   @Get('neva')
   @ApiOperation({ summary: 'Get NEVA brands' })
-  @ApiQuery({ name: 'locale', required: false, type: String })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
+    example: 'ru',
+  })
   @ApiResponse({ status: 200, description: 'List of NEVA brands' })
   async getNevaBrands(@Query('locale') locale?: string) {
     return this.brandsService.getBrands(locale || 'ru', Section.NEVA);
@@ -27,7 +39,13 @@ export class BrandsController {
 
   @Get('x-solution')
   @ApiOperation({ summary: 'Get X_SOLUTION brands' })
-  @ApiQuery({ name: 'locale', required: false, type: String })
+  @ApiQuery({
+    name: 'locale',
+    required: false,
+    type: String,
+    enum: ['ru', 'en', 'kr', 'uz'],
+    example: 'ru',
+  })
   @ApiResponse({ status: 200, description: 'List of X_SOLUTION brands' })
   async getXSolutionBrands(@Query('locale') locale?: string) {
     return this.brandsService.getBrands(locale || 'ru', Section.X_SOLUTION);

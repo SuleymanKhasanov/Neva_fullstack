@@ -33,33 +33,34 @@ export class ProductService {
         `🔍 Cache miss for product: ${cacheKey} - fetching from database`
       );
 
-      // Получаем продукт из базы данных с учетом локали
-      const product = await this.prisma.product.findFirst({
-        where: {
-          id,
-          locale, // Фильтруем по локали
-        },
+      // Получаем продукт из базы данных с переводами
+      const product = await this.prisma.product.findUnique({
+        where: { id },
         include: {
+          translations: {
+            where: { locale: locale as any },
+          },
           brand: {
-            select: {
-              id: true,
-              name: true,
-              locale: true,
-              section: true,
+            include: {
+              translations: {
+                where: { locale: locale as any },
+              },
             },
           },
           category: {
-            select: {
-              id: true,
-              name: true,
-              locale: true,
-              section: true,
+            include: {
+              translations: {
+                where: { locale: locale as any },
+              },
             },
+          },
+          images: {
+            orderBy: { sortOrder: 'asc' },
           },
         },
       });
 
-      if (!product) {
+      if (!product || product.translations.length === 0) {
         this.logger.warn(
           `Product with ID ${id} and locale ${locale} not found`
         );
@@ -68,44 +69,58 @@ export class ProductService {
         );
       }
 
+      const translation = product.translations[0];
+      const brandTranslation = product.brand?.translations[0];
+      const categoryTranslation = product.category?.translations[0];
+
       // Формируем полные URL для изображений
       const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-      const imageFileName = product.image
-        ? product.image.split('/').pop()
-        : null;
-      const fullImageFileName = product.fullImage
-        ? product.fullImage.split('/').pop()
-        : null;
-
       // Генерируем slug из названия
-      const slug = this.generateSlug(product.name);
+      const slug = this.generateSlug(translation.name);
 
       // Создаем DTO
       const productDetail: ProductDetailDto = {
         id: product.id,
-        name: product.name,
-        description: product.description,
-        image: imageFileName
-          ? `${baseUrl}/public/images/${imageFileName}`
-          : null,
-        fullImage: fullImageFileName
-          ? `${baseUrl}/public/images/${fullImageFileName}`
-          : null,
-        locale: product.locale,
+        name: translation.name,
+        description: translation.description || '',
+        image:
+          product.images.length > 0
+            ? `${baseUrl}/public/images/${product.images[0].imageSmall}`
+            : null,
+        fullImage:
+          product.images.length > 0
+            ? `${baseUrl}/public/images/${product.images[0].imageLarge}`
+            : null,
+        locale,
         section: product.section,
-        slug,
-        brand: product.brand,
-        category: product.category,
-        seoTitle: this.generateSeoTitle(product.name, product.brand?.name),
-        seoDescription: this.generateSeoDescription(
-          product.name,
-          product.description,
-          product.brand?.name
+        slug: product.slug || slug,
+        brand: brandTranslation
+          ? {
+              id: product.brand!.id,
+              name: brandTranslation.name,
+              locale: brandTranslation.locale,
+              section: product.section, // Используем секцию продукта
+            }
+          : null,
+        category: {
+          id: product.category.id,
+          name: categoryTranslation?.name || 'Unknown',
+          locale: categoryTranslation?.locale || locale,
+          section: product.category.section,
+        },
+        seoTitle: this.generateSeoTitle(
+          translation.name,
+          brandTranslation?.name
         ),
-        createdAt: new Date().toISOString(), // Добавим поля в схему позже
-        updatedAt: new Date().toISOString(),
+        seoDescription: this.generateSeoDescription(
+          translation.name,
+          translation.description || '',
+          brandTranslation?.name
+        ),
+        createdAt: product.createdAt.toISOString(),
+        updatedAt: product.updatedAt.toISOString(),
       };
 
       // Кешируем результат на 10 минут
@@ -134,14 +149,15 @@ export class ProductService {
     return await this.cacheService.getOrSet(
       cacheKey,
       async () => {
-        const product = await this.prisma.product.findFirst({
-          where: {
-            id,
-            locale,
+        const product = await this.prisma.product.findUnique({
+          where: { id },
+          include: {
+            translations: {
+              where: { locale: locale as any },
+            },
           },
-          select: { id: true },
         });
-        return !!product;
+        return !!(product && product.translations.length > 0);
       },
       { ttl: 300 } // 5 минут
     );
