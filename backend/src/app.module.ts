@@ -1,4 +1,4 @@
-// backend/src/app.module.ts
+// 🔧 backend/src/app.module.ts
 import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -6,6 +6,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { APP_GUARD } from '@nestjs/core';
 import * as redisStore from 'cache-manager-redis-store';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -17,7 +18,11 @@ import { NevaProductsModule } from './products/products.module';
 import { ProductModule } from './product/product.module';
 import { CacheServiceModule } from './common/cache.module';
 
-// Новый админ модуль
+// 🔐 Авторизация
+import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+
+// Админ модуль
 import { AdminModule } from './admin/admin.module';
 
 import { AppController } from './app.controller';
@@ -58,25 +63,22 @@ import { AppService } from './app.service';
 
     // Модули
     CacheServiceModule,
+    AuthModule, // 🔐 JWT авторизация
     NevaProductsModule,
     ProductModule,
     CategoriesModule,
     BrandsModule,
-    AdminModule, // 🆕 Чистый админ модуль
+    AdminModule, // 🔒 Защищенная админ панель
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [
+    AppService,
+    PrismaService,
+    // 🔒 Глобальная защита админских роутов
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
-export class AppModule {
-  constructor() {
-    console.log('✅ Clean AppModule initialized');
-    console.log('📦 Modules:');
-    console.log('   - Products (Public API)');
-    console.log('   - Categories & Brands');
-    console.log('   - 🆕 Admin Panel (Clean Architecture)');
-    console.log('');
-    console.log('🔗 Admin API:');
-    console.log('   http://localhost:3000/admin/products');
-    console.log('   http://localhost:3000/api-docs');
-  }
-}
+export class AppModule {}
