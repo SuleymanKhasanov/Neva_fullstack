@@ -1,11 +1,14 @@
+// backend/src/brands/brands.controller.ts
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { Section } from '@prisma/client';
 
+import { Public } from '../auth/decorators/public.decorator';
 import { BrandsService } from './brands.service';
 
 @ApiTags('Brands')
 @Controller('brands')
+@Public()
 export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
 

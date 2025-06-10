@@ -1,4 +1,3 @@
-// 🔧 backend/src/app.module.ts
 import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -6,7 +5,6 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { APP_GUARD } from '@nestjs/core';
 import * as redisStore from 'cache-manager-redis-store';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -20,7 +18,6 @@ import { CacheServiceModule } from './common/cache.module';
 
 // 🔐 Авторизация
 import { AuthModule } from './auth/auth.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 // Админ модуль
 import { AdminModule } from './admin/admin.module';
@@ -64,21 +61,13 @@ import { AppService } from './app.service';
     // Модули
     CacheServiceModule,
     AuthModule, // 🔐 JWT авторизация
-    NevaProductsModule,
-    ProductModule,
-    CategoriesModule,
-    BrandsModule,
-    AdminModule, // 🔒 Защищенная админ панель
+    NevaProductsModule, // 🌐 Публичный
+    ProductModule, // 🌐 Публичный
+    CategoriesModule, // 🌐 Публичный
+    BrandsModule, // 🌐 Публичный
+    AdminModule, // 🔒 Защищенная админ панель (внутри использует @Auth())
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    PrismaService,
-    // 🔒 Глобальная защита админских роутов
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-  ],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
