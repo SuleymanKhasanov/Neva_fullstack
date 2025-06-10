@@ -1,18 +1,9 @@
-// app/[locale]/product/[id]/layout.tsx
-
 import { ReactNode } from 'react';
-import { NextIntlClientProvider } from 'next-intl';
-import { getRequestConfig } from '@/shared/config/i18n/i18n';
-import {
-  Locale,
-  TranslationType,
-  isValidLocale,
-} from '@/shared/config/i18n/types';
+import { Locale, isValidLocale } from '@/shared/config/i18n/types';
 import { getProductById } from '@/shared/services/api/product';
 import { ProductDetail } from '@/shared/types/product';
 import { createProductMetadata } from '@/shared/types/metadata';
 import { notFound } from 'next/navigation';
-import { LoadingProvider } from '@/features/LoadingManager';
 
 interface ProductLayoutProps {
   children: ReactNode;
@@ -36,37 +27,23 @@ export default async function ProductLayout({
     productId: resolvedParams.id,
   });
 
-  // Получаем переводы
-  const { messages } = await getRequestConfig({ locale });
-  const plainMessages = JSON.parse(JSON.stringify(messages)) as TranslationType;
-
-  // Получаем данные продукта
+  // Получаем данные продукта для layout
   const product: ProductDetail | null = await getProductById(
     resolvedParams.id,
     locale
   );
 
   if (!product) {
-    console.log('❌ Product not found:', resolvedParams.id);
+    console.log('❌ Product not found in layout:', resolvedParams.id);
     notFound();
   }
 
   console.log('✅ Product loaded in layout:', product.name);
 
-  return (
-    <LoadingProvider>
-      <NextIntlClientProvider
-        locale={locale}
-        messages={plainMessages}
-        key={locale}
-      >
-        <div data-product-id={product.id.toString()}>{children}</div>
-      </NextIntlClientProvider>
-    </LoadingProvider>
-  );
+  return <div data-product-id={product.id.toString()}>{children}</div>;
 }
 
-// Генерация метаданных для SEO
+// Генерация метаданных для SEO на уровне layout
 export async function generateMetadata({
   params,
 }: {
