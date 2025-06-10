@@ -1,0 +1,49 @@
+/* Путь: src/pages/admin-dashboard/ui/admin-dashboard-page.module.css */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+.content {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 48px;
+  text-align: center;
+}
+
+.welcome {
+  font-size: 24px;
+  color: #374151;
+  margin-bottom: 16px;
+}
+
+.description {
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.status {
+  display: inline-block;
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 24px;
+}

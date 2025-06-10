@@ -1,5 +1,3 @@
-// app/[locale]/product/[id]/[productName]/page.tsx
-
 import { notFound, redirect } from 'next/navigation';
 import { getRequestConfig } from '@/shared/config/i18n/i18n';
 import {
@@ -59,7 +57,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       expected: product.slug,
     });
 
-    // Редирект на корректный URL с slug из API
+    // Редирект на корректный URL с slug из API в группе user
     redirect(`/${locale}/product/${resolvedParams.id}/${product.slug}`);
   }
 
@@ -77,11 +75,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
 // Генерация статических параметров для ISR
 export async function generateStaticParams(): Promise<
-  Array<{
+  {
     locale: string;
     id: string;
     productName: string;
-  }>
+  }[]
 > {
   console.log('🏗️ Generating static params for products...');
 

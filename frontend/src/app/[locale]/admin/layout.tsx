@@ -1,39 +1,40 @@
+// Путь: src/app/[locale]/admin/layout.tsx
 import { ReactNode } from 'react';
-import { MainContentBox } from '@/entities/MainContentBox';
-import { Header } from '@/widgets/Header';
-import { LoadingProvider } from '@/features/LoadingManager';
 import { getRequestConfig } from '@/shared/config/i18n/i18n';
 import {
   Locale,
   TranslationType,
   isValidLocale,
 } from '@/shared/config/i18n/types';
+import { AuthProvider } from '@/shared/contexts/AuthContext';
+import { AdminLayoutClient } from '@/widgets/AdminLayout';
 
-interface UserLayoutProps {
+interface AdminLayoutProps {
   children: ReactNode;
   params: Promise<{ locale: string }>;
 }
 
-export default async function UserLayout({
+export default async function AdminLayout({
   children,
   params,
-}: UserLayoutProps) {
+}: AdminLayoutProps) {
   const resolvedParams = await params;
   const locale: Locale = isValidLocale(resolvedParams.locale)
     ? resolvedParams.locale
     : 'en';
 
-  console.log('UserLayout resolved locale:', locale);
+  console.log('AdminLayout resolved locale:', locale);
 
   const { messages } = await getRequestConfig({ locale });
   const plainMessages = JSON.parse(JSON.stringify(messages)) as TranslationType;
 
   return (
-    <LoadingProvider>
-      <MainContentBox locale={locale} messages={plainMessages}>
-        <Header locale={locale} messages={plainMessages} />
+    <AuthProvider
+      baseUrl={process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}
+    >
+      <AdminLayoutClient locale={locale} messages={plainMessages}>
         {children}
-      </MainContentBox>
-    </LoadingProvider>
+      </AdminLayoutClient>
+    </AuthProvider>
   );
 }

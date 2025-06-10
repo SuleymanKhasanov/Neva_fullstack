@@ -5,11 +5,7 @@ import {
   TranslationType,
   isValidLocale,
 } from '@/shared/config/i18n/types';
-import '@/shared/styles/globals.css';
 import { ReactNode } from 'react';
-import { MainContentBox } from '@/entities/MainContentBox';
-import { Header } from '@/widgets/Header';
-import { LoadingProvider } from '@/features/LoadingManager';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -30,22 +26,13 @@ export default async function LocaleLayout({
   const { messages } = await getRequestConfig({ locale });
   const plainMessages = JSON.parse(JSON.stringify(messages)) as TranslationType;
 
-  console.log('Messages in LocaleLayout:', plainMessages);
-
   return (
-    <main>
-      <LoadingProvider>
-        <NextIntlClientProvider
-          locale={locale}
-          messages={plainMessages}
-          key={locale}
-        >
-          <MainContentBox locale={locale} messages={plainMessages}>
-            <Header locale={locale} messages={plainMessages} />
-            {children}
-          </MainContentBox>
-        </NextIntlClientProvider>
-      </LoadingProvider>
-    </main>
+    <NextIntlClientProvider
+      locale={locale}
+      messages={plainMessages}
+      key={locale}
+    >
+      {children}
+    </NextIntlClientProvider>
   );
 }
