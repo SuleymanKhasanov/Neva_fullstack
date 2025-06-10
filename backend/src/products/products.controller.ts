@@ -1,3 +1,4 @@
+// backend/src/products/products.controller.ts
 import { Controller, Get, Query } from '@nestjs/common';
 import {
   ApiOperation,
@@ -8,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { Section } from '@prisma/client';
 
+import { Public } from '../auth/decorators/public.decorator';
 import { GetProductsDto } from './dto/get-products.dto';
 import { ProductsService } from './products.service';
 
@@ -104,6 +106,7 @@ class ProductsResponse {
 
 @ApiTags('Products')
 @Controller('products')
+@Public() // ← ДОБАВИТЬ ДЛЯ ВСЕГО КОНТРОЛЛЕРА
 export class NevaProductsController {
   constructor(private readonly productsService: ProductsService) {}
 

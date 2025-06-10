@@ -17,6 +17,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 
+import { Public } from '../auth/decorators/public.decorator';
 import { ProductService } from './product.service';
 import {
   ProductResponseDto,
@@ -26,6 +27,7 @@ import {
 
 @ApiTags('Product')
 @Controller('product')
+@Public()
 export class ProductController {
   private readonly logger = new Logger(ProductController.name);
 

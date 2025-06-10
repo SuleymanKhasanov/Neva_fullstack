@@ -1,3 +1,4 @@
+// backend/src/categories/categories.controller.ts
 import { Controller, Get, Query } from '@nestjs/common';
 import {
   ApiOperation,
@@ -8,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { Section } from '@prisma/client';
 
+import { Public } from '../auth/decorators/public.decorator';
 import { CategoriesService } from './categories.service';
 import { GetCategoriesDto } from './dto/get-categories.dto';
 
@@ -55,6 +57,7 @@ class CategoriesResponse {
 
 @ApiTags('Categories')
 @Controller('categories')
+@Public() // ← ДОБАВИТЬ ДЛЯ ВСЕГО КОНТРОЛЛЕРА
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
