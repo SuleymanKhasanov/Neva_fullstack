@@ -13,6 +13,10 @@
   gap: 2rem;
 }
 
+.header {
+  text-align: center;
+}
+
 .title {
   font-size: 2.4rem;
   font-weight: 700;
@@ -40,6 +44,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  position: relative;
 }
 
 .label {
@@ -56,6 +61,12 @@
   padding: 1.4rem 2rem;
   font-weight: 600;
   margin-top: 0.8rem;
+  transition: opacity 0.3s ease;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .loader {
@@ -75,8 +86,100 @@
   }
 }
 
+/* Стили для ошибок */
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.8rem;
+  color: #dc2626;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.errorIcon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.fieldError {
+  color: #dc2626;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 0.4rem;
+  display: block;
+}
+
+.inputError {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 0.1rem rgba(220, 38, 38, 0.1) !important;
+}
+
+.inputError:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 0.3rem rgba(220, 38, 38, 0.1) !important;
+}
+
+/* Темная тема */
+:global(.dark) .title {
+  color: var(--foreground);
+}
+
+:global(.dark) .subtitle {
+  color: var(--muted-foreground);
+}
+
+:global(.dark) .label {
+  color: var(--foreground);
+}
+
+:global(.dark) .error {
+  background-color: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #ef4444;
+}
+
+:global(.dark) .fieldError {
+  color: #ef4444;
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
   .card {
     width: 90%;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+  }
+
+  .submitButton {
+    font-size: 1.4rem;
+    padding: 1.2rem 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .card {
+    width: 95%;
+  }
+
+  .form {
+    gap: 1.5rem;
+  }
+
+  .field {
+    gap: 0.6rem;
   }
 }
