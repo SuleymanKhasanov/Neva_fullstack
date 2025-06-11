@@ -163,9 +163,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     username: string,
     password: string
   ): Promise<{ success: boolean; error?: LoginError }> => {
-    try {
-      setIsLoading(true);
+    console.log('🔄 Starting login request...');
 
+    try {
+      // НЕ устанавливаем isLoading здесь, так как это может повлиять на UI
       const response = await fetch(`${baseUrl}/auth/login`, {
         method: 'POST',
         headers: {
@@ -174,22 +175,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         body: JSON.stringify({ username, password }),
       });
 
+      console.log('📡 Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+      });
+
       // Пытаемся получить JSON ответ
       let responseData: any = {};
       try {
-        responseData = await response.json();
+        const textResponse = await response.text();
+        console.log('📝 Raw response text:', textResponse);
+
+        if (textResponse) {
+          responseData = JSON.parse(textResponse);
+        }
       } catch (parseError) {
-        console.warn('Failed to parse response JSON:', parseError);
+        console.warn('⚠️ Failed to parse response JSON:', parseError);
+        responseData = {};
       }
 
-      console.log('Login response:', {
-        status: response.status,
-        statusText: response.statusText,
-        data: responseData,
-      });
+      console.log('📋 Parsed response data:', responseData);
 
       // Проверяем статус ответа
       if (response.status === 401) {
+        console.log('🔴 401 Unauthorized - Invalid credentials');
         const errorMessage =
           responseData.message || 'Неверный логин или пароль';
         return {
@@ -203,6 +213,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       }
 
       if (response.status >= 500) {
+        console.log('🔴 Server error (5xx)');
         return {
           success: false,
           error: {
@@ -215,11 +226,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
       if (!response.ok) {
         console.error(
-          'Login failed with status:',
+          '🔴 Login failed with status:',
           response.status,
           responseData
         );
-
         return {
           success: false,
           error: {
@@ -232,6 +242,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
       // Проверяем наличие необходимых данных в ответе
       if (responseData.access_token && responseData.user) {
+        console.log('✅ Login successful!');
         saveAuthData(
           responseData.access_token,
           responseData.refresh_token,
@@ -240,6 +251,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         return { success: true };
       }
 
+      console.log('🔴 Missing required data in response');
       return {
         success: false,
         error: {
@@ -249,7 +261,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         },
       };
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('💥 Login network error:', error);
 
       // Определяем тип ошибки сети
       const isNetworkError =
@@ -266,8 +278,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
             error instanceof Error ? error.message : 'Unknown network error',
         },
       };
-    } finally {
-      setIsLoading(false);
     }
   };
 
