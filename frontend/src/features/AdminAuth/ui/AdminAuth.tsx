@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/shared/ui/Input/Input';
 import { Button } from '@/shared/ui/Button/Button';
 import { useAuth } from '@/shared/contexts/AuthContext';
@@ -30,6 +30,15 @@ const AdminAuth = () => {
   });
 
   const { login, t } = useAuth();
+
+  // Логирование изменений ошибок для отладки
+  useEffect(() => {
+    console.log('🔍 Errors state changed:', errors);
+  }, [errors]);
+
+  useEffect(() => {
+    console.log('🔍 Touched state changed:', touched);
+  }, [touched]);
 
   // Валидация полей
   const validateField = (
@@ -116,17 +125,21 @@ const AdminAuth = () => {
 
     const value = field === 'username' ? username : password;
     const error = validateField(field, value);
-    setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+    setErrors((prev) => ({
+      ...prev,
+      [field]: error || undefined,
+      general: undefined, // Очищаем общую ошибку
+    }));
   };
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
-    // Предотвращаем стандартную отправку формы
+    // КРИТИЧЕСКИ ВАЖНО: предотвращаем стандартную отправку формы
     e.preventDefault();
     e.stopPropagation();
 
-    console.log('Form submitted, preventing default behavior');
+    console.log('🔄 Form submitted, preventing default behavior');
 
     // Отмечаем все поля как "тронутые"
     setTouched({ username: true, password: true });
@@ -136,33 +149,35 @@ const AdminAuth = () => {
 
     // Проверяем валидность формы
     if (!validateForm()) {
-      console.log('Form validation failed');
+      console.log('❌ Form validation failed');
       return;
     }
 
     setIsLoading(true);
-    console.log('Starting login process...');
+    console.log('🚀 Starting login process...');
 
     try {
       const result = await login(username, password);
-      console.log('Login result:', result);
+      console.log('📋 Login result:', result);
 
       if (result.success) {
-        console.log('Login successful, redirecting...');
+        console.log('✅ Login successful, redirecting...');
         // Успешная авторизация - перенаправляем на dashboard
         redirectToLocalized('admin/dashboard');
       } else {
-        console.log('Login failed:', result.error);
+        console.log('❌ Login failed:', result.error);
 
         // Обрабатываем разные типы ошибок
         if (result.error?.type === 'INVALID_CREDENTIALS') {
           // При неверных учетных данных показываем ошибки под полями
+          console.log('🔴 Setting field errors for invalid credentials');
           setErrors({
             username: 'Неверный логин',
             password: 'Неверный пароль',
           });
         } else {
           // Для других ошибок показываем общую ошибку
+          console.log('🔴 Setting general error');
           setErrors({
             general:
               result.error?.message ||
@@ -171,13 +186,13 @@ const AdminAuth = () => {
         }
       }
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('💥 Login error:', err);
       setErrors({
         general: t(TranslationKeys.AuthUnexpectedError),
       });
     } finally {
       setIsLoading(false);
-      console.log('Login process completed');
+      console.log('🏁 Login process completed');
     }
   };
 
@@ -268,6 +283,11 @@ const AdminAuth = () => {
             disabled={isLoading}
             className={styles.submitButton}
             aria-describedby={errors.general ? 'general-error' : undefined}
+            onClick={(e) => {
+              // Дополнительная защита - предотвращаем любые побочные эффекты
+              e.stopPropagation();
+              console.log('🖱️ Button clicked');
+            }}
           >
             {isLoading ? (
               <>
