@@ -5,6 +5,7 @@ import { Input } from '@/shared/ui/Input/Input';
 import { Button } from '@/shared/ui/Button/Button';
 import { useAuth } from '@/shared/contexts/AuthContext';
 import { redirectToLocalized } from '@/shared/utils/redirect';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 import styles from './AdminAuth.module.css';
 
 interface FormErrors {
@@ -28,7 +29,7 @@ const AdminAuth = () => {
     password: false,
   });
 
-  const { login } = useAuth();
+  const { login, t } = useAuth();
 
   // Валидация полей
   const validateField = (
@@ -38,19 +39,19 @@ const AdminAuth = () => {
     switch (field) {
       case 'username':
         if (!value.trim()) {
-          return 'Логин обязателен для заполнения';
+          return t(TranslationKeys.AuthUsernameRequired);
         }
         if (value.length < 3) {
-          return 'Логин должен содержать минимум 3 символа';
+          return t(TranslationKeys.AuthUsernameMinLength);
         }
         return '';
 
       case 'password':
         if (!value.trim()) {
-          return 'Пароль обязателен для заполнения';
+          return t(TranslationKeys.AuthPasswordRequired);
         }
         if (value.length < 6) {
-          return 'Пароль должен содержать минимум 6 символов';
+          return t(TranslationKeys.AuthPasswordMinLength);
         }
         return '';
 
@@ -80,7 +81,7 @@ const AdminAuth = () => {
     const value = e.target.value;
     setUsername(value);
 
-    // Очищаем ошибку при вводе если поле уже было тронуто
+    // Очищаем ошибки при вводе если поле уже было тронуто
     if (touched.username) {
       const error = validateField('username', value);
       setErrors((prev) => ({
@@ -98,7 +99,7 @@ const AdminAuth = () => {
     const value = e.target.value;
     setPassword(value);
 
-    // Очищаем ошибку при вводе если поле уже было тронуто
+    // Очищаем ошибки при вводе если поле уже было тронуто
     if (touched.password) {
       const error = validateField('password', value);
       setErrors((prev) => ({
@@ -130,8 +131,8 @@ const AdminAuth = () => {
     // Отмечаем все поля как "тронутые"
     setTouched({ username: true, password: true });
 
-    // Очищаем только общую ошибку, оставляем ошибки полей
-    setErrors((prev) => ({ ...prev, general: undefined }));
+    // Очищаем все ошибки перед валидацией
+    setErrors({});
 
     // Проверяем валидность формы
     if (!validateForm()) {
@@ -152,15 +153,27 @@ const AdminAuth = () => {
         redirectToLocalized('admin/dashboard');
       } else {
         console.log('Login failed:', result.error);
-        // Показываем конкретную ошибку от сервера
-        setErrors({
-          general: result.error?.message || 'Неверный логин или пароль',
-        });
+
+        // Обрабатываем разные типы ошибок
+        if (result.error?.type === 'INVALID_CREDENTIALS') {
+          // При неверных учетных данных показываем ошибки под полями
+          setErrors({
+            username: 'Неверный логин',
+            password: 'Неверный пароль',
+          });
+        } else {
+          // Для других ошибок показываем общую ошибку
+          setErrors({
+            general:
+              result.error?.message ||
+              t(TranslationKeys.AuthInvalidCredentials),
+          });
+        }
       }
     } catch (err) {
       console.error('Login error:', err);
       setErrors({
-        general: 'Неожиданная ошибка. Попробуйте позже.',
+        general: t(TranslationKeys.AuthUnexpectedError),
       });
     } finally {
       setIsLoading(false);
@@ -168,17 +181,12 @@ const AdminAuth = () => {
     }
   };
 
-  // Проверяем есть ли ошибки в полях (исключая общую ошибку)
-  const hasFieldErrors = (): boolean => {
-    return !!(errors.username || errors.password);
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Панель администратора</h1>
-          <p className={styles.subtitle}>Войдите для доступа к управлению</p>
+          <h1 className={styles.title}>{t(TranslationKeys.AuthTitle)}</h1>
+          <p className={styles.subtitle}>{t(TranslationKeys.AuthSubtitle)}</p>
         </div>
 
         <form
@@ -196,7 +204,7 @@ const AdminAuth = () => {
 
           <div className={styles.field}>
             <label htmlFor="username" className={styles.label}>
-              Логин *
+              {t(TranslationKeys.AuthUsername)} *
             </label>
             <Input
               id="username"
@@ -206,7 +214,7 @@ const AdminAuth = () => {
               value={username}
               onChange={handleUsernameChange}
               onBlur={() => handleBlur('username')}
-              placeholder="Введите ваш логин"
+              placeholder={t(TranslationKeys.AuthUsernamePlaceholder)}
               disabled={isLoading}
               className={errors.username ? styles.inputError : ''}
               autoComplete="username"
@@ -226,7 +234,7 @@ const AdminAuth = () => {
 
           <div className={styles.field}>
             <label htmlFor="password" className={styles.label}>
-              Пароль *
+              {t(TranslationKeys.AuthPassword)} *
             </label>
             <Input
               id="password"
@@ -236,7 +244,7 @@ const AdminAuth = () => {
               value={password}
               onChange={handlePasswordChange}
               onBlur={() => handleBlur('password')}
-              placeholder="Введите ваш пароль"
+              placeholder={t(TranslationKeys.AuthPasswordPlaceholder)}
               disabled={isLoading}
               className={errors.password ? styles.inputError : ''}
               autoComplete="current-password"
@@ -257,17 +265,17 @@ const AdminAuth = () => {
           <Button
             type="submit"
             variant="primary"
-            disabled={isLoading || hasFieldErrors()}
+            disabled={isLoading}
             className={styles.submitButton}
             aria-describedby={errors.general ? 'general-error' : undefined}
           >
             {isLoading ? (
               <>
                 <span className={styles.loader} aria-hidden="true"></span>
-                Вход...
+                {t(TranslationKeys.AuthLoggingIn)}
               </>
             ) : (
-              'Войти в систему'
+              t(TranslationKeys.AuthLoginButton)
             )}
           </Button>
         </form>

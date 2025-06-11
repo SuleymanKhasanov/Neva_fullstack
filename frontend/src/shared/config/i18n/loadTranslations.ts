@@ -26,6 +26,39 @@ export async function loadTranslations(
       brands: 'Error loading brands',
       unknown: 'Unknown error occurred',
     },
+    auth: {
+      title: 'Admin Panel',
+      subtitle: 'Log in to access the management',
+      username: 'Username',
+      password: 'Password',
+      usernameRequired: 'Username is required',
+      usernameMinLength: 'Minimum 3 characters',
+      passwordRequired: 'Password is required',
+      passwordMinLength: 'Minimum 6 characters',
+      loginButton: 'Sign In',
+      loggingIn: 'Signing in...',
+      invalidCredentials: 'Invalid username or password',
+      serverError: 'Server error. Please try again later',
+      networkError: 'Connection error to server',
+      unexpectedError: 'Unexpected error. Please try again later',
+      usernamePlaceholder: 'Enter your username',
+      passwordPlaceholder: 'Enter your password',
+      loading: 'Loading...',
+      dashboard: {
+        title: 'Admin Panel',
+        welcome: 'Welcome, {username}!',
+        logout: 'Logout',
+        users: 'Users',
+        usersDescription: 'User management system',
+        settings: 'Settings',
+        settingsDescription: 'System configuration',
+        reports: 'Reports',
+        reportsDescription: 'View analytics and reports',
+        statistics: 'Statistics',
+        statisticsDescription: 'Charts and statistics will be displayed here',
+        systemStatus: '✅ System is running',
+      },
+    },
   };
 
   try {
@@ -64,12 +97,20 @@ export async function loadTranslations(
       () => defaultTranslations.errors
     );
 
+    const authTranslations = await import(
+      `@/shared/locales/${locale}/auth.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.auth
+    );
+
     return {
       header: headerTranslations,
       card: cardTranslations,
       filters: filtersTranslations,
       products: productsTranslations,
       errors: errorsTranslations,
+      auth: authTranslations,
     };
   } catch (error) {
     console.error(

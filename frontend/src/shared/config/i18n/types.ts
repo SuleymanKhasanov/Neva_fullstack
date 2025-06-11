@@ -23,6 +23,25 @@ export enum TranslationKeys {
   // Errors
   ErrorsBrands = 'errors.brands',
   ErrorsUnknown = 'errors.unknown',
+
+  // Auth
+  AuthTitle = 'auth.title',
+  AuthSubtitle = 'auth.subtitle',
+  AuthUsername = 'auth.username',
+  AuthPassword = 'auth.password',
+  AuthUsernameRequired = 'auth.usernameRequired',
+  AuthUsernameMinLength = 'auth.usernameMinLength',
+  AuthPasswordRequired = 'auth.passwordRequired',
+  AuthPasswordMinLength = 'auth.passwordMinLength',
+  AuthLoginButton = 'auth.loginButton',
+  AuthLoggingIn = 'auth.loggingIn',
+  AuthInvalidCredentials = 'auth.invalidCredentials',
+  AuthServerError = 'auth.serverError',
+  AuthNetworkError = 'auth.networkError',
+  AuthUnexpectedError = 'auth.unexpectedError',
+  AuthUsernamePlaceholder = 'auth.usernamePlaceholder',
+  AuthPasswordPlaceholder = 'auth.passwordPlaceholder',
+  AuthLoading = 'auth.loading',
 }
 
 export type Header = {
@@ -57,12 +76,49 @@ export type Errors = {
   [key: string]: string;
 };
 
+export type Auth = {
+  title: string;
+  subtitle: string;
+  username: string;
+  password: string;
+  usernameRequired: string;
+  usernameMinLength: string;
+  passwordRequired: string;
+  passwordMinLength: string;
+  loginButton: string;
+  loggingIn: string;
+  invalidCredentials: string;
+  serverError: string;
+  networkError: string;
+  unexpectedError: string;
+  usernamePlaceholder: string;
+  passwordPlaceholder: string;
+  loading: string;
+  dashboard: {
+    title: string;
+    welcome: string;
+    logout: string;
+    users: string;
+    usersDescription: string;
+    settings: string;
+    settingsDescription: string;
+    reports: string;
+    reportsDescription: string;
+    statistics: string;
+    statisticsDescription: string;
+    systemStatus: string;
+    [key: string]: string;
+  };
+  [key: string]: string | object;
+};
+
 export type TranslationType = {
   header: Header;
   card: Card;
   filters: Filters;
   products: Products;
   errors: Errors;
+  auth: Auth;
 };
 
 export function isValidLocale(locale: string): locale is Locale {
