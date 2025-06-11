@@ -8,6 +8,7 @@ import React, {
   ReactNode,
   useCallback,
 } from 'react';
+import { TranslationType, TranslationKeys } from '@/shared/config/i18n/types';
 
 interface User {
   username: string;
@@ -18,6 +19,7 @@ interface User {
 interface LoginError {
   type: 'INVALID_CREDENTIALS' | 'SERVER_ERROR' | 'NETWORK_ERROR';
   message: string;
+  details?: string; // Дополнительная информация об ошибке
 }
 
 interface AuthContextType {
@@ -26,12 +28,15 @@ interface AuthContextType {
   refreshToken: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  locale: string;
+  messages: TranslationType | null;
   login: (
     username: string,
     password: string
   ) => Promise<{ success: boolean; error?: LoginError }>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<boolean>;
+  t: (key: string, params?: Record<string, string>) => string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,11 +52,15 @@ export const useAuth = () => {
 interface AuthProviderProps {
   children: ReactNode;
   baseUrl?: string;
+  locale: string;
+  messages: TranslationType;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({
   children,
   baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+  locale,
+  messages,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -60,6 +69,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
   // Вычисляемое свойство для проверки авторизации
   const isAuthenticated = !!(accessToken && user);
+
+  // Функция для перевода
+  const t = useCallback(
+    (key: string, params?: Record<string, string>): string => {
+      const keys = key.split('.');
+      if (keys.length < 2) return key;
+
+      let value: any = messages;
+
+      // Проходим по цепочке ключей
+      for (const k of keys) {
+        if (value && typeof value === 'object' && k in value) {
+          value = value[k];
+        } else {
+          return key; // Если ключ не найден, возвращаем исходный ключ
+        }
+      }
+
+      if (typeof value === 'string') {
+        // Заменяем параметры в строке типа {username}
+        if (params) {
+          return value.replace(/\{(\w+)\}/g, (match, paramKey) => {
+            return params[paramKey] || match;
+          });
+        }
+        return value;
+      }
+
+      return key;
+    },
+    [messages]
+  );
 
   // Сохранение токенов в хранилище
   const saveAuthData = useCallback(
@@ -133,13 +174,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         body: JSON.stringify({ username, password }),
       });
 
+      // Пытаемся получить JSON ответ
+      let responseData: any = {};
+      try {
+        responseData = await response.json();
+      } catch (parseError) {
+        console.warn('Failed to parse response JSON:', parseError);
+      }
+
+      console.log('Login response:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: responseData,
+      });
+
       // Проверяем статус ответа
       if (response.status === 401) {
+        const errorMessage =
+          responseData.message || 'Неверный логин или пароль';
         return {
           success: false,
           error: {
             type: 'INVALID_CREDENTIALS',
-            message: 'Неверный логин или пароль',
+            message: errorMessage,
+            details: `Status: ${response.status}, Error: ${responseData.error || 'Unauthorized'}`,
           },
         };
       }
@@ -149,28 +207,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
           success: false,
           error: {
             type: 'SERVER_ERROR',
-            message: 'Ошибка сервера. Попробуйте позже',
+            message: responseData.message || t(TranslationKeys.AuthServerError),
+            details: `Status: ${response.status}`,
           },
         };
       }
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Login failed:', errorData);
+        console.error(
+          'Login failed with status:',
+          response.status,
+          responseData
+        );
 
         return {
           success: false,
           error: {
             type: 'SERVER_ERROR',
-            message: errorData.message || 'Ошибка авторизации',
+            message: responseData.message || t(TranslationKeys.AuthServerError),
+            details: `Status: ${response.status}, Response: ${JSON.stringify(responseData)}`,
           },
         };
       }
 
-      const data = await response.json();
-
-      if (data.access_token && data.user) {
-        saveAuthData(data.access_token, data.refresh_token, data.user);
+      // Проверяем наличие необходимых данных в ответе
+      if (responseData.access_token && responseData.user) {
+        saveAuthData(
+          responseData.access_token,
+          responseData.refresh_token,
+          responseData.user
+        );
         return { success: true };
       }
 
@@ -178,16 +244,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         success: false,
         error: {
           type: 'SERVER_ERROR',
-          message: 'Неверный ответ сервера',
+          message: t(TranslationKeys.AuthServerError),
+          details: 'Missing access_token or user in response',
         },
       };
     } catch (error) {
       console.error('Login error:', error);
+
+      // Определяем тип ошибки сети
+      const isNetworkError =
+        error instanceof TypeError && error.message.includes('fetch');
+
       return {
         success: false,
         error: {
           type: 'NETWORK_ERROR',
-          message: 'Ошибка соединения с сервером',
+          message: isNetworkError
+            ? 'Ошибка сети. Проверьте подключение к интернету.'
+            : t(TranslationKeys.AuthNetworkError),
+          details:
+            error instanceof Error ? error.message : 'Unknown network error',
         },
       };
     } finally {
@@ -260,6 +336,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     logout,
     refreshAuth,
     isAuthenticated,
+    locale,
+    messages,
+    t,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

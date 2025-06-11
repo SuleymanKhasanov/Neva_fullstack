@@ -1,13 +1,13 @@
-// app/[locale]/admin/page.tsx
 'use client';
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/shared/contexts/AuthContext';
 import { AdminLoginPage } from '@/pages/AdminLogin';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 
 const AdminPage = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, t } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const AdminPage = () => {
           color: 'var(--text-secondary)',
         }}
       >
-        Загрузка...
+        {t(TranslationKeys.AuthLoading)}
       </div>
     );
   }
