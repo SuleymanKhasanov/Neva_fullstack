@@ -1,0 +1,37 @@
+/* frontend/src/entities/AdminMainContentBox/ui/AdminMainContentBox.module.css */
+.mainContent {
+  flex: 1;
+  background-color: var(--background);
+  min-height: calc(100vh - 6rem); /* Высота экрана минус высота header */
+  overflow-y: auto;
+}
+
+.contentWrapper {
+  padding: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .contentWrapper {
+    padding: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: 2rem;
+  }
+
+  .mainContent {
+    min-height: calc(100vh - 5.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .contentWrapper {
+    padding: 1.5rem;
+  }
+}

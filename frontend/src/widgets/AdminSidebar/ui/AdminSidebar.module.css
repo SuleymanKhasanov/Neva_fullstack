@@ -1,0 +1,221 @@
+/* frontend/src/widgets/AdminSidebar/ui/AdminSidebar.module.css */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 280px;
+  background-color: var(--content-box);
+  border-right: 1px solid var(--border);
+  transition: transform 0.3s ease;
+  z-index: 20;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar.closed {
+  transform: translateX(-280px);
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2rem;
+}
+
+/* Заголовок */
+.sidebarHeader {
+  margin-bottom: 3rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.logoIcon {
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.logoText {
+  flex: 1;
+}
+
+.logoTitle {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.2rem 0;
+}
+
+.logoSubtitle {
+  font-size: 1.2rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* Информация о пользователе */
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.5rem;
+  background-color: var(--muted);
+  border-radius: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.userAvatar {
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.userDetails {
+  flex: 1;
+}
+
+.username {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.2rem 0;
+}
+
+.userRole {
+  font-size: 1.2rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* Навигация */
+.navigation {
+  flex: 1;
+}
+
+.menuList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menuItem {
+  width: 100%;
+}
+
+.menuLink {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.2rem 1.5rem;
+  border-radius: 1rem;
+  text-decoration: none;
+  color: var(--foreground);
+  transition: all 0.2s ease;
+  position: relative;
+  width: 100%;
+  min-height: 4.8rem;
+}
+
+.menuLink:hover {
+  background-color: var(--muted);
+  transform: translateX(0.3rem);
+}
+
+.menuLink.active {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(227, 30, 36, 0.3);
+}
+
+.menuLink.active:hover {
+  background-color: var(--primary-hover);
+  transform: translateX(0);
+}
+
+.menuLink.disabled {
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.menuLink.disabled:hover {
+  background-color: transparent;
+  transform: none;
+}
+
+.menuIcon {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.menuLabel {
+  font-size: 1.4rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.comingSoon {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  background-color: var(--secondary);
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.6rem;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-280px);
+  }
+
+  .sidebar.closed {
+    transform: translateX(-280px);
+  }
+
+  /* Можно добавить overlay для мобильных устройств */
+}
+
+@media (max-width: 768px) {
+  .sidebarContent {
+    padding: 1.5rem;
+  }
+
+  .userInfo {
+    padding: 1.2rem;
+  }
+
+  .menuLink {
+    padding: 1rem 1.2rem;
+  }
+}

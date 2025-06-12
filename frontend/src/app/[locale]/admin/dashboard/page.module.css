@@ -1,0 +1,211 @@
+/* frontend/src/app/[locale]/admin/dashboard/page.module.css */
+.container {
+  width: 100%;
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 1rem;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--muted-foreground);
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.welcomeCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 0.4rem 1.6rem var(--shadow-content);
+}
+
+.welcome {
+  font-size: 2.4rem;
+  color: var(--foreground);
+  margin: 0 0 1.6rem;
+  font-weight: 600;
+}
+
+.description {
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  margin: 0 0 2rem;
+  font-size: 1.5rem;
+}
+
+.userInfo {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--secondary);
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.infoLabel {
+  font-size: 1.2rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.infoValue {
+  font-size: 1.4rem;
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.status {
+  display: inline-block;
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 0.8rem 1.6rem;
+  border-radius: 2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  border: 1px solid #bbf7d0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.4rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 0.2rem 0.8rem var(--shadow-card);
+}
+
+.card:hover {
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.8rem 2.4rem var(--shadow-card);
+}
+
+.cardTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 1rem;
+}
+
+.cardDescription {
+  color: var(--muted-foreground);
+  margin: 0 0 2rem;
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+.cardStats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statsNumber {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.statsLabel {
+  font-size: 1.2rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Темная тема */
+:global(.dark) .status {
+  background-color: rgba(22, 101, 52, 0.2);
+  color: #4ade80;
+  border-color: rgba(22, 101, 52, 0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.4rem;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+  }
+
+  .welcomeCard {
+    padding: 2rem;
+  }
+
+  .welcome {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1.4rem;
+  }
+
+  .userInfo {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcomeCard {
+    padding: 1.5rem;
+  }
+
+  .userInfo {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+}
