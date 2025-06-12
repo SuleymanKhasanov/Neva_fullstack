@@ -1,0 +1,107 @@
+/* frontend/src/widgets/AdminHeader/ui/AdminHeader.module.css */
+.header {
+  background-color: var(--content-box);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerContent {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.menuButton:hover {
+  background-color: var(--muted);
+  transform: scale(1.05);
+}
+
+.menuButton:active {
+  transform: scale(0.95);
+}
+
+.menuIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--foreground);
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+}
+
+.logoutIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.logoutText {
+  font-size: 1.4rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1.5rem;
+    height: 5.5rem;
+  }
+
+  .rightSection {
+    gap: 1rem;
+  }
+
+  .logoutText {
+    display: none;
+  }
+
+  .logoutButton {
+    padding: 1rem;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .rightSection {
+    gap: 0.8rem;
+  }
+}

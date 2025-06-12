@@ -1,3 +1,5 @@
+// frontend/src/shared/config/i18n/types.ts - Обновленная версия
+
 export const locales = ['en', 'ru', 'uz', 'kr'] as const;
 export type Locale = (typeof locales)[number];
 
@@ -42,6 +44,9 @@ export enum TranslationKeys {
   AuthUsernamePlaceholder = 'auth.usernamePlaceholder',
   AuthPasswordPlaceholder = 'auth.passwordPlaceholder',
   AuthLoading = 'auth.loading',
+
+  // Admin
+  AdminLogout = 'auth.dashboard.logout',
 }
 
 export type Header = {
