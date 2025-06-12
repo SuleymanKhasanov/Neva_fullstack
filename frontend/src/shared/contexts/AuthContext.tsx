@@ -22,6 +22,20 @@ interface LoginError {
   details?: string; // Дополнительная информация об ошибке
 }
 
+// Типы для API ответов
+interface LoginResponse {
+  access_token?: string;
+  refresh_token?: string;
+  user?: User;
+  message?: string;
+  error?: string;
+}
+
+interface RefreshResponse {
+  access_token?: string;
+  message?: string;
+}
+
 interface AuthContextType {
   user: User | null;
   accessToken: string | null;
@@ -76,12 +90,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       const keys = key.split('.');
       if (keys.length < 2) return key;
 
-      let value: any = messages;
+      let value: unknown = messages;
 
       // Проходим по цепочке ключей
       for (const k of keys) {
         if (value && typeof value === 'object' && k in value) {
-          value = value[k];
+          value = (value as Record<string, unknown>)[k];
         } else {
           return key; // Если ключ не найден, возвращаем исходный ключ
         }
@@ -182,13 +196,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       });
 
       // Пытаемся получить JSON ответ
-      let responseData: any = {};
+      let responseData: LoginResponse = {};
       try {
         const textResponse = await response.text();
         console.log('📝 Raw response text:', textResponse);
 
         if (textResponse) {
-          responseData = JSON.parse(textResponse);
+          responseData = JSON.parse(textResponse) as LoginResponse;
         }
       } catch (parseError) {
         console.warn('⚠️ Failed to parse response JSON:', parseError);
@@ -245,7 +259,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         console.log('✅ Login successful!');
         saveAuthData(
           responseData.access_token,
-          responseData.refresh_token,
+          responseData.refresh_token || '',
           responseData.user
         );
         return { success: true };
@@ -299,7 +313,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         return false;
       }
 
-      const data = await response.json();
+      const data: RefreshResponse = await response.json();
 
       if (data.access_token && user) {
         saveAuthData(data.access_token, refreshToken, user);
