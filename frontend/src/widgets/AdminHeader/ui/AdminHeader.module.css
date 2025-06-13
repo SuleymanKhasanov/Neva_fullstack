@@ -1,22 +1,22 @@
 /* frontend/src/widgets/AdminHeader/ui/AdminHeader.module.css */
 .header {
-  background-color: var(--content-box);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  height: 6rem;
   display: flex;
   align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
+  padding: 2rem;
+  background-color: var(--acrylic-bg);
+  backdrop-filter: var(--acrylic-blur);
   z-index: 10;
 }
 
 .headerContent {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: calc(100% - 1rem);
+  margin: 0 auto;
+  padding: 0.5rem;
+  position: relative;
 }
 
 .leftSection {
@@ -34,18 +34,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4rem;
-  height: 4rem;
-  background-color: var(--secondary);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
+  background-color: inherit;
+  border: inherit;
   cursor: pointer;
+  font-size: 2.5rem;
   transition: all 0.3s ease;
 }
 
 .menuButton:hover {
-  background-color: var(--muted);
-  transform: scale(1.05);
+  background-color: var(--secondary);
 }
 
 .menuButton:active {

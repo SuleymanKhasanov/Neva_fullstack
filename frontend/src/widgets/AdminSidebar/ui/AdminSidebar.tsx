@@ -1,24 +1,27 @@
 // frontend/src/widgets/AdminSidebar/ui/AdminSidebar.tsx
 'use client';
 
-import { useAuth } from '@/shared/contexts/AuthContext';
 import { TranslationType } from '@/shared/config/i18n/types';
 import {
   LuHouse,
   LuPackage,
   LuTag,
-  LuDatabase,
-  LuUsers,
   LuSettings,
+  LuBrush,
+  LuChevronLeft,
 } from 'react-icons/lu';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
 import styles from './AdminSidebar.module.css';
+import Image from 'next/image';
+import Logo from '@/shared/assets/Logo-light.svg';
 
 interface AdminSidebarProps {
   isOpen: boolean;
   locale: string;
   messages: TranslationType;
+  onToggle?: () => void;
 }
 
 interface MenuItem {
@@ -29,9 +32,25 @@ interface MenuItem {
   disabled?: boolean;
 }
 
-const AdminSidebar = ({ isOpen, locale }: AdminSidebarProps) => {
-  const { user } = useAuth();
+const AdminSidebar = ({ isOpen, locale, onToggle }: AdminSidebarProps) => {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Проверка на мобильное устройство
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems: MenuItem[] = [
     {
@@ -57,22 +76,8 @@ const AdminSidebar = ({ isOpen, locale }: AdminSidebarProps) => {
     {
       id: 'brands',
       label: 'Бренды',
-      icon: LuTag,
+      icon: LuBrush,
       href: `/${locale}/admin/brands`,
-      disabled: true,
-    },
-    {
-      id: 'cache',
-      label: 'Кеш',
-      icon: LuDatabase,
-      href: `/${locale}/admin/cache`,
-      disabled: true,
-    },
-    {
-      id: 'users',
-      label: 'Пользователи',
-      icon: LuUsers,
-      href: `/${locale}/admin/users`,
       disabled: true,
     },
     {
@@ -84,76 +89,136 @@ const AdminSidebar = ({ isOpen, locale }: AdminSidebarProps) => {
     },
   ];
 
-  const isActiveItem = (href: string) => {
-    return pathname === href;
-  };
+  const isActiveItem = useCallback(
+    (href: string) => {
+      return pathname === href;
+    },
+    [pathname]
+  );
+
+  const handleMenuItemClick = useCallback(
+    (item: MenuItem, e: React.MouseEvent) => {
+      if (item.disabled) {
+        e.preventDefault();
+        return;
+      }
+
+      // Закрываем сайдбар на мобильных устройствах после клика
+      if (isMobile && onToggle) {
+        setTimeout(onToggle, 150);
+      }
+    },
+    [isMobile, onToggle]
+  );
+
+  const handleOverlayClick = useCallback(() => {
+    if (onToggle) {
+      onToggle();
+    }
+  }, [onToggle]);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <aside className={`${styles.sidebar} ${!isOpen ? styles.closed : ''}`}>
-      <div className={styles.sidebarContent}>
-        {/* Заголовок */}
-        <div className={styles.sidebarHeader}>
-          <div className={styles.logo}>
-            <div className={styles.logoIcon}>A</div>
-            {isOpen && (
-              <div className={styles.logoText}>
-                <h2 className={styles.logoTitle}>Admin Panel</h2>
-                <p className={styles.logoSubtitle}>Neva</p>
+    <>
+      {/* Overlay для мобильных устройств */}
+      {isOpen && isMobile && (
+        <div
+          className={styles.overlay}
+          onClick={handleOverlayClick}
+          role="button"
+          tabIndex={0}
+          aria-label="Закрыть меню"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleOverlayClick();
+            }
+          }}
+        />
+      )}
+
+      <aside
+        className={`${styles.sidebar} ${!isOpen ? styles.closed : ''} ${isMobile && isOpen ? styles.open : ''}`}
+        role="navigation"
+        aria-label="Административная навигация"
+      >
+        <div className={styles.sidebarContent}>
+          {/* Заголовок с логотипом */}
+          <header className={styles.sidebarHeader}>
+            <div className={styles.logo}>
+              <div className={styles.logoIcon} aria-hidden="true">
+                <Image src={Logo} alt="Logo" priority />
               </div>
-            )}
-          </div>
+              {isOpen && (
+                <div className={styles.logoText}>
+                  <h1 className={styles.logoTitle}>East Telecom</h1>
+                  <p className={styles.logoSubtitle}>B2B Catalog Admin Panel</p>
+                </div>
+              )}
+            </div>
+          </header>
+
+          {/* Основное навигационное меню */}
+          <nav className={styles.navigation}>
+            <ul className={styles.menuList} role="none">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = isActiveItem(item.href);
+
+                return (
+                  <li
+                    key={item.id}
+                    className={styles.menuItem}
+                    data-tooltip={!isOpen ? item.label : ''}
+                    role="none"
+                  >
+                    {item.disabled ? (
+                      <div
+                        className={`${styles.menuLink} ${styles.disabled}`}
+                        role="menuitem"
+                        aria-disabled="true"
+                      >
+                        <Icon className={styles.menuIcon} aria-hidden="true" />
+                        {isOpen && (
+                          <span className={styles.menuLabel}>{item.label}</span>
+                        )}
+                      </div>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={`${styles.menuLink} ${isActive ? styles.active : ''}`}
+                        onClick={(e) => handleMenuItemClick(item, e)}
+                        role="menuitem"
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        <Icon className={styles.menuIcon} aria-hidden="true" />
+                        {isOpen && (
+                          <span className={styles.menuLabel}>{item.label}</span>
+                        )}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </div>
 
-        {/* Информация о пользователе */}
-        {isOpen && user && (
-          <div className={styles.userInfo}>
-            <div className={styles.userAvatar}>
-              {user.username.charAt(0).toUpperCase()}
-            </div>
-            <div className={styles.userDetails}>
-              <p className={styles.username}>{user.username}</p>
-              <p className={styles.userRole}>{user.role}</p>
-            </div>
-          </div>
+        {/* Кнопка переключения состояния сайдбара */}
+        {onToggle && !isMobile && (
+          <button
+            className={styles.toggleButton}
+            onClick={onToggle}
+            aria-label={isOpen ? 'Свернуть сайдбар' : 'Развернуть сайдбар'}
+            type="button"
+          >
+            <LuChevronLeft className={styles.toggleIcon} aria-hidden="true" />
+          </button>
         )}
-
-        {/* Навигационное меню */}
-        <nav className={styles.navigation}>
-          <ul className={styles.menuList}>
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = isActiveItem(item.href);
-
-              return (
-                <li key={item.id} className={styles.menuItem}>
-                  {item.disabled ? (
-                    <div className={`${styles.menuLink} ${styles.disabled}`}>
-                      <Icon className={styles.menuIcon} />
-                      {isOpen && (
-                        <span className={styles.menuLabel}>{item.label}</span>
-                      )}
-                      {isOpen && (
-                        <span className={styles.comingSoon}>Скоро</span>
-                      )}
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className={`${styles.menuLink} ${isActive ? styles.active : ''}`}
-                    >
-                      <Icon className={styles.menuIcon} />
-                      {isOpen && (
-                        <span className={styles.menuLabel}>{item.label}</span>
-                      )}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 

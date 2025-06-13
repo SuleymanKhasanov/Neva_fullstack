@@ -1,20 +1,50 @@
 /* frontend/src/entities/AdminMainContentBox/ui/AdminMainContentBox.module.css */
 .mainContent {
-  flex: 1;
-  background-color: var(--background);
-  min-height: calc(100vh - 6rem); /* Высота экрана минус высота header */
-  overflow-y: auto;
+  width: 100%;
+  height: calc(100vh - 2rem);
+  background-color: var(--content-box);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px var(--shadow-content);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .contentWrapper {
+  flex: 1;
   padding: 3rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.contentWrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contentWrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contentWrapper::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.contentWrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }
 
 /* Адаптивность */
 @media (max-width: 1024px) {
+  .mainContent {
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
   .contentWrapper {
     padding: 2.5rem;
   }
@@ -24,14 +54,25 @@
   .contentWrapper {
     padding: 2rem;
   }
-
-  .mainContent {
-    min-height: calc(100vh - 5.5rem);
-  }
 }
 
 @media (max-width: 480px) {
   .contentWrapper {
     padding: 1.5rem;
   }
+}
+
+/* Темная тема */
+.dark .mainContent {
+  background-color: var(--content-box);
+  border-color: var(--border);
+  box-shadow: 0 4px 16px var(--shadow-content);
+}
+
+.dark .contentWrapper::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.dark .contentWrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }

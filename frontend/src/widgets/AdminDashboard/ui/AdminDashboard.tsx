@@ -35,13 +35,15 @@ const AdminDashboard = ({
       <div
         className={`${styles.mainArea} ${!isSidebarOpen ? styles.expanded : ''}`}
       >
-        <AdminHeader
-          locale={locale}
-          messages={messages}
-          onToggleSidebar={toggleSidebar}
-          isSidebarOpen={isSidebarOpen}
-        />
-        <AdminMainContentBox>{children}</AdminMainContentBox>
+        <AdminMainContentBox>
+          <AdminHeader
+            locale={locale}
+            messages={messages}
+            onToggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+          />
+          {children}
+        </AdminMainContentBox>
       </div>
     </div>
   );
