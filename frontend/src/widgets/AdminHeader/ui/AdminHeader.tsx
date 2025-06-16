@@ -31,13 +31,14 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }: AdminHeaderProps) => {
       <div className={styles.headerContent}>
         {/* Левая часть - кнопка меню */}
         <div className={styles.leftSection}>
-          <button
-            className={styles.menuButton}
+          <Button
+            variant="secondary"
+            // className={styles.menuButton}
             onClick={onToggleSidebar}
             aria-label={isSidebarOpen ? 'Скрыть меню' : 'Показать меню'}
           >
             <LuPanelsTopLeft />
-          </button>
+          </Button>
         </div>
 
         {/* Правая часть - контролы */}
