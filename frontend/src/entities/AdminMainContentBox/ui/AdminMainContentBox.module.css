@@ -13,26 +13,40 @@
 
 .contentWrapper {
   flex: 1;
-  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Стили для закрепленного header - первый дочерний элемент */
+.contentWrapper > :first-child {
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+/* Стили для прокручиваемого контента - все элементы кроме первого */
+.contentWrapper > :nth-child(n + 2) {
+  flex: 1;
   overflow-y: auto;
+  padding: 3rem;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
 
-.contentWrapper::-webkit-scrollbar {
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar {
   width: 6px;
 }
 
-.contentWrapper::-webkit-scrollbar-track {
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.contentWrapper::-webkit-scrollbar-thumb {
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 3px;
 }
 
-.contentWrapper::-webkit-scrollbar-thumb:hover {
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }
 
@@ -45,19 +59,19 @@
     box-shadow: none;
   }
 
-  .contentWrapper {
+  .contentWrapper > :nth-child(n + 2) {
     padding: 2.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .contentWrapper {
+  .contentWrapper > :nth-child(n + 2) {
     padding: 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .contentWrapper {
+  .contentWrapper > :nth-child(n + 2) {
     padding: 1.5rem;
   }
 }
@@ -69,10 +83,10 @@
   box-shadow: 0 4px 16px var(--shadow-content);
 }
 
-.dark .contentWrapper::-webkit-scrollbar-thumb {
+.dark .contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb {
   background: var(--border);
 }
 
-.dark .contentWrapper::-webkit-scrollbar-thumb:hover {
+.dark .contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }

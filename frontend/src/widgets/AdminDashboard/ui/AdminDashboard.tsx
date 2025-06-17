@@ -31,6 +31,7 @@ const AdminDashboard = ({
         isOpen={isSidebarOpen}
         locale={locale}
         messages={messages}
+        onToggle={toggleSidebar}
       />
       <div
         className={`${styles.mainArea} ${!isSidebarOpen ? styles.expanded : ''}`}
@@ -42,7 +43,7 @@ const AdminDashboard = ({
             onToggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
           />
-          {children}
+          <div>{children}</div>
         </AdminMainContentBox>
       </div>
     </div>

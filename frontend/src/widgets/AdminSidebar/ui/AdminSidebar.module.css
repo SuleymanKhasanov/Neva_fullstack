@@ -23,7 +23,7 @@
 
 /* Заголовок */
 .sidebarHeader {
-  padding: 2rem;
+  padding: 2rem 1rem;
 }
 
 .logo {
@@ -43,20 +43,25 @@
 .logoText {
   flex: 1;
   opacity: 1;
-  transform: translateX(0);
-  transition: all 0.3s ease;
+  width: auto;
+  overflow: hidden;
+  transition:
+    opacity 0.3s ease,
+    width 0.3s ease;
+  white-space: nowrap;
 }
 
 .sidebar.closed .logoText {
   opacity: 0;
-  transform: translateX(-20px);
+  width: 0;
+  /* Убираем display: none - это вызывало прыжки */
   pointer-events: none;
 }
 
 .logoTitle {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--foreground);
   margin: 0;
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -148,14 +153,18 @@
   font-weight: inherit;
   flex: 1;
   opacity: 1;
-  transform: translateX(0);
-  transition: all 0.3s ease;
-  line-height: 1.4;
+  /* Улучшаем анимацию текста меню */
+  width: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    opacity 0.3s ease,
+    width 0.3s ease;
 }
 
 .sidebar.closed .menuLabel {
   opacity: 0;
-  transform: translateX(-15px);
+  width: 0;
 }
 
 /* Анимация для закрытого состояния */
@@ -275,6 +284,17 @@
 
   .toggleButton {
     display: none;
+  }
+
+  /* На мобильных всегда показываем текст */
+  .sidebar .logoText {
+    opacity: 1;
+    width: auto;
+  }
+
+  .sidebar .menuLabel {
+    opacity: 1;
+    width: auto;
   }
 }
 

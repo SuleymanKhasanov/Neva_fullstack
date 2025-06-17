@@ -2,10 +2,9 @@
 .header {
   display: flex;
   align-items: center;
-  padding: 2rem;
-  background-color: var(--acrylic-bg);
-  backdrop-filter: var(--acrylic-blur);
+  background-color: var(--content-box);
   z-index: 10;
+  padding: 1rem;
 }
 
 .headerContent {
@@ -17,6 +16,16 @@
   margin: 0 auto;
   padding: 0.5rem;
   position: relative;
+}
+
+.headerContent::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem; /* Отступ снизу */
+  left: 0;
+  right: 0;
+  height: 0.08rem;
+  background-color: var(--border);
 }
 
 .leftSection {
@@ -37,7 +46,7 @@
   background-color: inherit;
   border: inherit;
   cursor: pointer;
-  font-size: 2.5rem;
+  font-size: 4rem;
   transition: all 0.3s ease;
 }
 
@@ -49,27 +58,12 @@
   transform: scale(0.95);
 }
 
-.menuIcon {
-  width: 2rem;
-  height: 2rem;
-  color: var(--foreground);
-}
-
 .logoutButton {
   display: flex;
   align-items: center;
   gap: 0.8rem;
   padding: 1rem 1.5rem;
   font-weight: 500;
-}
-
-.logoutIcon {
-  width: 1.8rem;
-  height: 1.8rem;
-}
-
-.logoutText {
-  font-size: 1.4rem;
 }
 
 /* Адаптивность */

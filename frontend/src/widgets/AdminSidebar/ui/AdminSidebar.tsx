@@ -2,14 +2,7 @@
 'use client';
 
 import { TranslationType } from '@/shared/config/i18n/types';
-import {
-  LuHouse,
-  LuPackage,
-  LuTag,
-  LuSettings,
-  LuBrush,
-  LuChevronLeft,
-} from 'react-icons/lu';
+import { LuHouse, LuPackage, LuTag, LuSettings, LuBrush } from 'react-icons/lu';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
@@ -205,18 +198,6 @@ const AdminSidebar = ({ isOpen, locale, onToggle }: AdminSidebarProps) => {
             </ul>
           </nav>
         </div>
-
-        {/* Кнопка переключения состояния сайдбара */}
-        {onToggle && !isMobile && (
-          <button
-            className={styles.toggleButton}
-            onClick={onToggle}
-            aria-label={isOpen ? 'Свернуть сайдбар' : 'Развернуть сайдбар'}
-            type="button"
-          >
-            <LuChevronLeft className={styles.toggleIcon} aria-hidden="true" />
-          </button>
-        )}
       </aside>
     </>
   );
