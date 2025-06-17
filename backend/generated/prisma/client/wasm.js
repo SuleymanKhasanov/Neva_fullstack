@@ -167,21 +167,21 @@ exports.Prisma.SubcategoryTranslationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.CategoryBrandScalarFieldEnum = {
+exports.Prisma.SubcategoryBrandScalarFieldEnum = {
   id: 'id',
-  categoryId: 'categoryId',
+  subcategoryId: 'subcategoryId',
   brandId: 'brandId',
-  section: 'section',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
-  brandId: 'brandId',
+  sku: 'sku',
   categoryId: 'categoryId',
   subcategoryId: 'subcategoryId',
+  brandId: 'brandId',
   section: 'section',
-  slug: 'slug',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -193,22 +193,7 @@ exports.Prisma.ProductTranslationScalarFieldEnum = {
   locale: 'locale',
   name: 'name',
   description: 'description',
-  marketingDescription: 'marketingDescription',
-  metaTitle: 'metaTitle',
-  metaDescription: 'metaDescription',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ProductImageScalarFieldEnum = {
-  id: 'id',
-  productId: 'productId',
-  originalFilename: 'originalFilename',
-  imageSmall: 'imageSmall',
-  imageLarge: 'imageLarge',
-  altText: 'altText',
-  sortOrder: 'sortOrder',
-  isPrimary: 'isPrimary',
+  shortDesc: 'shortDesc',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -216,18 +201,29 @@ exports.Prisma.ProductImageScalarFieldEnum = {
 exports.Prisma.ProductSpecificationScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
-  specKey: 'specKey',
-  sortOrder: 'sortOrder',
+  key: 'key',
+  value: 'value',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProductSpecificationTranslationScalarFieldEnum = {
+exports.Prisma.ProductImageScalarFieldEnum = {
   id: 'id',
-  specificationId: 'specificationId',
-  locale: 'locale',
+  productId: 'productId',
+  url: 'url',
+  alt: 'alt',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password: 'password',
   name: 'name',
-  value: 'value',
+  role: 'role',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -249,8 +245,8 @@ exports.Prisma.NullsOrder = {
 exports.Locale = exports.$Enums.Locale = {
   ru: 'ru',
   en: 'en',
-  kr: 'kr',
-  uz: 'uz'
+  uz: 'uz',
+  kr: 'kr'
 };
 
 exports.Section = exports.$Enums.Section = {
@@ -265,12 +261,12 @@ exports.Prisma.ModelName = {
   CategoryTranslation: 'CategoryTranslation',
   Subcategory: 'Subcategory',
   SubcategoryTranslation: 'SubcategoryTranslation',
-  CategoryBrand: 'CategoryBrand',
+  SubcategoryBrand: 'SubcategoryBrand',
   Product: 'Product',
   ProductTranslation: 'ProductTranslation',
-  ProductImage: 'ProductImage',
   ProductSpecification: 'ProductSpecification',
-  ProductSpecificationTranslation: 'ProductSpecificationTranslation'
+  ProductImage: 'ProductImage',
+  User: 'User'
 };
 
 /**

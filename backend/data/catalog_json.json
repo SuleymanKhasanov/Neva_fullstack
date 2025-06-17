@@ -1,0 +1,1696 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": {
+        "ru": "Серверное оборудование",
+        "en": "Server Equipment",
+        "uz": "Server uskunalari",
+        "ko": "서버 장비"
+      },
+      "subcategories": [
+        {
+          "id": 101,
+          "name": {
+            "ru": "Серверы",
+            "en": "Servers",
+            "uz": "Serverlar",
+            "ko": "서버"
+          },
+          "brands": [
+            "Dell PowerEdge",
+            "HPE ProLiant",
+            "Lenovo ThinkSystem",
+            "IBM Power Systems",
+            "Cisco UCS",
+            "Supermicro",
+            "Fujitsu PRIMERGY",
+            "Huawei FusionServer",
+            "Oracle"
+          ]
+        },
+        {
+          "id": 102,
+          "name": {
+            "ru": "Системы хранения данных",
+            "en": "Data Storage Systems",
+            "uz": "Ma'lumotlarni saqlash tizimlari",
+            "ko": "데이터 저장 시스템"
+          },
+          "brands": [
+            "Dell EMC",
+            "NetApp",
+            "HPE Storage",
+            "IBM Storage",
+            "Pure Storage",
+            "Synology",
+            "QNAP",
+            "Western Digital",
+            "Seagate",
+            "Hitachi Vantara"
+          ]
+        },
+        {
+          "id": 103,
+          "name": {
+            "ru": "HCI (гиперконвергентная инфраструктура)",
+            "en": "HCI (Hyperconverged Infrastructure)",
+            "uz": "HCI (giperkonvergent infratuzilma)",
+            "ko": "HCI (하이퍼컨버지드 인프라)"
+          },
+          "brands": [
+            "VMware vSAN",
+            "Nutanix",
+            "Dell VxRail",
+            "HPE SimpliVity",
+            "Cisco HyperFlex",
+            "Lenovo ThinkAgile",
+            "Scale Computing"
+          ]
+        },
+        {
+          "id": 104,
+          "name": {
+            "ru": "Серверные аксессуары",
+            "en": "Server Accessories",
+            "uz": "Server aksessuarlari",
+            "ko": "서버 액세서리"
+          },
+          "brands": [
+            "Dell",
+            "HPE",
+            "Lenovo",
+            "Cisco",
+            "Intel",
+            "AMD",
+            "Kingston",
+            "Crucial",
+            "Samsung"
+          ]
+        },
+        {
+          "id": 105,
+          "name": {
+            "ru": "Стойки и шкафы",
+            "en": "Racks and Cabinets",
+            "uz": "Reyklar va shkaflar",
+            "ko": "랙 및 캐비닛"
+          },
+          "brands": [
+            "APC by Schneider Electric",
+            "Rittal",
+            "Legrand",
+            "Eaton",
+            "Vertiv",
+            "Chatsworth Products",
+            "Middle Atlantic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": {
+        "ru": "Сетевое оборудование",
+        "en": "Network Equipment",
+        "uz": "Tarmoq uskunalari",
+        "ko": "네트워크 장비"
+      },
+      "subcategories": [
+        {
+          "id": 201,
+          "name": {
+            "ru": "Коммутаторы",
+            "en": "Switches",
+            "uz": "Kommutatorlar",
+            "ko": "스위치"
+          },
+          "brands": [
+            "Cisco",
+            "HPE Aruba",
+            "Juniper Networks",
+            "D-Link",
+            "TP-Link",
+            "Huawei",
+            "Zyxel",
+            "Netgear",
+            "Extreme Networks",
+            "Allied Telesis"
+          ]
+        },
+        {
+          "id": 202,
+          "name": {
+            "ru": "Маршрутизаторы",
+            "en": "Routers",
+            "uz": "Marshrutizatorlar",
+            "ko": "라우터"
+          },
+          "brands": [
+            "Cisco",
+            "MikroTik",
+            "Juniper Networks",
+            "TP-Link",
+            "D-Link",
+            "Huawei",
+            "Zyxel",
+            "Netgear",
+            "Ubiquiti",
+            "EdgeCore"
+          ]
+        },
+        {
+          "id": 203,
+          "name": {
+            "ru": "Точки доступа Wi-Fi",
+            "en": "Wi-Fi Access Points",
+            "uz": "Wi-Fi kirish nuqtalari",
+            "ko": "Wi-Fi 액세스 포인트"
+          },
+          "brands": [
+            "Cisco",
+            "HPE Aruba",
+            "Ubiquiti",
+            "TP-Link",
+            "D-Link",
+            "Huawei",
+            "Zyxel",
+            "Ruckus",
+            "Extreme Networks",
+            "Fortinet"
+          ]
+        },
+        {
+          "id": 204,
+          "name": {
+            "ru": "Сетевые кабели",
+            "en": "Network Cables",
+            "uz": "Tarmoq kabellari",
+            "ko": "네트워크 케이블"
+          },
+          "brands": [
+            "Panduit",
+            "CommScope",
+            "Belden",
+            "Legrand",
+            "Nexans",
+            "General Cable",
+            "Hyperline",
+            "OK-Net"
+          ]
+        },
+        {
+          "id": 205,
+          "name": {
+            "ru": "Патч-панели",
+            "en": "Patch Panels",
+            "uz": "Patch panellari",
+            "ko": "패치 패널"
+          },
+          "brands": [
+            "Panduit",
+            "CommScope",
+            "Legrand",
+            "Nexans",
+            "Hyperline",
+            "Systimax",
+            "OK-Net"
+          ]
+        },
+        {
+          "id": 206,
+          "name": {
+            "ru": "Сетевые розетки",
+            "en": "Network Outlets",
+            "uz": "Tarmoq rozetkalar",
+            "ko": "네트워크 콘센트"
+          },
+          "brands": [
+            "Legrand",
+            "Panduit",
+            "CommScope",
+            "Hyperline",
+            "Nexans",
+            "OK-Net"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": {
+        "ru": "Компьютеры и периферия",
+        "en": "Computers and Peripherals",
+        "uz": "Kompyuterlar va periferiya",
+        "ko": "컴퓨터 및 주변기기"
+      },
+      "subcategories": [
+        {
+          "id": 301,
+          "name": {
+            "ru": "Моноблоки",
+            "en": "All-in-One PCs",
+            "uz": "Monobloklar",
+            "ko": "올인원 PC"
+          },
+          "brands": [
+            "Apple",
+            "Dell",
+            "HP",
+            "Lenovo",
+            "ASUS",
+            "MSI",
+            "Acer"
+          ]
+        },
+        {
+          "id": 302,
+          "name": {
+            "ru": "Ноутбуки",
+            "en": "Laptops",
+            "uz": "Noutbuklar",
+            "ko": "노트북"
+          },
+          "brands": [
+            "Dell",
+            "HP",
+            "Lenovo",
+            "Apple",
+            "ASUS",
+            "Acer",
+            "MSI",
+            "Samsung",
+            "Huawei"
+          ]
+        },
+        {
+          "id": 303,
+          "name": {
+            "ru": "Стационарные компьютеры",
+            "en": "Desktop Computers",
+            "uz": "Statsionar kompyuterlar",
+            "ko": "데스크톱 컴퓨터"
+          },
+          "brands": [
+            "Dell",
+            "HP",
+            "Lenovo",
+            "Apple",
+            "ASUS",
+            "Acer",
+            "MSI"
+          ]
+        },
+        {
+          "id": 304,
+          "name": {
+            "ru": "Мониторы",
+            "en": "Monitors",
+            "uz": "Monitorlar",
+            "ko": "모니터"
+          },
+          "brands": [
+            "Dell",
+            "HP",
+            "LG",
+            "Samsung",
+            "ASUS",
+            "Acer",
+            "BenQ",
+            "AOC",
+            "Philips",
+            "ViewSonic"
+          ]
+        },
+        {
+          "id": 305,
+          "name": {
+            "ru": "Клавиатуры и компьютерные мыши",
+            "en": "Keyboards and Computer Mice",
+            "uz": "Klaviaturalar va kompyuter sichqonlari",
+            "ko": "키보드 및 컴퓨터 마우스"
+          },
+          "brands": [
+            "Logitech",
+            "Microsoft",
+            "Razer",
+            "Corsair",
+            "SteelSeries",
+            "HyperX",
+            "Apple",
+            "A4Tech"
+          ]
+        },
+        {
+          "id": 306,
+          "name": {
+            "ru": "Принтеры и МФУ",
+            "en": "Printers and MFPs",
+            "uz": "Printerlar va MFU",
+            "ko": "프린터 및 복합기"
+          },
+          "brands": [
+            "HP",
+            "Canon",
+            "Epson",
+            "Brother",
+            "Xerox",
+            "Kyocera",
+            "Samsung",
+            "Ricoh"
+          ]
+        },
+        {
+          "id": 307,
+          "name": {
+            "ru": "Веб-камеры",
+            "en": "Web Cameras",
+            "uz": "Veb-kameralar",
+            "ko": "웹캠"
+          },
+          "brands": [
+            "Logitech",
+            "Microsoft",
+            "Creative",
+            "A4Tech",
+            "Canyon",
+            "Razer"
+          ]
+        },
+        {
+          "id": 308,
+          "name": {
+            "ru": "Наушники и гарнитуры",
+            "en": "Headphones and Headsets",
+            "uz": "Naushniklar va garnituralar",
+            "ko": "헤드폰 및 헤드셋"
+          },
+          "brands": [
+            "Sony",
+            "Sennheiser",
+            "Bose",
+            "Audio-Technica",
+            "Logitech",
+            "HyperX",
+            "SteelSeries",
+            "Razer",
+            "Apple"
+          ]
+        },
+        {
+          "id": 309,
+          "name": {
+            "ru": "Планшеты",
+            "en": "Tablets",
+            "uz": "Planshetlar",
+            "ko": "태블릿"
+          },
+          "brands": [
+            "Apple",
+            "Samsung",
+            "Microsoft",
+            "Lenovo",
+            "Huawei",
+            "Amazon"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": {
+        "ru": "Камеры видеонаблюдения",
+        "en": "Video Surveillance Cameras",
+        "uz": "Video kuzatuv kameralari",
+        "ko": "비디오 감시 카메라"
+      },
+      "subcategories": [
+        {
+          "id": 401,
+          "name": {
+            "ru": "IP-камеры",
+            "en": "IP Cameras",
+            "uz": "IP-kameralar",
+            "ko": "IP 카메라"
+          },
+          "brands": [
+            "Hikvision",
+            "Dahua",
+            "Axis",
+            "Bosch",
+            "Hanwha Techwin",
+            "Uniview",
+            "Vivotek",
+            "Panasonic"
+          ]
+        },
+        {
+          "id": 402,
+          "name": {
+            "ru": "Аналоговые камеры",
+            "en": "Analog Cameras",
+            "uz": "Analog kameralar",
+            "ko": "아날로그 카메라"
+          },
+          "brands": [
+            "Hikvision",
+            "Dahua",
+            "Bosch",
+            "Samsung",
+            "Panasonic"
+          ]
+        },
+        {
+          "id": 403,
+          "name": {
+            "ru": "Видеорегистраторы",
+            "en": "Video Recorders",
+            "uz": "Video registratorlar",
+            "ko": "비디오 레코더"
+          },
+          "brands": [
+            "Hikvision",
+            "Dahua",
+            "Bosch",
+            "Hanwha Techwin",
+            "Uniview"
+          ]
+        },
+        {
+          "id": 404,
+          "name": {
+            "ru": "Аксессуары для камер",
+            "en": "Camera Accessories",
+            "uz": "Kamera aksessuarlari",
+            "ko": "카메라 액세서리"
+          },
+          "brands": [
+            "Hikvision",
+            "Dahua",
+            "Axis",
+            "Bosch"
+          ]
+        },
+        {
+          "id": 405,
+          "name": {
+            "ru": "Кронштейны и крепления",
+            "en": "Brackets and Mounts",
+            "uz": "Kronshteynlar va mahkamlagichlar",
+            "ko": "브래킷 및 마운트"
+          },
+          "brands": [
+            "Hikvision",
+            "Dahua",
+            "Axis",
+            "Bosch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": {
+        "ru": "Файрволы и безопасность",
+        "en": "Firewalls and Security",
+        "uz": "Firewall va xavfsizlik",
+        "ko": "방화벽 및 보안"
+      },
+      "subcategories": [
+        {
+          "id": 501,
+          "name": {
+            "ru": "Аппаратные файрволы",
+            "en": "Hardware Firewalls",
+            "uz": "Apparat firewall",
+            "ko": "하드웨어 방화벽"
+          },
+          "brands": [
+            "Cisco",
+            "Fortinet",
+            "Palo Alto Networks",
+            "SonicWall",
+            "Check Point",
+            "Juniper Networks"
+          ]
+        },
+        {
+          "id": 502,
+          "name": {
+            "ru": "Программные файрволы",
+            "en": "Software Firewalls",
+            "uz": "Dasturiy firewall",
+            "ko": "소프트웨어 방화벽"
+          },
+          "brands": [
+            "pfSense",
+            "Sophos",
+            "Windows Defender",
+            "iptables"
+          ]
+        },
+        {
+          "id": 503,
+          "name": {
+            "ru": "UTM-системы",
+            "en": "UTM Systems",
+            "uz": "UTM tizimlari",
+            "ko": "UTM 시스템"
+          },
+          "brands": [
+            "Fortinet",
+            "SonicWall",
+            "Sophos",
+            "WatchGuard",
+            "Barracuda"
+          ]
+        },
+        {
+          "id": 504,
+          "name": {
+            "ru": "Системы обнаружения вторжений",
+            "en": "Intrusion Detection Systems",
+            "uz": "Bosqinchilarni aniqlash tizimlari",
+            "ko": "침입 탐지 시스템"
+          },
+          "brands": [
+            "Snort",
+            "Suricata",
+            "Cisco IPS",
+            "IBM QRadar"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": {
+        "ru": "Программное обеспечение",
+        "en": "Software",
+        "uz": "Dasturiy ta'minot",
+        "ko": "소프트웨어"
+      },
+      "subcategories": [
+        {
+          "id": 601,
+          "name": {
+            "ru": "Лицензионные ключи",
+            "en": "License Keys",
+            "uz": "Litsenziya kalitlari",
+            "ko": "라이선스 키"
+          },
+          "brands": [
+            "Microsoft",
+            "Adobe",
+            "Autodesk",
+            "VMware"
+          ]
+        },
+        {
+          "id": 602,
+          "name": {
+            "ru": "Офисные пакеты",
+            "en": "Office Suites",
+            "uz": "Ofis paketlari",
+            "ko": "오피스 제품군"
+          },
+          "brands": [
+            "Microsoft Office",
+            "LibreOffice",
+            "Google Workspace",
+            "WPS Office"
+          ]
+        },
+        {
+          "id": 603,
+          "name": {
+            "ru": "Облачные платформы",
+            "en": "Cloud Platforms",
+            "uz": "Bulut platformalari",
+            "ko": "클라우드 플랫폼"
+          },
+          "brands": [
+            "Microsoft Azure",
+            "Amazon Web Services",
+            "Google Cloud Platform",
+            "Yandex Cloud"
+          ]
+        },
+        {
+          "id": 604,
+          "name": {
+            "ru": "Защита данных",
+            "en": "Data Protection",
+            "uz": "Ma'lumotlarni himoya qilish",
+            "ko": "데이터 보호"
+          },
+          "brands": [
+            "Veeam",
+            "Acronis",
+            "Commvault",
+            "Veritas"
+          ]
+        },
+        {
+          "id": 605,
+          "name": {
+            "ru": "Антивирусное ПО",
+            "en": "Antivirus Software",
+            "uz": "Antivirus dasturlari",
+            "ko": "바이러스 백신 소프트웨어"
+          },
+          "brands": [
+            "Kaspersky",
+            "ESET",
+            "Symantec",
+            "Dr.Web",
+            "Avast"
+          ]
+        },
+        {
+          "id": 606,
+          "name": {
+            "ru": "Операционные системы",
+            "en": "Operating Systems",
+            "uz": "Operatsion tizimlar",
+            "ko": "운영 체제"
+          },
+          "brands": [
+            "Microsoft Windows",
+            "Linux",
+            "macOS",
+            "Ubuntu",
+            "CentOS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": {
+        "ru": "Телефония и связь",
+        "en": "Telephony and Communications",
+        "uz": "Telefoniya va aloqa",
+        "ko": "전화 및 통신"
+      },
+      "subcategories": [
+        {
+          "id": 701,
+          "name": {
+            "ru": "IP-телефоны",
+            "en": "IP Phones",
+            "uz": "IP-telefonlar",
+            "ko": "IP 전화"
+          },
+          "brands": [
+            "Cisco",
+            "Avaya",
+            "Yealink",
+            "Polycom",
+            "Grandstream",
+            "Fanvil"
+          ]
+        },
+        {
+          "id": 702,
+          "name": {
+            "ru": "Аналоговые телефоны",
+            "en": "Analog Phones",
+            "uz": "Analog telefonlar",
+            "ko": "아날로그 전화"
+          },
+          "brands": [
+            "Panasonic",
+            "Gigaset",
+            "Philips",
+            "Alcatel"
+          ]
+        },
+        {
+          "id": 703,
+          "name": {
+            "ru": "Гарнитуры для call-центров",
+            "en": "Call Center Headsets",
+            "uz": "Call-markaz garnitualari",
+            "ko": "콜센터 헤드셋"
+          },
+          "brands": [
+            "Plantronics",
+            "Jabra",
+            "Sennheiser",
+            "Logitech"
+          ]
+        },
+        {
+          "id": 704,
+          "name": {
+            "ru": "Конференц-связь",
+            "en": "Conference Communications",
+            "uz": "Konferens aloqasi",
+            "ko": "회의 통신"
+          },
+          "brands": [
+            "Polycom",
+            "Cisco",
+            "Yealink",
+            "Zoom"
+          ]
+        },
+        {
+          "id": 705,
+          "name": {
+            "ru": "Радиостанции",
+            "en": "Radio Stations",
+            "uz": "Radio stansiyalar",
+            "ko": "무전기"
+          },
+          "brands": [
+            "Motorola",
+            "Kenwood",
+            "Icom",
+            "Hytera"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": {
+        "ru": "Расходные материалы",
+        "en": "Consumables",
+        "uz": "Sarflanadigan materiallar",
+        "ko": "소모품"
+      },
+      "subcategories": [
+        {
+          "id": 801,
+          "name": {
+            "ru": "Картриджи для принтеров",
+            "en": "Printer Cartridges",
+            "uz": "Printer kartrijlari",
+            "ko": "프린터 카트리지"
+          },
+          "brands": [
+            "HP",
+            "Canon",
+            "Epson",
+            "Brother",
+            "Xerox",
+            "Kyocera"
+          ]
+        },
+        {
+          "id": 802,
+          "name": {
+            "ru": "Бумага для печати",
+            "en": "Printing Paper",
+            "uz": "Bosish uchun qog'oz",
+            "ko": "인쇄용지"
+          },
+          "brands": [
+            "Xerox",
+            "HP",
+            "Canon",
+            "SvetoCopy"
+          ]
+        },
+        {
+          "id": 803,
+          "name": {
+            "ru": "Этикетки",
+            "en": "Labels",
+            "uz": "Yorliqlar",
+            "ko": "라벨"
+          },
+          "brands": [
+            "Avery",
+            "Zebra",
+            "Brady"
+          ]
+        },
+        {
+          "id": 804,
+          "name": {
+            "ru": "CD/DVD диски",
+            "en": "CD/DVD Discs",
+            "uz": "CD/DVD disklar",
+            "ko": "CD/DVD 디스크"
+          },
+          "brands": [
+            "Verbatim",
+            "Sony",
+            "TDK"
+          ]
+        },
+        {
+          "id": 805,
+          "name": {
+            "ru": "USB-накопители",
+            "en": "USB Flash Drives",
+            "uz": "USB-nakopitellar",
+            "ko": "USB 플래시 드라이브"
+          },
+          "brands": [
+            "Kingston",
+            "SanDisk",
+            "Transcend",
+            "Samsung"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": {
+        "ru": "Электроника и аксессуары",
+        "en": "Electronics and Accessories",
+        "uz": "Elektronika va aksessuarlar",
+        "ko": "전자제품 및 액세서리"
+      },
+      "subcategories": [
+        {
+          "id": 901,
+          "name": {
+            "ru": "Кабели и переходники",
+            "en": "Cables and Adapters",
+            "uz": "Kabellar va o'tkazgichlar",
+            "ko": "케이블 및 어댑터"
+          },
+          "brands": [
+            "Belkin",
+            "Anker",
+            "AmazonBasics",
+            "UGREEN"
+          ]
+        },
+        {
+          "id": 902,
+          "name": {
+            "ru": "Зарядные устройства",
+            "en": "Chargers",
+            "uz": "Zaryad qurilmalari",
+            "ko": "충전기"
+          },
+          "brands": [
+            "Anker",
+            "Belkin",
+            "Samsung",
+            "Apple"
+          ]
+        },
+        {
+          "id": 903,
+          "name": {
+            "ru": "Источники бесперебойного питания",
+            "en": "Uninterruptible Power Supplies",
+            "uz": "Uzluksiz quvvat manbalarları",
+            "ko": "무정전 전원 공급장치"
+          },
+          "brands": [
+            "APC",
+            "CyberPower",
+            "Eaton",
+            "Powercom"
+          ]
+        },
+        {
+          "id": 904,
+          "name": {
+            "ru": "Сетевые фильтры",
+            "en": "Power Strips",
+            "uz": "Tarmoq filtrlari",
+            "ko": "파워 스트립"
+          },
+          "brands": [
+            "APC",
+            "Belkin",
+            "Monster"
+          ]
+        },
+        {
+          "id": 905,
+          "name": {
+            "ru": "Батарейки и аккумуляторы",
+            "en": "Batteries and Accumulators",
+            "uz": "Batareyalar va akkumulyatorlar",
+            "ko": "배터리 및 축전지"
+          },
+          "brands": [
+            "Duracell",
+            "Energizer",
+            "Panasonic",
+            "Varta"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": {
+        "ru": "Инструменты и оборудование",
+        "en": "Tools and Equipment",
+        "uz": "Asboblar va uskunalar",
+        "ko": "도구 및 장비"
+      },
+      "subcategories": [
+        {
+          "id": 1001,
+          "name": {
+            "ru": "Отвертки и инструменты",
+            "en": "Screwdrivers and Tools",
+            "uz": "Buragichlar va asboblar",
+            "ko": "드라이버 및 도구"
+          },
+          "brands": [
+            "Wera",
+            "Klein Tools",
+            "Wiha",
+            "Stanley"
+          ]
+        },
+        {
+          "id": 1002,
+          "name": {
+            "ru": "Измерительные приборы",
+            "en": "Measuring Instruments",
+            "uz": "O'lchash asboblari",
+            "ko": "측정 기기"
+          },
+          "brands": [
+            "Fluke",
+            "Keysight",
+            "Tektronix",
+            "Rohde & Schwarz"
+          ]
+        },
+        {
+          "id": 1003,
+          "name": {
+            "ru": "Паяльное оборудование",
+            "en": "Soldering Equipment",
+            "uz": "Lehimlash uskunalari",
+            "ko": "납땜 장비"
+          },
+          "brands": [
+            "Hakko",
+            "Weller",
+            "JBC",
+            "Metcal"
+          ]
+        },
+        {
+          "id": 1004,
+          "name": {
+            "ru": "Кабель-тестеры",
+            "en": "Cable Testers",
+            "uz": "Kabel-testerlar",
+            "ko": "케이블 테스터"
+          },
+          "brands": [
+            "Fluke Networks",
+            "Klein Tools",
+            "Ideal"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": {
+        "ru": "Мебель",
+        "en": "Furniture",
+        "uz": "Mebel",
+        "ko": "가구"
+      },
+      "subcategories": [
+        {
+          "id": 1101,
+          "name": {
+            "ru": "Офисные столы",
+            "en": "Office Desks",
+            "uz": "Ofis stollari",
+            "ko": "사무용 책상"
+          },
+          "brands": [
+            "IKEA",
+            "Herman Miller",
+            "Steelcase",
+            "HON",
+            "Humanscale"
+          ]
+        },
+        {
+          "id": 1102,
+          "name": {
+            "ru": "Офисные кресла",
+            "en": "Office Chairs",
+            "uz": "Ofis o'rindiqlari",
+            "ko": "사무용 의자"
+          },
+          "brands": [
+            "Herman Miller",
+            "Steelcase",
+            "Humanscale",
+            "IKEA",
+            "Aeron"
+          ]
+        },
+        {
+          "id": 1103,
+          "name": {
+            "ru": "Офисные шкафы",
+            "en": "Office Cabinets",
+            "uz": "Ofis shkaflar",
+            "ko": "사무용 캐비닛"
+          },
+          "brands": [
+            "IKEA",
+            "Steelcase",
+            "Herman Miller",
+            "HON"
+          ]
+        },
+        {
+          "id": 1104,
+          "name": {
+            "ru": "Офисные тумбочки",
+            "en": "Office Pedestals",
+            "uz": "Ofis tumbochkalari",
+            "ko": "사무용 수납함"
+          },
+          "brands": [
+            "IKEA",
+            "Steelcase",
+            "Herman Miller"
+          ]
+        },
+        {
+          "id": 1105,
+          "name": {
+            "ru": "Стеллажи",
+            "en": "Shelving",
+            "uz": "Javonlar",
+            "ko": "선반"
+          },
+          "brands": [
+            "IKEA",
+            "Elfa",
+            "Gladiator"
+          ]
+        },
+        {
+          "id": 1106,
+          "name": {
+            "ru": "Конференц-столы",
+            "en": "Conference Tables",
+            "uz": "Konferens stollari",
+            "ko": "회의용 테이블"
+          },
+          "brands": [
+            "Herman Miller",
+            "Steelcase",
+            "HON"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": {
+        "ru": "Канцтовары",
+        "en": "Office Supplies",
+        "uz": "Kantselyariya tovarlari",
+        "ko": "사무용품"
+      },
+      "subcategories": [
+        {
+          "id": 1201,
+          "name": {
+            "ru": "Органайзеры",
+            "en": "Organizers",
+            "uz": "Organayzerlar",
+            "ko": "정리함"
+          },
+          "brands": [
+            "Fellowes",
+            "Rubbermaid",
+            "Sterilite"
+          ]
+        },
+        {
+          "id": 1202,
+          "name": {
+            "ru": "Лотки для хранения",
+            "en": "Storage Trays",
+            "uz": "Saqlash lotkalari",
+            "ko": "보관 트레이"
+          },
+          "brands": [
+            "Rubbermaid",
+            "Sterilite",
+            "IRIS"
+          ]
+        },
+        {
+          "id": 1203,
+          "name": {
+            "ru": "Ежедневники",
+            "en": "Planners",
+            "uz": "Kundaliklar",
+            "ko": "다이어리"
+          },
+          "brands": [
+            "Moleskine",
+            "Leuchtturm1917",
+            "Rhodia"
+          ]
+        },
+        {
+          "id": 1204,
+          "name": {
+            "ru": "Степлеры и скобы",
+            "en": "Staplers and Staples",
+            "uz": "Steplerlar va skobalar",
+            "ko": "스테이플러 및 스테이플"
+          },
+          "brands": [
+            "Swingline",
+            "Bostitch",
+            "Stanley"
+          ]
+        },
+        {
+          "id": 1205,
+          "name": {
+            "ru": "Канцелярские ножи",
+            "en": "Utility Knives",
+            "uz": "Kantselyariya pichoqlari",
+            "ko": "커터칼"
+          },
+          "brands": [
+            "OLFA",
+            "X-Acto",
+            "Stanley"
+          ]
+        },
+        {
+          "id": 1206,
+          "name": {
+            "ru": "Скрепки и зажимы",
+            "en": "Paper Clips and Clamps",
+            "uz": "Qog'oz qisqichlari va siqgichlar",
+            "ko": "클립 및 집게"
+          },
+          "brands": [
+            "Staples",
+            "Office Depot",
+            "Acco"
+          ]
+        },
+        {
+          "id": 1207,
+          "name": {
+            "ru": "Доски",
+            "en": "Boards",
+            "uz": "Doskalar",
+            "ko": "보드"
+          },
+          "brands": [
+            "Quartet",
+            "Ghent",
+            "Bi-Office"
+          ]
+        },
+        {
+          "id": 1208,
+          "name": {
+            "ru": "Бейджи",
+            "en": "Name Badges",
+            "uz": "Beydjlar",
+            "ko": "명찰"
+          },
+          "brands": [
+            "Avery",
+            "C-Line",
+            "Brady"
+          ]
+        },
+        {
+          "id": 1209,
+          "name": {
+            "ru": "Папки",
+            "en": "Folders",
+            "uz": "Papkalar",
+            "ko": "폴더"
+          },
+          "brands": [
+            "Pendaflex",
+            "Smead",
+            "Oxford"
+          ]
+        },
+        {
+          "id": 1210,
+          "name": {
+            "ru": "Ручки",
+            "en": "Pens",
+            "uz": "Ruchkalar",
+            "ko": "펜"
+          },
+          "brands": [
+            "Bic",
+            "Pilot",
+            "Uniball",
+            "Parker"
+          ]
+        },
+        {
+          "id": 1211,
+          "name": {
+            "ru": "Карандаши",
+            "en": "Pencils",
+            "uz": "Qalamlar",
+            "ko": "연필"
+          },
+          "brands": [
+            "Dixon",
+            "Staedtler",
+            "Faber-Castell"
+          ]
+        },
+        {
+          "id": 1212,
+          "name": {
+            "ru": "Маркеры",
+            "en": "Markers",
+            "uz": "Markerlar",
+            "ko": "마커"
+          },
+          "brands": [
+            "Sharpie",
+            "Expo",
+            "Crayola"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": {
+        "ru": "Чистота и гигиена",
+        "en": "Cleanliness and Hygiene",
+        "uz": "Tozalik va gigiena",
+        "ko": "청결 및 위생"
+      },
+      "subcategories": [
+        {
+          "id": 1301,
+          "name": {
+            "ru": "Бумажные салфетки",
+            "en": "Paper Napkins",
+            "uz": "Qog'oz salfetkalar",
+            "ko": "종이 냅킨"
+          },
+          "brands": [
+            "Kleenex",
+            "Scott",
+            "Puffs"
+          ]
+        },
+        {
+          "id": 1302,
+          "name": {
+            "ru": "Влажные салфетки",
+            "en": "Wet Wipes",
+            "uz": "Nam salfetkalar",
+            "ko": "물티슈"
+          },
+          "brands": [
+            "Huggies",
+            "Pampers",
+            "WetOnes"
+          ]
+        },
+        {
+          "id": 1303,
+          "name": {
+            "ru": "Универсальные салфетки",
+            "en": "Universal Wipes",
+            "uz": "Universal salfetkalar",
+            "ko": "다목적 물티슈"
+          },
+          "brands": [
+            "Lysol",
+            "Clorox",
+            "Method"
+          ]
+        },
+        {
+          "id": 1304,
+          "name": {
+            "ru": "Бумажные полотенца",
+            "en": "Paper Towels",
+            "uz": "Qog'oz sochiqlar",
+            "ko": "종이 타월"
+          },
+          "brands": [
+            "Bounty",
+            "Scott",
+            "Viva"
+          ]
+        },
+        {
+          "id": 1305,
+          "name": {
+            "ru": "Туалетная бумага",
+            "en": "Toilet Paper",
+            "uz": "Tualet qog'ozi",
+            "ko": "화장지"
+          },
+          "brands": [
+            "Charmin",
+            "Scott",
+            "Angel Soft"
+          ]
+        },
+        {
+          "id": 1306,
+          "name": {
+            "ru": "Мыло и дезинфекторы",
+            "en": "Soap and Disinfectants",
+            "uz": "Sovun va dezinfektorlar",
+            "ko": "비누 및 소독제"
+          },
+          "brands": [
+            "Purell",
+            "Gojo",
+            "Dial",
+            "Lysol"
+          ]
+        },
+        {
+          "id": 1307,
+          "name": {
+            "ru": "Мусорные пакеты",
+            "en": "Garbage Bags",
+            "uz": "Axlat paketlari",
+            "ko": "쓰레기봉투"
+          },
+          "brands": [
+            "Glad",
+            "Hefty",
+            "Simplehuman"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": {
+        "ru": "Бытовая техника",
+        "en": "Home Appliances",
+        "uz": "Maishiy texnika",
+        "ko": "가전제품"
+      },
+      "subcategories": [
+        {
+          "id": 1401,
+          "name": {
+            "ru": "Микроволновые печи",
+            "en": "Microwave Ovens",
+            "uz": "Mikroto'lqinli pechlar",
+            "ko": "전자레인지"
+          },
+          "brands": [
+            "Samsung",
+            "LG",
+            "Panasonic",
+            "Sharp"
+          ]
+        },
+        {
+          "id": 1402,
+          "name": {
+            "ru": "Холодильники",
+            "en": "Refrigerators",
+            "uz": "Muzlatgichlar",
+            "ko": "냉장고"
+          },
+          "brands": [
+            "Samsung",
+            "LG",
+            "Whirlpool",
+            "GE"
+          ]
+        },
+        {
+          "id": 1403,
+          "name": {
+            "ru": "Чайники и кофеварки",
+            "en": "Kettles and Coffee Makers",
+            "uz": "Choynaklar va qahva qaynatgichlar",
+            "ko": "주전자 및 커피메이커"
+          },
+          "brands": [
+            "Keurig",
+            "Nespresso",
+            "Hamilton Beach",
+            "Cuisinart"
+          ]
+        },
+        {
+          "id": 1404,
+          "name": {
+            "ru": "Пылесосы",
+            "en": "Vacuum Cleaners",
+            "uz": "Changyutgichlar",
+            "ko": "청소기"
+          },
+          "brands": [
+            "Dyson",
+            "Shark",
+            "Bissell",
+            "Hoover"
+          ]
+        },
+        {
+          "id": 1405,
+          "name": {
+            "ru": "Кулеры для воды",
+            "en": "Water Coolers",
+            "uz": "Suv sovutgichlari",
+            "ko": "정수기"
+          },
+          "brands": [
+            "Primo",
+            "Avalon",
+            "Igloo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": {
+        "ru": "Освещение",
+        "en": "Lighting",
+        "uz": "Yoritish",
+        "ko": "조명"
+      },
+      "subcategories": [
+        {
+          "id": 1501,
+          "name": {
+            "ru": "Светодиодные лампы",
+            "en": "LED Bulbs",
+            "uz": "LED lampalar",
+            "ko": "LED 전구"
+          },
+          "brands": [
+            "Philips",
+            "GE",
+            "Cree",
+            "Osram"
+          ]
+        },
+        {
+          "id": 1502,
+          "name": {
+            "ru": "Настольные лампы",
+            "en": "Table Lamps",
+            "uz": "Stol lampalari",
+            "ko": "테이블 램프"
+          },
+          "brands": [
+            "Philips",
+            "IKEA",
+            "TaoTronics"
+          ]
+        },
+        {
+          "id": 1503,
+          "name": {
+            "ru": "Потолочные светильники",
+            "en": "Ceiling Lights",
+            "uz": "Shift chiroqlari",
+            "ko": "천장 조명"
+          },
+          "brands": [
+            "Philips",
+            "GE",
+            "Lithonia"
+          ]
+        },
+        {
+          "id": 1504,
+          "name": {
+            "ru": "Аварийное освещение",
+            "en": "Emergency Lighting",
+            "uz": "Favqulodda yoritish",
+            "ko": "비상 조명"
+          },
+          "brands": [
+            "Philips",
+            "Lithonia",
+            "Emergency Lighting"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": {
+        "ru": "Системы контроля доступа",
+        "en": "Access Control Systems",
+        "uz": "Kirish nazorati tizimlari",
+        "ko": "출입 통제 시스템"
+      },
+      "subcategories": [
+        {
+          "id": 1601,
+          "name": {
+            "ru": "Карт-ридеры",
+            "en": "Card Readers",
+            "uz": "Karta o'quvchilar",
+            "ko": "카드 리더"
+          },
+          "brands": [
+            "HID Global",
+            "Impinj",
+            "Identiv"
+          ]
+        },
+        {
+          "id": 1602,
+          "name": {
+            "ru": "Электронные замки",
+            "en": "Electronic Locks",
+            "uz": "Elektron qulflar",
+            "ko": "전자 잠금장치"
+          },
+          "brands": [
+            "Yale",
+            "August",
+            "Schlage"
+          ]
+        },
+        {
+          "id": 1603,
+          "name": {
+            "ru": "Турникеты",
+            "en": "Turnstiles",
+            "uz": "Turniketlar",
+            "ko": "회전문"
+          },
+          "brands": [
+            "Boon Edam",
+            "Kaba",
+            "Alvarado"
+          ]
+        },
+        {
+          "id": 1604,
+          "name": {
+            "ru": "Домофоны",
+            "en": "Intercoms",
+            "uz": "Domofonlar",
+            "ko": "인터폰"
+          },
+          "brands": [
+            "Aiphone",
+            "Comelit",
+            "Fermax"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": {
+        "ru": "Климатическое оборудование",
+        "en": "Climate Equipment",
+        "uz": "Iqlim uskunalari",
+        "ko": "공조 장비"
+      },
+      "subcategories": [
+        {
+          "id": 1701,
+          "name": {
+            "ru": "Кондиционеры",
+            "en": "Air Conditioners",
+            "uz": "Konditsionerlar",
+            "ko": "에어컨"
+          },
+          "brands": [
+            "Daikin",
+            "Mitsubishi",
+            "LG",
+            "Samsung"
+          ]
+        },
+        {
+          "id": 1702,
+          "name": {
+            "ru": "Вентиляторы",
+            "en": "Fans",
+            "uz": "Ventilyatorlar",
+            "ko": "선풍기"
+          },
+          "brands": [
+            "Dyson",
+            "Lasko",
+            "Honeywell"
+          ]
+        },
+        {
+          "id": 1703,
+          "name": {
+            "ru": "Обогреватели",
+            "en": "Heaters",
+            "uz": "Isitgichlar",
+            "ko": "히터"
+          },
+          "brands": [
+            "Dyson",
+            "Lasko",
+            "DeLonghi"
+          ]
+        },
+        {
+          "id": 1704,
+          "name": {
+            "ru": "Увлажнители воздуха",
+            "en": "Air Humidifiers",
+            "uz": "Havo namlash moslamalari",
+            "ko": "가습기"
+          },
+          "brands": [
+            "Honeywell",
+            "Levoit",
+            "Vicks"
+          ]
+        }
+      ]
+    }
+  ]
+}

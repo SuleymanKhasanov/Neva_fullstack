@@ -1,45 +1,45 @@
-FROM node:20-alpine
+# backend/Dockerfile
+FROM node:18-alpine
 
+# Установка переменных окружения
+ENV NODE_ENV=development
+ENV PORT=3001
+
+# Создание рабочей директории
 WORKDIR /app
 
-# Установить системные зависимости для Sharp
+# Установка системных зависимостей
 RUN apk add --no-cache \
-    libc6-compat \
-    vips-dev \
-    python3 \
-    make \
-    g++
+    bash \
+    curl \
+    netcat-openbsd \
+    postgresql-client
 
-# Копируем корневой package.json и yarn.lock для Yarn Workspaces
-COPY package.json yarn.lock ./
-COPY backend/package.json ./backend/package.json
+# Копирование файлов зависимостей
+COPY package*.json ./
+COPY tsconfig.json ./
 
-# Устанавливаем зависимости для всех рабочих пространств
-RUN yarn install --frozen-lockfile
+# Установка зависимостей
+RUN npm ci
 
-# Копируем весь проект
+# Копирование исходного кода
 COPY . .
 
-# Переходим в backend и генерируем Prisma Client
-WORKDIR /app/backend
+# Копирование схемы Prisma
+COPY prisma ./prisma
 
-# Генерируем Prisma Client
+# Генерация Prisma клиента
 RUN npx prisma generate
 
-# Создаем директории для изображений
-RUN mkdir -p /app/backend/public/images && \
-    mkdir -p /app/backend/public/thumbnails && \
-    chmod 755 /app/backend/public/images && \
-    chmod 755 /app/backend/public/thumbnails
+# Создание директории для логов
+RUN mkdir -p /app/logs
 
-# Копируем сгенерированные файлы Prisma Client в node_modules/.prisma/client
-RUN mkdir -p /app/node_modules/.prisma/client && \
-    cp -r /app/backend/generated/prisma/client/* /app/node_modules/.prisma/client/ || echo "Prisma client copy failed, will generate at runtime"
+# Установка правильных прав доступа
+RUN chown -R node:node /app
+USER node
 
-EXPOSE 3000
+# Открытие порта
+EXPOSE 3001
 
-# Healthcheck для проверки работы сервера
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
-
-CMD ["yarn", "start:dev"]
+# Команда по умолчанию (будет переопределена в docker-compose)
+CMD ["npm", "run", "dev"]
