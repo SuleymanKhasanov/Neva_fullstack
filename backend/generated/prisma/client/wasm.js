@@ -151,6 +151,22 @@ exports.Prisma.CategoryTranslationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SubcategoryScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SubcategoryTranslationScalarFieldEnum = {
+  id: 'id',
+  subcategoryId: 'subcategoryId',
+  locale: 'locale',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.CategoryBrandScalarFieldEnum = {
   id: 'id',
   categoryId: 'categoryId',
@@ -163,6 +179,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   brandId: 'brandId',
   categoryId: 'categoryId',
+  subcategoryId: 'subcategoryId',
   section: 'section',
   slug: 'slug',
   isActive: 'isActive',
@@ -246,6 +263,8 @@ exports.Prisma.ModelName = {
   BrandTranslation: 'BrandTranslation',
   Category: 'Category',
   CategoryTranslation: 'CategoryTranslation',
+  Subcategory: 'Subcategory',
+  SubcategoryTranslation: 'SubcategoryTranslation',
   CategoryBrand: 'CategoryBrand',
   Product: 'Product',
   ProductTranslation: 'ProductTranslation',
