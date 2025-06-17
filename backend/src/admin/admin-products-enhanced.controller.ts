@@ -1,4 +1,4 @@
-// 🔒 backend/src/admin/admin-products-enhanced.controller.ts
+// backend/src/admin/admin-products-enhanced.controller.ts
 import {
   Controller,
   Get,
@@ -25,6 +25,7 @@ import {
   UpdateProductEnhancedDto,
 } from './dto/admin-product-enhanced.dto';
 import { ImageService } from './image.service';
+import type { AdminUser, AdminProduct } from './types/shared.types';
 
 @ApiTags('Admin - Products Enhanced')
 @Controller('admin/products-enhanced')
@@ -46,30 +47,30 @@ export class AdminProductsEnhancedController {
     @Query('categoryId') categoryId?: number,
     @Query('subcategoryId') subcategoryId?: number,
     @Query('brandId') brandId?: number,
-    @CurrentUser() user?: any
+    @CurrentUser() user?: AdminUser
   ) {
-    this.logger.log(`Admin ${user.username} requesting products with filters`);
+    this.logger.log(`Admin ${user?.username} requesting products with filters`);
 
     const products = await this.adminProductsService.findAll();
 
-    // Фильтруем на стороне приложения (для простоты)
-    let filteredProducts = products;
+    // Фильтруем на стороне приложения с правильной типизацией
+    let filteredProducts: AdminProduct[] = products;
 
     if (categoryId) {
       filteredProducts = filteredProducts.filter(
-        (p) => p.categoryId === parseInt(String(categoryId))
+        (p: AdminProduct) => p.categoryId === parseInt(String(categoryId))
       );
     }
 
     if (subcategoryId) {
       filteredProducts = filteredProducts.filter(
-        (p) => p.subcategoryId === parseInt(String(subcategoryId))
+        (p: AdminProduct) => p.subcategoryId === parseInt(String(subcategoryId))
       );
     }
 
     if (brandId) {
       filteredProducts = filteredProducts.filter(
-        (p) => p.brandId === parseInt(String(brandId))
+        (p: AdminProduct) => p.brandId === parseInt(String(brandId))
       );
     }
 
@@ -89,7 +90,7 @@ export class AdminProductsEnhancedController {
   @ApiOperation({ summary: 'Получить продукт по ID с субкатегорией' })
   async getProduct(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(`Admin ${user.username} requesting product ${id}`);
 
@@ -116,7 +117,7 @@ export class AdminProductsEnhancedController {
   })
   async createProduct(
     @Body() createProductDto: CreateProductEnhancedDto,
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(
       `Admin ${user.username} creating product: ${createProductDto.translations[0]?.name} (subcategory: ${createProductDto.subcategoryId || 'none'})`
@@ -137,7 +138,7 @@ export class AdminProductsEnhancedController {
   async updateProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductEnhancedDto,
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(`Admin ${user.username} updating product ${id}`);
 
@@ -158,7 +159,7 @@ export class AdminProductsEnhancedController {
   @ApiOperation({ summary: 'Удалить продукт' })
   async deleteProduct(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(`Admin ${user.username} deleting product ${id}`);
     await this.adminProductsService.remove(id);
@@ -173,7 +174,7 @@ export class AdminProductsEnhancedController {
   async uploadImages(
     @Param('id', ParseIntPipe) id: number,
     @UploadedFiles() files: Express.Multer.File[],
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(
       `Admin ${user.username} uploading ${files.length} images for product ${id}`
@@ -196,7 +197,7 @@ export class AdminProductsEnhancedController {
   async deleteImage(
     @Param('id', ParseIntPipe) productId: number,
     @Param('imageId', ParseIntPipe) imageId: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(
       `Admin ${user.username} deleting image ${imageId} from product ${productId}`
@@ -211,7 +212,7 @@ export class AdminProductsEnhancedController {
   @ApiOperation({ summary: 'Получить продукты по категории' })
   async getProductsByCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(
       `Admin ${user.username} requesting products for category ${categoryId}`
@@ -219,7 +220,7 @@ export class AdminProductsEnhancedController {
 
     const products = await this.adminProductsService.findAll();
     const filteredProducts = products.filter(
-      (p) => p.categoryId === categoryId
+      (p: AdminProduct) => p.categoryId === categoryId
     );
 
     return {
@@ -234,7 +235,7 @@ export class AdminProductsEnhancedController {
   @ApiOperation({ summary: 'Получить продукты по субкатегории' })
   async getProductsBySubcategory(
     @Param('subcategoryId', ParseIntPipe) subcategoryId: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: AdminUser
   ) {
     this.logger.log(
       `Admin ${user.username} requesting products for subcategory ${subcategoryId}`
@@ -242,7 +243,7 @@ export class AdminProductsEnhancedController {
 
     const products = await this.adminProductsService.findAll();
     const filteredProducts = products.filter(
-      (p) => p.subcategoryId === subcategoryId
+      (p: AdminProduct) => p.subcategoryId === subcategoryId
     );
 
     return {

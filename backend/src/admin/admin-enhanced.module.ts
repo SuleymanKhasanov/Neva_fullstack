@@ -1,4 +1,4 @@
-// 🔒 backend/src/admin/admin-enhanced.module.ts
+// backend/src/admin/admin-enhanced.module.ts
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 
@@ -14,9 +14,9 @@ import { AdminProductsEnhancedService } from './admin-products-enhanced.service'
 import { AdminProductsController } from './admin-products.controller';
 import { AdminProductsService } from './admin-products.service';
 import { CacheAdminController } from './cache-admin.controller';
-import { ImageService } from './image.service';
 
-// 🆕 Новые контроллеры и сервисы для субкатегорий
+// Сервисы
+import { ImageService } from './image.service';
 
 @Module({
   imports: [

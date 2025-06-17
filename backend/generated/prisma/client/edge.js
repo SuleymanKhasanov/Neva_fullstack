@@ -255,7 +255,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/macbook/Web/neva_fullstack/backend/generated/prisma/client",
+      "value": "/app/backend/generated/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -264,12 +264,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "linux-musl-arm64-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/macbook/Web/neva_fullstack/backend/prisma/schema.prisma",
+    "sourceFilePath": "/app/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -283,6 +283,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

@@ -25,7 +25,7 @@
     "migrate:create": "prisma migrate dev",
     "migrate:apply": "prisma migrate deploy",
     "migrate:reset": "prisma migrate reset",
-    "db:seed": "ts-node scripts/seed-data.ts",
+    "db:seed": "ts-node scripts/seed-categories.ts",
     "db:seed:categories": "ts-node scripts/seed-categories.ts",
     "db:seed:all": "npm run db:seed:categories && npm run db:seed",
     "db:setup": "npm run prisma:generate && npm run migrate:apply && npm run db:seed:all",
