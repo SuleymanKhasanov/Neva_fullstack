@@ -59,9 +59,10 @@ model Category {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Связи
-  translations   CategoryTranslation[]
-  products       Product[]
-  categoryBrands CategoryBrand[]
+  translations       CategoryTranslation[]
+  subcategories      Subcategory[]
+  products           Product[]
+  categoryBrands     CategoryBrand[]
 
   @@map("categories")
 }
@@ -82,6 +83,37 @@ model CategoryTranslation {
   @@map("category_translations")
 }
 
+// 🆕 Основная таблица субкатегорий
+model Subcategory {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  category     Category                  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  translations SubcategoryTranslation[]
+  products     Product[]
+
+  @@map("subcategories")
+}
+
+// 🆕 Переводы субкатегорий
+model SubcategoryTranslation {
+  id            Int      @id @default(autoincrement())
+  subcategoryId Int      @map("subcategory_id")
+  locale        Locale
+  name          String   @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  subcategory Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+
+  @@unique([subcategoryId, locale])
+  @@map("subcategory_translations")
+}
+
 // Many-to-many связь категорий и брендов
 model CategoryBrand {
   id         Int      @id @default(autoincrement())
@@ -100,18 +132,20 @@ model CategoryBrand {
 
 // Основная таблица продуктов
 model Product {
-  id         Int      @id @default(autoincrement())
-  brandId    Int?     @map("brand_id")
-  categoryId Int      @map("category_id")
-  section    Section
-  slug       String?  @db.VarChar(255)
-  isActive   Boolean  @default(true) @map("is_active")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id            Int      @id @default(autoincrement())
+  brandId       Int?     @map("brand_id")
+  categoryId    Int      @map("category_id")
+  subcategoryId Int?     @map("subcategory_id") // 🆕 Опциональная субкатегория
+  section       Section
+  slug          String?  @db.VarChar(255)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   // Связи
   brand           Brand?                   @relation(fields: [brandId], references: [id], onDelete: SetNull)
   category        Category                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategory     Subcategory?             @relation(fields: [subcategoryId], references: [id], onDelete: SetNull) // 🆕
   translations    ProductTranslation[]
   images          ProductImage[]
   specifications  ProductSpecification[]
