@@ -1,43 +1,42 @@
-// 🔒 backend/src/admin/admin.module.ts
+// src/admin/admin.module.ts (исправленный с правильными импортами)
 import { Module } from '@nestjs/common';
-import { MulterModule } from '@nestjs/platform-express';
 
-import { PrismaService } from '../../prisma/prisma.service';
-import { CacheService } from '../common/cache.service';
-
-import { AdminProductsController } from './admin-products.controller';
-import { AdminProductsService } from './admin-products.service';
-import { AdminCategoriesController } from './admin-categories.controller';
-import { AdminBrandsController } from './admin-brands.controller';
-import { ImageService } from './image.service';
-import { CacheAdminController } from './cache-admin.controller';
+import { AdminBrandsController } from './brands/admin-brands.controller';
+import { AdminBrandsService } from './brands/admin-brands.service';
+import { AdminCategoriesController } from './categories/admin-categories.controller';
+import { AdminCategoriesService } from './categories/admin-categories.service';
+import { AdminProductsController } from './products/admin-products.controller';
+import { AdminProductsService } from './products/admin-products.service';
+import { AdminSystemController } from './system/admin-system.controller';
+import { AdminSystemService } from './system/admin-system.service';
 
 @Module({
-  imports: [
-    MulterModule.register({
-      limits: { fileSize: 10 * 1024 * 1024, files: 10 },
-      fileFilter: (req, file, callback) => {
-        const allowedTypes = [
-          'image/jpeg',
-          'image/jpg',
-          'image/png',
-          'image/webp',
-        ];
-        if (allowedTypes.includes(file.mimetype)) {
-          callback(null, true);
-        } else {
-          callback(new Error(`Unsupported file type: ${file.mimetype}`), false);
-        }
-      },
-    }),
-  ],
   controllers: [
     AdminProductsController,
     AdminCategoriesController,
     AdminBrandsController,
-    CacheAdminController,
+    AdminSystemController,
   ],
-  providers: [AdminProductsService, ImageService, PrismaService, CacheService],
-  exports: [AdminProductsService, ImageService],
+  providers: [
+    AdminProductsService,
+    AdminCategoriesService,
+    AdminBrandsService,
+    AdminSystemService,
+  ],
+  exports: [
+    AdminProductsService,
+    AdminCategoriesService,
+    AdminBrandsService,
+    AdminSystemService,
+  ],
 })
-export class AdminModule {}
+export class AdminModule {
+  constructor() {
+    console.log('🔒 AdminModule initialized (Protected endpoints)');
+    console.log('📋 Protected admin endpoints:');
+    console.log('   📦 /admin/products/*           - Управление продуктами');
+    console.log('   🏷️ /admin/categories/*         - Управление категориями');
+    console.log('   🏢 /admin/brands/*             - Управление брендами');
+    console.log('   🔧 /admin/system/*             - Системные операции');
+  }
+}

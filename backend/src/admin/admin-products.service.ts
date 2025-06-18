@@ -5,8 +5,10 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { CacheService } from '../common/cache.service';
+
+import { CacheService } from '../common/cache/cache.service';
+import { PrismaService } from '../common/database/prisma.service';
+
 import { CreateProductDto, UpdateProductDto } from './dto/admin-product.dto';
 
 @Injectable()
@@ -125,6 +127,7 @@ export class AdminProductsService {
     await this.invalidateCache();
 
     this.logger.log(`Created product ID: ${result.id}`);
+
     return this.findOne(result.id);
   }
 
@@ -203,6 +206,7 @@ export class AdminProductsService {
 
     await this.invalidateCache();
     this.logger.log(`Updated product ID: ${id}`);
+
     return this.findOne(id);
   }
 
@@ -305,6 +309,7 @@ export class AdminProductsService {
 
   private getImageUrl(imagePath: string): string {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
     return `${baseUrl}/public/images/${imagePath}`;
   }
 

@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import type { PrismaClient } from '@prisma/client';
 
-import { PrismaService } from '../../prisma/prisma.service';
-import { CacheService } from '../common/cache.service';
+import { CacheService } from '../common/cache/cache.service';
+import { PrismaService } from '../common/database/prisma.service';
 
 import {
   CreateProductEnhancedDto,
