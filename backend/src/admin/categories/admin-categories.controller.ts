@@ -11,9 +11,9 @@ import {
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Section, Locale } from '@prisma/client';
 
-import { Auth } from '../auth/decorators/auth.decorator';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { Auth } from '../../auth/decorators/auth.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 interface CreateCategoryDto {
   section: Section;
@@ -36,6 +36,7 @@ export class AdminCategoriesController {
       include: { translations: true },
       orderBy: { createdAt: 'desc' },
     });
+
     return categories.map((category) => ({
       id: category.id,
       section: category.section,
@@ -62,6 +63,7 @@ export class AdminCategoriesController {
       },
       include: { translations: true },
     });
+
     return { success: true, message: 'Категория создана', data: category };
   }
 }

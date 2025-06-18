@@ -57,6 +57,7 @@ export class ProductsService {
       if (cached) {
         console.log(`🎯 CACHE HIT for products: ${cacheKey}`);
         this.logger.log(`🎯 CACHE HIT for products: ${cacheKey}`);
+
         return cached;
       }
 
@@ -75,6 +76,7 @@ export class ProductsService {
             const category = await this.prisma.category.findUnique({
               where: { id: categoryId },
             });
+
             return !!category;
           },
           { ttl: 600 } // 10 минут
@@ -82,6 +84,7 @@ export class ProductsService {
 
         if (!categoryExists) {
           this.logger.warn(`Category ID ${categoryId} not found`);
+
           return { products: [], hasNextPage: false, totalCount: 0 };
         }
       }
@@ -93,6 +96,7 @@ export class ProductsService {
             const brand = await this.prisma.brand.findUnique({
               where: { id: brandId },
             });
+
             return !!brand;
           },
           { ttl: 600 } // 10 минут
@@ -100,6 +104,7 @@ export class ProductsService {
 
         if (!brandExists) {
           this.logger.warn(`Brand ID ${brandId} not found`);
+
           return { products: [], hasNextPage: false, totalCount: 0 };
         }
       }

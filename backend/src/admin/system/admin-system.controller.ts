@@ -7,7 +7,8 @@ import {
   ApiQuery,
   ApiParam,
 } from '@nestjs/swagger';
-import { CacheService } from '../common/cache.service';
+
+import { CacheService } from '../../common/cache.service';
 
 @ApiTags('Admin - Cache')
 @Controller('admin/cache')
@@ -27,6 +28,7 @@ export class CacheAdminController {
   async clearAllCache() {
     try {
       await this.cacheService.reset();
+
       return {
         success: true,
         message: 'Кеш очищен успешно',
@@ -46,6 +48,7 @@ export class CacheAdminController {
   @ApiResponse({ status: 200, description: 'Ключ кеша удален' })
   async deleteCacheKey(@Param('key') key: string) {
     await this.cacheService.del(key);
+
     return {
       success: true,
       message: `Ключ кеша '${key}' удален успешно`,
@@ -62,6 +65,7 @@ export class CacheAdminController {
   @ApiResponse({ status: 200, description: 'Ключи кеша удалены по паттерну' })
   async deleteCacheByPattern(@Query('pattern') pattern: string) {
     const deletedCount = await this.cacheService.invalidateByPattern(pattern);
+
     return {
       success: true,
       message: `Удалено ${deletedCount} ключей кеша по паттерну '${pattern}'`,

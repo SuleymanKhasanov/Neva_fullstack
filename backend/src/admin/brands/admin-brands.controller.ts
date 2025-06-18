@@ -3,9 +3,9 @@ import { Controller, Get, Post, Body, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Locale } from '@prisma/client';
 
-import { Auth } from '../auth/decorators/auth.decorator';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { Auth } from '../../auth/decorators/auth.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 interface CreateBrandDto {
   translations: { locale: Locale; name: string }[];
@@ -27,6 +27,7 @@ export class AdminBrandsController {
       include: { translations: true },
       orderBy: { createdAt: 'desc' },
     });
+
     return brands.map((brand) => ({
       id: brand.id,
       createdAt: brand.createdAt,
@@ -49,6 +50,7 @@ export class AdminBrandsController {
       data: { translations: { create: createBrandDto.translations } },
       include: { translations: true },
     });
+
     return { success: true, message: 'Бренд создан', data: brand };
   }
 }
