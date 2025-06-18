@@ -1,275 +1,398 @@
+// src/public/public.service.ts
 import { Injectable, Logger } from '@nestjs/common';
-import { Section } from '@prisma/client';
+import { Section, Locale } from '@prisma/client';
 
-import { PrismaService } from '../../prisma/prisma.service';
-import { CacheService } from '../common/cache.service';
+import { CacheService } from '../common/cache/cache.service';
+import { PrismaService } from '../common/database/prisma.service';
 
-import { NevaProduct } from './dto/product.dto';
+// Интерфейсы для фильтров
+export interface ProductFilters {
+  locale: string;
+  section?: string;
+  categoryId?: number;
+  subcategoryId?: number;
+  brandId?: number;
+  page?: number;
+  limit?: number;
+  search?: string;
+}
 
-interface ProductsResult {
-  products: NevaProduct[];
-  hasNextPage: boolean;
-  totalCount: number;
+export interface CategoryFilters {
+  locale: string;
+  section?: string;
+  withSubcategories?: boolean;
+  withBrands?: boolean;
+}
+
+export interface BrandFilters {
+  locale: string;
+  section?: string;
+  categoryId?: number;
+}
+
+export interface SearchQuery {
+  query: string;
+  locale: string;
+  section?: string;
+  page?: number;
+  limit?: number;
+}
+
+// Интерфейсы для ответов
+export interface ProductsResponse {
+  products: any[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}
+
+export interface CategoriesResponse {
+  categories: any[];
+}
+
+export interface BrandsResponse {
+  brands: any[];
+}
+
+export interface SearchResponse {
+  products: any[];
+  categories: any[];
+  brands: any[];
+  pagination: any;
+  query: string;
+}
+
+export interface MenuResponse {
+  neva: any[];
+  xSolution: any[];
 }
 
 @Injectable()
-export class ProductsService {
-  private readonly logger = new Logger(ProductsService.name);
+export class PublicService {
+  private readonly logger = new Logger(PublicService.name);
 
   constructor(
-    private prisma: PrismaService,
-    private cacheService: CacheService
+    private readonly prisma: PrismaService,
+    private readonly cache: CacheService
   ) {}
 
-  async getProducts(params: {
-    locale: string;
-    page?: number;
-    limit?: number;
-    after?: string;
-    section?: Section;
-    categoryId?: number | string;
-    brandId?: number | string;
-  }): Promise<ProductsResult> {
-    const { locale, page = 1, limit = 20, after, section } = params;
-    const categoryId = params.categoryId
-      ? parseInt(String(params.categoryId), 10)
-      : undefined;
-    const brandId = params.brandId
-      ? parseInt(String(params.brandId), 10)
-      : undefined;
+  // ==================== ПРОДУКТЫ ====================
 
-    // Создаем уникальный ключ кеша
-    const cacheKey = this.buildProductsCacheKey({
+  async getProducts(filters: ProductFilters): Promise<ProductsResponse> {
+    const {
       locale,
-      page,
-      limit,
-      after,
       section,
       categoryId,
+      subcategoryId,
       brandId,
-    });
+      page = 1,
+      limit = 20,
+      search,
+    } = filters;
 
-    try {
-      console.log(`🔍 Checking cache for key: ${cacheKey}`);
+    const cacheKey = `products:${JSON.stringify(filters)}`;
 
-      // Пытаемся получить из кеша
-      const cached = await this.cacheService.get<ProductsResult>(cacheKey);
-      if (cached) {
-        console.log(`🎯 CACHE HIT for products: ${cacheKey}`);
-        this.logger.log(`🎯 CACHE HIT for products: ${cacheKey}`);
-
-        return cached;
-      }
-
-      console.log(
-        `🔍 CACHE MISS for products: ${cacheKey} - fetching from database`
-      );
-      this.logger.log(
-        `🔍 CACHE MISS for products: ${cacheKey} - fetching from database`
-      );
-
-      // Валидация categoryId и brandId с кешированием
-      if (categoryId && !isNaN(categoryId)) {
-        const categoryExists = await this.cacheService.getOrSet(
-          `category_exists:${categoryId}`,
-          async () => {
-            const category = await this.prisma.category.findUnique({
-              where: { id: categoryId },
-            });
-
-            return !!category;
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const where: any = {
+          isActive: true,
+          translations: {
+            some: { locale: locale as Locale },
           },
-          { ttl: 600 } // 10 минут
-        );
-
-        if (!categoryExists) {
-          this.logger.warn(`Category ID ${categoryId} not found`);
-
-          return { products: [], hasNextPage: false, totalCount: 0 };
-        }
-      }
-
-      if (brandId && !isNaN(brandId)) {
-        const brandExists = await this.cacheService.getOrSet(
-          `brand_exists:${brandId}`,
-          async () => {
-            const brand = await this.prisma.brand.findUnique({
-              where: { id: brandId },
-            });
-
-            return !!brand;
-          },
-          { ttl: 600 } // 10 минут
-        );
-
-        if (!brandExists) {
-          this.logger.warn(`Brand ID ${brandId} not found`);
-
-          return { products: [], hasNextPage: false, totalCount: 0 };
-        }
-      }
-
-      const afterId = after
-        ? parseInt(Buffer.from(after, 'base64').toString(), 10)
-        : undefined;
-
-      // Строим WHERE условие с учетом переводов
-      const where: any = {
-        isActive: true,
-        translations: {
-          some: {
-            locale: locale as any,
-          },
-        },
-        ...(section && { section }),
-        ...(categoryId && !isNaN(categoryId) && { categoryId }),
-        ...(brandId && !isNaN(brandId) && { brandId }),
-        ...(afterId && { id: { gt: afterId } }),
-      };
-
-      this.logger.log(
-        `Fetching products with filters: ${JSON.stringify(where)}`
-      );
-
-      const skip = afterId ? undefined : (page - 1) * limit;
-      const take = limit;
-
-      const startTime = Date.now();
-
-      // Параллельно выполняем запросы к БД
-      const [products, totalCount] = await Promise.all([
-        this.prisma.product.findMany({
-          where,
-          skip,
-          take,
-          orderBy: { id: 'asc' },
-          include: {
+          ...(section && { section: section as Section }),
+          ...(categoryId && { categoryId }),
+          ...(subcategoryId && { subcategoryId }),
+          ...(brandId && { brandId }),
+          ...(search && {
             translations: {
-              where: { locale: locale as any },
+              some: {
+                locale: locale as Locale,
+                OR: [
+                  { name: { contains: search, mode: 'insensitive' } },
+                  { description: { contains: search, mode: 'insensitive' } },
+                ],
+              },
             },
-            category: {
-              include: {
-                translations: {
-                  where: { locale: locale as any },
+          }),
+        };
+
+        const [products, total] = await Promise.all([
+          this.prisma.product.findMany({
+            where,
+            skip: (page - 1) * limit,
+            take: limit,
+            include: {
+              translations: {
+                where: { locale: locale as Locale },
+              },
+              brand: {
+                include: {
+                  translations: {
+                    where: { locale: locale as Locale },
+                  },
                 },
               },
+              category: {
+                include: {
+                  translations: {
+                    where: { locale: locale as Locale },
+                  },
+                },
+              },
+              subcategory: {
+                include: {
+                  translations: {
+                    where: { locale: locale as Locale },
+                  },
+                },
+              },
+              images: {
+                where: { isPrimary: true },
+                take: 1,
+              },
+            },
+            orderBy: { id: 'desc' },
+          }),
+          this.prisma.product.count({ where }),
+        ]);
+
+        const formattedProducts = products
+          .filter((p) => p.translations.length > 0)
+          .map((product) => this.formatProduct(product));
+
+        const totalPages = Math.ceil(total / limit);
+
+        return {
+          products: formattedProducts,
+          pagination: {
+            page,
+            limit,
+            total,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPrevPage: page > 1,
+          },
+        };
+      },
+      { ttl: 300 } // 5 минут
+    );
+  }
+
+  async getProduct(id: number, locale: string): Promise<any> {
+    const cacheKey = `product:${id}:${locale}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const product = await this.prisma.product.findUnique({
+          where: { id, isActive: true },
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
             },
             brand: {
               include: {
                 translations: {
-                  where: { locale: locale as any },
+                  where: { locale: locale as Locale },
+                },
+              },
+            },
+            category: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
+            },
+            subcategory: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
                 },
               },
             },
             images: {
-              where: { isPrimary: true },
-              take: 1,
+              orderBy: { sortOrder: 'asc' },
+            },
+            specifications: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
+              orderBy: { sortOrder: 'asc' },
             },
           },
-        }),
-        // Кешируем общий счетчик отдельно для переиспользования
-        this.cacheService.getOrSet(
-          `products_count:${JSON.stringify(where)}`,
-          () => this.prisma.product.count({ where }),
-          { ttl: 180 } // 3 минуты для счетчика
-        ),
-      ]);
-
-      const dbTime = Date.now() - startTime;
-      console.log(`⏱️ Database query took: ${dbTime}ms`);
-
-      const baseUrl =
-        process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-
-      const productsWithUrls = products
-        .filter((product) => product.translations.length > 0) // Только с переводами
-        .map((product) => {
-          const translation = product.translations[0];
-          const brandTranslation = product.brand?.translations[0];
-          const categoryTranslation = product.category?.translations[0];
-          const primaryImage = product.images[0];
-
-          return {
-            id: product.id,
-            name: translation.name,
-            locale: translation.locale,
-            section: product.section,
-            description: translation.description || '',
-            image: primaryImage
-              ? `${baseUrl}/public/images/${primaryImage.imageSmall}`
-              : null,
-            fullImage: primaryImage
-              ? `${baseUrl}/public/images/${primaryImage.imageLarge}`
-              : null,
-            brand: brandTranslation
-              ? {
-                  id: product.brand!.id,
-                  name: brandTranslation.name,
-                  locale: brandTranslation.locale,
-                  section: product.section, // Используем секцию продукта
-                }
-              : null,
-            category: {
-              id: product.category.id,
-              name: categoryTranslation?.name || 'Unknown',
-              locale: categoryTranslation?.locale || locale,
-              section: product.category.section,
-            },
-          };
         });
 
-      const result: ProductsResult = {
-        products: productsWithUrls,
-        hasNextPage: products.length === limit,
-        totalCount,
-      };
+        if (!product || product.translations.length === 0) {
+          return null;
+        }
 
-      // Кешируем результат
-      await this.cacheService.set(cacheKey, result, { ttl: 300 });
-      console.log(
-        `💾 CACHED products result: ${cacheKey} (${result.products.length} items)`
-      );
-      this.logger.log(
-        `💾 CACHED products result: ${cacheKey} (${result.products.length} items)`
-      );
-
-      return result;
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
-      this.logger.error(`Failed to fetch products: ${message}`, stack);
-      throw new Error(message);
-    }
+        return this.formatProductDetail(product);
+      },
+      { ttl: 600 } // 10 минут
+    );
   }
 
-  async getCategories(locale: string, section?: Section) {
-    const cacheKey = `categories:${locale}:${section || 'all'}`;
+  async getProductBySlug(slug: string, locale: string): Promise<any> {
+    const cacheKey = `product:slug:${slug}:${locale}`;
 
-    return this.cacheService.getOrSet(
+    return this.cache.getOrSet(
       cacheKey,
       async () => {
-        const categories = await this.prisma.category.findMany({
+        const product = await this.prisma.product.findFirst({
           where: {
-            ...(section && { section }),
+            slug,
+            isActive: true,
             translations: {
-              some: {
-                locale: locale as any,
-              },
+              some: { locale: locale as Locale },
             },
           },
           include: {
             translations: {
-              where: { locale: locale as any },
+              where: { locale: locale as Locale },
+            },
+            brand: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
+            },
+            category: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
+            },
+            subcategory: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
+            },
+            images: {
+              orderBy: { sortOrder: 'asc' },
+            },
+            specifications: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
+              orderBy: { sortOrder: 'asc' },
+            },
+          },
+        });
+
+        if (!product) {
+          return null;
+        }
+
+        return this.formatProductDetail(product);
+      },
+      { ttl: 600 }
+    );
+  }
+
+  // ==================== КАТЕГОРИИ ====================
+
+  async getCategories(filters: CategoryFilters): Promise<CategoriesResponse> {
+    const {
+      locale,
+      section,
+      withSubcategories = true,
+      withBrands = true,
+    } = filters;
+
+    const cacheKey = `categories:${JSON.stringify(filters)}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const categories = await this.prisma.category.findMany({
+          where: {
+            ...(section && { section: section as Section }),
+            translations: {
+              some: { locale: locale as Locale },
+            },
+          },
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
+            },
+            ...(withSubcategories && {
+              subcategories: {
+                include: {
+                  translations: {
+                    where: { locale: locale as Locale },
+                  },
+                },
+              },
+            }),
+            ...(withBrands && {
+              categoryBrands: {
+                include: {
+                  brand: {
+                    include: {
+                      translations: {
+                        where: { locale: locale as Locale },
+                      },
+                    },
+                  },
+                },
+              },
+            }),
+          },
+          orderBy: { id: 'asc' },
+        });
+
+        const formattedCategories = categories
+          .filter((c) => c.translations.length > 0)
+          .map((category) =>
+            this.formatCategory(category, withSubcategories, withBrands)
+          );
+
+        return { categories: formattedCategories };
+      },
+      { ttl: 300 }
+    );
+  }
+
+  async getCategory(id: number, locale: string): Promise<any> {
+    const cacheKey = `category:${id}:${locale}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const category = await this.prisma.category.findUnique({
+          where: { id },
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
+            },
+            subcategories: {
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
             },
             categoryBrands: {
-              where: {
-                ...(section && { section }),
-              },
               include: {
                 brand: {
                   include: {
                     translations: {
-                      where: { locale: locale as any },
+                      where: { locale: locale as Locale },
                     },
                   },
                 },
@@ -278,108 +401,335 @@ export class ProductsService {
           },
         });
 
-        const formattedCategories = categories
-          .filter((cat) => cat.translations.length > 0)
-          .map((category) => ({
-            id: category.id,
-            name: category.translations[0].name,
-            locale: category.translations[0].locale,
-            section: category.section,
-            brands: category.categoryBrands
-              .filter((cb) => cb.brand.translations.length > 0)
-              .map((cb) => ({
-                id: cb.brand.id,
-                name: cb.brand.translations[0].name,
-                locale: cb.brand.translations[0].locale,
-                section: cb.section,
-              })),
-          }));
+        if (!category || category.translations.length === 0) {
+          return null;
+        }
 
-        return { categories: formattedCategories };
+        return this.formatCategory(category, true, true);
+      },
+      { ttl: 600 }
+    );
+  }
+
+  async getSubcategories(categoryId: number, locale: string): Promise<any[]> {
+    const cacheKey = `subcategories:${categoryId}:${locale}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const subcategories = await this.prisma.subcategory.findMany({
+          where: {
+            categoryId,
+            translations: {
+              some: { locale: locale as Locale },
+            },
+          },
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
+            },
+          },
+          orderBy: { id: 'asc' },
+        });
+
+        return subcategories
+          .filter((s) => s.translations.length > 0)
+          .map((subcategory) => ({
+            id: subcategory.id,
+            name: subcategory.translations[0].name,
+            categoryId: subcategory.categoryId,
+          }));
       },
       { ttl: 300 }
     );
   }
 
-  async getBrands(locale: string, section?: Section) {
-    const cacheKey = `brands:${locale}:${section || 'all'}`;
+  // ==================== БРЕНДЫ ====================
 
-    return this.cacheService.getOrSet(
+  async getBrands(filters: BrandFilters): Promise<BrandsResponse> {
+    const { locale, section, categoryId } = filters;
+
+    const cacheKey = `brands:${JSON.stringify(filters)}`;
+
+    return this.cache.getOrSet(
       cacheKey,
       async () => {
+        const where: any = {
+          translations: {
+            some: { locale: locale as Locale },
+          },
+        };
+
+        if (section || categoryId) {
+          where.categoryBrands = {
+            some: {
+              ...(section && { section: section as Section }),
+              ...(categoryId && { categoryId }),
+            },
+          };
+        }
+
+        const brands = await this.prisma.brand.findMany({
+          where,
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
+            },
+          },
+          orderBy: { id: 'asc' },
+        });
+
+        const formattedBrands = brands
+          .filter((b) => b.translations.length > 0)
+          .map((brand) => ({
+            id: brand.id,
+            name: brand.translations[0].name,
+          }));
+
+        return { brands: formattedBrands };
+      },
+      { ttl: 300 }
+    );
+  }
+
+  async getBrand(id: number, locale: string): Promise<any> {
+    const cacheKey = `brand:${id}:${locale}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const brand = await this.prisma.brand.findUnique({
+          where: { id },
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
+            },
+          },
+        });
+
+        if (!brand || brand.translations.length === 0) {
+          return null;
+        }
+
+        return {
+          id: brand.id,
+          name: brand.translations[0].name,
+        };
+      },
+      { ttl: 600 }
+    );
+  }
+
+  // ==================== ПОИСК ====================
+
+  async search(query: SearchQuery): Promise<SearchResponse> {
+    const { query: searchTerm, locale, section, page = 1, limit = 20 } = query;
+
+    const cacheKey = `search:${JSON.stringify(query)}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        // Поиск продуктов
+        const productsResult = await this.getProducts({
+          locale,
+          section,
+          search: searchTerm,
+          page,
+          limit,
+        });
+
+        // Поиск категорий
+        const categories = await this.prisma.category.findMany({
+          where: {
+            ...(section && { section: section as Section }),
+            translations: {
+              some: {
+                locale: locale as Locale,
+                name: { contains: searchTerm, mode: 'insensitive' },
+              },
+            },
+          },
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
+            },
+          },
+          take: 10,
+        });
+
+        // Поиск брендов
         const brands = await this.prisma.brand.findMany({
           where: {
             translations: {
               some: {
-                locale: locale as any,
+                locale: locale as Locale,
+                name: { contains: searchTerm, mode: 'insensitive' },
               },
             },
-            ...(section && {
-              categoryBrands: {
-                some: {
-                  section,
-                },
-              },
-            }),
           },
           include: {
             translations: {
-              where: { locale: locale as any },
+              where: { locale: locale as Locale },
             },
           },
-          orderBy: {
-            id: 'asc',
-          },
+          take: 10,
         });
 
-        return brands
-          .filter((brand) => brand.translations.length > 0)
-          .map((brand) => ({
-            id: brand.id,
-            name: brand.translations[0].name,
-            locale: brand.translations[0].locale,
-            section: section || Section.NEVA, // Используем переданную секцию или fallback
-          }));
+        return {
+          products: productsResult.products,
+          categories: categories
+            .filter((c) => c.translations.length > 0)
+            .map((c) => ({ id: c.id, name: c.translations[0].name })),
+          brands: brands
+            .filter((b) => b.translations.length > 0)
+            .map((b) => ({ id: b.id, name: b.translations[0].name })),
+          pagination: productsResult.pagination,
+          query: searchTerm,
+        };
       },
-      { ttl: 300 }
+      { ttl: 180 } // 3 минуты
     );
   }
 
-  // Инвалидация кеша продуктов
-  async invalidateProductsCache(locale?: string, section?: Section) {
-    const patterns = [
-      'products:*',
-      'products_count:*',
-      locale ? `*:${locale}:*` : '*',
-      section ? `*:${section}*` : '*',
-    ];
+  // ==================== НАВИГАЦИЯ ====================
 
-    for (const pattern of patterns) {
-      await this.cacheService.invalidateByPattern(pattern);
-    }
+  async getMenuData(locale: string, section?: string): Promise<MenuResponse> {
+    const cacheKey = `menu:${locale}:${section || 'all'}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const nevaCategories = await this.getCategories({
+          locale,
+          section: section === 'NEVA' ? 'NEVA' : section ? undefined : 'NEVA',
+        });
+
+        const xSolutionCategories = await this.getCategories({
+          locale,
+          section:
+            section === 'X_SOLUTION'
+              ? 'X_SOLUTION'
+              : section
+                ? undefined
+                : 'X_SOLUTION',
+        });
+
+        return {
+          neva: section === 'X_SOLUTION' ? [] : nevaCategories.categories,
+          xSolution: section === 'NEVA' ? [] : xSolutionCategories.categories,
+        };
+      },
+      { ttl: 600 } // 10 минут
+    );
   }
 
-  // Приватный метод для создания ключа кеша продуктов
-  private buildProductsCacheKey(params: {
-    locale: string;
-    page?: number;
-    limit?: number;
-    after?: string;
-    section?: Section;
-    categoryId?: number;
-    brandId?: number;
-  }): string {
-    const parts = [
-      'products',
-      `locale:${params.locale}`,
-      `page:${params.page || 1}`,
-      `limit:${params.limit || 20}`,
-      `after:${params.after || 'null'}`,
-      `section:${params.section || 'all'}`,
-      `categoryId:${params.categoryId || 'all'}`,
-      `brandId:${params.brandId || 'all'}`,
-    ];
+  // ==================== ПРИВАТНЫЕ МЕТОДЫ ====================
 
-    return parts.join(':');
+  private formatProduct(product: any): any {
+    const translation = product.translations[0];
+    const image = product.images[0];
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+    return {
+      id: product.id,
+      name: translation.name,
+      description: translation.description || '',
+      section: product.section,
+      image: image ? `${baseUrl}/public/images/${image.imageSmall}` : null,
+      brand: product.brand?.translations[0]
+        ? {
+            id: product.brand.id,
+            name: product.brand.translations[0].name,
+          }
+        : null,
+      category: {
+        id: product.category.id,
+        name: product.category.translations[0]?.name || 'Unknown',
+      },
+      subcategory: product.subcategory?.translations[0]
+        ? {
+            id: product.subcategory.id,
+            name: product.subcategory.translations[0].name,
+          }
+        : null,
+    };
+  }
+
+  private formatProductDetail(product: any): any {
+    const translation = product.translations[0];
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+    return {
+      id: product.id,
+      name: translation.name,
+      description: translation.description,
+      marketingDescription: translation.marketingDescription,
+      metaTitle: translation.metaTitle,
+      metaDescription: translation.metaDescription,
+      section: product.section,
+      slug: product.slug,
+      brand: product.brand?.translations[0]
+        ? {
+            id: product.brand.id,
+            name: product.brand.translations[0].name,
+          }
+        : null,
+      category: {
+        id: product.category.id,
+        name: product.category.translations[0]?.name || 'Unknown',
+      },
+      subcategory: product.subcategory?.translations[0]
+        ? {
+            id: product.subcategory.id,
+            name: product.subcategory.translations[0].name,
+          }
+        : null,
+      images: product.images.map((img: any) => ({
+        id: img.id,
+        small: `${baseUrl}/public/images/${img.imageSmall}`,
+        large: `${baseUrl}/public/images/${img.imageLarge}`,
+        altText: img.altText,
+        isPrimary: img.isPrimary,
+      })),
+      specifications: product.specifications
+        .filter((spec: any) => spec.translations.length > 0)
+        .map((spec: any) => ({
+          name: spec.translations[0].name,
+          value: spec.translations[0].value,
+        })),
+    };
+  }
+
+  private formatCategory(
+    category: any,
+    withSubcategories = false,
+    withBrands = false
+  ): any {
+    const translation = category.translations[0];
+
+    return {
+      id: category.id,
+      name: translation.name,
+      section: category.section,
+      ...(withSubcategories && {
+        subcategories:
+          category.subcategories
+            ?.filter((s: any) => s.translations.length > 0)
+            .map((s: any) => ({
+              id: s.id,
+              name: s.translations[0].name,
+            })) || [],
+      }),
+      ...(withBrands && {
+        brands:
+          category.categoryBrands
+            ?.filter((cb: any) => cb.brand.translations.length > 0)
+            .map((cb: any) => ({
+              id: cb.brand.id,
+              name: cb.brand.translations[0].name,
+            })) || [],
+      }),
+    };
   }
 }

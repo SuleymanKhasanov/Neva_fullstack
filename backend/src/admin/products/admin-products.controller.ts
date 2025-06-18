@@ -1,4 +1,4 @@
-// src/admin/products/admin-products.controller.ts
+// src/admin/products/admin-products.controller.ts (исправленный)
 import {
   Controller,
   Get,
@@ -22,14 +22,14 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
+import { Auth } from '../../auth/decorators/auth.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import {
   CreateProductDto,
   UpdateProductDto,
   AdminProductResponseDto,
   AdminProductsListResponseDto,
-} from '..//dto/product.dto';
-import { Auth } from '../../auth/decorators/auth.decorator';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+} from '../dto/product.dto';
 
 import { AdminProductsService } from './admin-products.service';
 

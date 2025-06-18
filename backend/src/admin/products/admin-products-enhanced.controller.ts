@@ -15,17 +15,16 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
-import { Auth } from '../auth/decorators/auth.decorator';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-
-import { AdminProductsEnhancedService } from './admin-products-enhanced.service';
+import { ImageService } from '../../common/upload/image.service';
+import { AdminProductsEnhancedService } from '../admin-products-enhanced.service';
 import {
   CreateProductEnhancedDto,
   UpdateProductEnhancedDto,
-} from './dto/admin-product-enhanced.dto';
-import { ImageService } from './image.service';
-import type { AdminUser, AdminProduct } from './types/shared.types';
+} from '../dto/admin-product-enhanced.dto';
+import type { AdminUser, AdminProduct } from '../types/shared.types';
 
 @ApiTags('Admin - Products Enhanced')
 @Controller('admin/products-enhanced')

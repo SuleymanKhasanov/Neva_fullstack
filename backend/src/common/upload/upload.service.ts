@@ -1,9 +1,9 @@
-// backend/src/admin/image.service.ts
+// src/common/upload/upload.service.ts
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
-import sharp from 'sharp'; // ✅ ИСПРАВЛЕНО: default import вместо namespace
+import sharp from 'sharp';
 
 import { PrismaService } from '../database/prisma.service';
 
@@ -20,8 +20,8 @@ interface UploadedFile {
 }
 
 @Injectable()
-export class ImageService {
-  private readonly logger = new Logger(ImageService.name);
+export class UploadService {
+  private readonly logger = new Logger(UploadService.name);
   private readonly uploadDir = join(process.cwd(), 'public', 'images');
   private readonly allowedTypes = [
     'image/jpeg',
@@ -29,13 +29,12 @@ export class ImageService {
     'image/png',
     'image/webp',
   ];
-  private readonly maxSize = 10 * 1024 * 1024;
+  private readonly maxSize = 10 * 1024 * 1024; // 10MB
 
   constructor(private readonly prisma: PrismaService) {
     this.ensureUploadDir();
   }
 
-  // ✅ ИСПРАВЛЕНО: Заменил Express.Multer.File на UploadedFile
   async processAndSaveImages(productId: number, files: UploadedFile[]) {
     this.logger.log(
       `Processing ${files.length} images for product ${productId}`
@@ -102,7 +101,6 @@ export class ImageService {
     this.logger.log(`Deleted image ${imageId} for product ${productId}`);
   }
 
-  // ✅ ИСПРАВЛЕНО: Заменил Express.Multer.File на UploadedFile
   private async processImage(file: UploadedFile, productId: number) {
     const timestamp = Date.now();
     const basename = `product_${productId}_${timestamp}`;
@@ -116,7 +114,7 @@ export class ImageService {
     // Обработать изображения параллельно
     await Promise.all([
       // Маленькое 400x400
-      sharp(file.buffer) // ✅ Теперь sharp() работает правильно
+      sharp(file.buffer)
         .resize(400, 400, { fit: 'cover' })
         .webp({ quality: 80 })
         .toFile(smallFullPath),
@@ -130,7 +128,6 @@ export class ImageService {
     return { smallPath, largePath };
   }
 
-  // ✅ ИСПРАВЛЕНО: Заменил Express.Multer.File на UploadedFile
   private validateFile(file: UploadedFile) {
     if (!this.allowedTypes.includes(file.mimetype)) {
       throw new BadRequestException(

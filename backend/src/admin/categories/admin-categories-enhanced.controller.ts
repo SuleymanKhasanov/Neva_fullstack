@@ -11,13 +11,13 @@ import {
   Logger,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { Section, Locale } from '@prisma/client';
 
-import { PrismaService } from '../../../prisma/prisma.service';
 import { Auth } from '../../auth/decorators/auth.decorator';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { CacheService } from '../../common/cache.service';
+import { CacheService } from '../../common/cache/cache.service';
+import { PrismaService } from '../../common/database/prisma.service';
 
 interface CreateCategoryDto {
   section: Section;

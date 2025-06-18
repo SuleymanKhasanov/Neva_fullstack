@@ -1,9 +1,9 @@
-// backend/src/categories/categories-enhanced.service.ts
+// src/public/categories-enhanced.service.ts (исправленный)
 import { Injectable, Logger } from '@nestjs/common';
 import { Section, Locale } from '@prisma/client';
 
-import { PrismaService } from '../../prisma/prisma.service';
-import { CacheService } from '../common/cache.service';
+import { CacheService } from '../common/cache/cache.service';
+import { PrismaService } from '../common/database/prisma.service';
 
 interface SubcategoryWithStats {
   id: number;
@@ -28,8 +28,8 @@ export class CategoriesEnhancedService {
   private readonly logger = new Logger(CategoriesEnhancedService.name);
 
   constructor(
-    private prisma: PrismaService,
-    private cacheService: CacheService
+    private readonly prisma: PrismaService,
+    private readonly cacheService: CacheService
   ) {}
 
   async getCategoriesWithSubcategories(
@@ -53,7 +53,7 @@ export class CategoriesEnhancedService {
         `🔍 Cache miss for enhanced categories: ${cacheKey} - fetching from database`
       );
 
-      // Получаем категории с субкатегориями, но только те, к которым привязаны бренды/продукты
+      // Получаем категории с субкатегориями
       const categories = await this.prisma.category.findMany({
         where: {
           ...(section && { section }),
@@ -146,10 +146,10 @@ export class CategoriesEnhancedService {
         orderBy: { id: 'asc' },
       });
 
-      // Форматируем результат
+      // Форматируем результат с правильной типизацией
       const formattedCategories: CategoryWithSubcategories[] = categories
-        .filter((category) => category.translations.length > 0)
-        .map((category) => {
+        .filter((category: any) => category.translations.length > 0)
+        .map((category: any) => {
           const translation = category.translations[0];
 
           return {
@@ -158,8 +158,8 @@ export class CategoriesEnhancedService {
             locale: translation.locale,
             section: category.section,
             subcategories: category.subcategories
-              .filter((sub) => sub.translations.length > 0)
-              .map((subcategory) => {
+              .filter((sub: any) => sub.translations.length > 0)
+              .map((subcategory: any) => {
                 const subTranslation = subcategory.translations[0];
 
                 return {
@@ -238,8 +238,8 @@ export class CategoriesEnhancedService {
         });
 
         return subcategories
-          .filter((sub) => sub.translations.length > 0)
-          .map((subcategory) => {
+          .filter((sub: any) => sub.translations.length > 0)
+          .map((subcategory: any) => {
             const translation = subcategory.translations[0];
 
             return {

@@ -1,4 +1,4 @@
-// src/app.module.ts
+// src/app.module.ts (исправленный)
 import { join } from 'path';
 
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -11,18 +11,13 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import * as redisStore from 'cache-manager-redis-store';
 
 // Основные модули приложения
-import { AdminModule } from '../admin/admin.module';
-
+import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { CommonModule } from './common/common.module';
 import { PublicModule } from './public/public.module';
-
-// Global JWT Guard
-
-// App контроллер и сервис
 
 @Module({
   imports: [
@@ -56,7 +51,7 @@ import { PublicModule } from './public/public.module';
       sortSchema: true,
       playground: process.env.NODE_ENV !== 'production',
       introspection: true,
-      context: ({ req }) => ({ req }),
+      context: ({ req }: { req: any }) => ({ req }),
       formatError: (error) => {
         console.error('GraphQL Error:', error);
 
@@ -83,7 +78,7 @@ import { PublicModule } from './public/public.module';
     // Общие сервисы (база данных, кеш, загрузка файлов)
     CommonModule,
 
-    // JWT авторизация (хорошо спроектирована - не трогаем)
+    // JWT авторизация
     AuthModule,
 
     // Публичный каталог (объединенные products + categories + brands)
@@ -116,7 +111,7 @@ export class AppModule {
     console.log('');
     console.log('🎯 Чистые модули (убрано дублирование):');
     console.log('  🛠️  CommonModule   - Общие сервисы (DB, Cache, Upload)');
-    console.log('  🔐  AuthModule     - JWT авторизация (не изменялся)');
+    console.log('  🔐  AuthModule     - JWT авторизация');
     console.log(
       '  🌐  PublicModule   - Весь публичный каталог (REST + GraphQL)'
     );
@@ -167,34 +162,3 @@ export class AppModule {
     console.log('🎉 Чистая архитектура готова!');
   }
 }
-
-/*
- * ==================== ПЛАН МИГРАЦИИ ====================
- *
- * 1. Создать новые модули:
- *    - src/public/public.module.ts
- *    - src/admin/admin.module.ts (обновленный)
- *    - src/common/common.module.ts
- *
- * 2. Объединить публичные API:
- *    FROM: products/, product/, categories/, categories-enhanced/, brands/
- *    TO:   public/public.controller.ts, public/public.service.ts, public/public.resolver.ts
- *
- * 3. Сгруппировать админские API:
- *    FROM: admin-products.controller.ts, admin-products-enhanced.controller.ts, etc.
- *    TO:   admin/products/admin-products.controller.ts
- *          admin/categories/admin-categories.controller.ts
- *          admin/brands/admin-brands.controller.ts
- *          admin/system/admin-system.controller.ts
- *
- * 4. Удалить дублирование:
- *    - Оставить только enhanced версии
- *    - Убрать legacy контроллеры
- *    - Объединить похожие DTO
- *
- * 5. Результат:
- *    - Модулей: 8 → 4 (-50%)
- *    - Контроллеров: 15+ → 6 (-60%)
- *    - Дублирования: устранено полностью
- *    - Логика приложения: сохранена и улучшена
- */

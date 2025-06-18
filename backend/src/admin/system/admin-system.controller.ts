@@ -1,4 +1,4 @@
-// backend/src/admin/cache-admin.controller.ts
+// src/admin/system/admin-system.controller.ts (исправленный)
 import { Controller, Get, Post, Delete, Query, Param } from '@nestjs/common';
 import {
   ApiTags,
@@ -8,54 +8,42 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
-import { CacheService } from '../../common/cache.service';
+import { Auth } from '../../auth/decorators/auth.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
-@ApiTags('Admin - Cache')
-@Controller('admin/cache')
-export class CacheAdminController {
-  constructor(private readonly cacheService: CacheService) {}
+import { AdminSystemService } from './admin-system.service';
 
-  @Get('stats')
+@ApiTags('Admin - System')
+@Controller('admin/system')
+@Auth()
+export class AdminSystemController {
+  constructor(private readonly adminSystemService: AdminSystemService) {}
+
+  // ==================== УПРАВЛЕНИЕ КЕШЕМ ====================
+
+  @Get('cache/stats')
   @ApiOperation({ summary: 'Получить статистику кеша' })
   @ApiResponse({ status: 200, description: 'Статистика кеша' })
   async getCacheStats() {
-    return await this.cacheService.getStats();
+    return await this.adminSystemService.getCacheStats();
   }
 
-  @Post('clear')
+  @Post('cache/clear')
   @ApiOperation({ summary: 'Очистить весь кеш' })
   @ApiResponse({ status: 200, description: 'Кеш очищен успешно' })
   async clearAllCache() {
-    try {
-      await this.cacheService.reset();
-
-      return {
-        success: true,
-        message: 'Кеш очищен успешно',
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: 'Не удалось очистить кеш',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
+    return this.adminSystemService.clearAllCache();
   }
 
-  @Delete('key/:key')
+  @Delete('cache/key/:key')
   @ApiOperation({ summary: 'Удалить конкретный ключ кеша' })
   @ApiParam({ name: 'key', description: 'Ключ кеша для удаления' })
   @ApiResponse({ status: 200, description: 'Ключ кеша удален' })
   async deleteCacheKey(@Param('key') key: string) {
-    await this.cacheService.del(key);
-
-    return {
-      success: true,
-      message: `Ключ кеша '${key}' удален успешно`,
-    };
+    return this.adminSystemService.deleteCacheKey(key);
   }
 
-  @Delete('pattern')
+  @Delete('cache/pattern')
   @ApiOperation({ summary: 'Удалить ключи кеша по паттерну' })
   @ApiQuery({
     name: 'pattern',
@@ -64,16 +52,10 @@ export class CacheAdminController {
   })
   @ApiResponse({ status: 200, description: 'Ключи кеша удалены по паттерну' })
   async deleteCacheByPattern(@Query('pattern') pattern: string) {
-    const deletedCount = await this.cacheService.invalidateByPattern(pattern);
-
-    return {
-      success: true,
-      message: `Удалено ${deletedCount} ключей кеша по паттерну '${pattern}'`,
-      deletedCount,
-    };
+    return this.adminSystemService.deleteCacheByPattern(pattern);
   }
 
-  @Post('invalidate/products')
+  @Post('cache/invalidate/products')
   @ApiOperation({ summary: 'Инвалидировать кеш продуктов' })
   @ApiQuery({
     name: 'locale',
@@ -90,30 +72,10 @@ export class CacheAdminController {
     @Query('locale') locale?: string,
     @Query('section') section?: string
   ) {
-    const patterns: string[] = [
-      'products:*',
-      'products_count:*',
-      'product:*',
-      'product_exists:*',
-      ...(locale ? [`*:${locale}:*`] : []),
-      ...(section ? [`*:${section}*`] : []),
-    ];
-
-    let totalDeleted = 0;
-    for (const pattern of patterns) {
-      const deleted = await this.cacheService.invalidateByPattern(pattern);
-      totalDeleted += deleted;
-    }
-
-    return {
-      success: true,
-      message: 'Кеш продуктов инвалидирован',
-      deletedCount: totalDeleted,
-      patterns,
-    };
+    return this.adminSystemService.invalidateProductsCache(locale, section);
   }
 
-  @Post('invalidate/categories')
+  @Post('cache/invalidate/categories')
   @ApiOperation({ summary: 'Инвалидировать кеш категорий' })
   @ApiQuery({
     name: 'locale',
@@ -130,18 +92,10 @@ export class CacheAdminController {
     @Query('locale') locale?: string,
     @Query('section') section?: string
   ) {
-    const pattern = `categories:locale:${locale || '*'}:section:${section || '*'}`;
-    const deletedCount = await this.cacheService.invalidateByPattern(pattern);
-
-    return {
-      success: true,
-      message: 'Кеш категорий инвалидирован',
-      deletedCount,
-      pattern,
-    };
+    return this.adminSystemService.invalidateCategoriesCache(locale, section);
   }
 
-  @Post('invalidate/brands')
+  @Post('cache/invalidate/brands')
   @ApiOperation({ summary: 'Инвалидировать кеш брендов' })
   @ApiQuery({
     name: 'locale',
@@ -158,81 +112,36 @@ export class CacheAdminController {
     @Query('locale') locale?: string,
     @Query('section') section?: string
   ) {
-    const pattern = `brands:locale:${locale || '*'}:section:${section || '*'}`;
-    const deletedCount = await this.cacheService.invalidateByPattern(pattern);
-
-    return {
-      success: true,
-      message: 'Кеш брендов инвалидирован',
-      deletedCount,
-      pattern,
-    };
+    return this.adminSystemService.invalidateBrandsCache(locale, section);
   }
 
-  @Get('health')
+  @Get('cache/health')
   @ApiOperation({ summary: 'Проверить здоровье кеша' })
   @ApiResponse({ status: 200, description: 'Статус здоровья кеша' })
   async getCacheHealth() {
-    try {
-      // Простой тест записи/чтения
-      const testKey = 'health_check';
-      const testValue = { timestamp: Date.now() };
-
-      await this.cacheService.set(testKey, testValue, { ttl: 10 });
-      const retrievedValue = await this.cacheService.get(testKey);
-      await this.cacheService.del(testKey);
-
-      const isHealthy =
-        JSON.stringify(retrievedValue) === JSON.stringify(testValue);
-
-      return {
-        status: isHealthy ? 'healthy' : 'unhealthy',
-        timestamp: new Date().toISOString(),
-        test: {
-          write: true,
-          read: !!retrievedValue,
-          match: isHealthy,
-        },
-      };
-    } catch (error) {
-      return {
-        status: 'unhealthy',
-        timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
+    return this.adminSystemService.getCacheHealth();
   }
 
-  @Get('debug')
-  @ApiOperation({ summary: 'Получить отладочную информацию кеша' })
-  @ApiResponse({ status: 200, description: 'Отладочная информация кеша' })
-  async getCacheDebug() {
-    try {
-      const stats = await this.cacheService.getStats();
+  // ==================== СИСТЕМНАЯ ИНФОРМАЦИЯ ====================
 
-      // Тестируем базовые операции
-      const testKey = 'debug_test';
-      const testValue = { test: true, timestamp: Date.now() };
+  @Get('health')
+  @ApiOperation({ summary: 'Состояние системы' })
+  @ApiResponse({ status: 200, description: 'Общее состояние системы' })
+  async getSystemHealth(@CurrentUser() user?: any) {
+    return this.adminSystemService.getSystemHealth();
+  }
 
-      await this.cacheService.set(testKey, testValue, { ttl: 30 });
-      const retrieved = await this.cacheService.get(testKey);
-      await this.cacheService.del(testKey);
+  @Get('stats')
+  @ApiOperation({ summary: 'Общая статистика' })
+  @ApiResponse({ status: 200, description: 'Системная статистика' })
+  async getSystemStats(@CurrentUser() user?: any) {
+    return this.adminSystemService.getSystemStats();
+  }
 
-      return {
-        stats,
-        basicOperations: {
-          set: true,
-          get: !!retrieved,
-          delete: true,
-          match: JSON.stringify(retrieved) === JSON.stringify(testValue),
-        },
-        timestamp: new Date().toISOString(),
-      };
-    } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
-      };
-    }
+  @Get('logs')
+  @ApiOperation({ summary: 'Системные логи' })
+  @ApiResponse({ status: 200, description: 'Последние логи системы' })
+  async getSystemLogs(@CurrentUser() user?: any) {
+    return this.adminSystemService.getSystemLogs();
   }
 }
