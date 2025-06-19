@@ -27,9 +27,11 @@
     "migrate:reset": "prisma migrate reset",
     "db:seed": "ts-node scripts/seed-categories.ts",
     "db:seed:categories": "ts-node scripts/seed-categories.ts",
-    "db:seed:all": "npm run db:seed:categories && npm run db:seed",
-    "db:setup": "npm run prisma:generate && npm run migrate:apply && npm run db:seed:all",
-    "db:setup:fresh": "npm run prisma:reset && npm run db:seed:all",
+    "db:seed:brands": "ts-node scripts/seed-brands-from-catalog.ts",
+    "db:seed:all": "yarn db:seed:categories && yarn db:seed:brands",
+    "db:test": "ts-node scripts/test-loaded-data.ts",
+    "db:setup": "yarn prisma:generate && yarn migrate:apply && yarn db:seed:all",
+    "db:setup:fresh": "yarn prisma:reset && yarn db:seed:all",
     "docker:build": "docker build -t neva-backend .",
     "docker:run": "docker-compose up -d",
     "docker:stop": "docker-compose down",
@@ -37,8 +39,9 @@
     "docker:clean": "docker-compose down -v && docker system prune -f",
     "cache:clear": "curl -X POST http://localhost:3000/admin/cache/clear -H \"Authorization: Bearer YOUR_TOKEN\"",
     "cache:stats": "curl http://localhost:3000/admin/cache/stats -H \"Authorization: Bearer YOUR_TOKEN\"",
-    "dev:full": "npm run docker:run && sleep 10 && npm run db:setup && npm run start:dev",
-    "dev:reset": "npm run docker:stop && npm run docker:clean && npm run dev:full"
+    "dev:full": "yarn docker:run && sleep 10 && yarn db:setup && yarn start:dev",
+    "dev:reset": "yarn docker:stop && yarn docker:clean && yarn dev:full",
+    "catalog:parse": "ts-node scripts/parse-catalog-json.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.12.1",
