@@ -28,12 +28,14 @@ services:
       - backend/.env
     command: >
       sh -c "cd /app/backend &&
-             echo '🔧 Generating Prisma client...' &&
-             npx prisma generate &&
-             echo '🔧 Running database migrations...' &&
-             npx prisma migrate deploy &&
-             echo '🚀 Starting development server...' &&
-             yarn start:dev"
+            echo '🔧 Generating Prisma client...' &&
+            npx prisma generate &&
+            echo '🔧 Running database migrations...' &&
+            npx prisma migrate deploy &&
+            echo '🔧 Importing catalog categories...' &&
+            yarn ts-node scripts/parse-catalog-json.ts &&
+            echo '🚀 Starting development server...' &&
+            yarn start:dev"
     networks:
       - neva-network
     restart: unless-stopped
