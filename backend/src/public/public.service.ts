@@ -304,7 +304,7 @@ export class PublicService {
     );
   }
 
-  // ==================== КАТЕГОРИИ ====================
+  // ==================== КАТЕГОРИИ (ТОЛЬКО С ПРОДУКТАМИ) ====================
 
   async getCategories(filters: CategoryFilters): Promise<CategoriesResponse> {
     const {
@@ -319,11 +319,21 @@ export class PublicService {
     return this.cache.getOrSet(
       cacheKey,
       async () => {
+        // 🔥 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Показываем только категории с активными продуктами
         const categories = await this.prisma.category.findMany({
           where: {
             ...(section && { section: section as Section }),
             translations: {
               some: { locale: locale as Locale },
+            },
+            // ✅ Фильтр: только категории с активными продуктами
+            products: {
+              some: {
+                isActive: true,
+                translations: {
+                  some: { locale: locale as Locale },
+                },
+              },
             },
           },
           include: {
@@ -332,6 +342,17 @@ export class PublicService {
             },
             ...(withSubcategories && {
               subcategories: {
+                // ✅ Показываем только субкатегории с продуктами
+                where: {
+                  products: {
+                    some: {
+                      isActive: true,
+                      translations: {
+                        some: { locale: locale as Locale },
+                      },
+                    },
+                  },
+                },
                 include: {
                   translations: {
                     where: { locale: locale as Locale },
@@ -341,6 +362,20 @@ export class PublicService {
             }),
             ...(withBrands && {
               categoryBrands: {
+                // ✅ Показываем только бренды с продуктами в этой категории
+                where: {
+                  brand: {
+                    products: {
+                      some: {
+                        isActive: true,
+                        categoryId: undefined, // Это будет заполнено динамически
+                        translations: {
+                          some: { locale: locale as Locale },
+                        },
+                      },
+                    },
+                  },
+                },
                 include: {
                   brand: {
                     include: {
@@ -356,11 +391,63 @@ export class PublicService {
           orderBy: { id: 'asc' },
         });
 
-        const formattedCategories = categories
-          .filter((c) => c.translations.length > 0)
-          .map((category) =>
-            this.formatCategory(category, withSubcategories, withBrands)
-          );
+        // Дополнительная фильтрация брендов в коде для корректного categoryId
+        const formattedCategories = [];
+
+        for (const category of categories) {
+          if (category.translations.length === 0) continue;
+
+          let formattedCategory: any = {
+            id: category.id,
+            name: category.translations[0].name,
+            section: category.section,
+          };
+
+          // Субкатегории (уже отфильтрованы в запросе)
+          if (withSubcategories) {
+            formattedCategory.subcategories =
+              category.subcategories
+                ?.filter((s: any) => s.translations.length > 0)
+                .map((s: any) => ({
+                  id: s.id,
+                  name: s.translations[0].name,
+                })) || [];
+          }
+
+          // Бренды - дополнительная фильтрация по categoryId
+          if (withBrands) {
+            const categoryBrands = await this.prisma.brand.findMany({
+              where: {
+                translations: {
+                  some: { locale: locale as Locale },
+                },
+                products: {
+                  some: {
+                    isActive: true,
+                    categoryId: category.id,
+                    translations: {
+                      some: { locale: locale as Locale },
+                    },
+                  },
+                },
+              },
+              include: {
+                translations: {
+                  where: { locale: locale as Locale },
+                },
+              },
+            });
+
+            formattedCategory.brands = categoryBrands
+              .filter((b: any) => b.translations.length > 0)
+              .map((b: any) => ({
+                id: b.id,
+                name: b.translations[0].name,
+              }));
+          }
+
+          formattedCategories.push(formattedCategory);
+        }
 
         return { categories: formattedCategories };
       },
@@ -374,27 +461,37 @@ export class PublicService {
     return this.cache.getOrSet(
       cacheKey,
       async () => {
-        const category = await this.prisma.category.findUnique({
-          where: { id },
+        // ✅ Проверяем что у категории есть активные продукты
+        const category = await this.prisma.category.findFirst({
+          where: {
+            id,
+            products: {
+              some: {
+                isActive: true,
+                translations: {
+                  some: { locale: locale as Locale },
+                },
+              },
+            },
+          },
           include: {
             translations: {
               where: { locale: locale as Locale },
             },
             subcategories: {
+              where: {
+                products: {
+                  some: {
+                    isActive: true,
+                    translations: {
+                      some: { locale: locale as Locale },
+                    },
+                  },
+                },
+              },
               include: {
                 translations: {
                   where: { locale: locale as Locale },
-                },
-              },
-            },
-            categoryBrands: {
-              include: {
-                brand: {
-                  include: {
-                    translations: {
-                      where: { locale: locale as Locale },
-                    },
-                  },
                 },
               },
             },
@@ -405,7 +502,47 @@ export class PublicService {
           return null;
         }
 
-        return this.formatCategory(category, true, true);
+        // Получаем бренды с продуктами в этой категории
+        const categoryBrands = await this.prisma.brand.findMany({
+          where: {
+            translations: {
+              some: { locale: locale as Locale },
+            },
+            products: {
+              some: {
+                isActive: true,
+                categoryId: category.id,
+                translations: {
+                  some: { locale: locale as Locale },
+                },
+              },
+            },
+          },
+          include: {
+            translations: {
+              where: { locale: locale as Locale },
+            },
+          },
+        });
+
+        return {
+          id: category.id,
+          name: category.translations[0].name,
+          section: category.section,
+          subcategories:
+            category.subcategories
+              ?.filter((s: any) => s.translations.length > 0)
+              .map((s: any) => ({
+                id: s.id,
+                name: s.translations[0].name,
+              })) || [],
+          brands: categoryBrands
+            .filter((b: any) => b.translations.length > 0)
+            .map((b: any) => ({
+              id: b.id,
+              name: b.translations[0].name,
+            })),
+        };
       },
       { ttl: 600 }
     );
@@ -417,11 +554,20 @@ export class PublicService {
     return this.cache.getOrSet(
       cacheKey,
       async () => {
+        // ✅ Только субкатегории с продуктами
         const subcategories = await this.prisma.subcategory.findMany({
           where: {
             categoryId,
             translations: {
               some: { locale: locale as Locale },
+            },
+            products: {
+              some: {
+                isActive: true,
+                translations: {
+                  some: { locale: locale as Locale },
+                },
+              },
             },
           },
           include: {
@@ -444,7 +590,7 @@ export class PublicService {
     );
   }
 
-  // ==================== БРЕНДЫ ====================
+  // ==================== БРЕНДЫ (ТОЛЬКО С ПРОДУКТАМИ) ====================
 
   async getBrands(filters: BrandFilters): Promise<BrandsResponse> {
     const { locale, section, categoryId } = filters;
@@ -458,16 +604,18 @@ export class PublicService {
           translations: {
             some: { locale: locale as Locale },
           },
-        };
-
-        if (section || categoryId) {
-          where.categoryBrands = {
+          // ✅ Только бренды с активными продуктами
+          products: {
             some: {
+              isActive: true,
+              translations: {
+                some: { locale: locale as Locale },
+              },
               ...(section && { section: section as Section }),
               ...(categoryId && { categoryId }),
             },
-          };
-        }
+          },
+        };
 
         const brands = await this.prisma.brand.findMany({
           where,
@@ -498,8 +646,22 @@ export class PublicService {
     return this.cache.getOrSet(
       cacheKey,
       async () => {
-        const brand = await this.prisma.brand.findUnique({
-          where: { id },
+        // ✅ Проверяем что у бренда есть активные продукты
+        const brand = await this.prisma.brand.findFirst({
+          where: {
+            id,
+            translations: {
+              some: { locale: locale as Locale },
+            },
+            products: {
+              some: {
+                isActive: true,
+                translations: {
+                  some: { locale: locale as Locale },
+                },
+              },
+            },
+          },
           include: {
             translations: {
               where: { locale: locale as Locale },
@@ -539,7 +701,7 @@ export class PublicService {
           limit,
         });
 
-        // Поиск категорий
+        // Поиск категорий (только с продуктами)
         const categories = await this.prisma.category.findMany({
           where: {
             ...(section && { section: section as Section }),
@@ -547,6 +709,14 @@ export class PublicService {
               some: {
                 locale: locale as Locale,
                 name: { contains: searchTerm, mode: 'insensitive' },
+              },
+            },
+            products: {
+              some: {
+                isActive: true,
+                translations: {
+                  some: { locale: locale as Locale },
+                },
               },
             },
           },
@@ -558,13 +728,22 @@ export class PublicService {
           take: 10,
         });
 
-        // Поиск брендов
+        // Поиск брендов (только с продуктами)
         const brands = await this.prisma.brand.findMany({
           where: {
             translations: {
               some: {
                 locale: locale as Locale,
                 name: { contains: searchTerm, mode: 'insensitive' },
+              },
+            },
+            products: {
+              some: {
+                isActive: true,
+                translations: {
+                  some: { locale: locale as Locale },
+                },
+                ...(section && { section: section as Section }),
               },
             },
           },
@@ -698,38 +877,6 @@ export class PublicService {
           name: spec.translations[0].name,
           value: spec.translations[0].value,
         })),
-    };
-  }
-
-  private formatCategory(
-    category: any,
-    withSubcategories = false,
-    withBrands = false
-  ): any {
-    const translation = category.translations[0];
-
-    return {
-      id: category.id,
-      name: translation.name,
-      section: category.section,
-      ...(withSubcategories && {
-        subcategories:
-          category.subcategories
-            ?.filter((s: any) => s.translations.length > 0)
-            .map((s: any) => ({
-              id: s.id,
-              name: s.translations[0].name,
-            })) || [],
-      }),
-      ...(withBrands && {
-        brands:
-          category.categoryBrands
-            ?.filter((cb: any) => cb.brand.translations.length > 0)
-            .map((cb: any) => ({
-              id: cb.brand.id,
-              name: cb.brand.translations[0].name,
-            })) || [],
-      }),
     };
   }
 }
