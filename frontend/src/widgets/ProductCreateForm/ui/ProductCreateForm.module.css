@@ -1,34 +1,105 @@
 /* frontend/src/widgets/ProductCreateForm/ui/ProductCreateForm.module.css */
+
+/* ✅ ИСПРАВЛЕНИЕ: Добавлены стили для новых элементов производительности */
+
 .container {
-  width: 100%;
-  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
+/* Заголовок с прогрессом */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 2rem;
+  background: var(--content-box);
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 8px var(--shadow-content);
+}
+
+.progressSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.progressBar {
+  width: 100%;
+  height: 0.8rem;
+  background: var(--secondary);
+  border-radius: 0.4rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #ff6b35 100%);
+  border-radius: 0.4rem;
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.4rem;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.progressComplete {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.autoSaveStatus {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Форма */
 .form {
   display: flex;
   flex-direction: column;
   gap: 3rem;
 }
 
+/* Секции */
 .section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 3rem;
   background: var(--content-box);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.4rem;
-  box-shadow: 0 0.2rem 0.8rem var(--shadow-content);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 8px var(--shadow-content);
   transition: all 0.3s ease;
 }
 
 .section:hover {
-  box-shadow: 0 0.4rem 1.2rem var(--shadow-content);
+  box-shadow: 0 4px 16px var(--shadow-content);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .sectionTitle {
   font-size: 2rem;
   font-weight: 600;
   color: var(--foreground);
-  margin: 0 0 2rem 0;
-  letter-spacing: -0.01em;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -42,20 +113,74 @@
   border-radius: 0.2rem;
 }
 
+.sectionStatus {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.statusComplete {
+  color: var(--success);
+}
+
+.statusIncomplete {
+  color: var(--destructive);
+}
+
+.statusOptional {
+  color: var(--text-secondary);
+}
+
+/* Секция действий */
 .actionsSection {
-  background: var(--content-box);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 3rem;
+  background: var(--secondary);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem 2.4rem;
-  box-shadow: 0 0.2rem 0.8rem var(--shadow-content);
+  border-radius: 1.2rem;
+  margin-top: 2rem;
   position: sticky;
   bottom: 2rem;
   z-index: 10;
 }
 
+/* Глобальные ошибки */
+.globalError {
+  padding: 1.6rem;
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid var(--destructive);
+  border-radius: 0.8rem;
+  color: var(--destructive);
+  font-size: 1.4rem;
+  margin-top: 2rem;
+}
+
 /* Адаптивность */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+    gap: 2.5rem;
+  }
+
+  .section {
+    padding: 2.5rem;
+  }
+
+  .actionsSection {
+    padding: 2.5rem;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+}
+
 @media (max-width: 768px) {
-  .form {
+  .container {
+    padding: 1rem;
     gap: 2rem;
   }
 
@@ -63,22 +188,133 @@
     padding: 2rem;
   }
 
+  .actionsSection {
+    padding: 2rem;
+    position: static; /* Убираем sticky на мобильных */
+  }
+
   .sectionTitle {
     font-size: 1.8rem;
   }
 
-  .actionsSection {
-    padding: 1.5rem 2rem;
-    position: static;
+  .header {
+    padding: 1.5rem;
+  }
+
+  .progressText {
+    font-size: 1.3rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 }
 
 @media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
   .section {
     padding: 1.5rem;
   }
 
   .actionsSection {
     padding: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.6rem;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+}
+
+/* Темная тема */
+.dark .section {
+  background: var(--content-box);
+  border-color: var(--border);
+  box-shadow: 0 2px 8px var(--shadow-content);
+}
+
+.dark .section:hover {
+  box-shadow: 0 4px 16px var(--shadow-content);
+}
+
+.dark .actionsSection {
+  background: var(--secondary);
+  border-color: var(--border);
+}
+
+.dark .globalError {
+  background: rgba(255, 0, 0, 0.15);
+  border-color: var(--destructive);
+}
+
+.dark .header {
+  background: var(--content-box);
+  border-color: var(--border);
+  box-shadow: 0 2px 8px var(--shadow-content);
+}
+
+/* Анимации загрузки */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.section[data-loading='true'] {
+  animation: pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Состояния фокуса для доступности */
+.section:focus-within {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Улучшенная типографика */
+.sectionTitle {
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.progressText {
+  line-height: 1.4;
+}
+
+/* Плавные переходы для всех интерактивных элементов */
+.container * {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Стили для состояния сохранения */
+.saving .progressFill {
+  background: linear-gradient(
+    90deg,
+    var(--primary) 0%,
+    var(--primary) 50%,
+    #ff6b35 100%
+  );
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
   }
 }
