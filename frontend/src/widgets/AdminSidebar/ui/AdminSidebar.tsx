@@ -2,7 +2,7 @@
 'use client';
 
 import { TranslationType } from '@/shared/config/i18n/types';
-import { LuHouse, LuPackage, LuTag, LuSettings, LuBrush } from 'react-icons/lu';
+import { LuHouse, LuPlus, LuList } from 'react-icons/lu';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
@@ -50,35 +50,20 @@ const AdminSidebar = ({ isOpen, locale, onToggle }: AdminSidebarProps) => {
       id: 'dashboard',
       label: 'Главная',
       icon: LuHouse,
-      href: `/${locale}/admin/dashboard`,
+      href: `/${locale}/admin/dashboard/home`,
     },
     {
-      id: 'products',
-      label: 'Продукты',
-      icon: LuPackage,
+      id: 'products-create',
+      label: 'Создать продукт',
+      icon: LuPlus,
+      href: `/${locale}/admin/dashboard/create`,
+    },
+    {
+      id: 'products-list',
+      label: 'Список продуктов',
+      icon: LuList,
       href: `/${locale}/admin/products`,
-      disabled: true,
-    },
-    {
-      id: 'categories',
-      label: 'Категории',
-      icon: LuTag,
-      href: `/${locale}/admin/categories`,
-      disabled: true,
-    },
-    {
-      id: 'brands',
-      label: 'Бренды',
-      icon: LuBrush,
-      href: `/${locale}/admin/brands`,
-      disabled: true,
-    },
-    {
-      id: 'settings',
-      label: 'Настройки',
-      icon: LuSettings,
-      href: `/${locale}/admin/settings`,
-      disabled: true,
+      disabled: true, // Пока отключено, сделаем позже
     },
   ];
 

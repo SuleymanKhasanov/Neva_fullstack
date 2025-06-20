@@ -1,0 +1,252 @@
+/* frontend/src/shared/ui/SearchableSelect/SearchableSelect.module.css */
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 4.4rem;
+  padding: 0 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  background: var(--content-box);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.field:hover {
+  border-color: var(--primary);
+}
+
+.field.open {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.1rem rgba(227, 30, 36, 0.2);
+}
+
+.container.error .field {
+  border-color: var(--destructive);
+}
+
+.container.disabled .field {
+  background: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.valueContainer {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.selectedValue {
+  font-size: 1.4rem;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.placeholder {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+}
+
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.clearButton:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.indicators {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-left: 0.8rem;
+}
+
+.icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Выпадающий список */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  background: var(--content-box);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  box-shadow: 0 0.8rem 2.4rem var(--shadow-content);
+  z-index: 1000;
+  max-height: 32rem;
+  overflow: hidden;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.8rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.searchContainer {
+  position: relative;
+  padding: 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--text-secondary);
+}
+
+.searchInput {
+  width: 100%;
+  height: 3.6rem;
+  padding: 0 1.2rem 0 3.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--background);
+  font-size: 1.4rem;
+  color: var(--foreground);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: var(--primary);
+}
+
+.optionsList {
+  max-height: 24rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.optionsList::-webkit-scrollbar {
+  width: 0.6rem;
+}
+
+.optionsList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.optionsList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 0.3rem;
+}
+
+.option {
+  padding: 1.2rem;
+  font-size: 1.4rem;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--border);
+}
+
+.option:last-child {
+  border-bottom: none;
+}
+
+.option:hover,
+.option.highlighted {
+  background: var(--secondary);
+}
+
+.option.selected {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 500;
+}
+
+.noOptions {
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+}
+
+.errorMessage {
+  margin-top: 0.6rem;
+  font-size: 1.2rem;
+  color: var(--destructive);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .field {
+    min-height: 4.8rem;
+    padding: 0 1.6rem;
+  }
+
+  .selectedValue,
+  .placeholder {
+    font-size: 1.6rem;
+  }
+
+  .searchInput {
+    height: 4rem;
+    font-size: 1.6rem;
+  }
+
+  .option {
+    padding: 1.6rem;
+    font-size: 1.6rem;
+  }
+
+  .dropdown {
+    max-height: 28rem;
+  }
+}
