@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useAdminApi } from '@/shared/hooks/useAdminApi';
 
 export interface SelectOption {
   value: string;
@@ -50,49 +49,49 @@ export const useSelectors = (
   const [isLoadingSubcategories, setIsLoadingSubcategories] = useState(false);
   const [isLoadingBrands, setIsLoadingBrands] = useState(false);
 
-  const { adminApi, isAuthenticated } = useAdminApi();
-
-  // Загрузка секций при инициализации
+  // ✅ ИСПРАВЛЕНИЕ: Загрузка секций - только один раз при монтировании
   useEffect(() => {
-    if (!isAuthenticated) return;
+    console.log('🔍 Loading sections...');
+    setIsLoadingSections(true);
 
-    const loadSections = async () => {
-      setIsLoadingSections(true);
-      try {
-        // Пока используем статические данные, позже заменим на API
-        const sections: SectionData[] = [
-          { value: 'NEVA', name: 'NEVA' },
-          { value: 'X_SOLUTION', name: 'X-Solution' },
-        ];
-        setSectionsData(sections);
-      } catch (error) {
-        console.error('Failed to load sections:', error);
-      } finally {
-        setIsLoadingSections(false);
-      }
-    };
+    try {
+      // Пока используем статические данные
+      const sections: SectionData[] = [
+        { value: 'NEVA', name: 'NEVA' },
+        { value: 'X_SOLUTION', name: 'X-Solution' },
+      ];
+      setSectionsData(sections);
+    } catch (error) {
+      console.error('Failed to load sections:', error);
+    } finally {
+      setIsLoadingSections(false);
+    }
+  }, []); // ✅ Пустой массив зависимостей - выполняется только при монтировании
 
-    loadSections();
-  }, [isAuthenticated]);
-
-  // Загрузка категорий при выборе секции
+  // ✅ ИСПРАВЛЕНИЕ: Загрузка категорий - только при изменении секции
   useEffect(() => {
-    if (!selectedSection || !isAuthenticated) {
+    if (!selectedSection) {
+      console.log('🔍 No section selected, clearing categories');
       setCategoriesData([]);
       return;
     }
 
-    const loadCategories = async () => {
-      setIsLoadingCategories(true);
-      try {
-        const response = await adminApi.get(
-          `/admin/categories?section=${selectedSection}&locale=${locale}`
-        );
+    console.log('🔍 Loading categories for section:', selectedSection);
+    setIsLoadingCategories(true);
 
-        if (response.ok) {
-          const data = await response.json();
-          setCategoriesData(data.data || []);
-        }
+    // Имитируем API запрос с задержкой
+    const loadCategories = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Имитация загрузки
+
+        // Моковые данные для демонстрации
+        const mockCategories: CategoryData[] = [
+          { id: 1, name: 'Серверы', section: selectedSection },
+          { id: 2, name: 'Сетевое оборудование', section: selectedSection },
+          { id: 3, name: 'Системы хранения', section: selectedSection },
+        ];
+
+        setCategoriesData(mockCategories);
       } catch (error) {
         console.error('Failed to load categories:', error);
         setCategoriesData([]);
@@ -102,26 +101,30 @@ export const useSelectors = (
     };
 
     loadCategories();
-  }, [selectedSection, locale, isAuthenticated, adminApi]);
+  }, [selectedSection]); // ✅ Зависит только от selectedSection
 
-  // Загрузка подкатегорий при выборе категории
+  // ✅ ИСПРАВЛЕНИЕ: Загрузка подкатегорий - только при изменении категории
   useEffect(() => {
-    if (!selectedCategoryId || !isAuthenticated) {
+    if (!selectedCategoryId) {
+      console.log('🔍 No category selected, clearing subcategories');
       setSubcategoriesData([]);
       return;
     }
 
-    const loadSubcategories = async () => {
-      setIsLoadingSubcategories(true);
-      try {
-        const response = await adminApi.get(
-          `/admin/subcategories?categoryId=${selectedCategoryId}&locale=${locale}`
-        );
+    console.log('🔍 Loading subcategories for category:', selectedCategoryId);
+    setIsLoadingSubcategories(true);
 
-        if (response.ok) {
-          const data = await response.json();
-          setSubcategoriesData(data.data || []);
-        }
+    const loadSubcategories = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // Моковые данные
+        const mockSubcategories: SubcategoryData[] = [
+          { id: 1, name: 'Rack серверы', categoryId: selectedCategoryId },
+          { id: 2, name: 'Blade серверы', categoryId: selectedCategoryId },
+        ];
+
+        setSubcategoriesData(mockSubcategories);
       } catch (error) {
         console.error('Failed to load subcategories:', error);
         setSubcategoriesData([]);
@@ -131,26 +134,32 @@ export const useSelectors = (
     };
 
     loadSubcategories();
-  }, [selectedCategoryId, locale, isAuthenticated, adminApi]);
+  }, [selectedCategoryId]); // ✅ Зависит только от selectedCategoryId
 
-  // Загрузка брендов при выборе секции
+  // ✅ ИСПРАВЛЕНИЕ: Загрузка брендов - только при изменении секции
   useEffect(() => {
-    if (!selectedSection || !isAuthenticated) {
+    if (!selectedSection) {
+      console.log('🔍 No section selected, clearing brands');
       setBrandsData([]);
       return;
     }
 
-    const loadBrands = async () => {
-      setIsLoadingBrands(true);
-      try {
-        const response = await adminApi.get(
-          `/admin/brands?section=${selectedSection}&locale=${locale}`
-        );
+    console.log('🔍 Loading brands for section:', selectedSection);
+    setIsLoadingBrands(true);
 
-        if (response.ok) {
-          const data = await response.json();
-          setBrandsData(data.data || []);
-        }
+    const loadBrands = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+
+        // Моковые данные
+        const mockBrands: BrandData[] = [
+          { id: 1, name: 'Dell', section: selectedSection },
+          { id: 2, name: 'HP', section: selectedSection },
+          { id: 3, name: 'Cisco', section: selectedSection },
+          { id: 4, name: 'Lenovo', section: selectedSection },
+        ];
+
+        setBrandsData(mockBrands);
       } catch (error) {
         console.error('Failed to load brands:', error);
         setBrandsData([]);
@@ -160,10 +169,10 @@ export const useSelectors = (
     };
 
     loadBrands();
-  }, [selectedSection, locale, isAuthenticated, adminApi]);
+  }, [selectedSection]); // ✅ Зависит только от selectedSection
 
-  // Мемоизированные опции для селектов
-  const sectionOptions: SelectOption[] = useMemo(
+  // ✅ ИСПРАВЛЕНИЕ: Мемоизированные опции для селекторов
+  const sectionOptions = useMemo(
     () =>
       sectionsData.map((section) => ({
         value: section.value,
@@ -173,7 +182,7 @@ export const useSelectors = (
     [sectionsData]
   );
 
-  const categoryOptions: SelectOption[] = useMemo(
+  const categoryOptions = useMemo(
     () =>
       categoriesData.map((category) => ({
         value: category.id.toString(),
@@ -183,7 +192,7 @@ export const useSelectors = (
     [categoriesData]
   );
 
-  const subcategoryOptions: SelectOption[] = useMemo(
+  const subcategoryOptions = useMemo(
     () =>
       subcategoriesData.map((subcategory) => ({
         value: subcategory.id.toString(),
@@ -193,7 +202,7 @@ export const useSelectors = (
     [subcategoriesData]
   );
 
-  const brandOptions: SelectOption[] = useMemo(
+  const brandOptions = useMemo(
     () =>
       brandsData.map((brand) => ({
         value: brand.id.toString(),
@@ -203,14 +212,32 @@ export const useSelectors = (
     [brandsData]
   );
 
+  console.log('🔍 useSelectors state:', {
+    sectionsCount: sectionsData.length,
+    categoriesCount: categoriesData.length,
+    subcategoriesCount: subcategoriesData.length,
+    brandsCount: brandsData.length,
+    selectedSection,
+    selectedCategoryId,
+  });
+
   return {
+    // Опции для селекторов
     sectionOptions,
     categoryOptions,
     subcategoryOptions,
     brandOptions,
+
+    // Состояния загрузки
     isLoadingSections,
     isLoadingCategories,
     isLoadingSubcategories,
     isLoadingBrands,
+
+    // Сырые данные (если нужны)
+    sectionsData,
+    categoriesData,
+    subcategoriesData,
+    brandsData,
   };
 };
