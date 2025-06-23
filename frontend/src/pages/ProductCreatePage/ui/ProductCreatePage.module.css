@@ -1,52 +1,19 @@
 /* frontend/src/pages/ProductCreatePage/ui/ProductCreatePage.module.css */
+
 .container {
   min-height: 100vh;
-  padding: 2rem;
   background: var(--background);
-}
-
-.header {
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.title {
-  font-size: 2.8rem;
-  font-weight: 600;
-  color: var(--foreground);
-  margin: 0 0 0.8rem 0;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  font-size: 1.6rem;
-  color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.content {
-  max-width: 120rem;
-  margin: 0 auto;
+  padding: 2rem 0;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
   .container {
-    padding: 1.5rem;
+    padding: 1rem 0;
   }
+}
 
-  .title {
-    font-size: 2.4rem;
-  }
-
-  .subtitle {
-    font-size: 1.4rem;
-  }
-
-  .header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-  }
+/* Темная тема */
+.dark .container {
+  background: var(--background);
 }

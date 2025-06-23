@@ -1,61 +1,70 @@
-// frontend/src/shared/ui/SearchableSelect/SearchableSelect.tsx
+// frontend/src/shared/ui/SearchableSelect/SearchableSelect.tsx - ИСПРАВЛЕНО
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { LuChevronDown, LuSearch, LuLoader, LuX } from 'react-icons/lu';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './SearchableSelect.module.css';
 
-export interface SelectOption {
-  value: string;
+interface Option {
+  value: string | number;
   label: string;
-  searchText: string;
 }
 
 interface SearchableSelectProps {
-  value?: string | null;
-  options: SelectOption[];
+  options: Option[];
+  value: string | number | null;
   placeholder?: string;
+  searchPlaceholder?: string;
   isLoading?: boolean;
-  error?: string;
   disabled?: boolean;
-  onChange: (value: string | null) => void;
+  error?: string;
+  onChange: (value: string | number | null) => void;
+  onSearch?: (searchTerm: string) => void;
+  className?: string;
 }
 
-const SearchableSelect = ({
-  value,
+export const SearchableSelect: React.FC<SearchableSelectProps> = ({
   options,
+  value,
   placeholder = 'Выберите...',
+  searchPlaceholder = 'Поиск...',
   isLoading = false,
-  error,
   disabled = false,
+  error,
   onChange,
-}: SearchableSelectProps) => {
+  onSearch,
+  className,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [filteredOptions, setFilteredOptions] = useState(options);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const optionsRef = useRef<HTMLDivElement>(null);
+  // Фильтрация опций
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(searchTerm);
+    } else {
+      const filtered = options.filter((option) =>
+        option.label.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredOptions(filtered);
+    }
+  }, [searchTerm, options, onSearch]);
 
-  // Найденная опция для отображения
-  const selectedOption = options.find((option) => option.value === value);
-
-  // Фильтрованные опции
-  const filteredOptions = options.filter((option) =>
-    option.searchText.includes(searchTerm.toLowerCase())
-  );
+  // Обновление опций извне
+  useEffect(() => {
+    setFilteredOptions(options);
+  }, [options]);
 
   // Закрытие при клике вне компонента
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
-        setSearchTerm('');
-        setHighlightedIndex(-1);
       }
     };
 
@@ -63,160 +72,120 @@ const SearchableSelect = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Обработка клавиш
+  // Фокус на поиск при открытии
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isOpen) return;
-
-      switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault();
-          setHighlightedIndex((prev) =>
-            prev < filteredOptions.length - 1 ? prev + 1 : 0
-          );
-          break;
-        case 'ArrowUp':
-          event.preventDefault();
-          setHighlightedIndex((prev) =>
-            prev > 0 ? prev - 1 : filteredOptions.length - 1
-          );
-          break;
-        case 'Enter':
-          event.preventDefault();
-          if (
-            highlightedIndex >= 0 &&
-            highlightedIndex < filteredOptions.length
-          ) {
-            handleSelect(filteredOptions[highlightedIndex].value);
-          }
-          break;
-        case 'Escape':
-          setIsOpen(false);
-          setSearchTerm('');
-          setHighlightedIndex(-1);
-          break;
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, highlightedIndex, filteredOptions]);
-
-  // Фокус на input при открытии
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    if (isOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
     }
   }, [isOpen]);
 
+  const selectedOption = options.find((option) => option.value === value);
+
   const handleToggle = () => {
-    if (disabled || isLoading) return;
-    setIsOpen(!isOpen);
-    setSearchTerm('');
-    setHighlightedIndex(-1);
+    if (!disabled && !isLoading) {
+      setIsOpen(!isOpen);
+      if (!isOpen) {
+        setSearchTerm('');
+      }
+    }
   };
 
-  const handleSelect = (optionValue: string) => {
-    onChange(optionValue);
+  const handleOptionSelect = (option: Option) => {
+    onChange(option.value);
     setIsOpen(false);
     setSearchTerm('');
-    setHighlightedIndex(-1);
   };
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     onChange(null);
+    setSearchTerm('');
   };
 
   return (
-    <div
-      className={`${styles.container} ${error ? styles.error : ''} ${disabled ? styles.disabled : ''}`}
-      ref={containerRef}
-    >
-      {/* Основное поле */}
+    <div className={`${styles.container} ${className || ''}`} ref={dropdownRef}>
+      {/* Основная кнопка */}
       <div
-        className={`${styles.field} ${isOpen ? styles.open : ''}`}
+        className={`${styles.trigger} ${error ? styles.error : ''} ${disabled ? styles.disabled : ''}`}
         onClick={handleToggle}
+        role="button"
+        tabIndex={disabled || isLoading ? -1 : 0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleToggle();
+          }
+        }}
       >
-        <div className={styles.valueContainer}>
-          {selectedOption ? (
-            <>
-              <span className={styles.selectedValue}>
-                {selectedOption.label}
-              </span>
-              {!disabled && (
-                <button
-                  type="button"
-                  className={styles.clearButton}
-                  onClick={handleClear}
-                  aria-label="Очистить"
-                >
-                  <LuX />
-                </button>
-              )}
-            </>
-          ) : (
-            <span className={styles.placeholder}>{placeholder}</span>
-          )}
-        </div>
+        <span className={styles.value}>
+          {isLoading ? 'Загрузка...' : selectedOption?.label || placeholder}
+        </span>
 
-        <div className={styles.indicators}>
-          {isLoading && (
-            <LuLoader className={`${styles.icon} ${styles.loading}`} />
+        <div className={styles.actions}>
+          {selectedOption && !disabled && (
+            <span
+              className={styles.clearButton}
+              onClick={handleClear}
+              role="button"
+              tabIndex={-1}
+              title="Очистить"
+            >
+              ✕
+            </span>
           )}
-          <LuChevronDown
-            className={`${styles.icon} ${styles.chevron} ${isOpen ? styles.rotated : ''}`}
-          />
+          <span className={`${styles.arrow} ${isOpen ? styles.rotated : ''}`}>
+            ▼
+          </span>
         </div>
       </div>
 
-      {/* Выпадающий список */}
+      {/* Dropdown */}
       {isOpen && (
-        <div className={styles.dropdown} ref={optionsRef}>
-          {/* Поле поиска */}
+        <div className={styles.dropdown}>
+          {/* Поиск */}
           <div className={styles.searchContainer}>
-            <LuSearch className={styles.searchIcon} />
             <input
-              ref={inputRef}
+              ref={searchInputRef}
               type="text"
-              className={styles.searchInput}
-              placeholder="Поиск..."
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setHighlightedIndex(-1);
-              }}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={searchPlaceholder}
+              className={styles.searchInput}
             />
           </div>
 
-          {/* Список опций */}
+          {/* Опции */}
           <div className={styles.optionsList}>
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((option, index) => (
+            {filteredOptions.length === 0 ? (
+              <div className={styles.noOptions}>
+                {isLoading ? 'Загрузка...' : 'Нет результатов'}
+              </div>
+            ) : (
+              filteredOptions.map((option) => (
                 <div
                   key={option.value}
                   className={`${styles.option} ${
-                    index === highlightedIndex ? styles.highlighted : ''
-                  } ${option.value === value ? styles.selected : ''}`}
-                  onClick={() => handleSelect(option.value)}
-                  onMouseEnter={() => setHighlightedIndex(index)}
+                    option.value === value ? styles.selected : ''
+                  }`}
+                  onClick={() => handleOptionSelect(option)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleOptionSelect(option);
+                    }
+                  }}
                 >
                   {option.label}
                 </div>
               ))
-            ) : (
-              <div className={styles.noOptions}>
-                {isLoading ? 'Загрузка...' : 'Нет результатов'}
-              </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Сообщение об ошибке */}
-      {error && <div className={styles.errorMessage}>{error}</div>}
+      {/* Ошибка */}
+      {error && <div className={styles.errorText}>{error}</div>}
     </div>
   );
 };
-
-export default SearchableSelect;

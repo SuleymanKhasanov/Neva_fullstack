@@ -1,60 +1,58 @@
 /* frontend/src/shared/ui/SearchableSelect/SearchableSelect.module.css */
+
 .container {
   position: relative;
   width: 100%;
 }
 
-.field {
+.trigger {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 4.4rem;
-  padding: 0 1.2rem;
+  padding: 1.2rem 1.6rem;
+  background: var(--content-box);
   border: 1px solid var(--border);
   border-radius: 0.8rem;
-  background: var(--content-box);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.field:hover {
-  border-color: var(--primary);
-}
-
-.field.open {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 0.1rem rgba(227, 30, 36, 0.2);
-}
-
-.container.error .field {
-  border-color: var(--destructive);
-}
-
-.container.disabled .field {
-  background: var(--muted);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.valueContainer {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  gap: 0.8rem;
-  min-width: 0;
-}
-
-.selectedValue {
   font-size: 1.4rem;
   color: var(--foreground);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  outline: none;
 }
 
-.placeholder {
-  font-size: 1.4rem;
-  color: var(--text-secondary);
+.trigger:hover:not(.disabled) {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+}
+
+.trigger:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+}
+
+.trigger.error {
+  border-color: #dc2626;
+}
+
+.trigger.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--secondary);
+}
+
+.value {
+  flex: 1;
+  text-align: left;
+  color: var(--foreground);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .clearButton {
@@ -63,190 +61,165 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  border: none;
-  background: none;
-  border-radius: 0.4rem;
-  cursor: pointer;
+  background: var(--secondary);
+  border-radius: 50%;
   color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.2rem;
   transition: all 0.2s ease;
+  user-select: none;
 }
 
 .clearButton:hover {
-  background: var(--muted);
+  background: var(--border);
   color: var(--foreground);
 }
 
-.indicators {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-left: 0.8rem;
-}
-
-.icon {
-  width: 1.6rem;
-  height: 1.6rem;
+.arrow {
   color: var(--text-secondary);
-  transition: all 0.3s ease;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
 }
 
-.chevron.rotated {
+.arrow.rotated {
   transform: rotate(180deg);
 }
 
-.loading {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Выпадающий список */
 .dropdown {
   position: absolute;
   top: calc(100% + 0.4rem);
   left: 0;
   right: 0;
+  z-index: 50;
   background: var(--content-box);
   border: 1px solid var(--border);
   border-radius: 0.8rem;
-  box-shadow: 0 0.8rem 2.4rem var(--shadow-content);
-  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
   max-height: 32rem;
   overflow: hidden;
-  animation: slideDown 0.2s ease;
+  animation: slideDown 0.2s ease-out;
 }
 
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-0.8rem);
+    transform: translateY(-8px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .searchContainer {
-  position: relative;
   padding: 1.2rem;
   border-bottom: 1px solid var(--border);
 }
 
-.searchIcon {
-  position: absolute;
-  left: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1.6rem;
-  height: 1.6rem;
-  color: var(--text-secondary);
-}
-
 .searchInput {
   width: 100%;
-  height: 3.6rem;
-  padding: 0 1.2rem 0 3.6rem;
+  padding: 0.8rem 1.2rem;
   border: 1px solid var(--border);
   border-radius: 0.6rem;
-  background: var(--background);
   font-size: 1.4rem;
+  background: var(--background);
   color: var(--foreground);
-  outline: none;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.2s ease;
 }
 
 .searchInput:focus {
+  outline: none;
   border-color: var(--primary);
+}
+
+.searchInput::placeholder {
+  color: var(--text-secondary);
 }
 
 .optionsList {
   max-height: 24rem;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-
-.optionsList::-webkit-scrollbar {
-  width: 0.6rem;
-}
-
-.optionsList::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.optionsList::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 0.3rem;
+  padding: 0.4rem;
 }
 
 .option {
-  padding: 1.2rem;
+  width: 100%;
+  display: block;
+  padding: 1rem 1.2rem;
+  background: transparent;
+  border-radius: 0.6rem;
   font-size: 1.4rem;
   color: var(--foreground);
   cursor: pointer;
-  transition: all 0.2s ease;
-  border-bottom: 1px solid var(--border);
+  text-align: left;
+  transition: all 0.15s ease;
+  outline: none;
+  user-select: none;
 }
 
-.option:last-child {
-  border-bottom: none;
-}
-
-.option:hover,
-.option.highlighted {
+.option:hover {
   background: var(--secondary);
 }
 
 .option.selected {
   background: var(--primary);
   color: var(--primary-foreground);
-  font-weight: 500;
+}
+
+.option.selected:hover {
+  background: var(--primary);
 }
 
 .noOptions {
   padding: 2rem;
   text-align: center;
-  font-size: 1.4rem;
   color: var(--text-secondary);
+  font-size: 1.4rem;
 }
 
-.errorMessage {
+.errorText {
   margin-top: 0.6rem;
   font-size: 1.2rem;
-  color: var(--destructive);
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Кастомный скроллбар */
+.optionsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.optionsList::-webkit-scrollbar-track {
+  background: var(--secondary);
+  border-radius: 3px;
+}
+
+.optionsList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.optionsList::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Темная тема */
+.dark .dropdown {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
-  .field {
-    min-height: 4.8rem;
-    padding: 0 1.6rem;
-  }
-
-  .selectedValue,
-  .placeholder {
-    font-size: 1.6rem;
-  }
-
-  .searchInput {
-    height: 4rem;
-    font-size: 1.6rem;
-  }
-
-  .option {
-    padding: 1.6rem;
-    font-size: 1.6rem;
+  .trigger {
+    padding: 1rem 1.4rem;
   }
 
   .dropdown {
-    max-height: 28rem;
+    max-height: 24rem;
+  }
+
+  .optionsList {
+    max-height: 18rem;
   }
 }
