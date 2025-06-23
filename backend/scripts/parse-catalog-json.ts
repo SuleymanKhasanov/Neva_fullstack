@@ -34,146 +34,151 @@ async function importCatalog() {
     // Поддерживаемые локали
     const locales: Locale[] = ['ru', 'en', 'uz', 'kr'];
 
-    // Обработка категорий
-    for (const category of data.categories) {
-      // Создание или обновление категории
-      const categoryRecord = await prisma.category.upsert({
-        where: { id: category.id },
-        update: {
-          section: Section.NEVA,
-        },
-        create: {
-          id: category.id,
-          section: Section.NEVA,
-        },
-      });
+    // Секции для дублирования данных
+    const sections: Section[] = [Section.NEVA, Section.X_SOLUTION];
 
-      // Обработка переводов категории
-      for (const locale of locales) {
-        if (category.name[locale]) {
-          await prisma.categoryTranslation.upsert({
-            where: {
-              categoryId_locale: {
-                categoryId: category.id,
-                locale: locale as Locale,
-              },
-            },
-            update: {
-              name: category.name[locale],
-            },
-            create: {
-              categoryId: category.id,
-              locale: locale as Locale,
-              name: category.name[locale],
-            },
-          });
-        }
-      }
+    // Обработка категорий для обеих секций
+    for (const section of sections) {
+      console.log(`Импорт для секции: ${section}`);
 
-      // Обработка субкатегорий
-      for (const subcategory of category.subcategories) {
-        // Создание или обновление субкатегории
-        const subcategoryRecord = await prisma.subcategory.upsert({
-          where: { id: subcategory.id },
+      for (const category of data.categories) {
+        // Создание уникального ID для каждой секции
+        // Для NEVA используем оригинальный ID, для X_SOLUTION добавляем смещение
+        const categoryId =
+          section === Section.NEVA ? category.id : category.id + 10000; // Смещение для X_SOLUTION
+
+        // Создание или обновление категории
+        const categoryRecord = await prisma.category.upsert({
+          where: { id: categoryId },
           update: {
-            categoryId: category.id,
+            section: section,
           },
           create: {
-            id: subcategory.id,
-            categoryId: category.id,
+            id: categoryId,
+            section: section,
           },
         });
 
-        // Обработка переводов субкатегории
+        // Обработка переводов категории
         for (const locale of locales) {
-          if (subcategory.name[locale]) {
-            await prisma.subcategoryTranslation.upsert({
+          if (category.name[locale]) {
+            await prisma.categoryTranslation.upsert({
               where: {
-                subcategoryId_locale: {
-                  subcategoryId: subcategory.id,
+                categoryId_locale: {
+                  categoryId: categoryId,
                   locale: locale as Locale,
                 },
               },
               update: {
-                name: subcategory.name[locale],
+                name: category.name[locale],
               },
               create: {
-                subcategoryId: subcategory.id,
+                categoryId: categoryId,
                 locale: locale as Locale,
-                name: subcategory.name[locale],
+                name: category.name[locale],
               },
             });
           }
         }
 
-        // Обработка брендов
-        for (const brandName of subcategory.brands) {
-          // Поиск существующего бренда по имени в русской локали
-          const existingBrand = await prisma.brand.findFirst({
-            where: {
-              translations: {
-                some: {
-                  locale: Locale.ru,
-                  name: brandName,
-                },
-              },
+        // Обработка субкатегорий
+        for (const subcategory of category.subcategories) {
+          // Создание уникального ID для субкатегории
+          const subcategoryId =
+            section === Section.NEVA ? subcategory.id : subcategory.id + 10000; // Смещение для X_SOLUTION
+
+          // Создание или обновление субкатегории
+          const subcategoryRecord = await prisma.subcategory.upsert({
+            where: { id: subcategoryId },
+            update: {
+              categoryId: categoryId,
             },
-            include: {
-              translations: true,
+            create: {
+              id: subcategoryId,
+              categoryId: categoryId,
             },
           });
 
-          let brand;
+          // Обработка переводов субкатегории
+          for (const locale of locales) {
+            if (subcategory.name[locale]) {
+              await prisma.subcategoryTranslation.upsert({
+                where: {
+                  subcategoryId_locale: {
+                    subcategoryId: subcategoryId,
+                    locale: locale as Locale,
+                  },
+                },
+                update: {
+                  name: subcategory.name[locale],
+                },
+                create: {
+                  subcategoryId: subcategoryId,
+                  locale: locale as Locale,
+                  name: subcategory.name[locale],
+                },
+              });
+            }
+          }
 
-          if (existingBrand) {
-            // Если бренд существует, обновляем его
-            brand = await prisma.brand.upsert({
-              where: { id: existingBrand.id },
-              update: {}, // Ничего не обновляем, если бренд уже существует
-              create: {
+          // Обработка брендов
+          for (const brandName of subcategory.brands) {
+            // Поиск существующего бренда по имени в русской локали
+            let existingBrand = await prisma.brand.findFirst({
+              where: {
                 translations: {
-                  create: locales.map((locale) => ({
-                    locale,
-                    name: brandName, // Используем одно имя для всех локалей
-                  })),
+                  some: {
+                    locale: Locale.ru,
+                    name: brandName,
+                  },
                 },
               },
+              include: {
+                translations: true,
+              },
             });
-          } else {
-            // Если бренд не существует, создаем новый
-            brand = await prisma.brand.create({
-              data: {
-                translations: {
-                  create: locales.map((locale) => ({
-                    locale,
-                    name: brandName, // Используем одно имя для всех локалей
-                  })),
+
+            let brand;
+
+            if (existingBrand) {
+              // Если бренд существует, используем его
+              brand = existingBrand;
+            } else {
+              // Если бренд не существует, создаем новый
+              brand = await prisma.brand.create({
+                data: {
+                  translations: {
+                    create: locales.map((locale) => ({
+                      locale,
+                      name: brandName, // Используем одно имя для всех локалей
+                    })),
+                  },
                 },
+              });
+            }
+
+            // Связывание бренда с категорией для текущей секции
+            await prisma.categoryBrand.upsert({
+              where: {
+                categoryId_brandId_section: {
+                  categoryId: categoryId,
+                  brandId: brand.id,
+                  section: section,
+                },
+              },
+              update: {},
+              create: {
+                categoryId: categoryId,
+                brandId: brand.id,
+                section: section,
               },
             });
           }
-
-          // Связывание бренда с категорией
-          await prisma.categoryBrand.upsert({
-            where: {
-              categoryId_brandId_section: {
-                categoryId: category.id,
-                brandId: brand.id,
-                section: Section.NEVA,
-              },
-            },
-            update: {},
-            create: {
-              categoryId: category.id,
-              brandId: brand.id,
-              section: Section.NEVA,
-            },
-          });
         }
       }
     }
 
-    console.log('Импорт каталога успешно завершен');
+    console.log('Импорт каталога для обеих секций успешно завершен');
   } catch (error) {
     console.error('Ошибка при импорте каталога:', error);
   } finally {

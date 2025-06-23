@@ -13,16 +13,7 @@ interface ProductCreatePageProps {
 const ProductCreatePage = ({ locale, messages }: ProductCreatePageProps) => {
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Создание продукта</h1>
-        <p className={styles.subtitle}>
-          Заполните форму для добавления нового продукта в каталог
-        </p>
-      </div>
-
-      <div className={styles.content}>
-        <ProductCreateForm locale={locale} messages={messages} />
-      </div>
+      <ProductCreateForm locale={locale} messages={messages} />
     </div>
   );
 };

@@ -1,197 +1,226 @@
 // frontend/src/features/ProductImageUpload/ui/ProductImageUpload.tsx
 'use client';
 
-import { useRef, useState } from 'react';
-import { LuUpload, LuX, LuImage, LuPlus } from 'react-icons/lu';
-import { useImageUpload } from '../model/useImageUpload';
+import React, { useRef } from 'react';
+import { TranslationType } from '@/shared/config/i18n/types';
 import styles from './ProductImageUpload.module.css';
 
 interface ProductImageUploadProps {
   images: File[];
-  errors: Record<string, string>;
-  onUpdate: (images: File[]) => void;
+  onChange: (images: File[]) => void;
+  error?: string;
+  disabled?: boolean;
+  maxImages?: number;
+  locale: string;
+  messages: TranslationType;
 }
 
-const ProductImageUpload = ({
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+export const ProductImageUpload: React.FC<ProductImageUploadProps> = ({
   images,
-  errors,
-  onUpdate,
-}: ProductImageUploadProps) => {
+  onChange,
+  error,
+  disabled = false,
+  maxImages = 5,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [dragActive, setDragActive] = useState(false);
 
-  const {
-    previews,
-    isUploading,
-    uploadError,
-    handleFileSelect,
-    removeImage,
-    reorderImages,
-  } = useImageUpload(images, onUpdate);
-
-  const maxImages = 5;
-  const canAddMore = images.length < maxImages;
-
-  // Обработка клика по кнопке загрузки
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  // Обработка выбора файлов
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    handleFileSelect(files);
+    if (files.length === 0) return;
 
-    // Очищаем input для возможности выбрать те же файлы повторно
+    // Проверка количества файлов
+    const totalFiles = images.length + files.length;
+    if (totalFiles > maxImages) {
+      alert(`Максимум ${maxImages} изображений`);
+      return;
+    }
+
+    // Проверка типов и размеров файлов
+    const validFiles: File[] = [];
+    const errors: string[] = [];
+
+    files.forEach((file) => {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        errors.push(`${file.name}: неподдерживаемый формат`);
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        errors.push(`${file.name}: слишком большой размер (макс. 10MB)`);
+        return;
+      }
+
+      validFiles.push(file);
+    });
+
+    if (errors.length > 0) {
+      alert('Ошибки при загрузке файлов:\n' + errors.join('\n'));
+    }
+
+    if (validFiles.length > 0) {
+      onChange([...images, ...validFiles]);
+    }
+
+    // Сброс input для возможности повторного выбора тех же файлов
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
-  // Drag & Drop обработчики
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
+  const handleRemoveImage = (index: number) => {
+    const newImages = images.filter((_, i) => i !== index);
+    onChange(newImages);
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    if (disabled) return;
+
+    const files = Array.from(event.dataTransfer.files);
+    if (files.length > 0) {
+      // Имитируем выбор файлов через input
+      const fileInput = fileInputRef.current;
+      if (fileInput) {
+        const dataTransfer = new DataTransfer();
+        files.forEach((file) => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+        handleFileSelect({
+          target: fileInput,
+        } as React.ChangeEvent<HTMLInputElement>);
+      }
     }
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+  };
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const files = Array.from(e.dataTransfer.files);
-      handleFileSelect(files);
+  const openFileDialog = () => {
+    if (!disabled && fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
+
+  const canAddMore = images.length < maxImages;
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <label className={styles.label}>
-          <LuImage className={styles.labelIcon} />
-          Изображения продукта <span className={styles.required}>*</span>
-        </label>
-        <div className={styles.counter}>
-          <span
-            className={`${styles.count} ${images.length === 0 ? styles.error : ''}`}
-          >
-            {images.length}
-          </span>
-          <span className={styles.maxCount}>/ {maxImages}</span>
-        </div>
+        <h3 className={styles.title}>Изображения продукта</h3>
+        <p className={styles.description}>
+          Загрузите от 1 до {maxImages} изображений (JPEG, PNG, WebP, GIF, макс.
+          10MB)
+        </p>
       </div>
 
-      {/* Скрытый input для файлов */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        className={styles.hiddenInput}
-      />
-
       {/* Область загрузки */}
-      {images.length === 0 ? (
+      {canAddMore && (
         <div
-          className={`${styles.uploadArea} ${dragActive ? styles.dragActive : ''} ${errors.images ? styles.error : ''}`}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
+          className={`${styles.uploadArea} ${disabled ? styles.disabled : ''}`}
           onDrop={handleDrop}
-          onClick={handleUploadClick}
+          onDragOver={handleDragOver}
+          onClick={openFileDialog}
         >
           <div className={styles.uploadContent}>
-            <LuUpload className={styles.uploadIcon} />
-            <h3 className={styles.uploadTitle}>Загрузите изображения</h3>
-            <p className={styles.uploadDescription}>
-              Перетащите файлы сюда или кликните для выбора
-            </p>
-            <div className={styles.uploadRequirements}>
-              <span>• Минимум 1 изображение, максимум {maxImages}</span>
-              <span>• Форматы: JPG, PNG, WebP</span>
-              <span>• Максимальный размер: 10MB на файл</span>
+            <div className={styles.uploadIcon}>📸</div>
+            <div className={styles.uploadText}>
+              <p className={styles.mainText}>
+                Нажмите или перетащите изображения сюда
+              </p>
+              <p className={styles.subText}>
+                {images.length > 0
+                  ? `Можно добавить еще ${maxImages - images.length} изображений`
+                  : `До ${maxImages} изображений`}
+              </p>
             </div>
           </div>
         </div>
-      ) : (
-        // Превью загруженных изображений
+      )}
+
+      {/* Скрытый input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept={ALLOWED_TYPES.join(',')}
+        onChange={handleFileSelect}
+        disabled={disabled}
+        style={{ display: 'none' }}
+      />
+
+      {/* Превью изображений */}
+      {images.length > 0 && (
         <div className={styles.imagesGrid}>
-          {previews.map((preview, index) => (
-            <div key={preview.id} className={styles.imageItem}>
-              <div className={styles.imagePreview}>
+          {images.map((image, index) => (
+            <div key={index} className={styles.imageItem}>
+              <div className={styles.imageWrapper}>
                 <img
-                  src={preview.url}
-                  alt={`Превью ${index + 1}`}
-                  className={styles.image}
+                  src={URL.createObjectURL(image)}
+                  alt={`Preview ${index + 1}`}
+                  className={styles.previewImage}
+                  loading="lazy"
                 />
-                <div className={styles.imageOverlay}>
-                  <button
-                    type="button"
-                    className={styles.removeButton}
-                    onClick={() => removeImage(index)}
-                    aria-label="Удалить изображение"
-                  >
-                    <LuX />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className={styles.removeButton}
+                  disabled={disabled}
+                  title="Удалить изображение"
+                >
+                  ✕
+                </button>
                 {index === 0 && (
                   <div className={styles.primaryBadge}>Основное</div>
                 )}
               </div>
               <div className={styles.imageInfo}>
-                <span className={styles.fileName}>{preview.file.name}</span>
-                <span className={styles.fileSize}>
-                  {(preview.file.size / 1024 / 1024).toFixed(1)} MB
-                </span>
+                <p className={styles.imageName}>{image.name}</p>
+                <p className={styles.imageSize}>
+                  {Math.round(image.size / 1024)} KB
+                </p>
               </div>
             </div>
           ))}
-
-          {/* Кнопка добавления еще изображений */}
-          {canAddMore && (
-            <div
-              className={`${styles.imageItem} ${styles.addMore}`}
-              onClick={handleUploadClick}
-            >
-              <div className={styles.addMoreContent}>
-                <LuPlus className={styles.addMoreIcon} />
-                <span className={styles.addMoreText}>Добавить еще</span>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
-      {/* Ошибки */}
-      {errors.images && (
-        <div className={styles.errorMessage}>{errors.images}</div>
+      {/* Дополнительная кнопка добавления */}
+      {canAddMore && images.length > 0 && (
+        <button
+          type="button"
+          onClick={openFileDialog}
+          className={styles.addMoreButton}
+          disabled={disabled}
+        >
+          + Добавить еще изображения
+        </button>
       )}
 
-      {uploadError && <div className={styles.errorMessage}>{uploadError}</div>}
+      {/* Статус и ошибки */}
+      <div className={styles.status}>
+        <span className={styles.count}>
+          {images.length}/{maxImages} изображений
+        </span>
+        {images.length >= 1 && (
+          <span className={styles.success}>✓ Минимум выполнен</span>
+        )}
+      </div>
+
+      {error && <div className={styles.error}>{error}</div>}
 
       {/* Подсказки */}
       <div className={styles.hints}>
-        <div className={styles.hintItem}>
-          <strong>Первое изображение</strong> будет использоваться как основное
-          в каталоге
-        </div>
-        <div className={styles.hintItem}>
-          <strong>Рекомендуемое разрешение:</strong> минимум 800x600 пикселей
-        </div>
-        <div className={styles.hintItem}>
-          <strong>Для лучшего качества:</strong> используйте изображения в
-          формате JPG или PNG
-        </div>
+        <h4 className={styles.hintsTitle}>💡 Рекомендации:</h4>
+        <ul className={styles.hintsList}>
+          <li>Первое изображение станет основным</li>
+          <li>Используйте качественные фотографии продукта</li>
+          <li>Рекомендуемое разрешение: от 800x600 пикселей</li>
+          <li>Изображения будут автоматически оптимизированы</li>
+        </ul>
       </div>
     </div>
   );
 };
-
-export default ProductImageUpload;

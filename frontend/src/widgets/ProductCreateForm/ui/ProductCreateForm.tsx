@@ -1,58 +1,24 @@
-// frontend/src/widgets/ProductCreateForm/ui/ProductCreateForm.tsx
+// frontend/src/widgets/ProductCreateForm/ui/ProductCreateForm.tsx - РАБОЧАЯ ВЕРСИЯ
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useState } from 'react';
 import { TranslationType } from '@/shared/config/i18n/types';
-import { useProductForm } from '../model/useProductForm';
+import { SectionSelect } from '@/features/SectionSelect';
+import { CategorySelect } from '@/features/CategorySelect';
+import { ProductImageUpload } from '@/features/ProductImageUpload';
+import { FloatingActionBar } from '@/shared/ui/FloatingActionBar/FloatingActionBar';
+import { useAdminApi } from '@/shared/hooks/useAdminApi';
 import styles from './ProductCreateForm.module.css';
 
-// ✅ ДИАГНОСТИКА: Проверяем каждый импорт по отдельности
-console.log('🔍 Checking imports...');
-
-let ProductBasicInfo: any = null;
-let ProductImageUpload: any = null;
-let ProductDescription: any = null;
-let ProductSpecifications: any = null;
-let ProductFormActions: any = null;
-
-try {
-  const basicInfoModule = require('@/features/ProductBasicInfo');
-  ProductBasicInfo = basicInfoModule.ProductBasicInfo;
-  console.log('✅ ProductBasicInfo imported:', !!ProductBasicInfo);
-} catch (e) {
-  console.error('❌ ProductBasicInfo import failed:', e);
-}
-
-try {
-  const imageUploadModule = require('@/features/ProductImageUpload');
-  ProductImageUpload = imageUploadModule.ProductImageUpload;
-  console.log('✅ ProductImageUpload imported:', !!ProductImageUpload);
-} catch (e) {
-  console.error('❌ ProductImageUpload import failed:', e);
-}
-
-try {
-  const descriptionModule = require('@/features/ProductDescription');
-  ProductDescription = descriptionModule.ProductDescription;
-  console.log('✅ ProductDescription imported:', !!ProductDescription);
-} catch (e) {
-  console.error('❌ ProductDescription import failed:', e);
-}
-
-try {
-  const specificationsModule = require('@/features/ProductSpecifications');
-  ProductSpecifications = specificationsModule.ProductSpecifications;
-  console.log('✅ ProductSpecifications imported:', !!ProductSpecifications);
-} catch (e) {
-  console.error('❌ ProductSpecifications import failed:', e);
-}
-
-try {
-  const formActionsModule = require('@/features/ProductFormActions');
-  ProductFormActions = formActionsModule.ProductFormActions;
-  console.log('✅ ProductFormActions imported:', !!ProductFormActions);
-} catch (e) {
-  console.error('❌ ProductFormActions import failed:', e);
+interface ProductFormData {
+  section: 'NEVA' | 'X_SOLUTION' | null;
+  categoryId: number | null;
+  subcategoryId: number | null;
+  brandId: number | null;
+  name: string;
+  images: File[];
+  description: string;
+  specifications: string;
 }
 
 interface ProductCreateFormProps {
@@ -60,367 +26,345 @@ interface ProductCreateFormProps {
   messages: TranslationType;
 }
 
-export interface ProductFormData {
-  // Основные данные
-  section: string | null;
-  categoryId: number | null;
-  subcategoryId: number | null;
-  brandId: number | null;
-  name: string;
+export const ProductCreateForm: React.FC<ProductCreateFormProps> = ({
+  locale,
+  messages,
+}) => {
+  const { adminApi, get, post } = useAdminApi();
 
-  // Медиа
-  images: File[];
-
-  // Контент
-  description: string;
-  specifications: string;
-}
-
-// ✅ FALLBACK компоненты для отсутствующих
-const FallbackBasicInfo = ({ formData, errors, onUpdate }: any) => (
-  <div
-    style={{ padding: '20px', border: '2px dashed #ccc', borderRadius: '8px' }}
-  >
-    <h3>ProductBasicInfo (Fallback)</h3>
-    <p>Компонент не найден или не импортирован корректно</p>
-    <input
-      type="text"
-      value={formData.name}
-      onChange={(e) => onUpdate({ name: e.target.value })}
-      placeholder="Название продукта"
-      style={{ width: '100%', padding: '8px', margin: '8px 0' }}
-    />
-  </div>
-);
-
-const FallbackImageUpload = ({ images, errors, onUpdate }: any) => (
-  <div
-    style={{ padding: '20px', border: '2px dashed #ccc', borderRadius: '8px' }}
-  >
-    <h3>ProductImageUpload (Fallback)</h3>
-    <p>Компонент не найден или не импортирован корректно</p>
-    <input
-      type="file"
-      multiple
-      accept="image/*"
-      onChange={(e) => {
-        const files = Array.from(e.target.files || []);
-        onUpdate(files);
-      }}
-      style={{ width: '100%', padding: '8px', margin: '8px 0' }}
-    />
-    <p>Загружено файлов: {images.length}</p>
-  </div>
-);
-
-const FallbackDescription = ({ description, errors, onUpdate }: any) => (
-  <div
-    style={{ padding: '20px', border: '2px dashed #ccc', borderRadius: '8px' }}
-  >
-    <h3>ProductDescription (Fallback)</h3>
-    <p>Компонент не найден или не импортирован корректно</p>
-    <textarea
-      value={description}
-      onChange={(e) => onUpdate(e.target.value)}
-      placeholder="Описание продукта"
-      style={{
-        width: '100%',
-        height: '100px',
-        padding: '8px',
-        margin: '8px 0',
-      }}
-    />
-  </div>
-);
-
-const FallbackSpecifications = ({ specifications, errors, onUpdate }: any) => (
-  <div
-    style={{ padding: '20px', border: '2px dashed #ccc', borderRadius: '8px' }}
-  >
-    <h3>ProductSpecifications (Fallback)</h3>
-    <p>Компонент не найден или не импортирован корректно</p>
-    <textarea
-      value={specifications}
-      onChange={(e) => onUpdate(e.target.value)}
-      placeholder="Технические характеристики"
-      style={{ width: '100%', height: '80px', padding: '8px', margin: '8px 0' }}
-    />
-  </div>
-);
-
-const FallbackFormActions = ({
-  isLoading,
-  isDirty,
-  onSubmit,
-  onReset,
-  onCancel,
-}: any) => (
-  <div
-    style={{ padding: '20px', border: '2px dashed #ccc', borderRadius: '8px' }}
-  >
-    <h3>ProductFormActions (Fallback)</h3>
-    <p>Компонент не найден или не импортирован корректно</p>
-    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-      <button
-        onClick={onSubmit}
-        disabled={isLoading}
-        style={{
-          padding: '10px 20px',
-          background: '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-        }}
-      >
-        {isLoading ? 'Создание...' : 'Создать продукт'}
-      </button>
-      <button
-        onClick={onReset}
-        style={{
-          padding: '10px 20px',
-          background: '#6c757d',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-        }}
-      >
-        Сбросить
-      </button>
-      <button
-        onClick={onCancel}
-        style={{
-          padding: '10px 20px',
-          background: '#dc3545',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-        }}
-      >
-        Отмена
-      </button>
-    </div>
-  </div>
-);
-
-const ProductCreateForm = ({ locale, messages }: ProductCreateFormProps) => {
-  const {
-    formData,
-    errors,
-    isLoading,
-    isDirty,
-    lastSaved,
-    updateFormData,
-    validateForm,
-    submitForm,
-    resetForm,
-  } = useProductForm();
-
-  // ✅ ДИАГНОСТИКА: Выбираем компоненты или fallback
-  const BasicInfoComponent = ProductBasicInfo || FallbackBasicInfo;
-  const ImageUploadComponent = ProductImageUpload || FallbackImageUpload;
-  const DescriptionComponent = ProductDescription || FallbackDescription;
-  const SpecificationsComponent =
-    ProductSpecifications || FallbackSpecifications;
-  const FormActionsComponent = ProductFormActions || FallbackFormActions;
-
-  console.log('🔍 Component status:', {
-    BasicInfoComponent: !!BasicInfoComponent,
-    ImageUploadComponent: !!ImageUploadComponent,
-    DescriptionComponent: !!DescriptionComponent,
-    SpecificationsComponent: !!SpecificationsComponent,
-    FormActionsComponent: !!FormActionsComponent,
+  // Состояние формы
+  const [formData, setFormData] = useState<ProductFormData>({
+    section: null,
+    categoryId: null,
+    subcategoryId: null,
+    brandId: null,
+    name: '',
+    images: [],
+    description: '',
+    specifications: '',
   });
 
-  const handleBasicInfoUpdate = useCallback(
-    (updates: Partial<ProductFormData>) => {
-      updateFormData(updates);
-    },
-    [updateFormData]
-  );
+  // Состояние UI
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleImageUpdate = useCallback(
-    (images: File[]) => {
-      updateFormData({ images });
-    },
-    [updateFormData]
-  );
+  // Обновление данных формы
+  const updateField = <K extends keyof ProductFormData>(
+    field: K,
+    value: ProductFormData[K]
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
 
-  const handleDescriptionUpdate = useCallback(
-    (description: string) => {
-      updateFormData({ description });
-    },
-    [updateFormData]
-  );
-
-  const handleSpecificationsUpdate = useCallback(
-    (specifications: string) => {
-      updateFormData({ specifications });
-    },
-    [updateFormData]
-  );
-
-  const handleCancel = useCallback(() => {
-    if (isDirty) {
-      const confirmLeave = window.confirm(
-        'У вас есть несохраненные изменения. Вы уверены, что хотите покинуть страницу?'
-      );
-      if (!confirmLeave) {
-        return;
-      }
+    // Очистка ошибки для обновленного поля
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
-    window.history.back();
-  }, [isDirty]);
 
-  const handleReset = useCallback(() => {
-    if (isDirty) {
-      const confirmReset = window.confirm(
-        'Вы уверены, что хотите сбросить все данные? Это действие нельзя отменить.'
-      );
-      if (!confirmReset) {
-        return;
-      }
+    // Сброс зависимых полей
+    if (field === 'section') {
+      setFormData((prev) => ({
+        ...prev,
+        categoryId: null,
+        subcategoryId: null,
+        brandId: null,
+      }));
+    } else if (field === 'categoryId') {
+      setFormData((prev) => ({
+        ...prev,
+        subcategoryId: null,
+        brandId: null,
+      }));
     }
-    resetForm();
-  }, [isDirty, resetForm]);
+  };
 
-  const progressInfo = useMemo(() => {
+  // Расчет прогресса
+  const calculateProgress = () => {
     const requiredFields = [
       formData.section,
       formData.categoryId,
-      formData.brandId,
       formData.name.trim(),
       formData.images.length > 0,
       formData.description.trim(),
     ];
 
-    const filledCount = requiredFields.filter(Boolean).length;
-    const totalCount = requiredFields.length;
-    const percentage = (filledCount / totalCount) * 100;
+    const filled = requiredFields.filter(
+      (field) => field !== null && field !== '' && field !== false
+    ).length;
 
     return {
-      filledCount,
-      totalCount,
-      percentage: Math.round(percentage),
-      isComplete: filledCount === totalCount,
+      filled,
+      total: requiredFields.length,
+      percentage: Math.round((filled / requiredFields.length) * 100),
     };
-  }, [
-    formData.section,
-    formData.categoryId,
-    formData.brandId,
-    formData.name,
-    formData.images.length,
-    formData.description,
-  ]);
+  };
+
+  // Валидация формы
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.section) newErrors.section = 'Выберите секцию';
+    if (!formData.categoryId) newErrors.categoryId = 'Выберите категорию';
+    if (!formData.name.trim()) newErrors.name = 'Введите название продукта';
+    if (formData.images.length === 0)
+      newErrors.images = 'Загрузите минимум 1 изображение';
+    if (!formData.description.trim())
+      newErrors.description = 'Введите описание продукта';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Отправка формы
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      // Создание продукта
+      const productData = {
+        section: formData.section,
+        categoryId: formData.categoryId,
+        subcategoryId: formData.subcategoryId,
+        brandId: formData.brandId || 1, // Временно используем ID 1
+        isActive: true,
+        translations: [
+          {
+            locale: locale,
+            name: formData.name,
+            description: formData.description,
+            marketingDescription: formData.description,
+          },
+        ],
+        specifications: formData.specifications
+          ? [
+              {
+                key: 'general',
+                translations: [
+                  {
+                    locale: locale,
+                    name: 'Характеристики',
+                    value: formData.specifications,
+                  },
+                ],
+              },
+            ]
+          : [],
+      };
+
+      const response = await post('/admin/products', productData);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Ошибка создания продукта');
+      }
+
+      // Загрузка изображений
+      if (result.id && formData.images.length > 0) {
+        const imageFormData = new FormData();
+        formData.images.forEach((image) => {
+          imageFormData.append('images', image);
+        });
+
+        const imageResponse = await fetch(
+          `/admin/products/${result.id}/images`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('admin_access_token')}`,
+            },
+            body: imageFormData,
+          }
+        );
+
+        if (!imageResponse.ok) {
+          console.warn('Ошибка загрузки изображений');
+        }
+      }
+
+      // Успех
+      alert('Продукт успешно создан!');
+      handleReset();
+    } catch (error) {
+      console.error('Ошибка создания продукта:', error);
+      setErrors({
+        general: error instanceof Error ? error.message : 'Неизвестная ошибка',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Сброс формы
+  const handleReset = () => {
+    setFormData({
+      section: null,
+      categoryId: null,
+      subcategoryId: null,
+      brandId: null,
+      name: '',
+      images: [],
+      description: '',
+      specifications: '',
+    });
+    setErrors({});
+  };
+
+  const progress = calculateProgress();
 
   return (
     <div className={styles.container}>
-      {/* Диагностическая информация */}
-      <div
-        style={{
-          padding: '20px',
-          background: '#f8f9fa',
-          border: '1px solid #dee2e6',
-          borderRadius: '8px',
-          marginBottom: '20px',
-        }}
-      >
-        <h3>🔍 Диагностика компонентов</h3>
-        <ul>
-          <li>ProductBasicInfo: {ProductBasicInfo ? '✅ OK' : '❌ Missing'}</li>
-          <li>
-            ProductImageUpload: {ProductImageUpload ? '✅ OK' : '❌ Missing'}
-          </li>
-          <li>
-            ProductDescription: {ProductDescription ? '✅ OK' : '❌ Missing'}
-          </li>
-          <li>
-            ProductSpecifications:{' '}
-            {ProductSpecifications ? '✅ OK' : '❌ Missing'}
-          </li>
-          <li>
-            ProductFormActions: {ProductFormActions ? '✅ OK' : '❌ Missing'}
-          </li>
-        </ul>
-        <p>
-          <strong>Прогресс:</strong> {progressInfo.filledCount}/
-          {progressInfo.totalCount} полей заполнено
+      {/* Заголовок */}
+      <div className={styles.header}>
+        <h1 className={styles.title}>Создание продукта</h1>
+        <p className={styles.subtitle}>
+          Заполните все необходимые поля для создания нового продукта
         </p>
       </div>
 
-      <form onSubmit={(e) => e.preventDefault()}>
-        {/* Секция 1: Базовая информация */}
-        <section style={{ marginBottom: '30px' }}>
-          <h2>Основная информация</h2>
-          <BasicInfoComponent
-            formData={formData}
-            errors={errors}
-            isLoading={isLoading}
+      {/* Основная форма */}
+      <div className={styles.form}>
+        {/* Выбор секции */}
+        <section className={styles.section}>
+          <SectionSelect
+            value={formData.section}
+            onChange={(value) => updateField('section', value)}
+            error={errors.section}
+            disabled={isLoading}
             locale={locale}
             messages={messages}
-            onUpdate={handleBasicInfoUpdate}
           />
         </section>
 
-        {/* Секция 2: Загрузка изображений */}
-        <section style={{ marginBottom: '30px' }}>
-          <h2>Изображения</h2>
-          <ImageUploadComponent
-            images={formData.images}
-            errors={errors}
-            onUpdate={handleImageUpdate}
-          />
-        </section>
-
-        {/* Секция 3: Описание */}
-        <section style={{ marginBottom: '30px' }}>
-          <h2>Описание</h2>
-          <DescriptionComponent
-            description={formData.description}
-            errors={errors}
-            onUpdate={handleDescriptionUpdate}
-          />
-        </section>
-
-        {/* Секция 4: Характеристики */}
-        <section style={{ marginBottom: '30px' }}>
-          <h2>Характеристики</h2>
-          <SpecificationsComponent
-            specifications={formData.specifications}
-            errors={errors}
-            onUpdate={handleSpecificationsUpdate}
-          />
-        </section>
-
-        {/* Секция 5: Действия */}
-        <section style={{ marginBottom: '30px' }}>
-          <FormActionsComponent
-            isLoading={isLoading}
-            isDirty={isDirty}
-            canSubmit={progressInfo.isComplete && !isLoading}
-            onSubmit={submitForm}
-            onReset={handleReset}
-            onCancel={handleCancel}
-          />
-        </section>
-
-        {/* Глобальные ошибки */}
-        {errors.general && (
-          <div
-            style={{
-              padding: '15px',
-              background: '#f8d7da',
-              border: '1px solid #f5c6cb',
-              borderRadius: '4px',
-              color: '#721c24',
-              marginTop: '20px',
-            }}
-          >
-            <strong>Ошибка:</strong> {errors.general}
-          </div>
+        {/* Выбор категории */}
+        {formData.section && (
+          <section className={styles.section}>
+            <CategorySelect
+              section={formData.section}
+              value={formData.categoryId}
+              onChange={(value) => updateField('categoryId', value)}
+              error={errors.categoryId}
+              disabled={isLoading}
+              locale={locale}
+              messages={messages}
+            />
+          </section>
         )}
-      </form>
+
+        {/* Название продукта */}
+        {formData.categoryId && (
+          <section className={styles.section}>
+            <div className={styles.field}>
+              <h3 className={styles.fieldTitle}>Название продукта</h3>
+              <p className={styles.fieldDescription}>
+                Введите четкое и понятное название продукта
+              </p>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => updateField('name', e.target.value)}
+                placeholder="Введите название продукта"
+                className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+                disabled={isLoading}
+              />
+              {errors.name && (
+                <span className={styles.errorText}>{errors.name}</span>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Загрузка изображений */}
+        {formData.name && (
+          <section className={styles.section}>
+            <ProductImageUpload
+              images={formData.images}
+              onChange={(images) => updateField('images', images)}
+              error={errors.images}
+              disabled={isLoading}
+              locale={locale}
+              messages={messages}
+            />
+          </section>
+        )}
+
+        {/* Описание */}
+        {formData.images.length > 0 && (
+          <section className={styles.section}>
+            <div className={styles.field}>
+              <h3 className={styles.fieldTitle}>Описание продукта</h3>
+              <p className={styles.fieldDescription}>
+                Подробно опишите функции, характеристики и преимущества продукта
+              </p>
+              <textarea
+                value={formData.description}
+                onChange={(e) => updateField('description', e.target.value)}
+                placeholder="Введите подробное описание продукта..."
+                rows={5}
+                className={`${styles.textarea} ${errors.description ? styles.inputError : ''}`}
+                disabled={isLoading}
+              />
+              {errors.description && (
+                <span className={styles.errorText}>{errors.description}</span>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Характеристики */}
+        {formData.description && (
+          <section className={styles.section}>
+            <div className={styles.field}>
+              <h3 className={styles.fieldTitle}>
+                Технические характеристики
+                <span className={styles.optional}>(опционально)</span>
+              </h3>
+              <p className={styles.fieldDescription}>
+                Укажите технические параметры, спецификации и дополнительную
+                информацию
+              </p>
+              <textarea
+                value={formData.specifications}
+                onChange={(e) => updateField('specifications', e.target.value)}
+                placeholder="Процессор: Intel Core i7&#10;Память: 16 ГБ DDR4&#10;Диск: SSD 512 ГБ&#10;Гарантия: 2 года"
+                rows={4}
+                className={styles.textarea}
+                disabled={isLoading}
+              />
+              <div className={styles.hint}>
+                💡 Можете использовать любой формат: списки, таблицы или
+                свободный текст
+              </div>
+            </div>
+          </section>
+        )}
+      </div>
+
+      {/* Глобальные ошибки */}
+      {errors.general && (
+        <div className={styles.globalError}>
+          <strong>Ошибка:</strong> {errors.general}
+        </div>
+      )}
+
+      {/* Плавающий бар действий */}
+      <FloatingActionBar
+        progress={progress}
+        isLoading={isLoading}
+        canSubmit={progress.percentage === 100}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+        submitText="Создать продукт"
+        resetText="Сбросить"
+      />
     </div>
   );
 };
-
-export default ProductCreateForm;

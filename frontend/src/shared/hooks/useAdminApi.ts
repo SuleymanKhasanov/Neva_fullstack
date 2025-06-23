@@ -1,57 +1,11 @@
-// Путь: src/shared/api/admin-api.ts
+// frontend/src/shared/hooks/useAdminApi.ts - ИСПРАВЛЕННАЯ ВЕРСИЯ
 'use client';
 
 import { useAuth } from '@/shared/contexts/AuthContext';
 import { useCallback } from 'react';
 
-// Типы для API данных
-interface BaseApiResponse {
-  success: boolean;
-  message?: string;
-}
-
-interface ProductCreateData {
-  section: string;
-  categoryId: number;
-  brandId: number;
-  isActive: boolean;
-  translations: Array<{
-    locale: string;
-    name: string;
-    description?: string;
-    marketingDescription?: string;
-  }>;
-  specifications?: Array<{
-    key: string;
-    translations: Array<{
-      locale: string;
-      name: string;
-      value: string;
-    }>;
-  }>;
-}
-
-interface ProductUpdateData extends Partial<ProductCreateData> {
-  id?: number;
-}
-
-interface CategoryCreateData {
-  section: string;
-  translations: Array<{
-    locale: string;
-    name: string;
-  }>;
-}
-
-interface BrandCreateData {
-  translations: Array<{
-    locale: string;
-    name: string;
-  }>;
-}
-
-// Тип для произвольных данных JSON
-type JsonData = Record<string, unknown>;
+// Простой тип для JSON данных
+type RequestData = Record<string, unknown>;
 
 interface UseAdminApiOptions {
   baseUrl?: string;
@@ -114,14 +68,14 @@ export const useAdminApi = (options: UseAdminApiOptions = {}) => {
     [accessToken, refreshAuth, logout, baseUrl]
   );
 
-  // Удобные методы для разных HTTP методов
+  // Базовые HTTP методы
   const get = useCallback(
     (endpoint: string) => makeRequest(endpoint, { method: 'GET' }),
     [makeRequest]
   );
 
   const post = useCallback(
-    <T = JsonData>(endpoint: string, data?: T) =>
+    (endpoint: string, data?: RequestData) =>
       makeRequest(endpoint, {
         method: 'POST',
         body: data ? JSON.stringify(data) : undefined,
@@ -130,7 +84,7 @@ export const useAdminApi = (options: UseAdminApiOptions = {}) => {
   );
 
   const put = useCallback(
-    <T = JsonData>(endpoint: string, data?: T) =>
+    (endpoint: string, data?: RequestData) =>
       makeRequest(endpoint, {
         method: 'PUT',
         body: data ? JSON.stringify(data) : undefined,
@@ -143,58 +97,59 @@ export const useAdminApi = (options: UseAdminApiOptions = {}) => {
     [makeRequest]
   );
 
-  // Специфичные методы для вашего API
+  // Структурированные методы API
   const adminApi = {
     // Продукты
     products: {
       getAll: () => get('/admin/products'),
       getById: (id: string) => get(`/admin/products/${id}`),
-      create: (data: ProductCreateData) => post('/admin/products', data),
-      update: (id: string, data: ProductUpdateData) =>
+      create: (data: RequestData) => post('/admin/products', data),
+      update: (id: string, data: RequestData) =>
         put(`/admin/products/${id}`, data),
       delete: (id: string) => del(`/admin/products/${id}`),
     },
 
     // Категории
     categories: {
-      getAll: () => get('/admin/categories'),
+      getAll: (params?: string) =>
+        get(`/admin/categories${params ? `?${params}` : ''}`),
       getById: (id: string) => get(`/admin/categories/${id}`),
-      create: (data: CategoryCreateData) => post('/admin/categories', data),
+      create: (data: RequestData) => post('/admin/categories', data),
+      getSubcategories: (categoryId: number, locale: string) =>
+        get(
+          `/admin/categories/subcategories/all?categoryId=${categoryId}&locale=${locale}`
+        ),
     },
 
     // Бренды
     brands: {
-      getAll: () => get('/admin/brands'),
+      getAll: (params?: string) =>
+        get(`/admin/brands${params ? `?${params}` : ''}`),
       getById: (id: string) => get(`/admin/brands/${id}`),
-      create: (data: BrandCreateData) => post('/admin/brands', data),
+      create: (data: RequestData) => post('/admin/brands', data),
     },
 
     // Кеш
     cache: {
-      getStats: () => get('/admin/cache/stats'),
-      getHealth: () => get('/admin/cache/health'),
-      clear: () => post('/admin/cache/clear'),
-      invalidateProducts: () => post('/admin/cache/invalidate/products'),
+      getStats: () => get('/admin/system/cache/stats'),
+      getHealth: () => get('/admin/system/cache/health'),
+      clear: () => post('/admin/system/cache/clear'),
+      invalidateProducts: () => post('/admin/system/cache/invalidate/products'),
     },
   };
 
   return {
-    makeRequest,
+    // Базовые методы (нужно для обратной совместимости)
     get,
     post,
     put,
     delete: del,
+    makeRequest,
+
+    // Структурированное API
     adminApi,
+
+    // Статус
     isAuthenticated: !!accessToken,
   };
-};
-
-// Экспортируем типы для использования в компонентах
-export type {
-  ProductCreateData,
-  ProductUpdateData,
-  CategoryCreateData,
-  BrandCreateData,
-  BaseApiResponse,
-  JsonData,
 };
