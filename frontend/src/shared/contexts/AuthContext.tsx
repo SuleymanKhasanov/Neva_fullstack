@@ -1,3 +1,4 @@
+// frontend/src/shared/contexts/AuthContext.tsx
 'use client';
 
 import React, {
@@ -8,46 +9,23 @@ import React, {
   ReactNode,
   useCallback,
 } from 'react';
-import { TranslationType, TranslationKeys } from '@/shared/config/i18n/types';
-
-interface User {
-  username: string;
-  role: string;
-}
-
-// Типы для ошибок авторизации
-interface LoginError {
-  type: 'INVALID_CREDENTIALS' | 'SERVER_ERROR' | 'NETWORK_ERROR';
-  message: string;
-  details?: string; // Дополнительная информация об ошибке
-}
-
-// Типы для API ответов
-interface LoginResponse {
-  access_token?: string;
-  refresh_token?: string;
-  user?: User;
-  message?: string;
-  error?: string;
-}
-
-interface RefreshResponse {
-  access_token?: string;
-  message?: string;
-}
+import { TranslationType } from '@/shared/config/i18n/types';
+import {
+  AdminUser,
+  LoginResult,
+  LoginError,
+  RefreshResponse,
+} from '@/shared/types/admin.types';
 
 interface AuthContextType {
-  user: User | null;
+  user: AdminUser | null;
   accessToken: string | null;
   refreshToken: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   locale: string;
   messages: TranslationType | null;
-  login: (
-    username: string,
-    password: string
-  ) => Promise<{ success: boolean; error?: LoginError }>;
+  login: (username: string, password: string) => Promise<LoginResult>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<boolean>;
   t: (key: string, params?: Record<string, string>) => string;
@@ -55,7 +33,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -70,16 +48,28 @@ interface AuthProviderProps {
   messages: TranslationType;
 }
 
+// Типы для API ответов с бекенда
+interface BackendLoginResponse {
+  access_token?: string;
+  refresh_token?: string;
+  user?: AdminUser;
+  message?: string;
+  error?: string;
+}
+
+// Используем типизированный RefreshResponse из admin.types
+type BackendRefreshResponse = RefreshResponse;
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({
   children,
   baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   locale,
   messages,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AdminUser | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Вычисляемое свойство для проверки авторизации
   const isAuthenticated = !!(accessToken && user);
@@ -88,282 +78,266 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   const t = useCallback(
     (key: string, params?: Record<string, string>): string => {
       const keys = key.split('.');
-      if (keys.length < 2) return key;
+      let value: string | Record<string, unknown> = messages;
 
-      let value: unknown = messages;
-
-      // Проходим по цепочке ключей
       for (const k of keys) {
-        if (value && typeof value === 'object' && k in value) {
-          value = (value as Record<string, unknown>)[k];
+        if (typeof value === 'object' && value !== null && k in value) {
+          value = value[k] as string | Record<string, unknown>;
         } else {
-          return key; // Если ключ не найден, возвращаем исходный ключ
+          console.warn(`Translation key not found: ${key}`);
+          return key; // Возвращаем ключ, если перевод не найден
         }
       }
 
-      if (typeof value === 'string') {
-        // Заменяем параметры в строке типа {username}
-        if (params) {
-          return value.replace(/\{(\w+)\}/g, (match, paramKey) => {
-            return params[paramKey] || match;
-          });
-        }
-        return value;
+      let result = typeof value === 'string' ? value : key;
+
+      // Заменяем параметры в строке
+      if (params) {
+        Object.entries(params).forEach(([paramKey, paramValue]) => {
+          result = result.replace(`{${paramKey}}`, paramValue);
+        });
       }
 
-      return key;
+      return result;
     },
     [messages]
   );
 
-  // Сохранение токенов в хранилище
-  const saveAuthData = useCallback(
-    (accessToken: string, refreshToken: string, user: User) => {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('admin_access_token', accessToken);
-        sessionStorage.setItem('admin_refresh_token', refreshToken);
-        sessionStorage.setItem('admin_user', JSON.stringify(user));
-      }
+  // Сохранение токенов в localStorage
+  const saveTokens = useCallback(
+    (accessToken: string, refreshToken: string): void => {
+      if (typeof window === 'undefined') return;
+
+      localStorage.setItem('admin_access_token', accessToken);
+      localStorage.setItem('admin_refresh_token', refreshToken);
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
-      setUser(user);
     },
     []
   );
 
-  // Очистка данных авторизации
-  const clearAuthData = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('admin_access_token');
-      sessionStorage.removeItem('admin_refresh_token');
-      sessionStorage.removeItem('admin_user');
-    }
+  // Очистка токенов
+  const clearTokens = useCallback((): void => {
+    if (typeof window === 'undefined') return;
+
+    localStorage.removeItem('admin_access_token');
+    localStorage.removeItem('admin_refresh_token');
     setAccessToken(null);
     setRefreshToken(null);
     setUser(null);
   }, []);
 
-  // Инициализация - загрузка токенов из хранилища
-  useEffect(() => {
-    const initAuth = () => {
-      try {
-        if (typeof window !== 'undefined') {
-          const storedAccessToken =
-            sessionStorage.getItem('admin_access_token');
-          const storedRefreshToken = sessionStorage.getItem(
-            'admin_refresh_token'
-          );
-          const storedUser = sessionStorage.getItem('admin_user');
+  // Функция для обновления токена
+  const refreshAuth = useCallback(async (): Promise<boolean> => {
+    const storedRefreshToken =
+      refreshToken ||
+      (typeof window !== 'undefined'
+        ? localStorage.getItem('admin_refresh_token')
+        : null);
 
-          if (storedAccessToken && storedUser) {
-            setAccessToken(storedAccessToken);
-            setRefreshToken(storedRefreshToken);
-            setUser(JSON.parse(storedUser));
-          }
-        }
-      } catch (error) {
-        console.error('Error loading auth data:', error);
-        clearAuthData();
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initAuth();
-  }, [clearAuthData]);
-
-  // Логин с улучшенной обработкой ошибок
-  const login = async (
-    username: string,
-    password: string
-  ): Promise<{ success: boolean; error?: LoginError }> => {
-    console.log('🔄 Starting login request...');
-
-    try {
-      // НЕ устанавливаем isLoading здесь, так как это может повлиять на UI
-      const response = await fetch(`${baseUrl}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      console.log('📡 Response received:', {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok,
-      });
-
-      // Пытаемся получить JSON ответ
-      let responseData: LoginResponse = {};
-      try {
-        const textResponse = await response.text();
-        console.log('📝 Raw response text:', textResponse);
-
-        if (textResponse) {
-          responseData = JSON.parse(textResponse) as LoginResponse;
-        }
-      } catch (parseError) {
-        console.warn('⚠️ Failed to parse response JSON:', parseError);
-        responseData = {};
-      }
-
-      console.log('📋 Parsed response data:', responseData);
-
-      // Проверяем статус ответа
-      if (response.status === 401) {
-        console.log('🔴 401 Unauthorized - Invalid credentials');
-        const errorMessage =
-          responseData.message || 'Неверный логин или пароль';
-        return {
-          success: false,
-          error: {
-            type: 'INVALID_CREDENTIALS',
-            message: errorMessage,
-            details: `Status: ${response.status}, Error: ${responseData.error || 'Unauthorized'}`,
-          },
-        };
-      }
-
-      if (response.status >= 500) {
-        console.log('🔴 Server error (5xx)');
-        return {
-          success: false,
-          error: {
-            type: 'SERVER_ERROR',
-            message: responseData.message || t(TranslationKeys.AuthServerError),
-            details: `Status: ${response.status}`,
-          },
-        };
-      }
-
-      if (!response.ok) {
-        console.error(
-          '🔴 Login failed with status:',
-          response.status,
-          responseData
-        );
-        return {
-          success: false,
-          error: {
-            type: 'SERVER_ERROR',
-            message: responseData.message || t(TranslationKeys.AuthServerError),
-            details: `Status: ${response.status}, Response: ${JSON.stringify(responseData)}`,
-          },
-        };
-      }
-
-      // Проверяем наличие необходимых данных в ответе
-      if (responseData.access_token && responseData.user) {
-        console.log('✅ Login successful!');
-        saveAuthData(
-          responseData.access_token,
-          responseData.refresh_token || '',
-          responseData.user
-        );
-        return { success: true };
-      }
-
-      console.log('🔴 Missing required data in response');
-      return {
-        success: false,
-        error: {
-          type: 'SERVER_ERROR',
-          message: t(TranslationKeys.AuthServerError),
-          details: 'Missing access_token or user in response',
-        },
-      };
-    } catch (error) {
-      console.error('💥 Login network error:', error);
-
-      // Определяем тип ошибки сети
-      const isNetworkError =
-        error instanceof TypeError && error.message.includes('fetch');
-
-      return {
-        success: false,
-        error: {
-          type: 'NETWORK_ERROR',
-          message: isNetworkError
-            ? 'Ошибка сети. Проверьте подключение к интернету.'
-            : t(TranslationKeys.AuthNetworkError),
-          details:
-            error instanceof Error ? error.message : 'Unknown network error',
-        },
-      };
+    if (!storedRefreshToken) {
+      console.log('❌ No refresh token available');
+      return false;
     }
-  };
-
-  // Обновление токена
-  const refreshAuth = async (): Promise<boolean> => {
-    if (!refreshToken) return false;
 
     try {
+      console.log('🔄 Attempting to refresh access token...');
+
       const response = await fetch(`${baseUrl}/auth/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ refresh_token: refreshToken }),
+        body: JSON.stringify({ refresh_token: storedRefreshToken }),
       });
 
       if (!response.ok) {
-        clearAuthData();
+        console.log('❌ Token refresh failed:', response.status);
+        clearTokens();
         return false;
       }
 
-      const data: RefreshResponse = await response.json();
+      const data: BackendRefreshResponse = await response.json();
 
-      if (data.access_token && user) {
-        saveAuthData(data.access_token, refreshToken, user);
+      if (data.access_token) {
+        console.log('✅ Token refreshed successfully');
+        setAccessToken(data.access_token);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('admin_access_token', data.access_token);
+        }
         return true;
+      } else {
+        console.log('❌ No access token in refresh response');
+        clearTokens();
+        return false;
       }
-
-      return false;
     } catch (error) {
-      console.error('Token refresh error:', error);
-      clearAuthData();
+      console.error('💥 Error refreshing token:', error);
+      clearTokens();
       return false;
     }
-  };
+  }, [baseUrl, refreshToken, clearTokens]);
 
-  // Логаут с очисткой сессии на сервере
-  const logout = useCallback(async () => {
-    try {
-      // Пытаемся отправить запрос на сервер для invalidation токена
-      if (accessToken) {
-        await fetch(`${baseUrl}/auth/logout`, {
+  // Функция входа в систему
+  const login = useCallback(
+    async (username: string, password: string): Promise<LoginResult> => {
+      try {
+        console.log('🚀 Attempting login for username:', username);
+
+        const response = await fetch(`${baseUrl}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify({ refresh_token: refreshToken }),
-        }).catch((error) => {
-          // Игнорируем ошибки logout на сервере
-          console.warn('Logout request failed:', error);
+          body: JSON.stringify({ username, password }),
         });
-      }
-    } finally {
-      // В любом случае очищаем локальные данные
-      clearAuthData();
-    }
-  }, [clearAuthData, accessToken, refreshToken, baseUrl]);
 
-  const value: AuthContextType = {
+        const data: BackendLoginResponse = await response.json();
+        console.log('📋 Login response status:', response.status);
+
+        if (
+          response.ok &&
+          data.access_token &&
+          data.refresh_token &&
+          data.user
+        ) {
+          console.log('✅ Login successful');
+
+          // Сохраняем токены и пользователя
+          saveTokens(data.access_token, data.refresh_token);
+          setUser(data.user);
+
+          return { success: true };
+        } else {
+          console.log('❌ Login failed:', data.message || data.error);
+
+          // Определяем тип ошибки
+          let errorType: LoginError['type'] = 'INVALID_CREDENTIALS';
+          if (response.status >= 500) {
+            errorType = 'SERVER_ERROR';
+          } else if (!response.ok && response.status === 0) {
+            errorType = 'NETWORK_ERROR';
+          }
+
+          const error: LoginError = {
+            type: errorType,
+            message: data.message || data.error || 'Неизвестная ошибка',
+          };
+
+          return { success: false, error };
+        }
+      } catch (err) {
+        console.error('💥 Login network error:', err);
+
+        const error: LoginError = {
+          type: 'NETWORK_ERROR',
+          message: 'Ошибка соединения с сервером',
+          details: err instanceof Error ? err.message : 'Unknown error',
+        };
+
+        return { success: false, error };
+      }
+    },
+    [baseUrl, saveTokens]
+  );
+
+  // Функция выхода из системы
+  const logout = useCallback(async (): Promise<void> => {
+    console.log('👋 Logging out...');
+    clearTokens();
+  }, [clearTokens]);
+
+  // Загрузка сохраненных токенов при инициализации
+  useEffect(() => {
+    const initializeAuth = async (): Promise<void> => {
+      if (typeof window === 'undefined') {
+        setIsLoading(false);
+        return;
+      }
+
+      console.log('🔄 Initializing authentication...');
+
+      const storedAccessToken = localStorage.getItem('admin_access_token');
+      const storedRefreshToken = localStorage.getItem('admin_refresh_token');
+
+      if (!storedAccessToken || !storedRefreshToken) {
+        console.log('❌ No stored tokens found');
+        setIsLoading(false);
+        return;
+      }
+
+      console.log('📋 Found stored tokens, verifying...');
+
+      try {
+        // Проверяем действительность access token через запрос профиля
+        const response = await fetch(`${baseUrl}/auth/profile`, {
+          headers: {
+            Authorization: `Bearer ${storedAccessToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const userData: AdminUser = await response.json();
+          console.log(
+            '✅ Valid tokens, user authenticated:',
+            userData.username
+          );
+
+          setAccessToken(storedAccessToken);
+          setRefreshToken(storedRefreshToken);
+          setUser(userData);
+        } else if (response.status === 401) {
+          console.log('🔄 Access token expired, trying to refresh...');
+
+          // Пробуем обновить токен
+          setRefreshToken(storedRefreshToken);
+          const refreshSuccess = await refreshAuth();
+
+          if (refreshSuccess) {
+            // После успешного обновления, снова запрашиваем профиль
+            const profileResponse = await fetch(`${baseUrl}/auth/profile`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('admin_access_token')}`,
+              },
+            });
+
+            if (profileResponse.ok) {
+              const userData: AdminUser = await profileResponse.json();
+              setUser(userData);
+              console.log('✅ Token refreshed and user authenticated');
+            }
+          }
+        } else {
+          console.log('❌ Token verification failed');
+          clearTokens();
+        }
+      } catch (error) {
+        console.error('💥 Error during auth initialization:', error);
+        clearTokens();
+      } finally {
+        setIsLoading(false);
+        console.log('🏁 Auth initialization completed');
+      }
+    };
+
+    initializeAuth();
+  }, [baseUrl, refreshAuth, clearTokens]);
+
+  const contextValue: AuthContextType = {
     user,
     accessToken,
     refreshToken,
     isLoading,
-    login,
-    logout,
-    refreshAuth,
     isAuthenticated,
     locale,
     messages,
+    login,
+    logout,
+    refreshAuth,
     t,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
 };
