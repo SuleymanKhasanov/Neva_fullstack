@@ -1,4 +1,4 @@
-// src/shared/components/AdminRouteGuard/AdminRouteGuard.tsx
+// frontend/src/shared/components/AdminRouteGuard/ui/AdminRouteGuard.tsx
 'use client';
 
 import { useAuth } from '@/shared/contexts/AuthContext';
@@ -17,8 +17,8 @@ interface AdminRouteGuardProps {
  */
 const AdminRouteGuard: React.FC<AdminRouteGuardProps> = ({
   children,
-  fallback = <div>Загрузка...</div>,
-  redirectTo = 'admin/',
+  fallback,
+  redirectTo = 'admin', // ИСПРАВЛЕНИЕ: убираем слеш в конце для корректного redirectToLocalized
 }) => {
   const { isAuthenticated, isLoading, user } = useAuth();
 
@@ -26,15 +26,19 @@ const AdminRouteGuard: React.FC<AdminRouteGuardProps> = ({
     // Ждем пока AuthContext загрузится
     if (isLoading) return;
 
-    // Если пользователь не авторизован - перенаправляем на логин
+    // ИСПРАВЛЕНИЕ: Если пользователь не авторизован - перенаправляем на логин
     if (!isAuthenticated) {
+      console.log('🔒 User not authenticated, redirecting to login page...');
       redirectToLocalized(redirectTo);
       return;
     }
 
     // Проверяем роль пользователя (опционально)
     if (user && user.role !== 'admin') {
-      console.warn('Access denied: insufficient permissions');
+      console.warn(
+        '🚫 Access denied: insufficient permissions. User role:',
+        user.role
+      );
       redirectToLocalized(redirectTo);
       return;
     }
@@ -42,12 +46,139 @@ const AdminRouteGuard: React.FC<AdminRouteGuardProps> = ({
 
   // Показываем загрузку пока проверяем авторизацию
   if (isLoading) {
-    return <>{fallback}</>;
+    return (
+      fallback || (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            flexDirection: 'column',
+            gap: '1.5rem',
+            color: 'var(--text-secondary)',
+          }}
+        >
+          <div
+            style={{
+              width: '3rem',
+              height: '3rem',
+              border: '3px solid var(--border)',
+              borderTop: '3px solid var(--primary)',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }}
+          />
+          <div style={{ fontSize: '1.6rem', fontWeight: '500' }}>
+            Проверка доступа...
+          </div>
+        </div>
+      )
+    );
   }
 
-  // Если пользователь не авторизован или нет нужной роли - показываем fallback
-  if (!isAuthenticated || (user && user.role !== 'admin')) {
-    return <>{fallback}</>;
+  // ИСПРАВЛЕНИЕ: Если пользователь не авторизован - показываем экран перенаправления
+  if (!isAuthenticated) {
+    return (
+      fallback || (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            flexDirection: 'column',
+            gap: '1.5rem',
+            textAlign: 'center',
+            padding: '2rem',
+          }}
+        >
+          <div
+            style={{
+              width: '3rem',
+              height: '3rem',
+              border: '3px solid var(--border)',
+              borderTop: '3px solid var(--primary)',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }}
+          />
+          <h2
+            style={{
+              fontSize: '1.8rem',
+              fontWeight: '600',
+              color: 'var(--foreground)',
+              margin: 0,
+            }}
+          >
+            Требуется авторизация
+          </h2>
+          <p
+            style={{
+              fontSize: '1.4rem',
+              color: 'var(--text-secondary)',
+              margin: 0,
+              lineHeight: '1.5',
+            }}
+          >
+            Перенаправление на страницу входа в админ панель...
+          </p>
+        </div>
+      )
+    );
+  }
+
+  // Если нет нужной роли - показываем экран отказа в доступе
+  if (user && user.role !== 'admin') {
+    return (
+      fallback || (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            flexDirection: 'column',
+            gap: '1.5rem',
+            textAlign: 'center',
+            padding: '2rem',
+          }}
+        >
+          <div
+            style={{
+              width: '3rem',
+              height: '3rem',
+              border: '3px solid var(--border)',
+              borderTop: '3px solid var(--destructive)',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }}
+          />
+          <h2
+            style={{
+              fontSize: '1.8rem',
+              fontWeight: '600',
+              color: 'var(--destructive)',
+              margin: 0,
+            }}
+          >
+            Доступ запрещен
+          </h2>
+          <p
+            style={{
+              fontSize: '1.4rem',
+              color: 'var(--text-secondary)',
+              margin: 0,
+              lineHeight: '1.5',
+            }}
+          >
+            У вас недостаточно прав для доступа к админ панели.
+            <br />
+            Перенаправление на страницу входа...
+          </p>
+        </div>
+      )
+    );
   }
 
   // Если все проверки пройдены - показываем защищенный контент
@@ -55,7 +186,7 @@ const AdminRouteGuard: React.FC<AdminRouteGuardProps> = ({
 };
 
 // Хук для использования в компонентах страниц
-export const useAdminGuard = (redirectTo: string = 'admin/') => {
+export const useAdminGuard = (redirectTo: string = 'admin') => {
   const { isAuthenticated, isLoading, user } = useAuth();
 
   useEffect(() => {
