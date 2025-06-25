@@ -1,30 +1,62 @@
 /* frontend/src/app/[locale]/admin/dashboard/home/page.module.css */
 
-/* ==================== ОСНОВНЫЕ СТИЛИ ==================== */
+/* ==================== ИСПРАВЛЕНИЯ ДЛЯ УСТРАНЕНИЯ ДЕРГАНИЯ ==================== */
 
 .container {
   width: 100%;
-  min-height: 100vh;
+  height: auto;
   padding: 2rem;
   box-sizing: border-box;
-  /* Стабильная прокрутка без дергания */
-  overflow-x: hidden;
+  position: relative;
+
+  /* КРИТИЧНО: Принудительная высота контейнера */
+  display: flex;
+  flex-direction: column;
+
+  /* Устраняем проблемы скролла */
+  overflow: hidden;
+}
+
+.scrollableContent {
+  flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Улучшенная прокрутка */
   scroll-behavior: smooth;
-  /* Предотвращаем bounce эффект */
   overscroll-behavior: contain;
+
   /* Hardware acceleration */
   transform: translate3d(0, 0, 0);
   will-change: scroll-position;
-  /* Фиксированная высота для предотвращения layout shift */
-  position: relative;
+
+  /* Кастомный скроллбар */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.scrollableContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollableContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollableContent::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.scrollableContent::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }
 
 .header {
   margin-bottom: 3rem;
-  /* Стабильное позиционирование */
+  flex-shrink: 0;
   position: relative;
-  contain: layout style;
+  z-index: 1;
 }
 
 .title {
@@ -42,9 +74,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  /* Предотвращаем layout shift */
   line-height: 1.2;
-  min-height: 3.8rem;
+  height: 3.8rem; /* Фиксированная высота */
 }
 
 .subtitle {
@@ -53,16 +84,14 @@
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 1.5;
-  min-height: 2.4rem;
+  height: 2.4rem; /* Фиксированная высота */
 }
 
 .content {
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  /* Стабильная высота контента */
-  position: relative;
-  contain: layout style;
+  padding-bottom: 3rem; /* Отступ для предотвращения прилипания к краю */
 }
 
 /* ==================== КАРТОЧКА ПРИВЕТСТВИЯ ==================== */
@@ -78,9 +107,10 @@
     0 0.1rem 0.3rem rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
-  /* Фиксированная минимальная высота */
-  min-height: 20rem;
-  contain: layout style;
+
+  /* КРИТИЧНО: Фиксированная высота */
+  min-height: 25rem;
+  max-height: 25rem;
 }
 
 .welcomeCard::before {
@@ -103,7 +133,10 @@
   margin: 0 0 1.6rem;
   font-weight: 600;
   line-height: 1.3;
-  min-height: 3.1rem;
+  height: 3.1rem; /* Фиксированная высота */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .description {
@@ -111,7 +144,11 @@
   line-height: 1.6;
   margin: 0 0 2rem;
   font-size: 1.5rem;
-  min-height: 4.8rem;
+  height: 4.8rem; /* Фиксированная высота */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .userInfo {
@@ -123,8 +160,8 @@
   background: var(--secondary);
   border-radius: 1rem;
   border: 1px solid var(--border);
-  /* Фиксированная высота */
-  min-height: 5rem;
+  height: 6rem; /* Фиксированная высота */
+  align-items: center;
 }
 
 .infoItem {
@@ -132,7 +169,6 @@
   flex-direction: column;
   gap: 0.5rem;
   text-align: center;
-  /* Фиксированная ширина для предотвращения сдвигов */
   min-width: 8rem;
 }
 
@@ -150,21 +186,21 @@
   color: var(--foreground);
   font-weight: 600;
   line-height: 1.2;
-  /* Предотвращаем текстовые сдвиги */
-  min-height: 1.7rem;
+  height: 1.7rem; /* Фиксированная высота */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ==================== СЕТКА КАРТОЧЕК ==================== */
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  /* Стабильная высота сетки */
-  min-height: 15rem;
-  contain: layout;
-  /* Hardware acceleration */
-  transform: translate3d(0, 0, 0);
+
+  /* КРИТИЧНО: Фиксированная высота сетки */
+  min-height: 32rem;
 }
 
 .card {
@@ -175,11 +211,13 @@
   box-shadow: 0 0.2rem 0.8rem var(--shadow-card);
   position: relative;
   overflow: hidden;
-  /* КРИТИЧНО: Фиксированная высота для предотвращения layout shift */
+
+  /* КРИТИЧНО: Строго фиксированная высота */
   height: 15rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   /* Оптимизация анимаций */
   transition:
     transform 0.2s ease,
@@ -187,7 +225,6 @@
     border-color 0.2s ease;
   transform: translate3d(0, 0, 0);
   will-change: transform;
-  contain: layout style;
 }
 
 .card:hover {
@@ -202,7 +239,9 @@
   color: var(--foreground);
   margin: 0 0 1rem;
   line-height: 1.2;
-  min-height: 2.2rem;
+  height: 2.2rem; /* Фиксированная высота */
+  display: flex;
+  align-items: center;
 }
 
 .cardDescription {
@@ -211,9 +250,13 @@
   font-size: 1.4rem;
   line-height: 1.5;
   flex: 1;
-  min-height: 4.2rem;
-  max-height: 4.2rem;
+
+  /* Фиксированная высота с обрезанием текста */
+  height: 4.2rem;
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .cardStats {
@@ -221,8 +264,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  /* Фиксированная высота для предотвращения сдвигов */
-  height: 4rem;
+  height: 4.5rem; /* Увеличенная фиксированная высота */
   justify-content: center;
 }
 
@@ -230,12 +272,13 @@
   font-size: 2.4rem;
   font-weight: 700;
   color: var(--primary);
-  /* Предотвращаем layout shift при изменении чисел */
-  min-width: 4ch;
+  min-width: 5ch; /* Больше места для чисел */
   text-align: center;
   line-height: 1;
-  /* Плавный переход для изменения значений */
-  transition: color 0.3s ease;
+  height: 2.4rem; /* Фиксированная высота */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .loading {
@@ -244,10 +287,8 @@
   justify-content: center;
   flex-direction: column;
   gap: 0.8rem;
-  /* КРИТИЧНО: Фиксированная высота = cardStats */
-  height: 4rem;
+  height: 4.5rem; /* Соответствует cardStats */
   color: var(--muted-foreground);
-  contain: layout style;
 }
 
 .loadingSpinner {
@@ -257,7 +298,6 @@
   border-top: 2px solid var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  /* Hardware acceleration */
   transform: translate3d(0, 0, 0);
   will-change: transform;
 }
@@ -268,25 +308,7 @@
   }
 }
 
-.trend {
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding: 0.2rem 0.6rem;
-  border-radius: 0.4rem;
-  line-height: 1;
-}
-
-.trendPositive {
-  color: #16a34a;
-  background-color: rgba(22, 163, 74, 0.1);
-}
-
-.trendNegative {
-  color: #dc2626;
-  background-color: rgba(220, 38, 38, 0.1);
-}
-
-/* ==================== ДЕТАЛИ КЕША ==================== */
+/* ==================== СИСТЕМНЫЕ КАРТОЧКИ ==================== */
 
 .cacheDetails {
   background: var(--card);
@@ -294,18 +316,19 @@
   border-radius: var(--radius);
   padding: 2.4rem;
   box-shadow: 0 0.2rem 0.8rem var(--shadow-card);
-  position: relative;
-  contain: layout style;
+
+  /* Фиксированная высота */
+  min-height: 20rem;
 }
 
-.sectionTitle {
+.cacheTitle {
   font-size: 2rem;
   font-weight: 600;
   color: var(--foreground);
   margin: 0 0 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-  line-height: 1.2;
+  height: 2.4rem; /* Фиксированная высота */
+  display: flex;
+  align-items: center;
 }
 
 .cacheGrid {
@@ -322,169 +345,73 @@
   background: var(--secondary);
   border-radius: 0.8rem;
   border: 1px solid var(--border);
-  /* Фиксированная высота */
-  min-height: 3rem;
+  height: 3rem; /* Фиксированная высота */
 }
 
 .cacheLabel {
   font-size: 1.3rem;
   color: var(--muted-foreground);
   font-weight: 500;
-  line-height: 1;
 }
 
 .cacheValue {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--foreground);
   font-weight: 600;
-  line-height: 1;
-  /* Предотвращаем сдвиги при изменении значений */
   text-align: right;
-  min-width: 3ch;
 }
 
 /* ==================== УВЕДОМЛЕНИЯ ==================== */
 
-.warningCard {
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  border-radius: var(--radius);
-  padding: 2rem;
-  margin-top: 2rem;
-  position: relative;
-  contain: layout style;
-}
-
-.warningCard h3 {
-  color: #d97706;
-  margin: 0 0 1rem;
-  font-size: 1.6rem;
-  line-height: 1.2;
-}
-
-.warningCard p {
-  color: var(--muted-foreground);
-  margin: 0 0 1rem;
-  font-size: 1.4rem;
-  line-height: 1.5;
-}
-
-.troubleshooting {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  background: var(--secondary);
-  border-radius: 0.8rem;
+.warningCard,
+.demoCard {
+  background: var(--card);
   border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.4rem;
+  box-shadow: 0 0.2rem 0.8rem var(--shadow-card);
+
+  /* Фиксированная минимальная высота */
+  min-height: 15rem;
 }
 
-.troubleshooting h4 {
-  color: var(--foreground);
-  margin: 0 0 1rem;
-  font-size: 1.4rem;
-  line-height: 1.2;
-}
-
-.troubleshooting ul {
-  margin: 0 0 1rem;
-  padding-left: 1.5rem;
-}
-
-.troubleshooting li {
-  color: var(--muted-foreground);
-  margin-bottom: 0.5rem;
-  font-size: 1.3rem;
-  line-height: 1.4;
+.warningCard {
+  border-left: 4px solid #f59e0b;
 }
 
 .demoCard {
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  border-radius: var(--radius);
-  padding: 2rem;
-  text-align: center;
-  margin-top: 2rem;
-  position: relative;
-  contain: layout style;
-}
-
-.demoCard h3 {
-  color: #2563eb;
-  margin: 0 0 1rem;
-  font-size: 1.6rem;
-  line-height: 1.2;
-}
-
-.demoCard p {
-  color: var(--muted-foreground);
-  margin: 0;
-  font-size: 1.4rem;
-  line-height: 1.6;
-}
-
-.errorCard {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: var(--radius);
-  padding: 2rem;
-  text-align: center;
-  margin-top: 2rem;
-  position: relative;
-  contain: layout style;
-}
-
-.errorCard h3 {
-  color: #dc2626;
-  margin: 0 0 1rem;
-  font-size: 1.6rem;
-  line-height: 1.2;
-}
-
-.errorCard p {
-  color: var(--muted-foreground);
-  margin: 0;
-  font-size: 1.4rem;
-  line-height: 1.5;
+  border-left: 4px solid #3b82f6;
 }
 
 /* ==================== АДАПТИВНОСТЬ ==================== */
 
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1.5rem;
-    /* Улучшенная прокрутка на мобильных */
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
   }
 
   .title {
-    font-size: 2.4rem;
-    min-height: 2.9rem;
-  }
-
-  .subtitle {
-    font-size: 1.4rem;
-    min-height: 2.1rem;
+    font-size: 2.8rem;
+    height: 3.4rem;
   }
 
   .welcomeCard {
     padding: 2rem;
-    min-height: 18rem;
-  }
-
-  .welcome {
-    font-size: 2rem;
-    min-height: 2.6rem;
-  }
-
-  .description {
-    font-size: 1.4rem;
-    min-height: 4.2rem;
+    min-height: 22rem;
+    max-height: 22rem;
   }
 
   .userInfo {
     flex-direction: column;
     gap: 1.5rem;
-    min-height: auto;
+    height: auto;
+    min-height: 8rem;
   }
 
   .grid {
@@ -493,23 +420,7 @@
   }
 
   .card {
-    padding: 2rem;
-    height: 13rem; /* Меньшая высота на мобильных */
-  }
-
-  .cacheGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .cacheItem {
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: center;
-    min-height: 4rem;
-  }
-
-  .cacheValue {
-    text-align: center;
+    height: 14rem;
   }
 }
 
@@ -518,21 +429,13 @@
     padding: 1rem;
   }
 
+  .content {
+    gap: 2rem;
+  }
+
   .welcomeCard {
     padding: 1.5rem;
-    min-height: 16rem;
-  }
-
-  .userInfo {
-    padding: 1rem;
-  }
-
-  .card {
-    padding: 1.5rem;
-    height: 12rem;
-  }
-
-  .cacheDetails {
-    padding: 1.5rem;
+    min-height: 20rem;
+    max-height: 20rem;
   }
 }

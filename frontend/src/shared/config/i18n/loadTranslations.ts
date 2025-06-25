@@ -1,12 +1,10 @@
-import { TranslationType } from './types';
-
-export async function loadTranslations(
-  locale: string
-): Promise<TranslationType> {
-  const defaultTranslations: TranslationType = {
+// shared/config/i18n/loadTranslations.ts
+export async function loadTranslations(locale: string) {
+  const defaultTranslations = {
     header: {
       logo: 'Logo',
       search: 'Search',
+      languageSwitcherLabel: 'Select language',
       contactUs: 'Contact Us',
     },
     card: {
@@ -14,8 +12,8 @@ export async function loadTranslations(
     },
     filters: {
       all: 'All',
-      neva: 'Neva',
-      xSolution: 'X-Solution',
+      neva: 'NEVA',
+      xSolution: 'X-SOLUTION',
       noBrands: 'No brands available',
     },
     products: {
@@ -28,15 +26,15 @@ export async function loadTranslations(
     },
     auth: {
       title: 'Admin Panel',
-      subtitle: 'Log in to access the management',
+      subtitle: 'Login to access management',
       username: 'Username',
       password: 'Password',
       usernameRequired: 'Username is required',
-      usernameMinLength: 'Minimum 3 characters',
+      usernameMinLength: 'Username must be at least 3 characters',
       passwordRequired: 'Password is required',
-      passwordMinLength: 'Minimum 6 characters',
-      loginButton: 'Sign In',
-      loggingIn: 'Signing in...',
+      passwordMinLength: 'Password must be at least 6 characters',
+      loginButton: 'Login',
+      loggingIn: 'Logging in...',
       invalidCredentials: 'Invalid username or password',
       serverError: 'Server error. Please try again later',
       networkError: 'Connection error to server',
@@ -57,6 +55,35 @@ export async function loadTranslations(
         statistics: 'Statistics',
         statisticsDescription: 'Charts and statistics will be displayed here',
         systemStatus: '✅ System is running',
+      },
+    },
+    // Новые переводы для админ главной страницы
+    admin_home: {
+      title: 'Dashboard',
+      subtitle: 'Manage products, categories and system',
+      stats: {
+        products: {
+          title: 'Products',
+          description: 'Total number of products in catalog',
+        },
+        categories: {
+          title: 'Categories',
+          description: 'Number of main categories',
+        },
+        subcategories: {
+          title: 'Subcategories',
+          description: 'Number of subcategories in all sections',
+        },
+        brands: {
+          title: 'Brands',
+          description: 'Total number of brands in system',
+        },
+      },
+      loading: 'Loading...',
+      error: {
+        title: 'Loading Error',
+        description: 'Failed to load statistics',
+        demo: 'Demo data shown',
       },
     },
   };
@@ -104,6 +131,14 @@ export async function loadTranslations(
       () => defaultTranslations.auth
     );
 
+    // Загрузка новых переводов для админ главной страницы
+    const adminHomeTranslations = await import(
+      `@/shared/locales/${locale}/admin_home.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.admin_home
+    );
+
     return {
       header: headerTranslations,
       card: cardTranslations,
@@ -111,6 +146,7 @@ export async function loadTranslations(
       products: productsTranslations,
       errors: errorsTranslations,
       auth: authTranslations,
+      admin_home: adminHomeTranslations,
     };
   } catch (error) {
     console.error(
