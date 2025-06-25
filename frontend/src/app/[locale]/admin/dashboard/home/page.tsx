@@ -26,7 +26,7 @@ export default async function AdminDashboardHomePage({
   const plainMessages = JSON.parse(JSON.stringify(messages)) as TranslationType;
 
   return (
-    <AdminRouteGuard redirectTo={`/${locale}/admin/`}>
+    <AdminRouteGuard redirectTo={`/admin/`}>
       <AdminHomePage locale={locale} messages={plainMessages} />
     </AdminRouteGuard>
   );

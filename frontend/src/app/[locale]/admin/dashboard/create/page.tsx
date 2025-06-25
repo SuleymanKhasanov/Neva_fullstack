@@ -25,7 +25,7 @@ export default async function AdminProductCreatePage({
   const plainMessages = JSON.parse(JSON.stringify(messages)) as TranslationType;
 
   return (
-    <AdminRouteGuard redirectTo={`/${locale}/admin/`}>
+    <AdminRouteGuard redirectTo={`admin/`}>
       <ProductCreatePage locale={locale} messages={plainMessages} />
     </AdminRouteGuard>
   );

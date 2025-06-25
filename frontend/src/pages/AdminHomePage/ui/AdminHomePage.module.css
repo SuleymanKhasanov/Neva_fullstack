@@ -1,7 +1,6 @@
 .container {
   width: 100%;
   padding: 0;
-  /* Убираем дополнительные отступы - они уже есть в AdminMainContentBox */
 }
 
 .header {
@@ -39,6 +38,7 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin-bottom: 2rem;
+  transition: all 0.3s ease-in-out;
 }
 
 .errorMessage {

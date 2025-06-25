@@ -1,3 +1,4 @@
+// frontend/src/pages/AdminHomePage/lib/hooks/useAdminHomeData.ts
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -24,62 +25,87 @@ export const useAdminHomeData = (): UseAdminHomeDataReturn => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Мок данные для демонстрации
-  const getMockStats = useCallback(
-    (): AdminHomeStats => ({
-      products: 342,
-      categories: 12,
-      subcategories: 48,
-      brands: 15,
-    }),
-    []
-  );
-
+  // ✅ ФУНКЦИЯ загрузки только реальных данных с бекенда
   const loadStats = useCallback(async () => {
     if (!isAuthenticated) {
+      console.log('❌ User not authenticated');
+      setStats({
+        products: 0,
+        categories: 0,
+        subcategories: 0,
+        brands: 0,
+      });
       setIsLoading(false);
+      setError('Пользователь не авторизован');
       return;
     }
 
     try {
       setIsLoading(true);
       setError(null);
+      console.log('📊 Loading admin stats from backend...');
 
-      // Параллельная загрузка статистики
-      const [systemResponse] = await Promise.allSettled([
-        adminApi.system.getStats(),
-      ]);
+      // Загружаем реальные данные с бекенда
+      const systemResponse = await adminApi.system.getStats();
 
-      if (
-        systemResponse.status === 'fulfilled' &&
-        systemResponse.value.success
-      ) {
-        const data = systemResponse.value.data;
+      if (systemResponse.success && systemResponse.data) {
+        console.log('✅ Real stats loaded from backend:', systemResponse.data);
+        const data = systemResponse.data;
         setStats({
           products: data?.products || 0,
           categories: data?.categories || 0,
           subcategories: data?.subcategories || 0,
           brands: data?.brands || 0,
         });
+        setError(null);
       } else {
-        // Показываем мок данные если API недоступно
-        setStats(getMockStats());
-        setError('Показаны демо-данные');
+        console.log('⚠️ API failed:', systemResponse.error);
+        // При ошибке API показываем пустые данные
+        setStats({
+          products: 0,
+          categories: 0,
+          subcategories: 0,
+          brands: 0,
+        });
+        setError(
+          `Не удалось загрузить данные: ${systemResponse.error || 'Неизвестная ошибка'}`
+        );
       }
     } catch (err) {
-      console.error('Error loading admin home stats:', err);
-      setStats(getMockStats());
-      setError('Показаны демо-данные');
+      console.error('💥 Error loading admin home stats:', err);
+      // При любой ошибке показываем пустые данные
+      setStats({
+        products: 0,
+        categories: 0,
+        subcategories: 0,
+        brands: 0,
+      });
+      setError('Ошибка загрузки данных с сервера');
     } finally {
       setIsLoading(false);
     }
-  }, [adminApi, isAuthenticated, getMockStats]);
+  }, [isAuthenticated]); // ✅ Убрали adminApi из зависимостей!
 
+  // ✅ КОНТРОЛИРУЕМЫЙ useEffect с четкими зависимостями
   useEffect(() => {
-    loadStats();
-  }, [loadStats]);
+    let mounted = true;
 
+    const runLoadStats = async () => {
+      if (mounted) {
+        await loadStats();
+      }
+    };
+
+    runLoadStats();
+
+    return () => {
+      mounted = false;
+    };
+  }, [isAuthenticated]); // ✅ Только isAuthenticated!
+
+  // ✅ ФУНКЦИЯ refetch для повторной загрузки
   const refetch = useCallback(async () => {
+    console.log('🔄 Manual refetch triggered');
     await loadStats();
   }, [loadStats]);
 

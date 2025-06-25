@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui/Button/Button';
 import { TranslationType, TranslationKeys } from '@/shared/config/i18n/types';
 import { LuLogOut, LuPanelsTopLeft } from 'react-icons/lu';
 import styles from './AdminHeader.module.css';
+import { AdminLanguageSwitcher } from '@/features/AdminLanguageSwitcher';
 
 interface AdminHeaderProps {
   locale: string;
@@ -15,7 +16,11 @@ interface AdminHeaderProps {
   isSidebarOpen: boolean;
 }
 
-const AdminHeader = ({ onToggleSidebar, isSidebarOpen }: AdminHeaderProps) => {
+const AdminHeader = ({
+  locale,
+  onToggleSidebar,
+  isSidebarOpen,
+}: AdminHeaderProps) => {
   const { logout, t } = useAuth();
 
   const handleLogout = async () => {
@@ -33,9 +38,9 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }: AdminHeaderProps) => {
         <div className={styles.leftSection}>
           <Button
             variant="secondary"
-            // className={styles.menuButton}
             onClick={onToggleSidebar}
             aria-label={isSidebarOpen ? 'Скрыть меню' : 'Показать меню'}
+            className={styles.menuButton}
           >
             <LuPanelsTopLeft />
           </Button>
@@ -43,7 +48,10 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }: AdminHeaderProps) => {
 
         {/* Правая часть - контролы */}
         <div className={styles.rightSection}>
+          {/* ✅ ДОБАВИЛИ: Переключатель языков */}
           <ThemeSwitcher />
+          <AdminLanguageSwitcher locale={locale} />
+
           <Button
             variant="secondary"
             onClick={handleLogout}
