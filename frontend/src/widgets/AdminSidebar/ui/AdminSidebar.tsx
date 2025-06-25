@@ -1,7 +1,7 @@
 // frontend/src/widgets/AdminSidebar/ui/AdminSidebar.tsx
 'use client';
 
-import { TranslationType } from '@/shared/config/i18n/types';
+import { TranslationType, TranslationKeys } from '@/shared/config/i18n/types';
 import { LuHouse, LuPlus, LuList } from 'react-icons/lu';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -25,7 +25,12 @@ interface MenuItem {
   disabled?: boolean;
 }
 
-const AdminSidebar = ({ isOpen, locale, onToggle }: AdminSidebarProps) => {
+const AdminSidebar = ({
+  isOpen,
+  locale,
+  messages,
+  onToggle,
+}: AdminSidebarProps) => {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -45,22 +50,42 @@ const AdminSidebar = ({ isOpen, locale, onToggle }: AdminSidebarProps) => {
     setMounted(true);
   }, []);
 
+  // ==================== ПОЛУЧЕНИЕ ПЕРЕВОДОВ ЧЕРЕЗ ENUM (ИСПРАВЛЕНО) ====================
+  const getTranslation = (key: TranslationKeys): string => {
+    try {
+      const keyPath = key.split('.'); // например: 'sidebar.dashboard'
+      let value: unknown = messages; // 👈 ИСПРАВЛЕНО: any → unknown
+
+      for (const k of keyPath) {
+        if (value && typeof value === 'object' && k in value) {
+          value = (value as Record<string, unknown>)[k];
+        } else {
+          return key; // fallback если путь не найден
+        }
+      }
+
+      return typeof value === 'string' ? value : key;
+    } catch {
+      return key; // fallback к ключу если перевод не найден
+    }
+  };
+
   const menuItems: MenuItem[] = [
     {
       id: 'dashboard',
-      label: 'Главная',
+      label: getTranslation(TranslationKeys.SidebarDashboard), // 👈 ИСПОЛЬЗОВАНИЕ ENUM
       icon: LuHouse,
       href: `/${locale}/admin/dashboard/home`,
     },
     {
       id: 'products-create',
-      label: 'Создать продукт',
+      label: getTranslation(TranslationKeys.SidebarProductsCreate), // 👈 ИСПОЛЬЗОВАНИЕ ENUM
       icon: LuPlus,
       href: `/${locale}/admin/dashboard/create`,
     },
     {
       id: 'products-list',
-      label: 'Список продуктов',
+      label: getTranslation(TranslationKeys.SidebarProductsList), // 👈 ИСПОЛЬЗОВАНИЕ ENUM
       icon: LuList,
       href: `/${locale}/admin/products`,
       disabled: true, // Пока отключено, сделаем позже

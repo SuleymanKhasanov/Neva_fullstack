@@ -5,6 +5,27 @@ import { useEffect, useState, useCallback } from 'react';
 import { useAdminApi } from '@/shared/hooks/useAdminApi';
 import { AdminHomeStats } from '../../types';
 
+// ==================== ТИПИЗАЦИЯ ОТВЕТА API ====================
+interface SystemStatsResponse {
+  products?: {
+    total?: number;
+    active?: number;
+    inactive?: number;
+  };
+  categories?: {
+    total?: number;
+    subcategories?: number;
+  };
+  brands?: {
+    total?: number;
+  };
+  content?: {
+    images?: number;
+    specifications?: number;
+  };
+  timestamp?: string;
+}
+
 interface UseAdminHomeDataReturn {
   stats: AdminHomeStats;
   isLoading: boolean;
@@ -50,12 +71,15 @@ export const useAdminHomeData = (): UseAdminHomeDataReturn => {
 
       if (systemResponse.success && systemResponse.data) {
         console.log('✅ Real stats loaded from backend:', systemResponse.data);
-        const data = systemResponse.data;
+
+        // ==================== ТИПИЗИРОВАННЫЙ ДОСТУП К ДАННЫМ ====================
+        const data = systemResponse.data as SystemStatsResponse;
+
         setStats({
-          products: data?.products || 0,
-          categories: data?.categories || 0,
-          subcategories: data?.subcategories || 0,
-          brands: data?.brands || 0,
+          products: data.products?.total || 0,
+          categories: data.categories?.total || 0,
+          subcategories: data.categories?.subcategories || 0,
+          brands: data.brands?.total || 0,
         });
         setError(null);
       } else {
@@ -84,7 +108,7 @@ export const useAdminHomeData = (): UseAdminHomeDataReturn => {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated]); // ✅ Убрали adminApi из зависимостей!
+  }, [adminApi, isAuthenticated]); // ✅ Добавлен adminApi обратно
 
   // ✅ КОНТРОЛИРУЕМЫЙ useEffect с четкими зависимостями
   useEffect(() => {
@@ -101,7 +125,7 @@ export const useAdminHomeData = (): UseAdminHomeDataReturn => {
     return () => {
       mounted = false;
     };
-  }, [isAuthenticated]); // ✅ Только isAuthenticated!
+  }, [loadStats]); // ✅ Используем loadStats вместо isAuthenticated
 
   // ✅ ФУНКЦИЯ refetch для повторной загрузки
   const refetch = useCallback(async () => {

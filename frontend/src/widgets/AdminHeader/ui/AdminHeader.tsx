@@ -16,11 +16,7 @@ interface AdminHeaderProps {
   isSidebarOpen: boolean;
 }
 
-const AdminHeader = ({
-  locale,
-  onToggleSidebar,
-  isSidebarOpen,
-}: AdminHeaderProps) => {
+const AdminHeader = ({ locale, onToggleSidebar }: AdminHeaderProps) => {
   const { logout, t } = useAuth();
 
   const handleLogout = async () => {
@@ -39,7 +35,6 @@ const AdminHeader = ({
           <Button
             variant="secondary"
             onClick={onToggleSidebar}
-            aria-label={isSidebarOpen ? 'Скрыть меню' : 'Показать меню'}
             className={styles.menuButton}
           >
             <LuPanelsTopLeft />

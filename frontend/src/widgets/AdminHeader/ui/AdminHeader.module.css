@@ -43,17 +43,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: inherit;
-  border: inherit;
-  cursor: pointer;
-  font-size: 2rem;
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
   padding: 1rem;
-  border-radius: 1rem;
-  transition: all 0.5s ease-in-out;
+  border-radius: 1.5rem;
+  width: 4.1rem;
+  height: 4.1rem;
+  cursor: pointer;
 }
 
-.menuButton:hover {
-  background-color: var(--secondary);
+.menuButton > * {
+  font-size: 4rem;
+  color: var(--foreground);
 }
 
 .menuButton:active {
@@ -80,12 +81,13 @@
   }
 
   .logoutText {
-    display: none;
+    font-weight: bold;
   }
 
   .logoutButton {
-    padding: 1rem;
+    padding: 2rem;
     min-width: auto;
+    font-weight: bold;
   }
 }
 

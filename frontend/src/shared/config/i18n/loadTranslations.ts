@@ -1,4 +1,6 @@
-// shared/config/i18n/loadTranslations.ts
+// frontend/src/shared/config/i18n/loadTranslations.ts
+// Заменить содержимое функции loadTranslations
+
 export async function loadTranslations(locale: string) {
   const defaultTranslations = {
     header: {
@@ -57,7 +59,6 @@ export async function loadTranslations(locale: string) {
         systemStatus: '✅ System is running',
       },
     },
-    // Новые переводы для админ главной страницы
     admin_home: {
       title: 'Dashboard',
       subtitle: 'Manage products, categories and system',
@@ -85,6 +86,12 @@ export async function loadTranslations(locale: string) {
         description: 'Failed to load statistics',
         demo: 'Demo data shown',
       },
+    },
+    // ==================== НОВОЕ: ДЕФОЛТНЫЕ ПЕРЕВОДЫ ДЛЯ САЙДБАРА ====================
+    sidebar: {
+      dashboard: 'Dashboard',
+      productsCreate: 'Create Product',
+      productsList: 'Products List',
     },
   };
 
@@ -131,12 +138,18 @@ export async function loadTranslations(locale: string) {
       () => defaultTranslations.auth
     );
 
-    // Загрузка новых переводов для админ главной страницы
     const adminHomeTranslations = await import(
       `@/shared/locales/${locale}/admin_home.json`
     ).then(
       (module) => module.default,
       () => defaultTranslations.admin_home
+    );
+
+    const sidebarTranslations = await import(
+      `@/shared/locales/${locale}/sidebar.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.sidebar
     );
 
     return {
@@ -147,6 +160,7 @@ export async function loadTranslations(locale: string) {
       errors: errorsTranslations,
       auth: authTranslations,
       admin_home: adminHomeTranslations,
+      sidebar: sidebarTranslations, // 👈 ДОБАВИТЬ ЭТУ СТРОКУ
     };
   } catch (error) {
     console.error(
