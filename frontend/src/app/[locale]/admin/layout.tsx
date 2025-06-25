@@ -1,3 +1,4 @@
+// frontend/src/app/[locale]/admin/layout.tsx
 import { ReactNode } from 'react';
 import {
   Locale,
@@ -5,6 +6,7 @@ import {
   TranslationType,
 } from '@/shared/config/i18n/types';
 import { AuthProvider } from '@/shared/contexts/AuthContext';
+import { LoadingProvider } from '@/features/LoadingManager/ui/LoadingContext';
 import { getRequestConfig } from '@/shared/config/i18n/i18n';
 
 interface AdminLayoutProps {
@@ -27,12 +29,14 @@ export default async function AdminLayout({
   const plainMessages = JSON.parse(JSON.stringify(messages)) as TranslationType;
 
   return (
-    <AuthProvider
-      baseUrl={process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}
-      locale={locale}
-      messages={plainMessages}
-    >
-      {children}
-    </AuthProvider>
+    <LoadingProvider>
+      <AuthProvider
+        baseUrl={process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}
+        locale={locale}
+        messages={plainMessages}
+      >
+        {children}
+      </AuthProvider>
+    </LoadingProvider>
   );
 }

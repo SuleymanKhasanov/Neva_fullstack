@@ -1,10 +1,10 @@
 // frontend/src/shared/hooks/useAdminApi.ts
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAuth } from '@/shared/contexts/AuthContext';
 
-// Минимальные типы для работы (без импорта из admin.types)
+// Минимальные типы для работы
 interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
@@ -21,14 +21,14 @@ interface ApiRequestConfig {
 }
 
 /**
- * Хук для работы с админским API
+ * ✅ ИСПРАВЛЕННЫЙ хук для работы с админским API
  */
 export const useAdminApi = () => {
   const { accessToken } = useAuth();
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-  // Базовая функция для выполнения запросов
+  // ✅ МЕМОИЗИРОВАННАЯ функция для выполнения запросов
   const makeRequest = useCallback(
     async (
       endpoint: string,
@@ -49,17 +49,18 @@ export const useAdminApi = () => {
           requestHeaders['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        // Используем переданный signal или создаем новый с timeout
+        // ✅ УПРОЩЕННАЯ обработка AbortController
         let finalSignal = signal;
+        let controller: AbortController | undefined;
         let timeoutId: NodeJS.Timeout | undefined;
 
         if (!signal) {
-          const controller = new AbortController();
+          controller = new AbortController();
           finalSignal = controller.signal;
           timeoutId = setTimeout(() => {
             console.log(`⏰ Request timeout for ${method} ${endpoint}`);
-            controller.abort();
-          }, 8000); // 8 секунд timeout
+            controller?.abort();
+          }, 10000); // Увеличили timeout до 10 секунд
         }
 
         const response = await fetch(`${baseUrl}${endpoint}`, {
@@ -69,7 +70,7 @@ export const useAdminApi = () => {
           signal: finalSignal,
         });
 
-        // Очищаем timeout только если мы его создали
+        // Очищаем timeout
         if (timeoutId) {
           clearTimeout(timeoutId);
         }
@@ -93,7 +94,7 @@ export const useAdminApi = () => {
             data
           );
 
-          // Если токен недействителен, очищаем его
+          // Если токен недействителен, не очищаем автоматически
           if (response.status === 401) {
             console.warn('🔒 Unauthorized - token may be expired');
           }
@@ -106,7 +107,7 @@ export const useAdminApi = () => {
         }
 
         console.log(`✅ ${method} ${endpoint} success`);
-        return data; // Возвращаем данные как есть
+        return data;
       } catch (error) {
         console.error(`💥 ${method} ${endpoint} error:`, error);
 
@@ -120,11 +121,13 @@ export const useAdminApi = () => {
 
           if (
             error.message.includes('fetch') ||
-            error.message.includes('Failed to fetch')
+            error.message.includes('Failed to fetch') ||
+            error.message.includes('NetworkError')
           ) {
             return {
               success: false,
-              error: 'Сервер недоступен. Проверьте подключение.',
+              error:
+                'Сервер недоступен. Проверьте подключение к серверу и убедитесь что backend запущен.',
             };
           }
         }
@@ -135,10 +138,10 @@ export const useAdminApi = () => {
         };
       }
     },
-    [accessToken, baseUrl]
+    [accessToken, baseUrl] // ✅ Только стабильные зависимости
   );
 
-  // Базовые HTTP методы
+  // ✅ МЕМОИЗИРОВАННЫЕ базовые HTTP методы
   const get = useCallback(
     (endpoint: string): Promise<ApiResponse> =>
       makeRequest(endpoint, { method: 'GET' }),
@@ -169,126 +172,93 @@ export const useAdminApi = () => {
     [makeRequest]
   );
 
-  // Структурированные методы API
-  const adminApi = {
-    // ==================== ПРОДУКТЫ ====================
-    products: {
-      getAll: async (): Promise<ApiResponse> => {
-        return get('/admin/products');
+  // ✅ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Мемоизированный adminApi объект
+  const adminApi = useMemo(
+    () => ({
+      // ==================== ПРОДУКТЫ ====================
+      products: {
+        getAll: (): Promise<ApiResponse> => get('/admin/products'),
+        getById: (id: string): Promise<ApiResponse> =>
+          get(`/admin/products/${id}`),
+        create: (data: unknown): Promise<ApiResponse> =>
+          post('/admin/products', data),
+        update: (id: string, data: unknown): Promise<ApiResponse> =>
+          put(`/admin/products/${id}`, data),
+        delete: (id: string): Promise<ApiResponse> =>
+          del(`/admin/products/${id}`),
       },
 
-      getById: async (id: string): Promise<ApiResponse> => {
-        return get(`/admin/products/${id}`);
+      // ==================== КАТЕГОРИИ ====================
+      categories: {
+        getAll: (params?: string): Promise<ApiResponse> => {
+          const endpoint = `/admin/categories${params ? `?${params}` : ''}`;
+          return get(endpoint);
+        },
+        getById: (id: string): Promise<ApiResponse> =>
+          get(`/admin/categories/${id}`),
+        create: (data: unknown): Promise<ApiResponse> =>
+          post('/admin/categories', data),
+        getSubcategories: (
+          categoryId: number,
+          locale: string
+        ): Promise<ApiResponse> => {
+          const endpoint = `/admin/categories/subcategories/all?categoryId=${categoryId}&locale=${locale}`;
+          return get(endpoint);
+        },
       },
 
-      create: async (data: unknown): Promise<ApiResponse> => {
-        return post('/admin/products', data);
+      // ==================== БРЕНДЫ ====================
+      brands: {
+        getAll: (params?: string): Promise<ApiResponse> => {
+          const endpoint = `/admin/brands${params ? `?${params}` : ''}`;
+          return get(endpoint);
+        },
+        getById: (id: string): Promise<ApiResponse> =>
+          get(`/admin/brands/${id}`),
+        create: (data: unknown): Promise<ApiResponse> =>
+          post('/admin/brands', data),
       },
 
-      update: async (id: string, data: unknown): Promise<ApiResponse> => {
-        return put(`/admin/products/${id}`, data);
+      // ==================== КЕШИРОВАНИЕ ====================
+      cache: {
+        getStats: (): Promise<ApiResponse> => get('/admin/system/cache/stats'),
+        getHealth: (): Promise<ApiResponse> =>
+          get('/admin/system/cache/health'),
+        clear: (): Promise<ApiResponse> => post('/admin/system/cache/clear'),
+        invalidateProducts: (): Promise<ApiResponse> =>
+          post('/admin/system/cache/invalidate/products'),
+        invalidateCategories: (): Promise<ApiResponse> =>
+          post('/admin/system/cache/invalidate/categories'),
+        invalidateBrands: (): Promise<ApiResponse> =>
+          post('/admin/system/cache/invalidate/brands'),
       },
 
-      delete: async (id: string): Promise<ApiResponse> => {
-        return del(`/admin/products/${id}`);
+      // ==================== СИСТЕМНАЯ ИНФОРМАЦИЯ ====================
+      system: {
+        getHealth: (): Promise<ApiResponse> => get('/admin/system/health'),
+        getStats: (): Promise<ApiResponse> => get('/admin/system/stats'),
+        getLogs: (): Promise<ApiResponse> => get('/admin/system/logs'),
       },
-    },
+    }),
+    [get, post, put, del]
+  ); // ✅ Стабильные зависимости
 
-    // ==================== КАТЕГОРИИ ====================
-    categories: {
-      getAll: async (params?: string): Promise<ApiResponse> => {
-        const endpoint = `/admin/categories${params ? `?${params}` : ''}`;
-        return get(endpoint);
-      },
+  // ✅ МЕМОИЗИРОВАННЫЙ возвращаемый объект
+  return useMemo(
+    () => ({
+      // Базовые методы
+      get,
+      post,
+      put,
+      delete: del,
+      makeRequest,
 
-      getById: async (id: string): Promise<ApiResponse> => {
-        return get(`/admin/categories/${id}`);
-      },
+      // Структурированное API
+      adminApi,
 
-      create: async (data: unknown): Promise<ApiResponse> => {
-        return post('/admin/categories', data);
-      },
-
-      getSubcategories: async (
-        categoryId: number,
-        locale: string
-      ): Promise<ApiResponse> => {
-        const endpoint = `/admin/categories/subcategories/all?categoryId=${categoryId}&locale=${locale}`;
-        return get(endpoint);
-      },
-    },
-
-    // ==================== БРЕНДЫ ====================
-    brands: {
-      getAll: async (params?: string): Promise<ApiResponse> => {
-        const endpoint = `/admin/brands${params ? `?${params}` : ''}`;
-        return get(endpoint);
-      },
-
-      getById: async (id: string): Promise<ApiResponse> => {
-        return get(`/admin/brands/${id}`);
-      },
-
-      create: async (data: unknown): Promise<ApiResponse> => {
-        return post('/admin/brands', data);
-      },
-    },
-
-    // ==================== КЕШИРОВАНИЕ ====================
-    cache: {
-      getStats: async (): Promise<ApiResponse> => {
-        return get('/admin/system/cache/stats');
-      },
-
-      getHealth: async (): Promise<ApiResponse> => {
-        return get('/admin/system/cache/health');
-      },
-
-      clear: async (): Promise<ApiResponse> => {
-        return post('/admin/system/cache/clear');
-      },
-
-      invalidateProducts: async (): Promise<ApiResponse> => {
-        return post('/admin/system/cache/invalidate/products');
-      },
-
-      invalidateCategories: async (): Promise<ApiResponse> => {
-        return post('/admin/system/cache/invalidate/categories');
-      },
-
-      invalidateBrands: async (): Promise<ApiResponse> => {
-        return post('/admin/system/cache/invalidate/brands');
-      },
-    },
-
-    // ==================== СИСТЕМНАЯ ИНФОРМАЦИЯ ====================
-    system: {
-      getHealth: async (): Promise<ApiResponse> => {
-        return get('/admin/system/health');
-      },
-
-      getStats: async (): Promise<ApiResponse> => {
-        return get('/admin/system/stats');
-      },
-
-      getLogs: async (): Promise<ApiResponse> => {
-        return get('/admin/system/logs');
-      },
-    },
-  };
-
-  return {
-    // Базовые методы
-    get,
-    post,
-    put,
-    delete: del,
-    makeRequest,
-
-    // Структурированное API
-    adminApi,
-
-    // Статус авторизации
-    isAuthenticated: !!accessToken,
-  };
+      // Статус авторизации
+      isAuthenticated: !!accessToken,
+    }),
+    [get, post, put, del, makeRequest, adminApi, accessToken]
+  );
 };

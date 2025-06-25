@@ -1,0 +1,250 @@
+/* frontend/src/features/AdminLanguageSwitcher/ui/AdminLanguageSwitcher.module.css */
+/* ✅ КОПИЯ СТИЛЕЙ из LanguageSwitcher.module.css для идентичного внешнего вида */
+
+/* Основной контейнер */
+.switcher {
+  position: relative;
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Кнопка-триггер */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 1.2rem 1.4rem;
+  min-width: 80px;
+  border-radius: 1.5rem;
+  border: 0.1rem solid var(--border);
+  background-color: var(--secondary);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.trigger:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 0.3rem rgba(227, 30, 36, 0.2);
+}
+
+.trigger.open {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 0.3rem rgba(227, 30, 36, 0.1);
+}
+
+/* ✅ ДОБАВИЛИ: Стиль для loading состояния */
+.trigger.loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Выбранный элемент */
+.selected {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.trigger:hover .name {
+  text-shadow: 0 0 0.2rem rgba(227, 30, 36, 0.3);
+}
+
+.name {
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Стрелка */
+.arrow {
+  color: var(--muted-foreground);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Выпадающий список */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 1rem);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: var(--content-box);
+  border: 0.1rem solid var(--border);
+  border-radius: 1rem;
+  box-shadow:
+    0 1rem 2.5rem rgba(0, 0, 0, 0.12),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(1.2rem);
+  animation: slideDown 0.2s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.8rem) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Список опций */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0.6rem;
+}
+
+/* Опция */
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--foreground);
+  user-select: none;
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(227, 30, 36, 0.05) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.option:hover::before {
+  transform: translateX(100%);
+}
+
+.option:hover,
+.option.focused {
+  background-color: var(--secondary);
+  transform: translateX(0.2rem);
+}
+
+.option.selected {
+  background-color: rgba(227, 30, 36, 0.1);
+  color: var(--primary);
+  font-weight: 600;
+  border-left: 0.3rem solid var(--primary);
+  padding-left: 0.9rem;
+}
+
+.option.selected::after {
+  content: ' ';
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* Стили для темной темы */
+:global(.dark) .dropdown {
+  background-color: var(--content-box);
+  border-color: var(--border);
+  box-shadow:
+    0 1rem 2.5rem rgba(0, 0, 0, 0.4),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+}
+
+:global(.dark) .option:hover,
+:global(.dark) .option.focused {
+  background-color: var(--secondary);
+}
+
+:global(.dark) .option.selected {
+  background-color: rgba(227, 30, 36, 0.2);
+}
+
+:global(.dark) .option::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(227, 30, 36, 0.1) 50%,
+    transparent 100%
+  );
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .trigger {
+    min-width: 70px;
+    padding: 1rem 1.2rem;
+    font-size: 1.3rem;
+  }
+
+  .dropdown {
+    left: -0.5rem;
+    right: -0.5rem;
+  }
+
+  .option {
+    padding: 1.2rem 1rem;
+  }
+}
+
+/* Плавное появление опций */
+.option {
+  opacity: 0;
+  animation: fadeInUp 0.2s ease-out forwards;
+}
+
+.option:nth-child(1) {
+  animation-delay: 0ms;
+}
+.option:nth-child(2) {
+  animation-delay: 40ms;
+}
+.option:nth-child(3) {
+  animation-delay: 80ms;
+}
+.option:nth-child(4) {
+  animation-delay: 120ms;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Активное состояние */
+.option:active {
+  transform: translateX(0.1rem) scale(0.98);
+}
