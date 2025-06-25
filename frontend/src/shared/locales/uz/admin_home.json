@@ -1,0 +1,28 @@
+{
+  "title": "Boshqaruv paneli",
+  "subtitle": "Mahsulotlar, kategoriyalar va tizimni boshqaring",
+  "stats": {
+    "products": {
+      "title": "Mahsulotlar",
+      "description": "Katalogdagi umumiy mahsulotlar soni"
+    },
+    "categories": {
+      "title": "Kategoriyalar",
+      "description": "Asosiy kategoriyalar soni"
+    },
+    "subcategories": {
+      "title": "Subkategoriyalar",
+      "description": "Barcha bo'limlardagi subkategoriyalar soni"
+    },
+    "brands": {
+      "title": "Brendlar",
+      "description": "Tizimdagi umumiy brendlar soni"
+    }
+  },
+  "loading": "Yuklanmoqda...",
+  "error": {
+    "title": "Yuklash xatosi",
+    "description": "Statistikani yuklashda xatolik",
+    "demo": "Demo ma'lumotlar ko'rsatilgan"
+  }
+}
