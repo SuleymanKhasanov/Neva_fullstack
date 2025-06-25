@@ -7,7 +7,7 @@ import { AdminHomePageProps } from '../types';
 import styles from './AdminHomePage.module.css';
 
 const AdminHomePage: React.FC<AdminHomePageProps> = ({ messages }) => {
-  const { stats, isLoading, error } = useAdminHomeData();
+  const { stats, isLoading } = useAdminHomeData();
 
   const t = messages.admin_home;
 
@@ -57,9 +57,6 @@ const AdminHomePage: React.FC<AdminHomePageProps> = ({ messages }) => {
           variant="default"
         />
       </div>
-
-      {/* Сообщение об ошибке/демо данных */}
-      {error && <div className={styles.errorMessage}>⚠️ {error}</div>}
     </div>
   );
 };

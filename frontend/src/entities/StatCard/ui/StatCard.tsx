@@ -5,15 +5,7 @@ import { StatCardProps } from '../types';
 import styles from './StatCard.module.css';
 
 const StatCard = memo<StatCardProps>(
-  ({
-    title,
-    value,
-    description,
-    trend,
-    isLoading = false,
-    icon,
-    variant = 'default',
-  }) => {
+  ({ title, value, description, icon, variant = 'default' }) => {
     const cardClasses = [
       styles.card,
       variant !== 'default' ? styles[variant] : '',
@@ -28,25 +20,11 @@ const StatCard = memo<StatCardProps>(
           {title}
         </h3>
         <p className={styles.cardDescription}>{description}</p>
-        {isLoading ? (
-          <div className={styles.loading}>
-            <div className={styles.loadingSpinner}></div>
-            <span>Загрузка...</span>
-          </div>
-        ) : (
-          <div className={styles.cardStats}>
-            <span className={styles.statsNumber}>
-              {typeof value === 'number'
-                ? value.toLocaleString('ru-RU')
-                : value}
-            </span>
-            {trend && (
-              <span>
-                {trend.isPositive ? '↗' : '↘'} {Math.abs(trend.value)}%
-              </span>
-            )}
-          </div>
-        )}
+        <div className={styles.cardStats}>
+          <span className={styles.statsNumber}>
+            {typeof value === 'number' ? value.toLocaleString('ru-RU') : value}
+          </span>
+        </div>
       </div>
     );
   }
