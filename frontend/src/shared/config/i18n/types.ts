@@ -62,6 +62,10 @@ export enum TranslationKeys {
   AdminHomeErrorTitle = 'admin_home.error.title',
   AdminHomeErrorDescription = 'admin_home.error.description',
   AdminHomeErrorDemo = 'admin_home.error.demo',
+
+  SidebarDashboard = 'sidebar.dashboard',
+  SidebarProductsCreate = 'sidebar.productsCreate',
+  SidebarProductsList = 'sidebar.productsList',
 }
 
 export type Header = {
@@ -162,6 +166,13 @@ export type AdminHome = {
   [key: string]: unknown;
 };
 
+export type Sidebar = {
+  dashboard: string;
+  productsCreate: string;
+  productsList: string;
+  [key: string]: unknown;
+};
+
 export type TranslationType = {
   header: Header;
   card: Card;
@@ -169,7 +180,8 @@ export type TranslationType = {
   products: Products;
   errors: Errors;
   auth: Auth;
-  admin_home: AdminHome; // Новая секция переводов
+  admin_home: AdminHome;
+  sidebar: Sidebar;
   [key: string]: unknown;
 };
 

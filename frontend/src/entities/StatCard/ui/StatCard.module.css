@@ -26,7 +26,6 @@
 .card:hover {
   transform: translate3d(0, -0.2rem, 0);
   box-shadow: 0 0.8rem 2.4rem var(--shadow-card);
-  border-color: var(--primary);
 }
 
 .cardTitle {
