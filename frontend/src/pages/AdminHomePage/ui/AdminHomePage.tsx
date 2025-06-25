@@ -11,23 +11,22 @@ import styles from './AdminHomePage.module.css';
 const AdminHomePage: React.FC<AdminHomePageProps> = ({ messages }) => {
   const { stats, isLoading } = useAdminHomeData();
 
-  // ==================== ИСПРАВЛЕННАЯ ФУНКЦИЯ ПОЛУЧЕНИЯ ПЕРЕВОДОВ ====================
   const getTranslation = (key: TranslationKeys): string => {
     try {
-      const keyPath = key.split('.'); // например: 'admin_home.title'
-      let value: unknown = messages; // 👈 ИСПРАВЛЕНО: any → unknown
+      const keyPath = key.split('.');
+      let value: unknown = messages;
 
       for (const k of keyPath) {
         if (value && typeof value === 'object' && k in value) {
           value = (value as Record<string, unknown>)[k];
         } else {
-          return key; // fallback если путь не найден
+          return key;
         }
       }
 
       return typeof value === 'string' ? value : key;
     } catch {
-      return key; // fallback к ключу если перевод не найден
+      return key;
     }
   };
 
@@ -51,7 +50,6 @@ const AdminHomePage: React.FC<AdminHomePageProps> = ({ messages }) => {
             TranslationKeys.AdminHomeStatsProductsDescription
           )}
           value={stats.products}
-          icon="📦"
           isLoading={isLoading}
           variant="primary"
         />
@@ -62,7 +60,6 @@ const AdminHomePage: React.FC<AdminHomePageProps> = ({ messages }) => {
             TranslationKeys.AdminHomeStatsCategoriesDescription
           )}
           value={stats.categories}
-          icon="🏷️"
           isLoading={isLoading}
           variant="success"
         />
@@ -75,7 +72,6 @@ const AdminHomePage: React.FC<AdminHomePageProps> = ({ messages }) => {
             TranslationKeys.AdminHomeStatsSubcategoriesDescription
           )}
           value={stats.subcategories}
-          icon="📋"
           isLoading={isLoading}
           variant="warning"
         />
@@ -86,7 +82,6 @@ const AdminHomePage: React.FC<AdminHomePageProps> = ({ messages }) => {
             TranslationKeys.AdminHomeStatsBrandsDescription
           )}
           value={stats.brands}
-          icon="🏢"
           isLoading={isLoading}
           variant="default"
         />

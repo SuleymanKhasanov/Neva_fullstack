@@ -2,8 +2,8 @@
 'use client';
 
 import { TranslationType } from '@/shared/config/i18n/types';
-import { ProductCreateForm } from '@/widgets/ProductCreateForm';
 import styles from './ProductCreatePage.module.css';
+import { AdminCreateCategory } from '@/widgets/AdminCreateCategory';
 
 interface ProductCreatePageProps {
   locale: string;
@@ -13,7 +13,7 @@ interface ProductCreatePageProps {
 const ProductCreatePage = ({ locale, messages }: ProductCreatePageProps) => {
   return (
     <div className={styles.container}>
-      <ProductCreateForm locale={locale} messages={messages} />
+      <AdminCreateCategory />
     </div>
   );
 };

@@ -1,0 +1,189 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+/* Лейбл */
+.label {
+  display: block;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+/* Триггер */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  background-color: var(--content-box);
+  border: 0.05rem solid var(--border);
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 4rem;
+}
+
+.trigger.open {
+  background-color: var(--content-box);
+  border-color: var(--foreground);
+}
+
+.trigger.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Выбранный текст */
+.selectedText {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--foreground);
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.disabled .selectedText {
+  color: var(--secondary);
+}
+
+/* Стрелка */
+.arrow {
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--foreground);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.dropdown {
+  width: 100%;
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  right: 0;
+  background-color: var(--content-box);
+  border: 0.05rem solid var(--border);
+  border-radius: 0.8rem;
+  box-shadow:
+    0 1rem 4rem rgba(0, 0, 0, 0.08),
+    0 0.4rem 1.6rem rgba(0, 0, 0, 0.04);
+  max-height: 32rem;
+  overflow: hidden;
+  animation: dropdownSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Поиск */
+.searchContainer {
+  padding: 1rem;
+  border-bottom: 0.05rem solid var(--border);
+  display: flex;
+  justify-content: center;
+}
+
+.searchInput {
+  position: relative;
+  width: 98%;
+  padding: 1.2rem;
+  border: none;
+  border-radius: 0.8rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 1.5rem;
+  font-weight: 400;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.01em;
+}
+
+/* Список опций */
+.optionsList {
+  max-height: 24rem;
+  overflow-y: auto;
+  padding: 0.8rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.optionsList::-webkit-scrollbar {
+  display: none;
+}
+
+/* Опция */
+.option {
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--foreground);
+  user-select: none;
+  letter-spacing: -0.01em;
+  position: relative;
+  border-radius: 1rem;
+}
+
+.option:hover {
+  background-color: var(--secondary);
+}
+
+/* Нет результатов */
+.noResults {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: rgba(60, 60, 67, 0.6);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .trigger {
+    padding: 1.4rem 1.6rem;
+    min-height: 4.8rem;
+  }
+
+  .selectedText {
+    font-size: 1.6rem;
+  }
+
+  .searchInput {
+    font-size: 1.6rem;
+    padding: 1.2rem 1.4rem 1.2rem 3.8rem;
+  }
+
+  .option {
+    padding: 1.4rem 1.6rem;
+    font-size: 1.6rem;
+  }
+
+  .optionsList {
+    max-height: 20rem;
+  }
+}
