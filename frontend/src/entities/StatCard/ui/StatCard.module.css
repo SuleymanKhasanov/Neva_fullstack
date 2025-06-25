@@ -29,18 +29,6 @@
   border-color: var(--primary);
 }
 
-.card.primary {
-  border-left: 4px solid var(--primary);
-}
-
-.card.success {
-  border-left: 4px solid #22c55e;
-}
-
-.card.warning {
-  border-left: 4px solid #f59e0b;
-}
-
 .cardTitle {
   font-size: 1.8rem;
   font-weight: 600;
@@ -119,24 +107,6 @@
   to {
     transform: translate3d(0, 0, 0) rotate(360deg);
   }
-}
-
-.trend {
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding: 0.2rem 0.6rem;
-  border-radius: 0.4rem;
-  line-height: 1;
-}
-
-.trendPositive {
-  color: #16a34a;
-  background-color: rgba(22, 163, 74, 0.1);
-}
-
-.trendNegative {
-  color: #dc2626;
-  background-color: rgba(220, 38, 38, 0.1);
 }
 
 /* Адаптивность */
