@@ -1,4 +1,3 @@
-// shared/config/i18n/types.ts
 export const locales = ['en', 'ru', 'uz', 'kr'] as const;
 export type Locale = (typeof locales)[number];
 
@@ -63,9 +62,50 @@ export enum TranslationKeys {
   AdminHomeErrorDescription = 'admin_home.error.description',
   AdminHomeErrorDemo = 'admin_home.error.demo',
 
+  // Sidebar
   SidebarDashboard = 'sidebar.dashboard',
   SidebarProductsCreate = 'sidebar.productsCreate',
   SidebarProductsList = 'sidebar.productsList',
+
+  // Product Create
+  ProductCreateTitle = 'product_create.title',
+  ProductCreateSubtitle = 'product_create.subtitle',
+  ProductCreateSectionsBasicInfoTitle = 'product_create.sections.basicInfo.title',
+  ProductCreateSectionsBasicInfoDescription = 'product_create.sections.basicInfo.description',
+  ProductCreateSectionsImagesTitle = 'product_create.sections.images.title',
+  ProductCreateSectionsImagesDescription = 'product_create.sections.images.description',
+  ProductCreateSectionsDetailsTitle = 'product_create.sections.details.title',
+  ProductCreateSectionsDetailsDescription = 'product_create.sections.details.description',
+  ProductCreateFieldsSectionLabel = 'product_create.fields.section.label',
+  ProductCreateFieldsSectionPlaceholder = 'product_create.fields.section.placeholder',
+  ProductCreateFieldsSectionRequired = 'product_create.fields.section.required',
+  ProductCreateFieldsCategoryLabel = 'product_create.fields.category.label',
+  ProductCreateFieldsCategoryPlaceholder = 'product_create.fields.category.placeholder',
+  ProductCreateFieldsCategoryLoading = 'product_create.fields.category.loading',
+  ProductCreateFieldsCategorySelectSectionFirst = 'product_create.fields.category.selectSectionFirst',
+  ProductCreateFieldsCategoryRequired = 'product_create.fields.category.required',
+  ProductCreateFieldsSubcategoryLabel = 'product_create.fields.subcategory.label',
+  ProductCreateFieldsSubcategoryPlaceholder = 'product_create.fields.subcategory.placeholder',
+  ProductCreateFieldsSubcategoryLoading = 'product_create.fields.subcategory.loading',
+  ProductCreateFieldsSubcategorySelectCategoryFirst = 'product_create.fields.subcategory.selectCategoryFirst',
+  ProductCreateFieldsSubcategoryNotAvailable = 'product_create.fields.subcategory.notAvailable',
+  ProductCreateFieldsBrandLabel = 'product_create.fields.brand.label',
+  ProductCreateFieldsBrandPlaceholder = 'product_create.fields.brand.placeholder',
+  ProductCreateFieldsBrandLoading = 'product_create.fields.brand.loading',
+  ProductCreateFieldsBrandSelectSubcategoryFirst = 'product_create.fields.brand.selectSubcategoryFirst',
+  ProductCreateFieldsBrandNotAvailable = 'product_create.fields.brand.notAvailable',
+  ProductCreateFieldsProductNameLabel = 'product_create.fields.productName.label',
+  ProductCreateFieldsProductNamePlaceholder = 'product_create.fields.productName.placeholder',
+  ProductCreateFieldsProductNameRequired = 'product_create.fields.productName.required',
+  ProductCreateFieldsArticleNumberLabel = 'product_create.fields.articleNumber.label',
+  ProductCreateFieldsArticleNumberPlaceholder = 'product_create.fields.articleNumber.placeholder',
+  ProductCreateFieldsPriceLabel = 'product_create.fields.price.label',
+  ProductCreateFieldsPricePlaceholder = 'product_create.fields.price.placeholder',
+  ProductCreateSectionsNamesNeva = 'product_create.sections_names.neva',
+  ProductCreateSectionsNamesXSolution = 'product_create.sections_names.x_solution',
+  ProductCreateLoadingCategories = 'product_create.loading.categories',
+  ProductCreateLoadingSubcategories = 'product_create.loading.subcategories',
+  ProductCreateLoadingBrands = 'product_create.loading.brands',
 }
 
 export type Header = {
@@ -135,7 +175,6 @@ export type Auth = {
   [key: string]: unknown;
 };
 
-// Новый тип для admin_home переводов
 export type AdminHome = {
   title: string;
   subtitle: string;

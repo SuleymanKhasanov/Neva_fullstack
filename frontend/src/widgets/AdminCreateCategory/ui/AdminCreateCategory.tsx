@@ -18,6 +18,8 @@ import {
 } from '@/shared/store/adminCategoryStore';
 import styles from './AdminCreateCategory.module.css';
 import { CustomInput } from '@/shared/ui/CustomInput/CustomInput';
+import { TranslationKeys } from '@/shared/config/i18n/types';
+import { useTranslations } from 'next-intl';
 
 // ==================== СТРОГИЕ ТИПЫ ====================
 
@@ -42,6 +44,7 @@ const SECTION_OPTIONS: readonly SelectOption[] = [
 const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
   onFormChange,
 }) => {
+  const t = useTranslations();
   // ==================== СОСТОЯНИЕ ИЗ STORE ====================
 
   // Выбранные значения
@@ -98,7 +101,6 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
 
   const handleSubcategoryChange = React.useCallback(
     (value: string | number): void => {
-      console.log('📝 Субкатегория изменена:', value);
       const subcategoryId =
         typeof value === 'number' ? value : parseInt(String(value), 10);
       if (!isNaN(subcategoryId)) {
@@ -152,10 +154,11 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
   return (
     <div className={styles.container}>
       <div className={styles.titleContainer}>
-        <h3 className={styles.sectionTitle}>Основная информация</h3>
+        <h3 className={styles.sectionTitle}>
+          {t(TranslationKeys.ProductCreateSectionsBasicInfoTitle)}
+        </h3>
         <span className={styles.sectionDescription}>
-          Выберете секцию, категорию, подкатегорию, бренд и введите название
-          модели продукта
+          {t(TranslationKeys.ProductCreateSectionsBasicInfoDescription)}
         </span>
       </div>
       {/* Форма в виде гридов 2x2 */}
@@ -163,10 +166,12 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         {/* Секция */}
         <div className={styles.fieldContainer}>
           <CustomSelect
-            label="Секция *"
+            label={t(TranslationKeys.ProductCreateFieldsSectionLabel)}
             options={SECTION_OPTIONS}
             value={selectedSection}
-            placeholder="Выберите секцию"
+            placeholder={t(
+              TranslationKeys.ProductCreateFieldsSectionPlaceholder
+            )}
             onChange={handleSectionChange}
           />
         </div>
@@ -174,15 +179,15 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         {/* Категория */}
         <div className={styles.fieldContainer}>
           <CustomSelect
-            label="Категория *"
+            label={t(TranslationKeys.ProductCreateFieldsCategoryLabel)}
             options={categoryOptions}
             value={selectedCategory ?? ''}
             placeholder={getPlaceholder(
               loading.categories,
               Boolean(selectedSection),
-              'Загрузка категорий...',
-              'Выберите категорию',
-              'Сначала выберите секцию'
+              t(TranslationKeys.ProductCreateLoadingCategories),
+              t(TranslationKeys.ProductCreateFieldsCategoryPlaceholder),
+              t(TranslationKeys.ProductCreateFieldsCategorySelectSectionFirst)
             )}
             disabled={!selectedSection || loading.categories}
             onChange={handleCategoryChange}
@@ -192,17 +197,19 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         {/* Субкатегория */}
         <div className={styles.fieldContainer}>
           <CustomSelect
-            label="Подкатегория"
+            label={t(TranslationKeys.ProductCreateFieldsSubcategoryLabel)}
             options={subcategoryOptions}
             value={selectedSubcategory ?? ''}
             placeholder={getPlaceholder(
               loading.subcategories,
               Boolean(selectedCategory),
-              'Загрузка субкатегорий...',
+              t(TranslationKeys.ProductCreateLoadingSubcategories),
               subcategoryOptions.length > 0
-                ? 'Выберите субкатегорию'
-                : 'Субкатегории отсутствуют',
-              'Сначала выберите категорию'
+                ? t(TranslationKeys.ProductCreateFieldsSubcategoryPlaceholder)
+                : t(TranslationKeys.ProductCreateFieldsSubcategoryNotAvailable),
+              t(
+                TranslationKeys.ProductCreateFieldsSubcategorySelectCategoryFirst
+              )
             )}
             disabled={!selectedCategory || loading.subcategories}
             onChange={handleSubcategoryChange}
@@ -212,15 +219,19 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         {/* Бренд */}
         <div className={styles.fieldContainer}>
           <CustomSelect
-            label="Бренд"
+            label={t(TranslationKeys.ProductCreateFieldsBrandLabel)}
             options={brandOptions}
             value={selectedBrand ?? ''}
             placeholder={getPlaceholder(
               loading.brands,
               Boolean(selectedSubcategory),
-              'Загрузка брендов...',
-              brandOptions.length > 0 ? 'Выберите бренд' : 'Бренды отсутствуют',
-              'Сначала выберите субкатегорию'
+              t(TranslationKeys.ProductCreateLoadingBrands),
+              brandOptions.length > 0
+                ? t(
+                    TranslationKeys.ProductCreateFieldsBrandSelectSubcategoryFirst
+                  )
+                : t(TranslationKeys.ProductCreateFieldsBrandNotAvailable),
+              t(TranslationKeys.ProductCreateFieldsBrandSelectSubcategoryFirst)
             )}
             disabled={!selectedSubcategory || loading.brands}
             onChange={handleBrandChange}
@@ -230,8 +241,10 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
 
       <div className={styles.fieldContainer}>
         <CustomInput
-          label="Введите название модели *"
-          placeholder="Введите название продукта"
+          label={t(TranslationKeys.ProductCreateFieldsProductNameLabel)}
+          placeholder={t(
+            TranslationKeys.ProductCreateFieldsProductNamePlaceholder
+          )}
         />
       </div>
 
@@ -240,9 +253,12 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         <div className={styles.loadingIndicator}>
           <div className={styles.spinner} />
           <span>
-            Загрузка {loading.categories && 'категорий'}
-            {loading.subcategories && 'субкатегорий'}
-            {loading.brands && 'брендов'}
+            t(TranslationKeys.AdminHomeLoading ){' '}
+            {loading.categories &&
+              t(TranslationKeys.ProductCreateLoadingCategories)}
+            {loading.subcategories &&
+              t(TranslationKeys.ProductCreateLoadingSubcategories)}
+            {loading.brands && t(TranslationKeys.ProductCreateLoadingBrands)}
             ...
           </span>
         </div>
