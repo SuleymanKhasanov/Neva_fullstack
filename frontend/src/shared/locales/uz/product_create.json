@@ -1,0 +1,60 @@
+{
+  "title": "Mahsulot yaratish",
+  "subtitle": "Yangi mahsulot yaratish uchun barcha kerakli maydonlarni to'ldiring",
+  "sections": {
+    "basicInfo": {
+      "title": "Asosiy ma'lumotlar",
+      "description": "Bo'lim, kategoriya, subkategoriya, brend tanlang va mahsulot modeli nomini kiriting"
+    },
+    "images": {
+      "title": "Rasmlar",
+      "description": "Mahsulot rasmlari va fotosuratlarini yuklang"
+    },
+    "details": {
+      "title": "Tavsif va xususiyatlar",
+      "description": "Batafsil tavsif va texnik xususiyatlarni qo'shing"
+    }
+  },
+  "fields": {
+    "section": {
+      "label": "Bo'lim *",
+      "placeholder": "Bo'limni tanlang",
+      "required": "Bo'limni tanlang"
+    },
+    "category": {
+      "label": "Kategoriya *",
+      "placeholder": "Kategoriyani tanlang",
+      "loading": "Kategoriyalar yuklanmoqda...",
+      "selectSectionFirst": "Avval bo'limni tanlang",
+      "required": "Kategoriyani tanlang"
+    },
+    "subcategory": {
+      "label": "Subkategoriya",
+      "placeholder": "Subkategoriyani tanlang",
+      "loading": "Subkategoriyalar yuklanmoqda...",
+      "selectCategoryFirst": "Avval kategoriyani tanlang",
+      "notAvailable": "Subkategoriyalar mavjud emas"
+    },
+    "brand": {
+      "label": "Brend",
+      "placeholder": "Brendni tanlang",
+      "loading": "Brendlar yuklanmoqda...",
+      "selectSubcategoryFirst": "Avval subkategoriyani tanlang",
+      "notAvailable": "Brendlar mavjud emas"
+    },
+    "productName": {
+      "label": "Model nomini kiriting *",
+      "placeholder": "Mahsulot nomini kiriting",
+      "required": "Mahsulot nomini kiriting"
+    }
+  },
+  "sections_names": {
+    "neva": "Neva",
+    "x_solution": "X-Solution"
+  },
+  "loading": {
+    "categories": "kategoriyalar",
+    "subcategories": "subkategoriyalar",
+    "brands": "brendlar"
+  }
+}

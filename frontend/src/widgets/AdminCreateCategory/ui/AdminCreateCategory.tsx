@@ -13,11 +13,11 @@ import {
   useSelectedSubcategory,
   useSelectedBrand,
   useLoading,
-  useError,
   useAdminCategoryActions,
   type FormData,
 } from '@/shared/store/adminCategoryStore';
 import styles from './AdminCreateCategory.module.css';
+import { CustomInput } from '@/shared/ui/CustomInput/CustomInput';
 
 // ==================== СТРОГИЕ ТИПЫ ====================
 
@@ -57,7 +57,6 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
 
   // Состояния
   const loading = useLoading();
-  const error = useError();
 
   // Вычисляемые значения
   const formData: FormData = useFormData();
@@ -123,10 +122,6 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
     [setSelectedBrand, clearError]
   );
 
-  const handleErrorDismiss = React.useCallback((): void => {
-    clearError();
-  }, [clearError]);
-
   // ==================== ЭФФЕКТЫ ====================
 
   React.useEffect(() => {
@@ -156,21 +151,13 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* Отображение ошибок */}
-      {error && (
-        <div className={styles.error}>
-          <span>⚠️ {error}</span>
-          <button
-            type="button"
-            onClick={handleErrorDismiss}
-            className={styles.errorClose}
-            aria-label="Закрыть ошибку"
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
+      <div className={styles.titleContainer}>
+        <h3 className={styles.sectionTitle}>Основная информация</h3>
+        <span className={styles.sectionDescription}>
+          Выберете секцию, категорию, подкатегорию, бренд и введите название
+          модели продукта
+        </span>
+      </div>
       {/* Форма в виде гридов 2x2 */}
       <div className={styles.formGrid}>
         {/* Секция */}
@@ -205,7 +192,7 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         {/* Субкатегория */}
         <div className={styles.fieldContainer}>
           <CustomSelect
-            label="Субкатегория"
+            label="Подкатегория"
             options={subcategoryOptions}
             value={selectedSubcategory ?? ''}
             placeholder={getPlaceholder(
@@ -239,6 +226,13 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
             onChange={handleBrandChange}
           />
         </div>
+      </div>
+
+      <div className={styles.fieldContainer}>
+        <CustomInput
+          label="Введите название модели *"
+          placeholder="Введите название продукта"
+        />
       </div>
 
       {/* Индикаторы загрузки */}

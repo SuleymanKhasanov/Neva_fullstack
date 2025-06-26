@@ -173,6 +173,76 @@ export type Sidebar = {
   [key: string]: unknown;
 };
 
+export type ProductCreate = {
+  title: string;
+  subtitle: string;
+  sections: {
+    basicInfo: {
+      title: string;
+      description: string;
+    };
+    images: {
+      title: string;
+      description: string;
+    };
+    details: {
+      title: string;
+      description: string;
+    };
+  };
+  fields: {
+    section: {
+      label: string;
+      placeholder: string;
+      required: string;
+    };
+    category: {
+      label: string;
+      placeholder: string;
+      loading: string;
+      selectSectionFirst: string;
+      required: string;
+    };
+    subcategory: {
+      label: string;
+      placeholder: string;
+      loading: string;
+      selectCategoryFirst: string;
+      notAvailable: string;
+    };
+    brand: {
+      label: string;
+      placeholder: string;
+      loading: string;
+      selectSubcategoryFirst: string;
+      notAvailable: string;
+    };
+    productName: {
+      label: string;
+      placeholder: string;
+      required: string;
+    };
+    articleNumber: {
+      label: string;
+      placeholder: string;
+    };
+    price: {
+      label: string;
+      placeholder: string;
+    };
+  };
+  sections_names: {
+    neva: string;
+    x_solution: string;
+  };
+  loading: {
+    categories: string;
+    subcategories: string;
+    brands: string;
+  };
+  [key: string]: unknown;
+};
+
 export type TranslationType = {
   header: Header;
   card: Card;
@@ -182,6 +252,7 @@ export type TranslationType = {
   auth: Auth;
   admin_home: AdminHome;
   sidebar: Sidebar;
+  product_create: ProductCreate;
   [key: string]: unknown;
 };
 
