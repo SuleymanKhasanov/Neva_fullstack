@@ -93,7 +93,13 @@ const getTranslatedName = (
 
 const getAuthToken = (): string | null => {
   // Проверяем разные возможные ключи токена
-  const possibleKeys = ['accessToken', 'access_token', 'authToken', 'token'];
+  const possibleKeys = [
+    'admin_access_token', // ✅ Основной ключ из AuthContext
+    'accessToken',
+    'access_token',
+    'authToken',
+    'token',
+  ];
 
   for (const key of possibleKeys) {
     const token = localStorage.getItem(key);
