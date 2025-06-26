@@ -1,6 +1,3 @@
-// frontend/src/shared/config/i18n/loadTranslations.ts
-// Заменить содержимое функции loadTranslations
-
 export async function loadTranslations(locale: string) {
   const defaultTranslations = {
     header: {
@@ -56,7 +53,7 @@ export async function loadTranslations(locale: string) {
         reportsDescription: 'View analytics and reports',
         statistics: 'Statistics',
         statisticsDescription: 'Charts and statistics will be displayed here',
-        systemStatus: '✅ System is running',
+        systemStatus: 'System is running',
       },
     },
     admin_home: {
@@ -92,6 +89,76 @@ export async function loadTranslations(locale: string) {
       dashboard: 'Dashboard',
       productsCreate: 'Create Product',
       productsList: 'Products List',
+    },
+
+    product_create: {
+      title: 'Create Product',
+      subtitle: 'Fill in all required fields to create a new product',
+      sections: {
+        basicInfo: {
+          title: 'Basic Information',
+          description:
+            'Select section, category, subcategory, brand and enter product model name',
+        },
+        images: {
+          title: 'Images',
+          description: 'Upload product images and photos',
+        },
+        details: {
+          title: 'Description and Specifications',
+          description: 'Add detailed description and technical specifications',
+        },
+      },
+      fields: {
+        section: {
+          label: 'Section *',
+          placeholder: 'Select section',
+          required: 'Please select section',
+        },
+        category: {
+          label: 'Category *',
+          placeholder: 'Select category',
+          loading: 'Loading categories...',
+          selectSectionFirst: 'Select section first',
+          required: 'Please select category',
+        },
+        subcategory: {
+          label: 'Subcategory',
+          placeholder: 'Select subcategory',
+          loading: 'Loading subcategories...',
+          selectCategoryFirst: 'Select category first',
+          notAvailable: 'Subcategories not available',
+        },
+        brand: {
+          label: 'Brand',
+          placeholder: 'Select brand',
+          loading: 'Loading brands...',
+          selectSubcategoryFirst: 'Select subcategory first',
+          notAvailable: 'Brands not available',
+        },
+        productName: {
+          label: 'Enter model name *',
+          placeholder: 'Enter product name',
+          required: 'Please enter product name',
+        },
+        articleNumber: {
+          label: 'Article Number',
+          placeholder: 'Enter product article number',
+        },
+        price: {
+          label: 'Price',
+          placeholder: '0.00',
+        },
+      },
+      sections_names: {
+        neva: 'Neva',
+        x_solution: 'X-Solution',
+      },
+      loading: {
+        categories: 'categories',
+        subcategories: 'subcategories',
+        brands: 'brands',
+      },
     },
   };
 
@@ -152,6 +219,13 @@ export async function loadTranslations(locale: string) {
       () => defaultTranslations.sidebar
     );
 
+    const productCreateTranslations = await import(
+      `@/shared/locales/${locale}/product_create.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.product_create
+    );
+
     return {
       header: headerTranslations,
       card: cardTranslations,
@@ -160,7 +234,8 @@ export async function loadTranslations(locale: string) {
       errors: errorsTranslations,
       auth: authTranslations,
       admin_home: adminHomeTranslations,
-      sidebar: sidebarTranslations, // 👈 ДОБАВИТЬ ЭТУ СТРОКУ
+      sidebar: sidebarTranslations,
+      product_create: productCreateTranslations,
     };
   } catch (error) {
     console.error(

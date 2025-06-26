@@ -14,6 +14,28 @@
   position: relative;
 }
 
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.sectionTitle {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+  padding: 0;
+  margin: 0;
+}
+
+.sectionDescription {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  max-width: 60rem;
+}
+
 /* ==================== ФОРМА ГРИДЫ 2x2 ==================== */
 .formGrid {
   display: grid;
@@ -31,6 +53,7 @@
   border-radius: var(--radius);
   padding: 2rem;
   transition: all 0.3s ease;
+  justify-content: center;
 }
 
 .fieldContainer:hover {

@@ -172,13 +172,38 @@ const fetchCategories = async (
   const response = await makeApiRequest(
     `/admin/categories?section=${section}&locale=${locale}`
   );
-  const data: ApiResponse<CategoryData[]> = await response.json();
 
-  if (!data.success) {
-    throw new Error(data.message || 'Ошибка загрузки категорий');
+  const rawData: unknown = await response.json();
+
+  // Если это массив - бекенд вернул данные напрямую
+  if (Array.isArray(rawData)) {
+    return rawData as CategoryData[];
   }
 
-  return data.data || [];
+  // Если это объект с success
+  const apiResponse = rawData as ApiResponse<CategoryData[]>;
+  if (
+    typeof apiResponse === 'object' &&
+    apiResponse !== null &&
+    'success' in apiResponse
+  ) {
+    if (!apiResponse.success) {
+      throw new Error(apiResponse.message || 'Ошибка загрузки категорий');
+    }
+    return apiResponse.data || [];
+  }
+
+  // Если это объект с data (без success)
+  const dataResponse = rawData as { data?: CategoryData[] };
+  if (
+    typeof dataResponse === 'object' &&
+    dataResponse !== null &&
+    'data' in dataResponse
+  ) {
+    return dataResponse.data || [];
+  }
+
+  throw new Error('Неожиданный формат ответа от сервера');
 };
 
 const fetchSubcategories = async (
@@ -188,13 +213,38 @@ const fetchSubcategories = async (
   const response = await makeApiRequest(
     `/admin/categories/subcategories/all?categoryId=${categoryId}&locale=${locale}`
   );
-  const data: ApiResponse<SubcategoryData[]> = await response.json();
 
-  if (!data.success) {
-    throw new Error(data.message || 'Ошибка загрузки субкатегорий');
+  const rawData: unknown = await response.json();
+
+  // Если это массив - бекенд вернул данные напрямую
+  if (Array.isArray(rawData)) {
+    return rawData as SubcategoryData[];
   }
 
-  return data.data || [];
+  // Если это объект с success
+  const apiResponse = rawData as ApiResponse<SubcategoryData[]>;
+  if (
+    typeof apiResponse === 'object' &&
+    apiResponse !== null &&
+    'success' in apiResponse
+  ) {
+    if (!apiResponse.success) {
+      throw new Error(apiResponse.message || 'Ошибка загрузки субкатегорий');
+    }
+    return apiResponse.data || [];
+  }
+
+  // Если это объект с data (без success)
+  const dataResponse = rawData as { data?: SubcategoryData[] };
+  if (
+    typeof dataResponse === 'object' &&
+    dataResponse !== null &&
+    'data' in dataResponse
+  ) {
+    return dataResponse.data || [];
+  }
+
+  throw new Error('Неожиданный формат ответа от сервера');
 };
 
 const fetchBrands = async (
@@ -208,13 +258,38 @@ const fetchBrands = async (
   }
 
   const response = await makeApiRequest(endpoint);
-  const data: ApiResponse<BrandData[]> = await response.json();
 
-  if (!data.success) {
-    throw new Error(data.message || 'Ошибка загрузки брендов');
+  const rawData: unknown = await response.json();
+
+  // Если это массив - бекенд вернул данные напрямую
+  if (Array.isArray(rawData)) {
+    return rawData as BrandData[];
   }
 
-  return data.data || [];
+  // Если это объект с success
+  const apiResponse = rawData as ApiResponse<BrandData[]>;
+  if (
+    typeof apiResponse === 'object' &&
+    apiResponse !== null &&
+    'success' in apiResponse
+  ) {
+    if (!apiResponse.success) {
+      throw new Error(apiResponse.message || 'Ошибка загрузки брендов');
+    }
+    return apiResponse.data || [];
+  }
+
+  // Если это объект с data (без success)
+  const dataResponse = rawData as { data?: BrandData[] };
+  if (
+    typeof dataResponse === 'object' &&
+    dataResponse !== null &&
+    'data' in dataResponse
+  ) {
+    return dataResponse.data || [];
+  }
+
+  throw new Error('Неожиданный формат ответа от сервера');
 };
 
 // ==================== ZUSTAND STORE ====================
