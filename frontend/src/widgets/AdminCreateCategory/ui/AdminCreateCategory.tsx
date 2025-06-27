@@ -14,7 +14,6 @@ import {
   useSelectedBrand,
   useLoading,
   useAdminCategoryActions,
-  type FormData,
 } from '@/shared/store/adminCategoryStore';
 import styles from './AdminCreateCategory.module.css';
 import { CustomInput } from '@/shared/ui/CustomInput/CustomInput';

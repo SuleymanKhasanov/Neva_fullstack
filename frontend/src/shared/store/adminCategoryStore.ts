@@ -1,4 +1,4 @@
-// shared/stores/adminCategoryStore.ts
+// frontend/src/shared/store/adminCategoryStore.ts (РАСШИРЕННАЯ ВЕРСИЯ)
 
 import React from 'react';
 import { create } from 'zustand';
@@ -48,23 +48,72 @@ interface ApiResponse<T> {
   readonly error?: string;
 }
 
+// ==================== НОВЫЕ ТИПЫ ДЛЯ ПРОДУКТА ====================
+
+interface ProductImage {
+  readonly id: string;
+  readonly file: File;
+  readonly preview: string;
+  readonly slotIndex: number;
+  readonly isPrimary: boolean;
+}
+
+interface ProductTranslations {
+  readonly ru: {
+    readonly name: string;
+    readonly description: string;
+    readonly marketingDescription: string;
+    readonly specifications: string;
+  };
+  readonly en: {
+    readonly name: string;
+    readonly description: string;
+    readonly marketingDescription: string;
+    readonly specifications: string;
+  };
+  readonly uz: {
+    readonly name: string;
+    readonly description: string;
+    readonly marketingDescription: string;
+    readonly specifications: string;
+  };
+  readonly kr: {
+    readonly name: string;
+    readonly description: string;
+    readonly marketingDescription: string;
+    readonly specifications: string;
+  };
+}
+
 interface AdminCategoryState {
-  // Выбранные значения
+  // ==================== СУЩЕСТВУЮЩИЕ ПОЛЯ ====================
+  // Выбранные значения для категорий
   readonly selectedSection: string;
   readonly selectedCategory: number | null;
   readonly selectedSubcategory: number | null;
   readonly selectedBrand: number | null;
 
-  // Данные
+  // Данные категорий
   readonly categories: readonly CategoryData[];
   readonly subcategories: readonly SubcategoryData[];
   readonly brands: readonly BrandData[];
 
-  // Состояния загрузки
+  // Состояния загрузки категорий
   readonly loading: LoadingState;
   readonly error: string;
 
-  // Действия
+  // ==================== НОВЫЕ ПОЛЯ ДЛЯ ПРОДУКТА ====================
+  // Переводы продукта
+  readonly productTranslations: ProductTranslations;
+
+  // Изображения продукта (5 слотов: 0, 1, 2, 3, 4)
+  readonly productImages: readonly ProductImage[];
+
+  // Состояние создания продукта
+  readonly isCreatingProduct: boolean;
+  readonly productCreationError: string;
+
+  // ==================== СУЩЕСТВУЮЩИЕ ДЕЙСТВИЯ ====================
   setSelectedSection: (section: string) => void;
   setSelectedCategory: (categoryId: number | null) => void;
   setSelectedSubcategory: (subcategoryId: number | null) => void;
@@ -77,6 +126,28 @@ interface AdminCategoryState {
   setError: (error: string) => void;
   clearError: () => void;
   resetForm: () => void;
+
+  // ==================== НОВЫЕ ДЕЙСТВИЯ ДЛЯ ПРОДУКТА ====================
+  // Переводы
+  setProductTranslation: (
+    locale: keyof ProductTranslations,
+    field: keyof ProductTranslations['ru'],
+    value: string
+  ) => void;
+
+  // Изображения
+  setProductImage: (slotIndex: number, file: File | null) => void;
+  removeProductImage: (slotIndex: number) => void;
+  setPrimaryProductImage: (slotIndex: number) => void;
+  reorderProductImages: (fromIndex: number, toIndex: number) => void;
+
+  // Создание продукта
+  createProduct: () => Promise<boolean>;
+  setProductCreationError: (error: string) => void;
+  clearProductCreationError: () => void;
+
+  // Сброс данных продукта
+  resetProductData: () => void;
 }
 
 // ==================== УТИЛИТЫ ====================
@@ -89,12 +160,52 @@ const getTranslatedName = (
   return translation?.name || translations[0]?.name || 'Без названия';
 };
 
+const generateImageId = (): string => {
+  return `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+const createImagePreview = (file: File): string => {
+  return URL.createObjectURL(file);
+};
+
+const revokeImagePreview = (preview: string): void => {
+  URL.revokeObjectURL(preview);
+};
+
+// ==================== НАЧАЛЬНЫЕ СОСТОЯНИЯ ====================
+
+const initialProductTranslations: ProductTranslations = {
+  ru: {
+    name: '',
+    description: '',
+    marketingDescription: '',
+    specifications: '',
+  },
+  en: {
+    name: '',
+    description: '',
+    marketingDescription: '',
+    specifications: '',
+  },
+  uz: {
+    name: '',
+    description: '',
+    marketingDescription: '',
+    specifications: '',
+  },
+  kr: {
+    name: '',
+    description: '',
+    marketingDescription: '',
+    specifications: '',
+  },
+};
+
 // ==================== API ФУНКЦИИ ====================
 
 const getAuthToken = (): string | null => {
-  // Проверяем разные возможные ключи токена
   const possibleKeys = [
-    'admin_access_token', // ✅ Основной ключ из AuthContext
+    'admin_access_token',
     'accessToken',
     'access_token',
     'authToken',
@@ -109,10 +220,7 @@ const getAuthToken = (): string | null => {
     }
   }
 
-  console.error(
-    '🚫 Токен не найден в localStorage. Доступные ключи:',
-    Object.keys(localStorage)
-  );
+  console.error('🚫 Токен не найден в localStorage.');
   return null;
 };
 
@@ -127,7 +235,6 @@ const makeApiRequest = async (endpoint: string): Promise<Response> => {
   const fullUrl = `${baseUrl}${endpoint}`;
 
   console.log(`🌐 API запрос: ${fullUrl}`);
-  console.log(`🔑 Используемый токен: ${token.substring(0, 20)}...`);
 
   const response = await fetch(fullUrl, {
     method: 'GET',
@@ -141,14 +248,9 @@ const makeApiRequest = async (endpoint: string): Promise<Response> => {
 
   if (!response.ok) {
     if (response.status === 401) {
-      // Специальная обработка 401 ошибки
-      console.error(
-        '🚫 Ошибка авторизации (401). Токен недействителен или истек.'
-      );
       throw new Error('Сессия истекла. Войдите в систему заново.');
     }
 
-    // Пытаемся получить детали ошибки от сервера
     let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
     try {
       const errorData = await response.json();
@@ -175,12 +277,10 @@ const fetchCategories = async (
 
   const rawData: unknown = await response.json();
 
-  // Если это массив - бекенд вернул данные напрямую
   if (Array.isArray(rawData)) {
     return rawData as CategoryData[];
   }
 
-  // Если это объект с success
   const apiResponse = rawData as ApiResponse<CategoryData[]>;
   if (
     typeof apiResponse === 'object' &&
@@ -193,7 +293,6 @@ const fetchCategories = async (
     return apiResponse.data || [];
   }
 
-  // Если это объект с data (без success)
   const dataResponse = rawData as { data?: CategoryData[] };
   if (
     typeof dataResponse === 'object' &&
@@ -216,12 +315,10 @@ const fetchSubcategories = async (
 
   const rawData: unknown = await response.json();
 
-  // Если это массив - бекенд вернул данные напрямую
   if (Array.isArray(rawData)) {
     return rawData as SubcategoryData[];
   }
 
-  // Если это объект с success
   const apiResponse = rawData as ApiResponse<SubcategoryData[]>;
   if (
     typeof apiResponse === 'object' &&
@@ -234,7 +331,6 @@ const fetchSubcategories = async (
     return apiResponse.data || [];
   }
 
-  // Если это объект с data (без success)
   const dataResponse = rawData as { data?: SubcategoryData[] };
   if (
     typeof dataResponse === 'object' &&
@@ -261,12 +357,10 @@ const fetchBrands = async (
 
   const rawData: unknown = await response.json();
 
-  // Если это массив - бекенд вернул данные напрямую
   if (Array.isArray(rawData)) {
     return rawData as BrandData[];
   }
 
-  // Если это объект с success
   const apiResponse = rawData as ApiResponse<BrandData[]>;
   if (
     typeof apiResponse === 'object' &&
@@ -279,7 +373,6 @@ const fetchBrands = async (
     return apiResponse.data || [];
   }
 
-  // Если это объект с data (без success)
   const dataResponse = rawData as { data?: BrandData[] };
   if (
     typeof dataResponse === 'object' &&
@@ -292,11 +385,53 @@ const fetchBrands = async (
   throw new Error('Неожиданный формат ответа от сервера');
 };
 
+// ==================== API СОЗДАНИЯ ПРОДУКТА ====================
+
+const createProductApi = async (formData: FormData): Promise<boolean> => {
+  const token = getAuthToken();
+
+  if (!token) {
+    throw new Error('Не авторизован: токен отсутствует в localStorage');
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+  const fullUrl = `${baseUrl}/admin/products`;
+
+  console.log(`🚀 Создание продукта: ${fullUrl}`);
+
+  const response = await fetch(fullUrl, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  console.log(
+    `📡 Ответ создания продукта: ${response.status} ${response.statusText}`
+  );
+
+  if (!response.ok) {
+    let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+    try {
+      const errorData = await response.json();
+      if (errorData.message) {
+        errorMessage = errorData.message;
+      }
+    } catch {
+      // Игнорируем ошибку парсинга JSON
+    }
+    throw new Error(errorMessage);
+  }
+
+  return true;
+};
+
 // ==================== ZUSTAND STORE ====================
 
 export const useAdminCategoryStore = create<AdminCategoryState>()(
   subscribeWithSelector((set, get) => ({
-    // Начальное состояние
+    // ==================== СУЩЕСТВУЮЩЕЕ СОСТОЯНИЕ ====================
     selectedSection: '',
     selectedCategory: null,
     selectedSubcategory: null,
@@ -314,7 +449,13 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
 
     error: '',
 
-    // ==================== SETTER ДЕЙСТВИЯ ====================
+    // ==================== НОВОЕ СОСТОЯНИЕ ПРОДУКТА ====================
+    productTranslations: initialProductTranslations,
+    productImages: [],
+    isCreatingProduct: false,
+    productCreationError: '',
+
+    // ==================== СУЩЕСТВУЮЩИЕ SETTER ДЕЙСТВИЯ ====================
 
     setSelectedSection: (section: string) => {
       set({
@@ -362,7 +503,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       set({ selectedBrand: brandId });
     },
 
-    // ==================== ЗАГРУЗКА ДАННЫХ ====================
+    // ==================== СУЩЕСТВУЮЩАЯ ЗАГРУЗКА ДАННЫХ ====================
 
     loadCategories: async (section: string) => {
       const locale = getCurrentLocale();
@@ -379,11 +520,6 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
           'локаль:',
           locale
         );
-        console.log('🌍 Текущий URL:', window.location.href);
-        console.log(
-          '📍 Base URL:',
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-        );
 
         const categories = await fetchCategories(section, locale);
 
@@ -399,24 +535,10 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
         const errorMessage =
           error instanceof Error ? error.message : 'Ошибка загрузки категорий';
 
-        // Более детальная ошибка для отладки
-        let detailedError = errorMessage;
-        if (
-          errorMessage.includes('401') ||
-          errorMessage.includes('авторизации')
-        ) {
-          detailedError = 'Ошибка авторизации. Проверьте токен в localStorage.';
-        } else if (
-          errorMessage.includes('Network') ||
-          errorMessage.includes('fetch')
-        ) {
-          detailedError = 'Сервер недоступен. Проверьте подключение.';
-        }
-
         set((state) => ({
           categories: [],
           loading: { ...state.loading, categories: false },
-          error: detailedError,
+          error: errorMessage,
         }));
       }
     },
@@ -499,7 +621,214 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       }
     },
 
-    // ==================== УТИЛИТЫ ====================
+    // ==================== НОВЫЕ ДЕЙСТВИЯ ДЛЯ ПРОДУКТА ====================
+
+    setProductTranslation: (locale, field, value) => {
+      set((state) => ({
+        productTranslations: {
+          ...state.productTranslations,
+          [locale]: {
+            ...state.productTranslations[locale],
+            [field]: value,
+          },
+        },
+      }));
+    },
+
+    setProductImage: (slotIndex: number, file: File | null) => {
+      set((state) => {
+        const newImages = [...state.productImages];
+
+        // Удаляем существующее изображение в этом слоте
+        const existingIndex = newImages.findIndex(
+          (img) => img.slotIndex === slotIndex
+        );
+        if (existingIndex !== -1) {
+          revokeImagePreview(newImages[existingIndex].preview);
+          newImages.splice(existingIndex, 1);
+        }
+
+        // Добавляем новое изображение если файл предоставлен
+        if (file) {
+          const newImage: ProductImage = {
+            id: generateImageId(),
+            file,
+            preview: createImagePreview(file),
+            slotIndex,
+            isPrimary: newImages.length === 0, // Первое изображение автоматически основное
+          };
+          newImages.push(newImage);
+        }
+
+        return { productImages: newImages };
+      });
+    },
+
+    removeProductImage: (slotIndex: number) => {
+      set((state) => {
+        const imageToRemove = state.productImages.find(
+          (img) => img.slotIndex === slotIndex
+        );
+        if (imageToRemove) {
+          revokeImagePreview(imageToRemove.preview);
+        }
+
+        const newImages = state.productImages.filter(
+          (img) => img.slotIndex !== slotIndex
+        );
+
+        // Если удаляем основное изображение, делаем основным первое оставшееся
+        if (imageToRemove?.isPrimary && newImages.length > 0) {
+          newImages[0] = { ...newImages[0], isPrimary: true };
+        }
+
+        return { productImages: newImages };
+      });
+    },
+
+    setPrimaryProductImage: (slotIndex: number) => {
+      set((state) => {
+        const newImages = state.productImages.map((img) => ({
+          ...img,
+          isPrimary: img.slotIndex === slotIndex,
+        }));
+
+        return { productImages: newImages };
+      });
+    },
+
+    reorderProductImages: (fromIndex: number, toIndex: number) => {
+      set((state) => {
+        const newImages = [...state.productImages];
+        const fromImage = newImages.find((img) => img.slotIndex === fromIndex);
+        const toImage = newImages.find((img) => img.slotIndex === toIndex);
+
+        if (fromImage && toImage) {
+          // Меняем местами slotIndex
+          const updatedImages = newImages.map((img) => {
+            if (img.slotIndex === fromIndex) {
+              return { ...img, slotIndex: toIndex };
+            }
+            if (img.slotIndex === toIndex) {
+              return { ...img, slotIndex: fromIndex };
+            }
+            return img;
+          });
+
+          return { productImages: updatedImages };
+        }
+
+        return state;
+      });
+    },
+
+    createProduct: async () => {
+      const state = get();
+
+      // Валидация
+      if (!state.selectedSection || !state.selectedCategory) {
+        set({ productCreationError: 'Выберите секцию и категорию' });
+        return false;
+      }
+
+      if (!state.productTranslations.ru.name.trim()) {
+        set({
+          productCreationError: 'Введите название продукта на русском языке',
+        });
+        return false;
+      }
+
+      if (state.productImages.length === 0) {
+        set({ productCreationError: 'Добавьте минимум одно изображение' });
+        return false;
+      }
+
+      set({ isCreatingProduct: true, productCreationError: '' });
+
+      try {
+        const formData = new FormData();
+
+        // Основные поля
+        formData.append('section', state.selectedSection);
+        formData.append('categoryId', state.selectedCategory.toString());
+        if (state.selectedSubcategory) {
+          formData.append(
+            'subcategoryId',
+            state.selectedSubcategory.toString()
+          );
+        }
+        if (state.selectedBrand) {
+          formData.append('brandId', state.selectedBrand.toString());
+        }
+
+        // Переводы
+        formData.append(
+          'translations',
+          JSON.stringify(state.productTranslations)
+        );
+
+        // Изображения (сортируем по slotIndex)
+        const sortedImages = [...state.productImages].sort(
+          (a, b) => a.slotIndex - b.slotIndex
+        );
+        sortedImages.forEach((image, index) => {
+          formData.append('images', image.file);
+          formData.append(
+            `imageMetadata[${index}]`,
+            JSON.stringify({
+              slotIndex: image.slotIndex,
+              isPrimary: image.isPrimary,
+            })
+          );
+        });
+
+        await createProductApi(formData);
+
+        console.log('✅ Продукт успешно создан');
+
+        // Сбрасываем данные продукта после успешного создания
+        get().resetProductData();
+
+        set({ isCreatingProduct: false });
+        return true;
+      } catch (error) {
+        console.error('💥 Ошибка создания продукта:', error);
+
+        const errorMessage =
+          error instanceof Error ? error.message : 'Ошибка создания продукта';
+
+        set({
+          isCreatingProduct: false,
+          productCreationError: errorMessage,
+        });
+        return false;
+      }
+    },
+
+    setProductCreationError: (error: string) => {
+      set({ productCreationError: error });
+    },
+
+    clearProductCreationError: () => {
+      set({ productCreationError: '' });
+    },
+
+    resetProductData: () => {
+      const state = get();
+
+      // Освобождаем все preview URL
+      state.productImages.forEach((img) => {
+        revokeImagePreview(img.preview);
+      });
+
+      set({
+        productTranslations: initialProductTranslations,
+        productImages: [],
+        productCreationError: '',
+      });
+    },
+
+    // ==================== СУЩЕСТВУЮЩИЕ УТИЛИТЫ ====================
 
     setError: (error: string) => {
       set({ error });
@@ -510,6 +839,13 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
     },
 
     resetForm: () => {
+      const state = get();
+
+      // Освобождаем preview URL изображений
+      state.productImages.forEach((img) => {
+        revokeImagePreview(img.preview);
+      });
+
       set({
         selectedSection: '',
         selectedCategory: null,
@@ -524,14 +860,17 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
           brands: false,
         },
         error: '',
+        productTranslations: initialProductTranslations,
+        productImages: [],
+        isCreatingProduct: false,
+        productCreationError: '',
       });
     },
   }))
 );
 
-// ==================== СЕЛЕКТОРЫ С МЕМОИЗАЦИЕЙ ====================
+// ==================== СУЩЕСТВУЮЩИЕ СЕЛЕКТОРЫ ====================
 
-// Мемоизированная функция создания опций
 const createSelectOptions = (
   items:
     | readonly CategoryData[]
@@ -545,7 +884,6 @@ const createSelectOptions = (
   }));
 };
 
-// Простые селекторы для получения данных
 export const useSelectedSection = (): string =>
   useAdminCategoryStore((state) => state.selectedSection);
 
@@ -573,15 +911,29 @@ export const useLoading = (): LoadingState =>
 export const useError = (): string =>
   useAdminCategoryStore((state) => state.error);
 
-// Экспорт типа для использования в компонентах
-export interface FormData {
-  readonly section: string;
-  readonly categoryId: number | null;
-  readonly subcategoryId: number | null;
-  readonly brandId: number | null;
-}
+// ==================== НОВЫЕ СЕЛЕКТОРЫ ДЛЯ ПРОДУКТА ====================
 
-// Мемоизированные селекторы для опций - используем отдельные хуки
+export const useProductTranslations = (): ProductTranslations =>
+  useAdminCategoryStore((state) => state.productTranslations);
+
+export const useProductImages = (): readonly ProductImage[] =>
+  useAdminCategoryStore((state) => state.productImages);
+
+export const useIsCreatingProduct = (): boolean =>
+  useAdminCategoryStore((state) => state.isCreatingProduct);
+
+export const useProductCreationError = (): string =>
+  useAdminCategoryStore((state) => state.productCreationError);
+
+// Селектор для получения изображения по слоту
+export const useProductImageBySlot = (slotIndex: number): ProductImage | null =>
+  useAdminCategoryStore(
+    (state) =>
+      state.productImages.find((img) => img.slotIndex === slotIndex) || null
+  );
+
+// ==================== МЕМОИЗИРОВАННЫЕ СЕЛЕКТОРЫ ====================
+
 export const useCategoryOptions = (): SelectOption[] => {
   const categories = useCategories();
   const locale = getCurrentLocale();
@@ -612,8 +964,7 @@ export const useBrandOptions = (): SelectOption[] => {
   );
 };
 
-// Мемоизированный селектор для данных формы
-export const useFormData = (): FormData => {
+export const useFormData = () => {
   const selectedSection = useSelectedSection();
   const selectedCategory = useSelectedCategory();
   const selectedSubcategory = useSelectedSubcategory();
@@ -633,25 +984,51 @@ export const useFormData = (): FormData => {
 export const useIsFormValid = (): boolean => {
   const selectedSection = useSelectedSection();
   const selectedCategory = useSelectedCategory();
+  const productTranslations = useProductTranslations();
+  const productImages = useProductImages();
 
   return React.useMemo(
-    () => Boolean(selectedSection && selectedCategory),
-    [selectedSection, selectedCategory]
+    () =>
+      Boolean(
+        selectedSection &&
+          selectedCategory &&
+          productTranslations.ru.name.trim() &&
+          productImages.length > 0
+      ),
+    [
+      selectedSection,
+      selectedCategory,
+      productTranslations.ru.name,
+      productImages.length,
+    ]
   );
 };
 
-// Экспорт действий
+// ==================== ЭКСПОРТ ДЕЙСТВИЙ ====================
+
 export const useAdminCategoryActions = () => {
   const store = useAdminCategoryStore();
 
   return React.useMemo(
     () => ({
+      // Существующие действия
       setSelectedSection: store.setSelectedSection,
       setSelectedCategory: store.setSelectedCategory,
       setSelectedSubcategory: store.setSelectedSubcategory,
       setSelectedBrand: store.setSelectedBrand,
       clearError: store.clearError,
       resetForm: store.resetForm,
+
+      // Новые действия для продукта
+      setProductTranslation: store.setProductTranslation,
+      setProductImage: store.setProductImage,
+      removeProductImage: store.removeProductImage,
+      setPrimaryProductImage: store.setPrimaryProductImage,
+      reorderProductImages: store.reorderProductImages,
+      createProduct: store.createProduct,
+      setProductCreationError: store.setProductCreationError,
+      clearProductCreationError: store.clearProductCreationError,
+      resetProductData: store.resetProductData,
     }),
     [store]
   );
