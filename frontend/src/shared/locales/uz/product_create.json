@@ -1,18 +1,18 @@
 {
   "title": "Mahsulot yaratish",
-  "subtitle": "Yangi mahsulot yaratish uchun barcha kerakli maydonlarni to'ldiring",
+  "subtitle": "Yangi mahsulot yaratish uchun barcha zarur maydonlarni to'ldiring",
   "sections": {
     "basicInfo": {
       "title": "Asosiy ma'lumotlar",
-      "description": "Bo'lim, kategoriya, subkategoriya, brend tanlang va mahsulot modeli nomini kiriting"
+      "description": "Bo'lim, kategoriya, kichik kategoriya, brendni tanlang va mahsulot modelining nomini kiriting"
     },
     "images": {
       "title": "Rasmlar",
-      "description": "Mahsulot rasmlari va fotosuratlarini yuklang"
+      "description": "Mahsulotning rasmlari va fotosuratlarini yuklang"
     },
     "details": {
-      "title": "Tavsif va xususiyatlar",
-      "description": "Batafsil tavsif va texnik xususiyatlarni qo'shing"
+      "title": "Ta'rif va xususiyatlar",
+      "description": "Batafsil ta'rif va texnik xususiyatlarni qo'shing"
     }
   },
   "fields": {
@@ -29,23 +29,34 @@
       "required": "Kategoriyani tanlang"
     },
     "subcategory": {
-      "label": "Subkategoriya",
-      "placeholder": "Subkategoriyani tanlang",
-      "loading": "Subkategoriyalar yuklanmoqda...",
+      "label": "Kichik kategoriya",
+      "placeholder": "Kichik kategoriyani tanlang",
+      "loading": "Kichik kategoriyalar yuklanmoqda...",
       "selectCategoryFirst": "Avval kategoriyani tanlang",
-      "notAvailable": "Subkategoriyalar mavjud emas"
+      "notAvailable": "Kichik kategoriyalar mavjud emas"
     },
     "brand": {
       "label": "Brend",
       "placeholder": "Brendni tanlang",
       "loading": "Brendlar yuklanmoqda...",
-      "selectSubcategoryFirst": "Avval subkategoriyani tanlang",
+      "selectSubcategoryFirst": "Avval kichik kategoriyani tanlang",
       "notAvailable": "Brendlar mavjud emas"
     },
     "productName": {
       "label": "Model nomini kiriting *",
       "placeholder": "Mahsulot nomini kiriting",
       "required": "Mahsulot nomini kiriting"
+    },
+    "productDescription": {
+      "label_ru": "Mahsulot ta'rifi (Ruscha) *",
+      "label_en": "Mahsulot ta'rifi (Inglizcha) *",
+      "label_uz": "Mahsulot ta'rifi (O'zbekcha) *",
+      "label_kr": "Mahsulot ta'rifi (Koreyscha) *",
+      "placeholder": "Mahsulot ta'rifini kiriting",
+      "specifications": {
+        "label": "Texnik xususiyatlar",
+        "placeholder": "Texnik xususiyatlarni kiriting"
+      }
     }
   },
   "sections_names": {
@@ -54,7 +65,7 @@
   },
   "loading": {
     "categories": "kategoriyalar",
-    "subcategories": "subkategoriyalar",
+    "subcategories": "kichik kategoriyalar",
     "brands": "brendlar"
   }
 }

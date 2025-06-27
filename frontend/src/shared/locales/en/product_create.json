@@ -4,11 +4,11 @@
   "sections": {
     "basicInfo": {
       "title": "Basic Information",
-      "description": "Select section, category, subcategory, brand and enter product model name"
+      "description": "Select section, category, subcategory, brand, and enter the product model name"
     },
     "images": {
       "title": "Images",
-      "description": "Upload product images and photos"
+      "description": "Upload images and photos of the product"
     },
     "details": {
       "title": "Description and Specifications",
@@ -19,33 +19,44 @@
     "section": {
       "label": "Section *",
       "placeholder": "Select section",
-      "required": "Please select section"
+      "required": "Please select a section"
     },
     "category": {
       "label": "Category *",
       "placeholder": "Select category",
       "loading": "Loading categories...",
-      "selectSectionFirst": "Select section first",
-      "required": "Please select category"
+      "selectSectionFirst": "Please select a section first",
+      "required": "Please select a category"
     },
     "subcategory": {
       "label": "Subcategory",
       "placeholder": "Select subcategory",
       "loading": "Loading subcategories...",
-      "selectCategoryFirst": "Select category first",
-      "notAvailable": "Subcategories not available"
+      "selectCategoryFirst": "Please select a category first",
+      "notAvailable": "No subcategories available"
     },
     "brand": {
       "label": "Brand",
       "placeholder": "Select brand",
       "loading": "Loading brands...",
-      "selectSubcategoryFirst": "Select subcategory first",
-      "notAvailable": "Brands not available"
+      "selectSubcategoryFirst": "Please select a subcategory first",
+      "notAvailable": "No brands available"
     },
     "productName": {
       "label": "Enter model name *",
       "placeholder": "Enter product name",
-      "required": "Please enter product name"
+      "required": "Please enter the product name"
+    },
+    "productDescription": {
+      "label_ru": "Product Description (Russian) *",
+      "label_en": "Product Description (English) *",
+      "label_uz": "Product Description (Uzbek) *",
+      "label_kr": "Product Description (Korean) *",
+      "placeholder": "Enter product description",
+      "specifications": {
+        "label": "Technical Specifications",
+        "placeholder": "Enter technical specifications"
+      }
     }
   },
   "sections_names": {

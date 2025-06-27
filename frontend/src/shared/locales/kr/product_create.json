@@ -1,6 +1,6 @@
 {
   "title": "제품 생성",
-  "subtitle": "새 제품을 생성하기 위해 모든 필수 필드를 입력하세요",
+  "subtitle": "새 제품을 생성하기 위해 모든 필수 필드를 작성하세요",
   "sections": {
     "basicInfo": {
       "title": "기본 정보",
@@ -8,7 +8,7 @@
     },
     "images": {
       "title": "이미지",
-      "description": "제품 이미지와 사진을 업로드하세요"
+      "description": "제품의 이미지와 사진을 업로드하세요"
     },
     "details": {
       "title": "설명 및 사양",
@@ -18,27 +18,27 @@
   "fields": {
     "section": {
       "label": "섹션 *",
-      "placeholder": "섹션 선택",
+      "placeholder": "섹션을 선택하세요",
       "required": "섹션을 선택하세요"
     },
     "category": {
       "label": "카테고리 *",
-      "placeholder": "카테고리 선택",
-      "loading": "카테고리 로딩 중...",
+      "placeholder": "카테고리를 선택하세요",
+      "loading": "카테고리 로드 중...",
       "selectSectionFirst": "먼저 섹션을 선택하세요",
       "required": "카테고리를 선택하세요"
     },
     "subcategory": {
       "label": "하위 카테고리",
-      "placeholder": "하위 카테고리 선택",
-      "loading": "하위 카테고리 로딩 중...",
+      "placeholder": "하위 카테고리를 선택하세요",
+      "loading": "하위 카테고리 로드 중...",
       "selectCategoryFirst": "먼저 카테고리를 선택하세요",
       "notAvailable": "하위 카테고리가 없습니다"
     },
     "brand": {
       "label": "브랜드",
-      "placeholder": "브랜드 선택",
-      "loading": "브랜드 로딩 중...",
+      "placeholder": "브랜드를 선택하세요",
+      "loading": "브랜드 로드 중...",
       "selectSubcategoryFirst": "먼저 하위 카테고리를 선택하세요",
       "notAvailable": "브랜드가 없습니다"
     },
@@ -46,6 +46,17 @@
       "label": "모델명 입력 *",
       "placeholder": "제품명을 입력하세요",
       "required": "제품명을 입력하세요"
+    },
+    "productDescription": {
+      "label_ru": "제품 설명 (러시아어) *",
+      "label_en": "제품 설명 (영어) *",
+      "label_uz": "제품 설명 (우즈베크어) *",
+      "label_kr": "제품 설명 (한국어) *",
+      "placeholder": "제품 설명을 입력하세요",
+      "specifications": {
+        "label": "기술 사양",
+        "placeholder": "기술 사양을 입력하세요"
+      }
     }
   },
   "sections_names": {
