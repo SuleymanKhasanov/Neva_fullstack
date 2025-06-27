@@ -6,7 +6,6 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { getCurrentLocale } from '@/shared/utils/redirect';
 
 // ==================== СТРОГИЕ ТИПЫ ====================
-
 interface SelectOption {
   readonly value: string | number;
   readonly label: string;
