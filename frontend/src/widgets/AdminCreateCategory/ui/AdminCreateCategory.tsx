@@ -14,6 +14,7 @@ import {
   useSelectedBrand,
   useLoading,
   useAdminCategoryActions,
+  useProductTranslations, // Новый хук для переводов
 } from '@/shared/store/adminCategoryStore';
 import styles from './AdminCreateCategory.module.css';
 import { CustomInput } from '@/shared/ui/CustomInput/CustomInput';
@@ -44,6 +45,7 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
   onFormChange,
 }) => {
   const t = useTranslations();
+
   // ==================== СОСТОЯНИЕ ИЗ STORE ====================
 
   // Выбранные значения
@@ -56,6 +58,9 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
   const categoryOptions: SelectOption[] = useCategoryOptions();
   const subcategoryOptions: SelectOption[] = useSubcategoryOptions();
   const brandOptions: SelectOption[] = useBrandOptions();
+
+  // Переводы
+  const productTranslations = useProductTranslations(); // Получаем переводы
 
   // Состояния
   const loading = useLoading();
@@ -71,6 +76,7 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
     setSelectedSubcategory,
     setSelectedBrand,
     clearError,
+    setProductTranslation, // Добавляем действие для переводов
   } = useAdminCategoryActions();
 
   // ==================== ОБРАБОТЧИКИ ====================
@@ -121,6 +127,16 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
       }
     },
     [setSelectedBrand, clearError]
+  );
+
+  // Обработчик для поля названия продукта
+  const handleProductNameChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>): void => {
+      const value = event.target.value;
+      console.log('📝 Название продукта изменено:', value);
+      setProductTranslation('ru', 'name', value); // Обновляем название для локали 'ru'
+    },
+    [setProductTranslation]
   );
 
   // ==================== ЭФФЕКТЫ ====================
@@ -244,6 +260,8 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
           placeholder={t(
             TranslationKeys.ProductCreateFieldsProductNamePlaceholder
           )}
+          value={productTranslations.ru.name}
+          onChange={handleProductNameChange}
         />
       </div>
 
@@ -252,7 +270,7 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         <div className={styles.loadingIndicator}>
           <div className={styles.spinner} />
           <span>
-            t(TranslationKeys.AdminHomeLoading ){' '}
+            {t(TranslationKeys.AdminHomeLoading)}{' '}
             {loading.categories &&
               t(TranslationKeys.ProductCreateLoadingCategories)}
             {loading.subcategories &&
