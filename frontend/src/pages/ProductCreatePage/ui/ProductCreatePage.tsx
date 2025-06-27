@@ -6,6 +6,7 @@ import { AdminCreateCategory } from '@/widgets/AdminCreateCategory';
 import { TranslationKeys } from '@/shared/config/i18n/types';
 import { useTranslations } from 'next-intl';
 import { ProductImagesUpload } from '@/widgets/ProductImagesUpload';
+import { ProductDetails } from '@/widgets/ProductDetails';
 
 const ProductCreatePage = () => {
   const t = useTranslations();
@@ -22,6 +23,7 @@ const ProductCreatePage = () => {
       </div>
       <AdminCreateCategory />
       <ProductImagesUpload />
+      <ProductDetails />
     </div>
   );
 };

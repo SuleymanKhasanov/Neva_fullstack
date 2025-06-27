@@ -1,0 +1,37 @@
+.container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 3rem;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.8rem 2.4rem var(--shadow-content);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+.sectionTitle {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+  padding: 0;
+  margin: 0;
+}
+
+.sectionDescription {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  max-width: 60rem;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+}
