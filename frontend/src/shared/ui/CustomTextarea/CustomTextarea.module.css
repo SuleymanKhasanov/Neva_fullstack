@@ -1,0 +1,107 @@
+/* frontend/src/shared/ui/CustomTextarea/CustomTextarea.module.css */
+
+.textareaWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.label {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.textarea {
+  width: 100%;
+  padding: 1.2rem 1.6rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--foreground);
+  background-color: var(--background);
+  border: 0.1rem solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  resize: none;
+  max-height: 12rem;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.textarea::placeholder {
+  color: var(--muted-foreground);
+  font-style: normal;
+}
+
+.textarea:disabled {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+  opacity: 0.6;
+  resize: none;
+}
+
+.textarea:disabled::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* ==================== ВАРИАНТЫ ====================*/
+
+.description {
+  min-height: 12rem;
+}
+
+.specifications {
+  min-height: 16rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* ==================== СОСТОЯНИЕ ОШИБКИ ==================== */
+
+.error {
+  border-color: var(--destructive);
+}
+
+.error:focus {
+  border-color: var(--destructive);
+}
+
+/* ==================== АДАПТИВНОСТЬ ==================== */
+
+@media (max-width: 768px) {
+  .textarea {
+    font-size: 1.6rem;
+    padding: 1.4rem 1.6rem;
+  }
+
+  .description {
+    min-height: 10rem;
+  }
+
+  .specifications {
+    min-height: 14rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .textarea {
+    font-size: 1.6rem;
+    padding: 1.2rem 1.4rem;
+  }
+
+  .description {
+    min-height: 8rem;
+  }
+
+  .specifications {
+    min-height: 12rem;
+  }
+}
