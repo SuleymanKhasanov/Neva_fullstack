@@ -1,0 +1,130 @@
+/* frontend/src/widgets/ProductImagesUpload/ui/ProductImagesUpload.module.css */
+
+.container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 3rem;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.8rem 2.4rem var(--shadow-content);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+/* ==================== ЗАГОЛОВОК ==================== */
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.sectionTitle {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+  padding: 0;
+  margin: 0;
+}
+
+.sectionDescription {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  max-width: 60rem;
+}
+
+/* ==================== СЕТКА ИЗОБРАЖЕНИЙ ==================== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.6rem;
+  margin-bottom: 2.4rem;
+  align-items: start;
+}
+
+.slot {
+  width: 100%;
+}
+
+/* ==================== АДАПТИВНОСТЬ ==================== */
+
+/* Планшеты */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+}
+
+/* Мобильные (большие) */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  .container {
+    padding: 1.6rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: stretch;
+    text-align: center;
+  }
+}
+
+/* Мобильные (маленькие) */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .container {
+    padding: 1.2rem;
+  }
+
+  .header {
+    margin-bottom: 1.6rem;
+  }
+
+  .title {
+    font-size: 1.125rem;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+  }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .container {
+    padding: 0.8rem;
+  }
+}
