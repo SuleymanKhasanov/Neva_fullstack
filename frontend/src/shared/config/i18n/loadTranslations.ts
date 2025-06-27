@@ -141,13 +141,16 @@ export async function loadTranslations(locale: string) {
           placeholder: 'Enter product name',
           required: 'Please enter product name',
         },
-        articleNumber: {
-          label: 'Article Number',
-          placeholder: 'Enter product article number',
-        },
-        price: {
-          label: 'Price',
-          placeholder: '0.00',
+        productDescription: {
+          label_ru: 'Product Description (Russian) *',
+          label_en: 'Product Description (English) *',
+          label_uz: 'Product Description (Uzbek) *',
+          label_kr: 'Product Description (Korean) *',
+          placeholder: 'Enter product description',
+          specifications: {
+            label: 'Technical Specifications',
+            placeholder: 'Enter technical specifications',
+          },
         },
       },
       sections_names: {

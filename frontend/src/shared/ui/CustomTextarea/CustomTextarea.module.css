@@ -60,8 +60,7 @@
 }
 
 .specifications {
-  min-height: 16rem;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  min-height: 12rem;
 }
 
 /* ==================== СОСТОЯНИЕ ОШИБКИ ==================== */
