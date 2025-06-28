@@ -1,4 +1,4 @@
-// frontend/src/shared/store/adminCategoryStore.ts (РАСШИРЕННАЯ ВЕРСИЯ)
+// frontend/src/shared/store/adminCategoryStore.ts (ФИНАЛЬНАЯ ИСПРАВЛЕННАЯ ВЕРСИЯ)
 
 import React from 'react';
 import { create } from 'zustand';
@@ -84,35 +84,35 @@ interface ProductTranslations {
   };
 }
 
+// ✅ Интерфейс для правильной типизации FormData
+interface FormDataShape {
+  readonly section: string;
+  readonly categoryId: number | null;
+  readonly subcategoryId: number | null;
+  readonly brandId: number | null;
+}
+
 interface AdminCategoryState {
   // ==================== СУЩЕСТВУЮЩИЕ ПОЛЯ ====================
-  // Выбранные значения для категорий
   readonly selectedSection: string;
   readonly selectedCategory: number | null;
   readonly selectedSubcategory: number | null;
   readonly selectedBrand: number | null;
 
-  // Данные категорий
   readonly categories: readonly CategoryData[];
   readonly subcategories: readonly SubcategoryData[];
   readonly brands: readonly BrandData[];
 
-  // Состояния загрузки категорий
   readonly loading: LoadingState;
   readonly error: string;
 
   // ==================== НОВЫЕ ПОЛЯ ДЛЯ ПРОДУКТА ====================
-  // Переводы продукта
   readonly productTranslations: ProductTranslations;
-
-  // Изображения продукта (5 слотов: 0, 1, 2, 3, 4)
   readonly productImages: readonly ProductImage[];
-
-  // Состояние создания продукта
   readonly isCreatingProduct: boolean;
   readonly productCreationError: string;
 
-  // ==================== СУЩЕСТВУЮЩИЕ ДЕЙСТВИЯ ====================
+  // ==================== ДЕЙСТВИЯ ====================
   setSelectedSection: (section: string) => void;
   setSelectedCategory: (categoryId: number | null) => void;
   setSelectedSubcategory: (subcategoryId: number | null) => void;
@@ -126,7 +126,6 @@ interface AdminCategoryState {
   clearError: () => void;
   resetForm: () => void;
 
-  // ==================== НОВЫЕ ДЕЙСТВИЯ ДЛЯ ПРОДУКТА ====================
   // Переводы
   setProductTranslation: (
     locale: keyof ProductTranslations,
@@ -144,8 +143,6 @@ interface AdminCategoryState {
   createProduct: () => Promise<boolean>;
   setProductCreationError: (error: string) => void;
   clearProductCreationError: () => void;
-
-  // Сброс данных продукта
   resetProductData: () => void;
 }
 
@@ -384,53 +381,11 @@ const fetchBrands = async (
   throw new Error('Неожиданный формат ответа от сервера');
 };
 
-// ==================== API СОЗДАНИЯ ПРОДУКТА ====================
-
-const createProductApi = async (formData: FormData): Promise<boolean> => {
-  const token = getAuthToken();
-
-  if (!token) {
-    throw new Error('Не авторизован: токен отсутствует в localStorage');
-  }
-
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-  const fullUrl = `${baseUrl}/admin/products`;
-
-  console.log(`🚀 Создание продукта: ${fullUrl}`);
-
-  const response = await fetch(fullUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  console.log(
-    `📡 Ответ создания продукта: ${response.status} ${response.statusText}`
-  );
-
-  if (!response.ok) {
-    let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-    try {
-      const errorData = await response.json();
-      if (errorData.message) {
-        errorMessage = errorData.message;
-      }
-    } catch {
-      // Игнорируем ошибку парсинга JSON
-    }
-    throw new Error(errorMessage);
-  }
-
-  return true;
-};
-
 // ==================== ZUSTAND STORE ====================
 
 export const useAdminCategoryStore = create<AdminCategoryState>()(
   subscribeWithSelector((set, get) => ({
-    // ==================== СУЩЕСТВУЮЩЕЕ СОСТОЯНИЕ ====================
+    // ==================== СОСТОЯНИЕ ====================
     selectedSection: '',
     selectedCategory: null,
     selectedSubcategory: null,
@@ -448,13 +403,12 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
 
     error: '',
 
-    // ==================== НОВОЕ СОСТОЯНИЕ ПРОДУКТА ====================
     productTranslations: initialProductTranslations,
     productImages: [],
     isCreatingProduct: false,
     productCreationError: '',
 
-    // ==================== СУЩЕСТВУЮЩИЕ SETTER ДЕЙСТВИЯ ====================
+    // ==================== ДЕЙСТВИЯ ====================
 
     setSelectedSection: (section: string) => {
       set({
@@ -502,7 +456,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       set({ selectedBrand: brandId });
     },
 
-    // ==================== СУЩЕСТВУЮЩАЯ ЗАГРУЗКА ДАННЫХ ====================
+    // ==================== ЗАГРУЗКА ДАННЫХ ====================
 
     loadCategories: async (section: string) => {
       const locale = getCurrentLocale();
@@ -620,7 +574,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       }
     },
 
-    // ==================== НОВЫЕ ДЕЙСТВИЯ ДЛЯ ПРОДУКТА ====================
+    // ==================== ДЕЙСТВИЯ ДЛЯ ПРОДУКТА ====================
 
     setProductTranslation: (locale, field, value) => {
       set((state) => ({
@@ -721,12 +675,28 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       });
     },
 
+    // ✅ ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ ФУНКЦИЯ createProduct (JSON + отдельные изображения)
     createProduct: async () => {
       const state = get();
 
-      // Валидация
-      if (!state.selectedSection || !state.selectedCategory) {
-        set({ productCreationError: 'Выберите секцию и категорию' });
+      console.log('🔍 Debug полное состояние:', {
+        selectedSection: state.selectedSection,
+        selectedCategory: state.selectedCategory,
+        selectedSubcategory: state.selectedSubcategory,
+        selectedBrand: state.selectedBrand,
+        ruName: state.productTranslations.ru.name,
+        imagesCount: state.productImages.length,
+        productTranslations: state.productTranslations,
+      });
+
+      // Валидация обязательных полей
+      if (!state.selectedSection || state.selectedSection.trim() === '') {
+        set({ productCreationError: 'Выберите секцию (NEVA или X-Solution)' });
+        return false;
+      }
+
+      if (!state.selectedCategory || state.selectedCategory < 1) {
+        set({ productCreationError: 'Выберите категорию' });
         return false;
       }
 
@@ -737,65 +707,163 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
         return false;
       }
 
-      if (state.productImages.length === 0) {
-        set({ productCreationError: 'Добавьте минимум одно изображение' });
-        return false;
-      }
-
       set({ isCreatingProduct: true, productCreationError: '' });
 
       try {
-        const formData = new FormData();
-
-        // Основные поля
-        formData.append('section', state.selectedSection);
-        formData.append('categoryId', state.selectedCategory.toString());
-        if (state.selectedSubcategory) {
-          formData.append(
-            'subcategoryId',
-            state.selectedSubcategory.toString()
-          );
-        }
-        if (state.selectedBrand) {
-          formData.append('brandId', state.selectedBrand.toString());
+        const token = getAuthToken();
+        if (!token) {
+          throw new Error('Токен авторизации не найден');
         }
 
-        // Переводы
-        formData.append(
-          'translations',
-          JSON.stringify(state.productTranslations)
-        );
+        const baseUrl =
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-        // Изображения (сортируем по slotIndex)
-        const sortedImages = [...state.productImages].sort(
-          (a, b) => a.slotIndex - b.slotIndex
-        );
-        sortedImages.forEach((image, index) => {
-          formData.append('images', image.file);
-          formData.append(
-            `imageMetadata[${index}]`,
-            JSON.stringify({
-              slotIndex: image.slotIndex,
-              isPrimary: image.isPrimary,
-            })
-          );
+        // ✅ ШАГ 1: Создаем продукт через JSON API (точно по Swagger схеме)
+        const productData = {
+          section: state.selectedSection.trim().toUpperCase(), // "NEVA" или "X_SOLUTION"
+          categoryId: Number(state.selectedCategory),
+          subcategoryId: state.selectedSubcategory
+            ? Number(state.selectedSubcategory)
+            : undefined,
+          brandId: state.selectedBrand
+            ? Number(state.selectedBrand)
+            : undefined,
+          isActive: true,
+          translations: [
+            {
+              locale: 'ru',
+              name: state.productTranslations.ru.name.trim(),
+              description:
+                state.productTranslations.ru.description?.trim() || '',
+              marketingDescription:
+                state.productTranslations.ru.marketingDescription?.trim() || '',
+            },
+          ],
+          specifications: [], // Пустой массив пока что
+        };
+
+        // Добавляем дополнительные переводы если заполнены
+        ['en', 'uz', 'kr'].forEach((locale) => {
+          const translation = state.productTranslations[locale];
+          if (translation.name && translation.name.trim()) {
+            productData.translations.push({
+              locale,
+              name: translation.name.trim(),
+              description: translation.description?.trim() || '',
+              marketingDescription:
+                translation.marketingDescription?.trim() || '',
+            });
+          }
         });
 
-        await createProductApi(formData);
+        console.log(
+          '📤 Отправляем JSON данные для создания продукта:',
+          productData
+        );
 
-        console.log('✅ Продукт успешно создан');
+        // Создание продукта
+        const productResponse = await fetch(`${baseUrl}/admin/products`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(productData),
+        });
 
-        // Сбрасываем данные продукта после успешного создания
+        console.log(
+          `📡 Ответ создания продукта: ${productResponse.status} ${productResponse.statusText}`
+        );
+
+        if (!productResponse.ok) {
+          const errorData = await productResponse.json();
+          console.error('🚨 Ошибка создания продукта:', errorData);
+
+          let errorMessage = 'Ошибка создания продукта';
+          if (errorData.message) {
+            if (Array.isArray(errorData.message)) {
+              errorMessage = errorData.message.join(', ');
+            } else {
+              errorMessage = errorData.message;
+            }
+          }
+          throw new Error(errorMessage);
+        }
+
+        const createdProduct = await productResponse.json();
+        console.log('✅ Продукт успешно создан:', createdProduct);
+
+        // ✅ ШАГ 2: Загружаем изображения отдельно (если есть)
+        if (state.productImages.length > 0) {
+          console.log(
+            `📸 Загружаем ${state.productImages.length} изображений для продукта ${createdProduct.id}...`
+          );
+
+          try {
+            const imageFormData = new FormData();
+
+            // Добавляем все изображения, отсортированные по slotIndex
+            state.productImages
+              .sort((a, b) => a.slotIndex - b.slotIndex)
+              .forEach((image) => {
+                imageFormData.append('images', image.file);
+                console.log(
+                  `📤 Добавляем изображение: ${image.file.name} (${image.file.size} bytes)`
+                );
+              });
+
+            const imageResponse = await fetch(
+              `${baseUrl}/admin/products/${createdProduct.id}/images`,
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                body: imageFormData,
+              }
+            );
+
+            console.log(
+              `📡 Ответ загрузки изображений: ${imageResponse.status} ${imageResponse.statusText}`
+            );
+
+            if (!imageResponse.ok) {
+              const imageError = await imageResponse.json();
+              console.warn(
+                '⚠️ Продукт создан, но изображения не загружены:',
+                imageError
+              );
+              // НЕ прерываем процесс - продукт уже создан успешно
+            } else {
+              const imageResult = await imageResponse.json();
+              console.log('✅ Изображения успешно загружены:', imageResult);
+            }
+          } catch (imageError) {
+            console.warn(
+              '⚠️ Ошибка загрузки изображений (продукт уже создан):',
+              imageError
+            );
+            // НЕ прерываем процесс - продукт уже создан успешно
+          }
+        } else {
+          console.log(
+            '📷 Изображения не добавлены - продукт создан только с текстовыми данными'
+          );
+        }
+
+        console.log('🎉 Процесс создания продукта завершен успешно!');
+
+        // Сбрасываем данные формы
         get().resetProductData();
-
         set({ isCreatingProduct: false });
         return true;
       } catch (error) {
-        console.error('💥 Ошибка создания продукта:', error);
+        console.error('💥 Критическая ошибка создания продукта:', error);
 
         const errorMessage =
-          error instanceof Error ? error.message : 'Ошибка создания продукта';
-
+          error instanceof Error
+            ? error.message
+            : 'Неизвестная ошибка создания продукта';
         set({
           isCreatingProduct: false,
           productCreationError: errorMessage,
@@ -827,7 +895,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       });
     },
 
-    // ==================== СУЩЕСТВУЮЩИЕ УТИЛИТЫ ====================
+    // ==================== УТИЛИТЫ ====================
 
     setError: (error: string) => {
       set({ error });
@@ -868,7 +936,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
   }))
 );
 
-// ==================== СУЩЕСТВУЮЩИЕ СЕЛЕКТОРЫ ====================
+// ==================== СЕЛЕКТОРЫ ====================
 
 const createSelectOptions = (
   items:
@@ -910,8 +978,6 @@ export const useLoading = (): LoadingState =>
 export const useError = (): string =>
   useAdminCategoryStore((state) => state.error);
 
-// ==================== НОВЫЕ СЕЛЕКТОРЫ ДЛЯ ПРОДУКТА ====================
-
 export const useProductTranslations = (): ProductTranslations =>
   useAdminCategoryStore((state) => state.productTranslations);
 
@@ -924,7 +990,6 @@ export const useIsCreatingProduct = (): boolean =>
 export const useProductCreationError = (): string =>
   useAdminCategoryStore((state) => state.productCreationError);
 
-// Селектор для получения изображения по слоту
 export const useProductImageBySlot = (slotIndex: number): ProductImage | null =>
   useAdminCategoryStore(
     (state) =>
@@ -963,7 +1028,8 @@ export const useBrandOptions = (): SelectOption[] => {
   );
 };
 
-export const useFormData = () => {
+// ✅ ИСПРАВЛЕННАЯ ТИПИЗАЦИЯ
+export const useFormData = (): FormDataShape => {
   const selectedSection = useSelectedSection();
   const selectedCategory = useSelectedCategory();
   const selectedSubcategory = useSelectedSubcategory();
@@ -986,21 +1052,39 @@ export const useIsFormValid = (): boolean => {
   const productTranslations = useProductTranslations();
   const productImages = useProductImages();
 
-  return React.useMemo(
-    () =>
-      Boolean(
-        selectedSection &&
-          selectedCategory &&
-          productTranslations.ru.name.trim() &&
-          productImages.length > 0
-      ),
-    [
-      selectedSection,
-      selectedCategory,
-      productTranslations.ru.name,
-      productImages.length,
-    ]
-  );
+  return React.useMemo(() => {
+    const isValidSection = Boolean(
+      selectedSection &&
+        selectedSection.trim() &&
+        ['NEVA', 'X_SOLUTION'].includes(selectedSection.trim().toUpperCase())
+    );
+
+    const isValidCategory = Boolean(selectedCategory && selectedCategory > 0);
+
+    const isValidTranslations = Boolean(
+      productTranslations.ru.name.trim().length >= 2
+    );
+
+    const isValidImages = productImages.length > 0;
+
+    const isValid =
+      isValidSection && isValidCategory && isValidTranslations && isValidImages;
+
+    console.log('🔍 Валидация формы:', {
+      isValidSection,
+      isValidCategory,
+      isValidTranslations,
+      isValidImages,
+      finalResult: isValid,
+    });
+
+    return isValid;
+  }, [
+    selectedSection,
+    selectedCategory,
+    productTranslations.ru.name,
+    productImages.length,
+  ]);
 };
 
 // ==================== ЭКСПОРТ ДЕЙСТВИЙ ====================

@@ -29,6 +29,7 @@
   box-sizing: border-box;
   resize: none;
   max-height: 12rem;
+  font-family: inherit;
 }
 
 .textarea:focus {

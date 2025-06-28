@@ -1,5 +1,6 @@
 // backend/src/admin/dto/admin-product.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
+import { Section, Locale } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsString,
@@ -12,7 +13,6 @@ import {
   Min,
   IsBoolean,
 } from 'class-validator';
-import { Section, Locale } from '@prisma/client';
 
 export class TranslationDto {
   @ApiProperty({ enum: Locale, example: 'ru' })
