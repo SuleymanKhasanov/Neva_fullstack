@@ -1,3 +1,5 @@
+// frontend/src/widgets/AdminCreateCategory/ui/AdminCreateCategory.tsx (ИСПРАВЛЕННАЯ ВЕРСИЯ)
+
 'use client';
 
 import React from 'react';
@@ -28,8 +30,16 @@ interface SelectOption {
   readonly label: string;
 }
 
+// ✅ ИСПРАВЛЕНО: Правильная типизация для пропсов
+interface FormDataShape {
+  readonly section: string;
+  readonly categoryId: number | null;
+  readonly subcategoryId: number | null;
+  readonly brandId: number | null;
+}
+
 interface AdminCreateCategoryProps {
-  readonly onFormChange?: (isValid: boolean, data: FormData) => void;
+  readonly onFormChange?: (isValid: boolean, data: FormDataShape) => void;
 }
 
 // ==================== КОНСТАНТЫ ====================
@@ -66,7 +76,7 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
   const loading = useLoading();
 
   // Вычисляемые значения
-  const formData: FormData = useFormData();
+  const formData: FormDataShape = useFormData();
   const isFormValid: boolean = useIsFormValid();
 
   // Действия
@@ -176,6 +186,7 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
           {t(TranslationKeys.ProductCreateSectionsBasicInfoDescription)}
         </span>
       </div>
+
       {/* Форма в виде гридов 2x2 */}
       <div className={styles.formGrid}>
         {/* Секция */}
