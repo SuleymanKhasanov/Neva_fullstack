@@ -51,13 +51,16 @@ import { PublicModule } from './public/public.module';
       sortSchema: true,
       playground: process.env.NODE_ENV !== 'production',
       introspection: true,
-      context: ({ req }: { req: any }) => ({ req }),
+      context: ({ req, res }: { req?: any; res?: any }) => ({
+        req: req || {},
+        res: res || {},
+      }),
       formatError: (error) => {
         console.error('GraphQL Error:', error);
 
         return {
           message: error.message,
-          code: error.extensions?.code,
+          code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
           path: error.path,
         };
       },
@@ -65,7 +68,7 @@ import { PublicModule } from './public/public.module';
 
     // ==================== СТАТИЧЕСКИЕ ФАЙЛЫ ====================
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(process.cwd(), 'public'),
       serveRoot: '/public',
       serveStaticOptions: {
         cacheControl: true,

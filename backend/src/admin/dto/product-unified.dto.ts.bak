@@ -1,0 +1,632 @@
+// backend/src/admin/dto/product-unified.dto.ts
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+  IsNotEmpty,
+  IsInt,
+  Min,
+  Max,
+  IsBoolean,
+  ArrayMinSize,
+  MaxLength,
+  MinLength,
+  Matches,
+} from 'class-validator';
+
+// Локальные enum'ы для избежания проблем с импортом
+export enum LocaleEnum {
+  ru = 'ru',
+  en = 'en',
+  uz = 'uz',
+  kr = 'kr',
+}
+
+export enum SectionEnum {
+  NEVA = 'NEVA',
+  X_SOLUTION = 'X_SOLUTION',
+}
+
+import {
+  BaseTranslationDto,
+  BaseSpecificationDto,
+} from '../../shared/dto/base-translation.dto';
+
+// ==================== СТРОГИЕ ТИПЫ ДЛЯ ПЕРЕВОДОВ ====================
+
+export class ProductTranslationDto {
+  @ApiProperty({
+    enum: LocaleEnum,
+    example: 'ru',
+    description: 'Язык перевода (ru, en, uz, kr)',
+  })
+  @IsEnum(LocaleEnum, {
+    message: 'Язык должен быть одним из: ru, en, uz, kr',
+  })
+  readonly locale!: LocaleEnum;
+
+  @ApiProperty({
+    example: 'Котел газовый NEVA-4510',
+    description:
+      'Название продукта (обязательно для ru, опционально для остальных)',
+    minLength: 0,
+    maxLength: 500,
+  })
+  @IsString({ message: 'Название должно быть строкой' })
+  @MaxLength(500, { message: 'Название не должно превышать 500 символов' })
+  readonly name!: string;
+
+  @ApiProperty({
+    required: false,
+    example:
+      'Высокоэффективный газовый котел для отопления дома площадью до 200 м²',
+    description: 'Краткое описание продукта',
+  })
+  @IsString({ message: 'Описание должно быть строкой' })
+  @IsOptional()
+  @MaxLength(2000, { message: 'Описание не должно превышать 2000 символов' })
+  readonly description?: string;
+
+  @ApiProperty({
+    required: false,
+    example:
+      'Превосходное решение для вашего дома с гарантией 5 лет и бесплатным сервисом',
+    description: 'Маркетинговое описание продукта',
+  })
+  @IsString({ message: 'Маркетинговое описание должно быть строкой' })
+  @IsOptional()
+  @MaxLength(1000, {
+    message: 'Маркетинговое описание не должно превышать 1000 символов',
+  })
+  readonly marketingDescription?: string;
+}
+
+// ==================== СТРОГИЕ ТИПЫ ДЛЯ ХАРАКТЕРИСТИК ====================
+
+export class SpecificationTranslationDto {
+  @ApiProperty({
+    enum: LocaleEnum,
+    example: 'ru',
+    description: 'Язык перевода характеристики',
+  })
+  @IsEnum(LocaleEnum, {
+    message: 'Язык должен быть одним из: ru, en, uz, kr',
+  })
+  readonly locale!: LocaleEnum;
+
+  @ApiProperty({
+    example: 'Мощность',
+    description: 'Название характеристики',
+  })
+  @IsString({ message: 'Название характеристики должно быть строкой' })
+  @IsNotEmpty({ message: 'Название характеристики не может быть пустым' })
+  @MinLength(1, {
+    message: 'Название характеристики должно содержать минимум 1 символ',
+  })
+  @MaxLength(255, {
+    message: 'Название характеристики не должно превышать 255 символов',
+  })
+  readonly name!: string;
+
+  @ApiProperty({
+    example: '24 кВт',
+    description: 'Значение характеристики',
+  })
+  @IsString({ message: 'Значение характеристики должно быть строкой' })
+  @IsNotEmpty({ message: 'Значение характеристики не может быть пустым' })
+  @MinLength(1, {
+    message: 'Значение характеристики должно содержать минимум 1 символ',
+  })
+  @MaxLength(500, {
+    message: 'Значение характеристики не должно превышать 500 символов',
+  })
+  readonly value!: string;
+}
+
+export class ProductSpecificationDto {
+  @ApiProperty({
+    example: 'power',
+    description:
+      'Уникальный ключ характеристики (только латиница, цифры, подчеркивания)',
+  })
+  @IsString({ message: 'Ключ характеристики должен быть строкой' })
+  @IsNotEmpty({ message: 'Ключ характеристики не может быть пустым' })
+  @MinLength(2, {
+    message: 'Ключ характеристики должен содержать минимум 2 символа',
+  })
+  @MaxLength(100, {
+    message: 'Ключ характеристики не должен превышать 100 символов',
+  })
+  @Matches(/^[a-z0-9_]+$/, {
+    message:
+      'Ключ характеристики может содержать только строчные латинские буквы, цифры и подчеркивания',
+  })
+  readonly key!: string;
+
+  @ApiProperty({
+    example: 0,
+    description: 'Порядок сортировки характеристики',
+    minimum: 0,
+    default: 0,
+  })
+  @IsInt({ message: 'Порядок сортировки должен быть целым числом' })
+  @Min(0, { message: 'Порядок сортировки не может быть отрицательным' })
+  @IsOptional()
+  readonly sortOrder?: number = 0;
+
+  @ApiProperty({
+    type: [SpecificationTranslationDto],
+    description: 'Переводы характеристики на разные языки',
+    minItems: 1,
+  })
+  @IsArray({ message: 'Переводы характеристики должны быть массивом' })
+  @ValidateNested({ each: true })
+  @ArrayMinSize(1, {
+    message: 'Характеристика должна иметь минимум один перевод',
+  })
+  @Type(() => SpecificationTranslationDto)
+  readonly translations!: readonly SpecificationTranslationDto[];
+}
+
+// ==================== ОСНОВНЫЕ DTO ДЛЯ ПРОДУКТОВ ====================
+
+export class CreateProductDto {
+  @ApiProperty({
+    enum: SectionEnum,
+    example: 'NEVA',
+    description: 'Секция продукта: NEVA или X_SOLUTION',
+  })
+  @IsEnum(SectionEnum, {
+    message: 'Секция должна быть одной из: NEVA, X_SOLUTION',
+  })
+  readonly section!: SectionEnum;
+
+  @ApiProperty({
+    example: 1,
+    description: 'ID категории продукта',
+    minimum: 1,
+  })
+  @IsInt({ message: 'ID категории должен быть целым числом' })
+  @Min(1, { message: 'ID категории должен быть положительным числом' })
+  readonly categoryId!: number;
+
+  @ApiProperty({
+    required: false,
+    example: 15,
+    description: 'ID субкатегории продукта (необязательно)',
+    minimum: 1,
+  })
+  @IsInt({ message: 'ID субкатегории должен быть целым числом' })
+  @Min(1, { message: 'ID субкатегории должен быть положительным числом' })
+  @IsOptional()
+  readonly subcategoryId?: number;
+
+  @ApiProperty({
+    required: false,
+    example: 5,
+    description: 'ID бренда продукта (необязательно)',
+    minimum: 1,
+  })
+  @IsInt({ message: 'ID бренда должен быть целым числом' })
+  @Min(1, { message: 'ID бренда должен быть положительным числом' })
+  @IsOptional()
+  readonly brandId?: number;
+
+  @ApiProperty({
+    default: true,
+    description: 'Активен ли продукт (отображается в каталоге)',
+  })
+  @IsBoolean({ message: 'Статус активности должен быть булевым значением' })
+  @IsOptional()
+  readonly isActive?: boolean = true;
+
+  @ApiProperty({
+    type: [ProductTranslationDto],
+    description:
+      'Переводы продукта на разные языки (минимум 1, рекомендуется русский)',
+    minItems: 1,
+  })
+  @IsArray({ message: 'Переводы должны быть массивом' })
+  @ValidateNested({ each: true })
+  @ArrayMinSize(1, { message: 'Продукт должен иметь минимум один перевод' })
+  @Type(() => ProductTranslationDto)
+  readonly translations!: readonly ProductTranslationDto[];
+
+  @ApiProperty({
+    type: [ProductSpecificationDto],
+    required: false,
+    description: 'Технические характеристики продукта (необязательно)',
+  })
+  @IsArray({ message: 'Характеристики должны быть массивом' })
+  @ValidateNested({ each: true })
+  @IsOptional()
+  @Type(() => ProductSpecificationDto)
+  readonly specifications?: readonly ProductSpecificationDto[];
+}
+
+export class UpdateProductDto {
+  @ApiProperty({
+    required: false,
+    example: 1,
+    description: 'ID новой категории продукта',
+    minimum: 1,
+  })
+  @IsInt({ message: 'ID категории должен быть целым числом' })
+  @Min(1, { message: 'ID категории должен быть положительным числом' })
+  @IsOptional()
+  readonly categoryId?: number;
+
+  @ApiProperty({
+    required: false,
+    example: 15,
+    description: 'ID новой субкатегории продукта',
+    minimum: 1,
+  })
+  @IsInt({ message: 'ID субкатегории должен быть целым числом' })
+  @Min(1, { message: 'ID субкатегории должен быть положительным числом' })
+  @IsOptional()
+  readonly subcategoryId?: number;
+
+  @ApiProperty({
+    required: false,
+    example: 5,
+    description: 'ID нового бренда продукта',
+    minimum: 1,
+  })
+  @IsInt({ message: 'ID бренда должен быть целым числом' })
+  @Min(1, { message: 'ID бренда должен быть положительным числом' })
+  @IsOptional()
+  readonly brandId?: number;
+
+  @ApiProperty({
+    required: false,
+    description: 'Изменить статус активности продукта',
+  })
+  @IsBoolean({ message: 'Статус активности должен быть булевым значением' })
+  @IsOptional()
+  readonly isActive?: boolean;
+
+  @ApiProperty({
+    type: [ProductTranslationDto],
+    required: false,
+    description: 'Обновленные переводы продукта',
+  })
+  @IsArray({ message: 'Переводы должны быть массивом' })
+  @ValidateNested({ each: true })
+  @IsOptional()
+  @Type(() => ProductTranslationDto)
+  readonly translations?: readonly ProductTranslationDto[];
+
+  @ApiProperty({
+    type: [ProductSpecificationDto],
+    required: false,
+    description: 'Обновленные характеристики продукта',
+  })
+  @IsArray({ message: 'Характеристики должны быть массивом' })
+  @ValidateNested({ each: true })
+  @IsOptional()
+  @Type(() => ProductSpecificationDto)
+  readonly specifications?: readonly ProductSpecificationDto[];
+}
+
+// ==================== RESPONSE DTO ДЛЯ API ====================
+
+export class BrandResponseDto {
+  @ApiProperty({ description: 'ID бренда' })
+  readonly id!: number;
+
+  @ApiProperty({ description: 'Переводы бренда' })
+  readonly translations!: readonly {
+    readonly id: number;
+    readonly name: string;
+    readonly locale: Locale;
+  }[];
+}
+
+export class CategoryResponseDto {
+  @ApiProperty({ description: 'ID категории' })
+  readonly id!: number;
+
+  @ApiProperty({ enum: Section, description: 'Секция категории' })
+  readonly section!: Section;
+
+  @ApiProperty({ description: 'Переводы категории' })
+  readonly translations!: readonly {
+    readonly id: number;
+    readonly name: string;
+    readonly locale: Locale;
+  }[];
+}
+
+export class SubcategoryResponseDto {
+  @ApiProperty({ description: 'ID субкатегории' })
+  readonly id!: number;
+
+  @ApiProperty({ description: 'ID родительской категории' })
+  readonly categoryId!: number;
+
+  @ApiProperty({ description: 'Переводы субкатегории' })
+  readonly translations!: readonly {
+    readonly id: number;
+    readonly name: string;
+    readonly locale: Locale;
+  }[];
+}
+
+export class ProductImageResponseDto {
+  @ApiProperty({ description: 'ID изображения' })
+  readonly id!: number;
+
+  @ApiProperty({ description: 'Путь к маленькому изображению' })
+  readonly imageSmall!: string;
+
+  @ApiProperty({ description: 'Путь к большому изображению' })
+  readonly imageLarge!: string;
+
+  @ApiProperty({ description: 'Alt текст', nullable: true })
+  readonly altText!: string | null;
+
+  @ApiProperty({ description: 'Порядок сортировки' })
+  readonly sortOrder!: number;
+
+  @ApiProperty({ description: 'Является ли основным изображением' })
+  readonly isPrimary!: boolean;
+}
+
+export class ProductSpecificationResponseDto {
+  @ApiProperty({ description: 'ID характеристики' })
+  readonly id!: number;
+
+  @ApiProperty({ description: 'Ключ характеристики' })
+  readonly specKey!: string;
+
+  @ApiProperty({ description: 'Порядок сортировки' })
+  readonly sortOrder!: number;
+
+  @ApiProperty({
+    type: [SpecificationTranslationDto],
+    description: 'Переводы характеристики',
+  })
+  readonly translations!: readonly SpecificationTranslationDto[];
+}
+
+export class ProductResponseDto {
+  @ApiProperty({ description: 'ID продукта' })
+  readonly id!: number;
+
+  @ApiProperty({ enum: Section, description: 'Секция продукта' })
+  readonly section!: Section;
+
+  @ApiProperty({ description: 'ID категории' })
+  readonly categoryId!: number;
+
+  @ApiProperty({ description: 'ID субкатегории', nullable: true })
+  readonly subcategoryId!: number | null;
+
+  @ApiProperty({ description: 'ID бренда', nullable: true })
+  readonly brandId!: number | null;
+
+  @ApiProperty({ description: 'Slug для URL', nullable: true })
+  readonly slug!: string | null;
+
+  @ApiProperty({ description: 'Активен ли продукт' })
+  readonly isActive!: boolean;
+
+  @ApiProperty({ description: 'Дата создания' })
+  readonly createdAt!: Date;
+
+  @ApiProperty({ description: 'Дата обновления' })
+  readonly updatedAt!: Date;
+
+  @ApiProperty({
+    type: [ProductTranslationDto],
+    description: 'Переводы продукта',
+  })
+  readonly translations!: readonly ProductTranslationDto[];
+
+  @ApiProperty({
+    type: [ProductSpecificationResponseDto],
+    description: 'Характеристики продукта',
+  })
+  readonly specifications!: readonly ProductSpecificationResponseDto[];
+
+  @ApiProperty({
+    type: [ProductImageResponseDto],
+    description: 'Изображения продукта',
+  })
+  readonly images!: readonly ProductImageResponseDto[];
+
+  @ApiProperty({
+    type: BrandResponseDto,
+    description: 'Бренд продукта',
+    nullable: true,
+  })
+  readonly brand!: BrandResponseDto | null;
+
+  @ApiProperty({
+    type: CategoryResponseDto,
+    description: 'Категория продукта',
+  })
+  readonly category!: CategoryResponseDto;
+
+  @ApiProperty({
+    type: SubcategoryResponseDto,
+    description: 'Субкатегория продукта',
+    nullable: true,
+  })
+  readonly subcategory!: SubcategoryResponseDto | null;
+}
+
+export class PaginationDto {
+  @ApiProperty({ description: 'Текущая страница' })
+  readonly page!: number;
+
+  @ApiProperty({ description: 'Количество элементов на странице' })
+  readonly limit!: number;
+
+  @ApiProperty({ description: 'Общее количество элементов' })
+  readonly total!: number;
+
+  @ApiProperty({ description: 'Общее количество страниц' })
+  readonly totalPages!: number;
+
+  @ApiProperty({ description: 'Есть ли следующая страница' })
+  readonly hasNextPage!: boolean;
+
+  @ApiProperty({ description: 'Есть ли предыдущая страница' })
+  readonly hasPrevPage!: boolean;
+}
+
+export class AdminProductsListResponseDto {
+  @ApiProperty({ description: 'Успешность операции' })
+  readonly success!: boolean;
+
+  @ApiProperty({ type: [ProductResponseDto], description: 'Список продуктов' })
+  readonly data!: readonly ProductResponseDto[];
+
+  @ApiProperty({ type: PaginationDto, description: 'Информация о пагинации' })
+  readonly pagination!: PaginationDto;
+
+  @ApiProperty({ description: 'Дополнительное сообщение', required: false })
+  readonly message?: string;
+}
+
+export class AdminProductResponseDto {
+  @ApiProperty({ description: 'Успешность операции' })
+  readonly success!: boolean;
+
+  @ApiProperty({ type: ProductResponseDto, description: 'Данные продукта' })
+  readonly data!: ProductResponseDto;
+
+  @ApiProperty({ description: 'Дополнительное сообщение', required: false })
+  readonly message?: string;
+}
+
+// ==================== ЗАПРОСЫ И ФИЛЬТРЫ ====================
+
+export class GetProductsQueryDto {
+  @ApiProperty({ required: false, description: 'ID категории для фильтрации' })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  readonly categoryId?: number;
+
+  @ApiProperty({
+    required: false,
+    description: 'ID субкатегории для фильтрации',
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  readonly subcategoryId?: number;
+
+  @ApiProperty({ required: false, description: 'ID бренда для фильтрации' })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  readonly brandId?: number;
+
+  @ApiProperty({
+    required: false,
+    enum: SectionEnum,
+    description: 'Секция для фильтрации',
+  })
+  @IsOptional()
+  @IsEnum(Section)
+  readonly section?: Section;
+
+  @ApiProperty({ required: false, description: 'Фильтр по активности' })
+  @IsOptional()
+  @IsBoolean()
+  readonly isActive?: boolean;
+
+  @ApiProperty({
+    required: false,
+    description: 'Номер страницы',
+    minimum: 1,
+    default: 1,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  readonly page?: number = 1;
+
+  @ApiProperty({
+    required: false,
+    description: 'Количество элементов на странице',
+    minimum: 1,
+    maximum: 100,
+    default: 20,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  readonly limit?: number = 20;
+
+  @ApiProperty({ required: false, description: 'Поисковый запрос' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  readonly search?: string;
+
+  @ApiProperty({
+    required: false,
+    enum: ['createdAt', 'updatedAt', 'name'],
+    description: 'Поле для сортировки',
+    default: 'createdAt',
+  })
+  @IsOptional()
+  @IsEnum(['createdAt', 'updatedAt', 'name'])
+  readonly sortBy?: 'createdAt' | 'updatedAt' | 'name' = 'createdAt';
+
+  @ApiProperty({
+    required: false,
+    enum: ['asc', 'desc'],
+    description: 'Направление сортировки',
+    default: 'desc',
+  })
+  @IsOptional()
+  @IsEnum(['asc', 'desc'])
+  readonly sortOrder?: 'asc' | 'desc' = 'desc';
+}
+
+// ==================== ВСПОМОГАТЕЛЬНЫЕ ТИПЫ ====================
+
+/**
+ * Интерфейс для пользователя админки
+ */
+export interface AdminUser {
+  readonly username: string;
+  readonly role: string;
+}
+
+/**
+ * Тип для внутренних операций с продуктом (используется в сервисе)
+ */
+export interface InternalProductData {
+  readonly id: number;
+  readonly section: Section;
+  readonly categoryId: number;
+  readonly subcategoryId: number | null;
+  readonly brandId: number | null;
+  readonly slug: string | null;
+  readonly isActive: boolean;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+}
+
+/**
+ * Тип для валидации переводов (используется в сервисе)
+ */
+export interface ProductTranslationValidation {
+  readonly hasRussian: boolean;
+  readonly languages: readonly Locale[];
+  readonly duplicatedLanguages: readonly Locale[];
+  readonly isValid: boolean;
+  readonly translationsCount: number;
+}

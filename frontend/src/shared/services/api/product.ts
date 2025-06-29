@@ -6,6 +6,11 @@ import {
   AllProductsApiResponse,
   ProductPath,
 } from '@/shared/types/product';
+import {
+  fetchWithCache,
+  CACHE_SETTINGS,
+  createProductTags,
+} from '@/shared/utils/cache';
 
 /**
  * Получение продукта по ID с поддержкой локализации
@@ -16,50 +21,14 @@ export async function getProductById(
 ): Promise<ProductDetail | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const url = `${baseUrl}/product/${locale}/${id}`;
+    const url = `${baseUrl}/api/product/${locale}/${id}`;
 
     console.log('🔍 Fetching product:', { id, locale, url });
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      // Кеширование для ISR
-      next: {
-        revalidate: 3600, // Revalidate каждый час
-        tags: [`product-${id}`, `locale-${locale}`],
-      },
+    const data = await fetchWithCache<ProductApiResponse>(url, {
+      ...CACHE_SETTINGS.PRODUCT_DETAIL,
+      tags: createProductTags(id, locale),
     });
-
-    if (!response.ok) {
-      console.error('❌ Product fetch failed:', {
-        status: response.status,
-        statusText: response.statusText,
-        url,
-      });
-
-      if (response.status === 404) {
-        return null; // Продукт не найден
-      }
-
-      throw new Error(
-        `HTTP error! status: ${response.status}, statusText: ${response.statusText}`
-      );
-    }
-
-    const responseText = await response.text();
-    console.log('📝 Raw response:', responseText);
-
-    let data: ProductApiResponse;
-    try {
-      data = JSON.parse(responseText);
-    } catch (parseError) {
-      console.error('❌ JSON parse error:', parseError);
-      console.error('❌ Response text:', responseText);
-      throw new Error('Invalid JSON response from server');
-    }
 
     if (!data.success || !data.data) {
       console.error('❌ Invalid product response:', data);
@@ -84,38 +53,41 @@ export async function getAllProductPaths(): Promise<ProductPath[]> {
     const allPaths: ProductPath[] = [];
 
     for (const locale of locales) {
-      const url = `${baseUrl}/products/all/${locale}`;
+      const url = `${baseUrl}/api/products/all/${locale}`;
 
       console.log(`🔍 Fetching all products for locale: ${locale}`);
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Кеширование для сборки
-        next: {
-          revalidate: 86400, // 24 часа
-        },
-      });
-
-      if (response.ok) {
-        const responseText = await response.text();
-        const data: AllProductsApiResponse = JSON.parse(responseText);
+      try {
+        const data = await fetchWithCache<AllProductsApiResponse>(url, {
+          revalidate: 86400, // 24 часа для статической генерации
+          tags: [`all-products-${locale}`],
+        });
 
         if (data.success && data.data.products) {
           data.data.products.forEach((product: ProductDetail) => {
-            allPaths.push({
-              locale,
-              id: product.id.toString(),
-              slug: product.slug,
-            });
+            // Используем существующий slug или генерируем из названия
+            const slug =
+              product.slug && product.slug.trim().length > 0
+                ? product.slug
+                : createSlug(product.name);
+
+            if (slug && slug.length > 0) {
+              allPaths.push({
+                locale,
+                id: product.id.toString(),
+                slug: slug,
+              });
+            } else {
+              console.warn(
+                `⚠️ Product ${product.id} (${product.name}) has no valid slug, skipping`
+              );
+            }
           });
         }
-      } else {
+      } catch (error) {
         console.warn(
           `⚠️ Failed to fetch products for locale ${locale}:`,
-          response.status
+          error
         );
       }
     }
@@ -132,11 +104,16 @@ export async function getAllProductPaths(): Promise<ProductPath[]> {
  * Создание SEO-friendly slug
  */
 export function createSlug(name: string): string {
+  if (!name || typeof name !== 'string') {
+    return '';
+  }
+
   return name
     .toLowerCase()
     .replace(/[^\w\s-]/g, '') // Убираем специальные символы
     .replace(/\s+/g, '-') // Заменяем пробелы на дефисы
     .replace(/-+/g, '-') // Убираем множественные дефисы
+    .replace(/^-+|-+$/g, '') // Убираем дефисы в начале и конце
     .trim();
 }
 

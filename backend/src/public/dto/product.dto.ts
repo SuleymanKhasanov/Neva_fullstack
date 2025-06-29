@@ -59,3 +59,40 @@ export class NevaProduct {
   @Field(() => NevaCategory)
   category: NevaCategory = new NevaCategory();
 }
+
+// GraphQL Pagination Types
+@ObjectType()
+export class ProductEdge {
+  @Field(() => NevaProduct)
+  node: NevaProduct = new NevaProduct();
+
+  @Field(() => String)
+  cursor: string = '';
+}
+
+@ObjectType()
+export class PageInfo {
+  @Field(() => Boolean)
+  hasNextPage: boolean = false;
+
+  @Field(() => String, { nullable: true })
+  endCursor: string | null = null;
+}
+
+@ObjectType()
+export class ProductConnection {
+  @Field(() => [ProductEdge])
+  edges: ProductEdge[] = [];
+
+  @Field(() => PageInfo)
+  pageInfo: PageInfo = new PageInfo();
+
+  @Field(() => Int)
+  totalCount: number = 0;
+}
+
+@ObjectType()
+export class BrandsResponse {
+  @Field(() => [NevaBrand])
+  brands: NevaBrand[] = [];
+}

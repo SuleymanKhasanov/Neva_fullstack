@@ -5,6 +5,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+
 import type { PrismaClient } from '@prisma/client';
 
 import { CacheService } from '../common/cache/cache.service';
@@ -93,24 +94,30 @@ export class AdminProductsEnhancedService {
   async create(
     createProductDto: CreateProductEnhancedDto
   ): Promise<AdminProduct> {
-    // Валидация данных
-    await this.validateProductDataEnhanced(createProductDto);
+    // Валидация данных из админских таблиц
+    await this.validateProductDataFromAdmin(createProductDto);
 
     const result = await this.prisma.$transaction(
       async (tx: PrismaTransaction) => {
-        // 1. Создать продукт
+        // 1. Скопировать данные из админских таблиц в публичные
+        const publicIds = await this.copyAdminDataToPublic(
+          tx,
+          createProductDto
+        );
+
+        // 2. Создать продукт с ID из публичных таблиц
         const product = await tx.product.create({
           data: {
             section: createProductDto.section,
-            categoryId: createProductDto.categoryId,
-            subcategoryId: createProductDto.subcategoryId,
-            brandId: createProductDto.brandId,
+            categoryId: publicIds.categoryId,
+            subcategoryId: publicIds.subcategoryId,
+            brandId: publicIds.brandId,
             isActive: createProductDto.isActive ?? true,
             slug: this.generateSlug(createProductDto.translations[0].name),
           },
         });
 
-        // 2. Создать переводы
+        // 3. Создать переводы
         await tx.productTranslation.createMany({
           data: createProductDto.translations.map((t: TranslationDto) => ({
             productId: product.id,
@@ -121,7 +128,7 @@ export class AdminProductsEnhancedService {
           })),
         });
 
-        // 3. Создать характеристики
+        // 4. Создать характеристики
         if (createProductDto.specifications?.length) {
           for (const spec of createProductDto.specifications) {
             const specification = await tx.productSpecification.create({
@@ -150,7 +157,7 @@ export class AdminProductsEnhancedService {
     await this.invalidateCache();
 
     this.logger.log(
-      `Created product ID: ${result.id} with subcategory: ${createProductDto.subcategoryId || 'none'}`
+      `Created product ID: ${result.id} with admin category: ${createProductDto.categoryId}, admin subcategory: ${createProductDto.subcategoryId || 'none'}, admin brand: ${createProductDto.brandId || 'none'}`
     );
 
     return this.findOne(result.id);
@@ -262,50 +269,51 @@ export class AdminProductsEnhancedService {
     this.logger.log(`Deleted product ID: ${id}`);
   }
 
-  private async validateProductDataEnhanced(
+  private async validateProductDataFromAdmin(
     dto: CreateProductEnhancedDto
   ): Promise<void> {
-    // Проверить категорию
-    const category = await this.prisma.category.findUnique({
+    // Проверить категорию в админских таблицах
+    const adminCategory = await this.prisma.adminCategory.findUnique({
       where: { id: dto.categoryId },
     });
 
-    if (!category) {
-      throw new BadRequestException(`Category ${dto.categoryId} not found`);
+    if (!adminCategory) {
+      throw new BadRequestException(
+        `Admin category ${dto.categoryId} not found`
+      );
     }
 
-    if (category.section !== dto.section) {
-      throw new BadRequestException('Category section mismatch');
+    if (adminCategory.section !== dto.section) {
+      throw new BadRequestException('Admin category section mismatch');
     }
 
     // Проверить субкатегорию если указана
     if (dto.subcategoryId) {
-      const subcategory = await this.prisma.subcategory.findUnique({
+      const adminSubcategory = await this.prisma.adminSubcategory.findUnique({
         where: { id: dto.subcategoryId },
-        include: { category: true },
       });
 
-      if (!subcategory) {
+      if (!adminSubcategory) {
         throw new BadRequestException(
-          `Subcategory ${dto.subcategoryId} not found`
+          `Admin subcategory ${dto.subcategoryId} not found`
         );
       }
 
-      if (subcategory.categoryId !== dto.categoryId) {
+      if (adminSubcategory.categoryId !== dto.categoryId) {
         throw new BadRequestException(
-          `Subcategory ${dto.subcategoryId} does not belong to category ${dto.categoryId}`
+          `Admin subcategory ${dto.subcategoryId} does not belong to admin category ${dto.categoryId}`
         );
       }
     }
 
     // Проверить бренд если указан
     if (dto.brandId) {
-      const brand = await this.prisma.brand.findUnique({
+      const adminBrand = await this.prisma.adminBrand.findUnique({
         where: { id: dto.brandId },
       });
 
-      if (!brand) {
-        throw new BadRequestException(`Brand ${dto.brandId} not found`);
+      if (!adminBrand) {
+        throw new BadRequestException(`Admin brand ${dto.brandId} not found`);
       }
     }
 
@@ -314,6 +322,219 @@ export class AdminProductsEnhancedService {
     if (new Set(locales).size !== locales.length) {
       throw new BadRequestException('Duplicate locales in translations');
     }
+  }
+
+  private async copyAdminDataToPublic(
+    tx: PrismaTransaction,
+    dto: CreateProductEnhancedDto
+  ): Promise<{
+    categoryId: number;
+    subcategoryId: number | null;
+    brandId: number | null;
+  }> {
+    let publicCategoryId: number;
+    let publicSubcategoryId: number | null = null;
+    let publicBrandId: number | null = null;
+
+    // 1. Копировать категорию
+    const adminCategory = await tx.adminCategory.findUnique({
+      where: { id: dto.categoryId },
+      include: { translations: true },
+    });
+
+    // Ищем публичную категорию с такими же переводами (по названию)
+    let existingPublicCategory = await tx.category.findFirst({
+      where: {
+        section: adminCategory!.section,
+        translations: {
+          some: {
+            name: adminCategory!.translations[0]?.name,
+          },
+        },
+      },
+      include: { translations: true },
+    });
+
+    if (existingPublicCategory) {
+      // Проверить нужно ли обновить переводы
+      const existingTranslations = existingPublicCategory.translations.map(
+        (t) => t.locale
+      );
+      const adminTranslations = adminCategory!.translations.map(
+        (t) => t.locale
+      );
+
+      if (
+        !adminTranslations.every((locale) =>
+          existingTranslations.includes(locale)
+        )
+      ) {
+        // Добавить недостающие переводы
+        for (const adminTranslation of adminCategory!.translations) {
+          if (!existingTranslations.includes(adminTranslation.locale)) {
+            await tx.categoryTranslation.create({
+              data: {
+                categoryId: existingPublicCategory.id,
+                locale: adminTranslation.locale,
+                name: adminTranslation.name,
+              },
+            });
+          }
+        }
+      }
+      publicCategoryId = existingPublicCategory.id;
+    } else {
+      // Создать новую публичную категорию
+      const newPublicCategory = await tx.category.create({
+        data: {
+          section: adminCategory!.section,
+        },
+      });
+
+      await tx.categoryTranslation.createMany({
+        data: adminCategory!.translations.map((t) => ({
+          categoryId: newPublicCategory.id,
+          locale: t.locale,
+          name: t.name,
+        })),
+      });
+
+      publicCategoryId = newPublicCategory.id;
+    }
+
+    // 2. Копировать субкатегорию если указана
+    if (dto.subcategoryId) {
+      const adminSubcategory = await tx.adminSubcategory.findUnique({
+        where: { id: dto.subcategoryId },
+        include: { translations: true },
+      });
+
+      let existingPublicSubcategory = null;
+
+      if (adminSubcategory?.translations[0]?.name) {
+        existingPublicSubcategory = await tx.subcategory.findFirst({
+          where: {
+            categoryId: publicCategoryId,
+            translations: {
+              some: {
+                name: adminSubcategory.translations[0].name,
+              },
+            },
+          },
+          include: { translations: true },
+        });
+      }
+
+      if (existingPublicSubcategory && adminSubcategory) {
+        // Обновить переводы если нужно
+        const existingTranslations = existingPublicSubcategory.translations.map(
+          (t) => t.locale
+        );
+
+        for (const adminTranslation of adminSubcategory.translations) {
+          if (!existingTranslations.includes(adminTranslation.locale)) {
+            await tx.subcategoryTranslation.create({
+              data: {
+                subcategoryId: existingPublicSubcategory.id,
+                locale: adminTranslation.locale,
+                name: adminTranslation.name,
+              },
+            });
+          }
+        }
+        publicSubcategoryId = existingPublicSubcategory.id;
+      } else if (adminSubcategory) {
+        // Создать новую публичную субкатегорию
+        const newPublicSubcategory = await tx.subcategory.create({
+          data: {
+            categoryId: publicCategoryId,
+          },
+        });
+
+        await tx.subcategoryTranslation.createMany({
+          data: adminSubcategory.translations.map((t) => ({
+            subcategoryId: newPublicSubcategory.id,
+            locale: t.locale,
+            name: t.name,
+          })),
+        });
+
+        publicSubcategoryId = newPublicSubcategory.id;
+      }
+    }
+
+    // 3. Копировать бренд если указан
+    if (dto.brandId) {
+      const adminBrand = await tx.adminBrand.findUnique({
+        where: { id: dto.brandId },
+        include: { translations: true },
+      });
+
+      let existingPublicBrand = null;
+
+      if (adminBrand?.translations[0]?.name) {
+        existingPublicBrand = await tx.brand.findFirst({
+          where: {
+            translations: {
+              some: {
+                name: adminBrand.translations[0].name,
+              },
+            },
+          },
+          include: { translations: true },
+        });
+      }
+
+      if (existingPublicBrand && adminBrand) {
+        // Обновить переводы если нужно
+        const existingTranslations = existingPublicBrand.translations.map(
+          (t) => t.locale
+        );
+
+        for (const adminTranslation of adminBrand.translations) {
+          if (!existingTranslations.includes(adminTranslation.locale)) {
+            await tx.brandTranslation.create({
+              data: {
+                brandId: existingPublicBrand.id,
+                locale: adminTranslation.locale,
+                name: adminTranslation.name,
+              },
+            });
+          }
+        }
+        publicBrandId = existingPublicBrand.id;
+      } else if (adminBrand) {
+        // Создать новый публичный бренд
+        const newPublicBrand = await tx.brand.create({
+          data: {},
+        });
+
+        await tx.brandTranslation.createMany({
+          data: adminBrand.translations.map((t) => ({
+            brandId: newPublicBrand.id,
+            locale: t.locale,
+            name: t.name,
+          })),
+        });
+
+        // Создать связь категория-бренд
+        await tx.categoryBrand.create({
+          data: {
+            categoryId: publicCategoryId,
+            brandId: newPublicBrand.id,
+            section: dto.section,
+          },
+        });
+
+        publicBrandId = newPublicBrand.id;
+      }
+    }
+
+    return {
+      categoryId: publicCategoryId,
+      subcategoryId: publicSubcategoryId,
+      brandId: publicBrandId,
+    };
   }
 
   private formatProductEnhanced(product: any): AdminProduct {

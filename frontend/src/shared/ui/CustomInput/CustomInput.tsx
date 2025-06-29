@@ -28,7 +28,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
           ref={ref}
           className={`${styles.input} ${error ? styles.inputError : ''} ${className || ''}`}
           placeholder={placeholder}
-          {...rest} // ✅ Это ключевое исправление - передаем все пропсы включая value и onChange
+          {...rest}
         />
         {error && <span className={styles.errorText}>{error}</span>}
       </div>

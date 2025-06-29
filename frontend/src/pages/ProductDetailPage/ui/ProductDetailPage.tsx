@@ -2,7 +2,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProductDetail } from '@/shared/types/product';
 import { Locale, TranslationType } from '@/shared/config/i18n/types';
@@ -16,21 +16,54 @@ interface ProductDetailPageProps {
 }
 
 export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
   return (
     <div className={styles.container}>
       <div className={styles.productContent}>
         <div className={styles.imageSection}>
-          <div className={styles.imageContainer}>
-            {product.fullImage && (
-              <Image
-                src={product.fullImage}
-                alt={product.name}
-                fill
-                className={styles.image}
-                priority
-              />
-            )}
-          </div>
+          {product.images && product.images.length > 0 ? (
+            <div className={styles.imageContainer}>
+              {/* Основное изображение */}
+              <div className={styles.mainImageContainer}>
+                <Image
+                  src={product.images[selectedImageIndex].large}
+                  alt={product.name}
+                  fill
+                  className={styles.image}
+                  priority
+                />
+              </div>
+
+              {/* Галерея миниатюр */}
+              {product.images.length > 1 && (
+                <div className={styles.imageGallery}>
+                  {product.images.map((image, index) => (
+                    <div
+                      key={image.id}
+                      className={`${styles.thumbContainer} ${
+                        index === selectedImageIndex ? styles.thumbActive : ''
+                      }`}
+                      onClick={() => setSelectedImageIndex(index)}
+                    >
+                      <Image
+                        src={image.small}
+                        alt={`${product.name} - изображение ${index + 1}`}
+                        fill
+                        className={styles.thumbImage}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className={styles.placeholderContainer}>
+              <div className={styles.placeholderText}>
+                Изображение недоступно
+              </div>
+            </div>
+          )}
         </div>
 
         <div className={styles.infoSection}>
@@ -46,6 +79,28 @@ export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
                 </p>
               ))}
             </div>
+          </div>
+
+          {/* Характеристики */}
+          <div className={styles.divider}></div>
+          <div className={styles.specificationsSection}>
+            <h3 className={styles.sectionTitle}>Технические характеристики</h3>
+            {product.specifications && product.specifications.length > 0 ? (
+              <div className={styles.specificationsGrid}>
+                {product.specifications.map((spec, index) => (
+                  <div key={index} className={styles.specificationItem}>
+                    <span className={styles.specName}>{spec.name}</span>
+                    <span className={styles.specValue}>{spec.value}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className={styles.noSpecifications}>
+                <p className={styles.noSpecText}>
+                  Характеристики данного продукта уточняйте у наших менеджеров
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Действия */}
@@ -66,11 +121,11 @@ export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Product',
-            '@id': `${typeof window !== 'undefined' ? window.location.origin : ''}/${locale}/product/${product.id}/${product.slug}`,
+            '@id': `/${locale}/product/${product.id}/${product.slug}`,
             name: product.name,
             description: product.description,
-            image: product.fullImage,
-            url: `${typeof window !== 'undefined' ? window.location.origin : ''}/${locale}/product/${product.id}/${product.slug}`,
+            image: product.images?.[0]?.large || '',
+            url: `/${locale}/product/${product.id}/${product.slug}`,
             brand: {
               '@type': 'Brand',
               name: product.brand.name,

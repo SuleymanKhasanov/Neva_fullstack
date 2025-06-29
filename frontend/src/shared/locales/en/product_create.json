@@ -21,6 +21,15 @@
       "placeholder": "Select section",
       "required": "Please select a section"
     },
+    "productName": {
+      "label": "Enter model name *",
+      "labelRu": "Product Name (Russian) *",
+      "labelEn": "Product Name (English)",
+      "labelUz": "Product Name (Uzbek)",
+      "labelKr": "Product Name (Korean)",
+      "placeholder": "Enter product name",
+      "required": "Please enter the product name"
+    },
     "category": {
       "label": "Category *",
       "placeholder": "Select category",
@@ -41,11 +50,6 @@
       "loading": "Loading brands...",
       "selectSubcategoryFirst": "Please select a subcategory first",
       "notAvailable": "No brands available"
-    },
-    "productName": {
-      "label": "Enter model name *",
-      "placeholder": "Enter product name",
-      "required": "Please enter the product name"
     },
     "productDescription": {
       "label_ru": "Product Description (Russian) *",

@@ -41,3 +41,253 @@
 .dark .container {
   background: var(--background);
 }
+
+/* ==================== ПАНЕЛЬ ДЕЙСТВИЙ ==================== */
+.actionPanel {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background: var(--background);
+  border: 0.1rem solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 2.4rem;
+  margin-top: 2rem;
+  box-shadow: 0 -0.4rem 2.4rem rgba(0, 0, 0, 0.05);
+}
+
+.progressSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 2rem;
+}
+
+.progressInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.progressTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.progressDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.percentage {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.details {
+  font-size: 1.4rem;
+  color: var(--muted-foreground);
+}
+
+.additionalDetails {
+  font-size: 1.3rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.progressBar {
+  width: 100%;
+  height: 0.8rem;
+  background-color: var(--secondary);
+  border-radius: 0.4rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, rgba(227, 30, 36, 0.8) 100%);
+  transition: width 0.3s ease;
+  border-radius: 0.4rem;
+}
+
+/* Сообщения статуса */
+.statusMessage {
+  padding: 1.2rem 1.6rem;
+  background-color: rgba(251, 191, 36, 0.1);
+  border: 0.1rem solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius);
+  color: rgb(161, 98, 7);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.warningMessage {
+  padding: 1.2rem 1.6rem;
+  background-color: rgba(251, 146, 60, 0.1);
+  border: 0.1rem solid rgba(251, 146, 60, 0.3);
+  border-radius: var(--radius);
+  color: rgb(194, 65, 12);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.completeMessage {
+  padding: 1.2rem 1.6rem;
+  background-color: rgba(34, 197, 94, 0.1);
+  border: 0.1rem solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius);
+  color: rgb(21, 128, 61);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 1.6rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.resetButton {
+  padding: 1.2rem 2.4rem;
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-size: 1.4rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.resetButton:hover:not(:disabled) {
+  background-color: var(--muted);
+  transform: translateY(-0.1rem);
+}
+
+.resetButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submitButton {
+  padding: 1.2rem 2.4rem;
+  border: 0.1rem solid transparent;
+  border-radius: var(--radius);
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.submitButton.complete {
+  background-color: var(--primary);
+  color: white;
+}
+
+.submitButton.complete:hover:not(:disabled) {
+  background-color: rgba(227, 30, 36, 0.9);
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.4rem 1.2rem rgba(227, 30, 36, 0.3);
+}
+
+.submitButton.incomplete {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.spinner {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  border-top: 0.2rem solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorMessage {
+  padding: 1.6rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 0.1rem solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius);
+  color: rgb(185, 28, 28);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+}
+
+.errorIcon {
+  font-size: 1.6rem;
+}
+
+.closeError {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 0.4rem;
+  transition: background-color 0.2s ease;
+  margin-left: auto;
+}
+
+.closeError:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.debugInfo {
+  margin-top: 2rem;
+  padding: 1.6rem;
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
+  border-radius: var(--radius);
+}
+
+.debugData {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 1.2rem;
+  color: var(--foreground);
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .actionPanel {
+    padding: 1.6rem;
+    margin-top: 1rem;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  
+  .resetButton,
+  .submitButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

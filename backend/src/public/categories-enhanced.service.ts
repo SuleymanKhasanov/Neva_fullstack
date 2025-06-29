@@ -1,5 +1,6 @@
 // src/public/categories-enhanced.service.ts (исправленный)
 import { Injectable, Logger } from '@nestjs/common';
+
 import { Section, Locale } from '@prisma/client';
 
 import { CacheService } from '../common/cache/cache.service';

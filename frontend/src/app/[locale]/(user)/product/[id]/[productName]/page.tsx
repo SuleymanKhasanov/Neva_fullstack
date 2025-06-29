@@ -90,11 +90,18 @@ export async function generateStaticParams(): Promise<
     console.log(`📊 Generated ${allPaths.length} static paths`);
 
     // Возвращаем параметры для статической генерации
-    return allPaths.map(({ locale, id, slug }) => ({
-      locale,
-      id,
-      productName: slug,
-    }));
+    const params = allPaths
+      .filter(({ slug }) => slug && slug.trim().length > 0) // Фильтруем продукты без slug
+      .map(({ locale, id, slug }) => ({
+        locale,
+        id,
+        productName: slug,
+      }));
+
+    console.log(
+      `📊 Generated ${params.length} valid static paths from ${allPaths.length} products`
+    );
+    return params;
   } catch (error) {
     console.error('💥 Error generating static params:', error);
     return [];
@@ -135,9 +142,9 @@ export async function generateMetadata({
 
   // Используем SEO данные из API
   const title =
-    product.seoTitle || `${product.name} - ${product.brand.name} | Neva App`;
+    product.metaTitle || `${product.name} - ${product.brand.name} | Neva App`;
   const description =
-    product.seoDescription ||
+    product.metaDescription ||
     (product.description.length > 160
       ? `${product.description.substring(0, 157)}...`
       : product.description);
@@ -147,7 +154,7 @@ export async function generateMetadata({
   return createProductMetadata({
     title,
     description,
-    imageUrl: product.fullImage,
+    imageUrl: product.images?.[0]?.large || '',
     canonicalUrl,
     locale,
     keywords: [

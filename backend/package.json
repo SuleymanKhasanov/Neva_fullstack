@@ -41,7 +41,9 @@
     "cache:stats": "curl http://localhost:3000/admin/cache/stats -H \"Authorization: Bearer YOUR_TOKEN\"",
     "dev:full": "yarn docker:run && sleep 10 && yarn db:setup && yarn start:dev",
     "dev:reset": "yarn docker:stop && yarn docker:clean && yarn dev:full",
-    "catalog:parse": "ts-node scripts/parse-catalog-json.ts"
+    "catalog:parse": "ts-node scripts/parse-catalog-json.ts",
+    "catalog:parse:admin": "ts-node scripts/parse-catalog-json-admin.ts",
+    "catalog:clear-public": "ts-node scripts/clear-public-tables.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.12.1",

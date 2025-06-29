@@ -48,20 +48,51 @@ export class AdminCategoriesController {
     private readonly adminCategoriesService: AdminCategoriesService
   ) {}
 
-  // ================== КАТЕГОРИИ ==================
+  // ================== АДМИНСКИЕ КАТЕГОРИИ ==================
 
   @Get()
-  @ApiOperation({ summary: 'Получить все категории с субкатегориями' })
-  @ApiQuery({ name: 'section', required: false, enum: ['NEVA', 'X_SOLUTION'] })
-  @ApiQuery({ name: 'locale', required: false, enum: ['ru', 'en', 'kr', 'uz'] })
-  async getAllCategories(
+  @ApiOperation({ summary: 'Получить админские категории' })
+  @ApiQuery({ name: 'section', required: false })
+  @ApiQuery({ name: 'locale', required: false })
+  async getAdminCategories(
     @Query('section') section?: string,
     @Query('locale') locale?: string,
-    @CurrentUser() user?: any
+    @CurrentUser() user?: Record<string, unknown>
   ) {
-    this.logger.log(`Admin ${user?.username} requesting categories`);
+    this.logger.log(`Admin ${user?.username} requesting admin categories`);
 
-    return this.adminCategoriesService.getAllCategories(section, locale);
+    return this.adminCategoriesService.getAdminCategories(section, locale);
+  }
+
+  @Get('subcategories/all')
+  @ApiOperation({ summary: 'Получить админские субкатегории' })
+  @ApiQuery({ name: 'categoryId', required: false })
+  @ApiQuery({ name: 'locale', required: false })
+  async getAdminSubcategories(
+    @Query('categoryId') categoryId?: string,
+    @Query('locale') locale?: string,
+    @CurrentUser() user?: Record<string, unknown>
+  ) {
+    this.logger.log(
+      `Admin ${user?.username || 'unknown'} requesting admin subcategories for category: ${categoryId}, locale: ${locale}`
+    );
+
+    try {
+      const result = await this.adminCategoriesService.getAdminSubcategories(
+        categoryId,
+        locale
+      );
+      this.logger.log(
+        `Returning ${result.length} subcategories for category ${categoryId}`
+      );
+      return result;
+    } catch (error) {
+      this.logger.error(
+        `Error getting subcategories for category ${categoryId}:`,
+        error
+      );
+      throw error;
+    }
   }
 
   @Get(':id')

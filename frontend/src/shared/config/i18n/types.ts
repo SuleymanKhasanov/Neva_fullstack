@@ -113,6 +113,10 @@ export enum TranslationKeys {
   ProductCreateFieldsProductDescriptionPlaceholder = 'product_create.fields.productDescription.placeholder',
   ProductCreateFieldsProductDescriptionSpecificationsLabel = 'product_create.fields.productDescription.specifications.label',
   ProductCreateFieldsProductDescriptionSpecificationsPlaceholder = 'product_create.fields.productDescription.specifications.placeholder',
+  ProductCreateFieldsProductNameLabelRu = 'product_create.fields.productName.labelRu',
+  ProductCreateFieldsProductNameLabelEn = 'product_create.fields.productName.labelEn',
+  ProductCreateFieldsProductNameLabelUz = 'product_create.fields.productName.labelUz',
+  ProductCreateFieldsProductNameLabelKr = 'product_create.fields.productName.labelKr',
 }
 
 export type Header = {

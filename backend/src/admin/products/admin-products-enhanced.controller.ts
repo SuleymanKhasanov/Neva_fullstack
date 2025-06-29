@@ -1,4 +1,4 @@
-// backend/src/admin/admin-products-enhanced.controller.ts
+// backend/src/admin/products/admin-products-enhanced.controller.ts
 import {
   Controller,
   Get,
@@ -8,26 +8,28 @@ import {
   Body,
   Param,
   ParseIntPipe,
-  UseInterceptors,
-  UploadedFiles,
   Logger,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { ApiTags, ApiOperation, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 
-import { ImageService } from '../../common/upload/image.service';
+import { Section, Locale } from '@prisma/client';
+
+import { Auth } from '../../auth/decorators/auth.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { AdminProductsEnhancedService } from '../admin-products-enhanced.service';
+import { ImageService } from '../../common/upload/image.service';
 import {
   CreateProductEnhancedDto,
   UpdateProductEnhancedDto,
 } from '../dto/admin-product-enhanced.dto';
-import type { AdminUser, AdminProduct } from '../types/shared.types';
 
 @ApiTags('Admin - Products Enhanced')
-@Controller('admin/products-enhanced')
+@Controller('admin/products')
+@Auth()
 export class AdminProductsEnhancedController {
   private readonly logger = new Logger(AdminProductsEnhancedController.name);
 
@@ -36,60 +38,61 @@ export class AdminProductsEnhancedController {
     private readonly imageService: ImageService
   ) {}
 
+  // ================== ПРОДУКТЫ ==================
+
   @Get()
-  @Auth()
-  @ApiOperation({ summary: 'Получить все продукты с субкатегориями' })
-  @ApiQuery({ name: 'categoryId', required: false, type: Number })
-  @ApiQuery({ name: 'subcategoryId', required: false, type: Number })
-  @ApiQuery({ name: 'brandId', required: false, type: Number })
+  @ApiOperation({ summary: 'Получить все продукты' })
+  @ApiQuery({ name: 'section', required: false, enum: Section })
+  @ApiQuery({ name: 'locale', required: false, enum: Locale })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   async getAllProducts(
-    @Query('categoryId') categoryId?: number,
-    @Query('subcategoryId') subcategoryId?: number,
-    @Query('brandId') brandId?: number,
-    @CurrentUser() user?: AdminUser
+    @Query('section') section?: Section,
+    @Query('locale') locale?: Locale,
+    @Query('page') page = 1,
+    @Query('limit') limit = 20,
+    @CurrentUser() user?: Record<string, unknown>
   ) {
-    this.logger.log(`Admin ${user?.username} requesting products with filters`);
+    this.logger.log(`Admin ${user?.username} requesting products`);
 
     const products = await this.adminProductsService.findAll();
 
-    // Фильтруем на стороне приложения с правильной типизацией
-    let filteredProducts: AdminProduct[] = products;
+    // Базовая фильтрация
+    let filteredProducts = products;
 
-    if (categoryId) {
-      filteredProducts = filteredProducts.filter(
-        (p: AdminProduct) => p.categoryId === parseInt(String(categoryId))
+    if (section) {
+      filteredProducts = filteredProducts.filter((p) => p.section === section);
+    }
+
+    if (locale) {
+      filteredProducts = filteredProducts.filter((p) =>
+        p.translations.some((t) => t.locale === locale)
       );
     }
 
-    if (subcategoryId) {
-      filteredProducts = filteredProducts.filter(
-        (p: AdminProduct) => p.subcategoryId === parseInt(String(subcategoryId))
-      );
-    }
-
-    if (brandId) {
-      filteredProducts = filteredProducts.filter(
-        (p: AdminProduct) => p.brandId === parseInt(String(brandId))
-      );
-    }
+    // Пагинация
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
     return {
-      data: filteredProducts,
-      total: filteredProducts.length,
-      filters: {
-        categoryId: categoryId ? parseInt(String(categoryId)) : null,
-        subcategoryId: subcategoryId ? parseInt(String(subcategoryId)) : null,
-        brandId: brandId ? parseInt(String(brandId)) : null,
+      products: paginatedProducts,
+      pagination: {
+        page,
+        limit,
+        total: filteredProducts.length,
+        totalPages: Math.ceil(filteredProducts.length / limit),
+        hasNextPage: endIndex < filteredProducts.length,
+        hasPrevPage: page > 1,
       },
     };
   }
 
   @Get(':id')
-  @Auth()
-  @ApiOperation({ summary: 'Получить продукт по ID с субкатегорией' })
+  @ApiOperation({ summary: 'Получить продукт по ID' })
   async getProduct(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: AdminUser
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} requesting product ${id}`);
 
@@ -97,158 +100,230 @@ export class AdminProductsEnhancedController {
   }
 
   @Post()
-  @Auth()
-  @ApiOperation({ summary: 'Создать продукт с субкатегорией' })
-  @ApiResponse({
-    status: 201,
-    description: 'Продукт создан успешно',
-    schema: {
-      type: 'object',
-      properties: {
-        success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Продукт создан' },
-        data: {
-          type: 'object',
-          description: 'Данные созданного продукта',
-        },
-      },
-    },
-  })
+  @ApiOperation({ summary: 'Создать продукт (без изображений)' })
   async createProduct(
     @Body() createProductDto: CreateProductEnhancedDto,
-    @CurrentUser() user: AdminUser
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(
-      `Admin ${user.username} creating product: ${createProductDto.translations[0]?.name} (subcategory: ${createProductDto.subcategoryId || 'none'})`
+      `Admin ${user.username} creating product: ${createProductDto.translations?.[0]?.name || 'Unknown'}`
     );
 
-    const product = await this.adminProductsService.create(createProductDto);
+    try {
+      const product = await this.adminProductsService.create(createProductDto);
 
-    return {
-      success: true,
-      message: 'Продукт создан',
-      data: product,
-    };
+      this.logger.log(`Product created with ID: ${product.id}`);
+
+      return {
+        success: true,
+        message: 'Продукт успешно создан',
+        productId: product.id,
+        data: product,
+      };
+    } catch (error) {
+      this.logger.error(`Error creating product:`, error);
+      throw error;
+    }
   }
 
   @Put(':id')
-  @Auth()
-  @ApiOperation({ summary: 'Обновить продукт с субкатегорией' })
+  @ApiOperation({ summary: 'Обновить продукт (без изображений)' })
   async updateProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductEnhancedDto,
-    @CurrentUser() user: AdminUser
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} updating product ${id}`);
 
-    const product = await this.adminProductsService.update(
-      id,
-      updateProductDto
-    );
+    try {
+      const product = await this.adminProductsService.update(
+        id,
+        updateProductDto
+      );
 
-    return {
-      success: true,
-      message: 'Продукт обновлен',
-      data: product,
-    };
+      return {
+        success: true,
+        message: 'Продукт успешно обновлен',
+        data: product,
+      };
+    } catch (error) {
+      this.logger.error(`Error updating product ${id}:`, error);
+      throw error;
+    }
   }
 
   @Delete(':id')
-  @Auth()
   @ApiOperation({ summary: 'Удалить продукт' })
   async deleteProduct(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: AdminUser
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} deleting product ${id}`);
+
     await this.adminProductsService.remove(id);
-
-    return { success: true, message: 'Продукт удален' };
-  }
-
-  @Post(':id/images')
-  @Auth()
-  @UseInterceptors(FilesInterceptor('images', 10))
-  @ApiOperation({ summary: 'Загрузить изображения продукта' })
-  async uploadImages(
-    @Param('id', ParseIntPipe) id: number,
-    @UploadedFiles() files: Express.Multer.File[],
-    @CurrentUser() user: AdminUser
-  ) {
-    this.logger.log(
-      `Admin ${user.username} uploading ${files.length} images for product ${id}`
-    );
-    if (!files || files.length === 0) {
-      throw new Error('No files uploaded');
-    }
-    const result = await this.imageService.processAndSaveImages(id, files);
 
     return {
       success: true,
-      message: `Загружено ${result.length} изображений`,
-      images: result,
+      message: 'Продукт успешно удален',
     };
   }
 
-  @Delete(':id/images/:imageId')
-  @Auth()
-  @ApiOperation({ summary: 'Удалить изображение продукта' })
-  async deleteImage(
-    @Param('id', ParseIntPipe) productId: number,
-    @Param('imageId', ParseIntPipe) imageId: number,
-    @CurrentUser() user: AdminUser
+  // ================== МАССОВЫЕ ОПЕРАЦИИ ==================
+
+  @Post('bulk/delete')
+  @ApiOperation({ summary: 'Массовое удаление продуктов' })
+  async bulkDeleteProducts(
+    @Body('ids') ids: number[],
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(
-      `Admin ${user.username} deleting image ${imageId} from product ${productId}`
-    );
-    await this.imageService.deleteImage(productId, imageId);
-
-    return { success: true, message: 'Изображение удалено' };
-  }
-
-  @Get('by-category/:categoryId')
-  @Auth()
-  @ApiOperation({ summary: 'Получить продукты по категории' })
-  async getProductsByCategory(
-    @Param('categoryId', ParseIntPipe) categoryId: number,
-    @CurrentUser() user: AdminUser
-  ) {
-    this.logger.log(
-      `Admin ${user.username} requesting products for category ${categoryId}`
+      `Admin ${user.username} bulk deleting ${ids.length} products`
     );
 
-    const products = await this.adminProductsService.findAll();
-    const filteredProducts = products.filter(
-      (p: AdminProduct) => p.categoryId === categoryId
-    );
+    for (const id of ids) {
+      await this.adminProductsService.remove(id);
+    }
 
     return {
-      data: filteredProducts,
-      total: filteredProducts.length,
-      categoryId,
+      success: true,
+      message: `Удалено продуктов: ${ids.length}`,
     };
   }
 
-  @Get('by-subcategory/:subcategoryId')
-  @Auth()
-  @ApiOperation({ summary: 'Получить продукты по субкатегории' })
-  async getProductsBySubcategory(
-    @Param('subcategoryId', ParseIntPipe) subcategoryId: number,
-    @CurrentUser() user: AdminUser
+  @Put('bulk/toggle-status')
+  @ApiOperation({ summary: 'Массовое изменение статуса продуктов' })
+  async bulkToggleStatus(
+    @Body('ids') ids: number[],
+    @Body('isActive') isActive: boolean,
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(
-      `Admin ${user.username} requesting products for subcategory ${subcategoryId}`
+      `Admin ${user.username} bulk toggling status for ${ids.length} products to ${isActive}`
     );
 
-    const products = await this.adminProductsService.findAll();
-    const filteredProducts = products.filter(
-      (p: AdminProduct) => p.subcategoryId === subcategoryId
-    );
+    for (const id of ids) {
+      await this.adminProductsService.update(id, { isActive });
+    }
 
     return {
-      data: filteredProducts,
-      total: filteredProducts.length,
-      subcategoryId,
+      success: true,
+      message: `Статус изменен для ${ids.length} продуктов`,
     };
+  }
+
+  // ================== ИЗОБРАЖЕНИЯ ==================
+
+  @Post(':id/images')
+  @ApiOperation({ summary: 'Загрузить изображения для продукта' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FilesInterceptor('images', 10))
+  async uploadProductImages(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFiles() images: Express.Multer.File[],
+    @CurrentUser() user: Record<string, unknown>
+  ) {
+    this.logger.log(
+      `Admin ${user.username} uploading ${images?.length || 0} images for product ${id}`
+    );
+
+    if (!images || images.length === 0) {
+      this.logger.warn(`No images provided for product ${id}`);
+      return {
+        success: false,
+        message: 'Нет изображений для загрузки',
+        error: 'NO_IMAGES',
+      };
+    }
+
+    // Проверяем что продукт существует
+    try {
+      const product = await this.adminProductsService.findOne(id);
+      this.logger.log(`Product ${id} exists: ${product.translations[0]?.name}`);
+    } catch (error) {
+      this.logger.error(`Product ${id} not found:`, error);
+      return {
+        success: false,
+        message: `Продукт с ID ${id} не найден`,
+        error: 'PRODUCT_NOT_FOUND',
+      };
+    }
+
+    // Валидация файлов
+    const validImages = images.filter((img) => {
+      const isValidType = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/webp',
+      ].includes(img.mimetype);
+      const isValidSize = img.size <= 10 * 1024 * 1024; // 10MB
+      return isValidType && isValidSize;
+    });
+
+    if (validImages.length === 0) {
+      this.logger.warn(`No valid images for product ${id}`);
+      return {
+        success: false,
+        message: 'Нет подходящих изображений (только JPEG, PNG, WebP до 10MB)',
+        error: 'NO_VALID_IMAGES',
+      };
+    }
+
+    // Обрабатываем и сохраняем изображения через ImageService
+    this.logger.log(
+      `Processing ${validImages.length} valid images for product ${id}`
+    );
+
+    try {
+      const processedImages = await this.imageService.processAndSaveImages(
+        id,
+        validImages
+      );
+
+      this.logger.log(
+        `Successfully processed ${processedImages.length} images for product ${id}`
+      );
+
+      return {
+        success: true,
+        message: `Успешно загружено и обработано ${processedImages.length} изображений`,
+        productId: id,
+        processedImages: processedImages,
+      };
+    } catch (error) {
+      this.logger.error(`Error processing images for product ${id}:`, error);
+      return {
+        success: false,
+        message: 'Ошибка обработки изображений',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        productId: id,
+      };
+    }
+  }
+
+  // ================== СТАТИСТИКА ==================
+
+  @Get('stats/overview')
+  @ApiOperation({ summary: 'Статистика по продуктам' })
+  async getProductsStats(@CurrentUser() user: Record<string, unknown>) {
+    this.logger.log(`Admin ${user.username} requesting products stats`);
+
+    const products = await this.adminProductsService.findAll();
+
+    const stats = {
+      total: products.length,
+      active: products.filter((p) => p.isActive).length,
+      inactive: products.filter((p) => !p.isActive).length,
+      bySection: {
+        NEVA: products.filter((p) => p.section === 'NEVA').length,
+        X_SOLUTION: products.filter((p) => p.section === 'X_SOLUTION').length,
+      },
+      withBrand: products.filter((p) => p.brandId).length,
+      withoutBrand: products.filter((p) => !p.brandId).length,
+      withSubcategory: products.filter((p) => p.subcategoryId).length,
+      withoutSubcategory: products.filter((p) => !p.subcategoryId).length,
+    };
+
+    return stats;
   }
 }

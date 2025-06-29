@@ -3,6 +3,11 @@ import {
   Category,
   CategoryWithBrands,
 } from '@/shared/types/category';
+import {
+  fetchWithCache,
+  CACHE_SETTINGS,
+  createCategoryTags,
+} from '@/shared/utils/cache';
 
 interface FetchCategoriesParams {
   locale: string;
@@ -22,24 +27,20 @@ export async function fetchCategories({
     };
   }
 
-  const endpoint = section === 'x_solution' ? 'x-solution' : section;
-  const url = new URL(`${baseUrl}/categories/${endpoint}`);
+  // Convert frontend section names to backend format
+  const backendSection = section === 'x_solution' ? 'X_SOLUTION' : 'NEVA';
+  const url = new URL(`${baseUrl}/api/categories`);
   url.searchParams.append('locale', locale);
+  url.searchParams.append('section', backendSection);
 
   try {
-    const response = await fetch(url.toString(), {
-      cache: 'no-store',
-      next: { revalidate: 300 },
+    const categoriesData = await fetchWithCache<any>(url.toString(), {
+      ...CACHE_SETTINGS.CATEGORIES,
+      tags: [
+        ...CACHE_SETTINGS.CATEGORIES.tags,
+        ...createCategoryTags('all', locale, section),
+      ],
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Categories fetch failed: HTTP ${response.status} - ${response.statusText} - ${errorText}`
-      );
-    }
-
-    const categoriesData = await response.json();
     const categories = categoriesData.data || categoriesData.categories || [];
     if (!Array.isArray(categories)) {
       throw new Error('Invalid categories response format');

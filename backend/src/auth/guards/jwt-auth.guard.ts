@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
@@ -32,18 +33,22 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       this.logger.debug(
         `🌐 Public route accessed: ${this.getRouteInfo(context)}`
       );
+
       return true;
     }
 
     this.logger.log(
       `🔐 Protected route accessed: ${this.getRouteInfo(context)}`
     );
+
     return super.canActivate(context);
   }
 
   handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    const route = `${request.method} ${request.url}`;
+    const request = this.getRequest(context);
+    const route = request
+      ? `${request.method || 'GraphQL'} ${request.url || 'GraphQL'}`
+      : 'GraphQL';
 
     // Логируем попытку доступа
     this.logger.log(`JWT Auth attempt for ${route}`);
@@ -60,16 +65,34 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     this.logger.log(`JWT Auth success for admin: ${user.username}`);
+
     return user;
   }
 
   private getRouteInfo(context: ExecutionContext): string {
-    const request = context.switchToHttp().getRequest();
-    return `${request.method} ${request.url}`;
+    const request = this.getRequest(context);
+
+    if (!request) {
+      return 'GraphQL';
+    }
+
+    return `${request.method || 'GraphQL'} ${request.url || 'GraphQL'}`;
   }
 
-  // ✅ ИСПРАВЛЕНИЕ для ошибки "Cannot read properties of undefined (reading 'logIn')"
+  // ✅ ИСПРАВЛЕНИЕ для поддержки GraphQL и HTTP запросов
   getRequest(context: ExecutionContext) {
-    return context.switchToHttp().getRequest();
+    try {
+      // Проверяем, это GraphQL или HTTP запрос
+      const gqlContext = GqlExecutionContext.create(context);
+      return gqlContext.getContext().req;
+    } catch {
+      // Если не GraphQL, пробуем HTTP
+      try {
+        return context.switchToHttp().getRequest();
+      } catch {
+        // Если ничего не работает, возвращаем пустой объект
+        return {};
+      }
+    }
   }
 }

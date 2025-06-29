@@ -18,57 +18,153 @@ export class AdminCategoriesService {
     private readonly cache: CacheService
   ) {}
 
-  // ==================== КАТЕГОРИИ ====================
+  // ==================== АДМИНСКИЕ КАТЕГОРИИ ====================
 
-  async getAllCategories(section?: string, locale?: string) {
-    const categories = await this.prisma.category.findMany({
-      where: {
-        ...(section && { section: section as any }),
-      },
-      include: {
-        translations: {
-          ...(locale && { where: { locale: locale as any } }),
-        },
-        subcategories: {
+  async getAdminCategories(section?: string, locale?: string) {
+    const cacheKey = `admin:admin-categories:all:${section || 'all'}:${locale || 'all'}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const categories = await this.prisma.adminCategory.findMany({
+          where: {
+            ...(section && { section: section as any }),
+          },
           include: {
             translations: {
               ...(locale && { where: { locale: locale as any } }),
             },
-            _count: {
-              select: { products: true },
+            subcategories: {
+              include: {
+                translations: {
+                  ...(locale && { where: { locale: locale as any } }),
+                },
+              },
             },
           },
-        },
-        _count: {
-          select: {
-            products: true,
-            categoryBrands: true,
-          },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+          orderBy: { createdAt: 'desc' },
+        });
 
-    return categories.map((category) => ({
-      id: category.id,
-      section: category.section,
-      createdAt: category.createdAt,
-      updatedAt: category.updatedAt,
-      translations: category.translations,
-      subcategories: category.subcategories.map((sub) => ({
-        id: sub.id,
-        categoryId: sub.categoryId,
-        createdAt: sub.createdAt,
-        updatedAt: sub.updatedAt,
-        translations: sub.translations,
-        productsCount: sub._count.products,
-      })),
-      stats: {
-        productsCount: category._count.products,
-        brandsCount: category._count.categoryBrands,
-        subcategoriesCount: category.subcategories.length,
+        return categories.map((category) => ({
+          id: category.id,
+          section: category.section,
+          createdAt: category.createdAt,
+          updatedAt: category.updatedAt,
+          translations: category.translations,
+          subcategories: category.subcategories.map((sub) => ({
+            id: sub.id,
+            categoryId: sub.categoryId,
+            createdAt: sub.createdAt,
+            updatedAt: sub.updatedAt,
+            translations: sub.translations,
+          })),
+        }));
       },
-    }));
+      { ttl: 300 } // 5 минут
+    );
+  }
+
+  async getAdminSubcategories(categoryId?: string, locale?: string) {
+    const cacheKey = `admin:admin-subcategories:${categoryId || 'all'}:${locale || 'all'}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const subcategories = await this.prisma.adminSubcategory.findMany({
+          where: {
+            ...(categoryId && { categoryId: parseInt(categoryId) }),
+          },
+          include: {
+            translations: {
+              ...(locale && { where: { locale: locale as any } }),
+            },
+            category: {
+              include: {
+                translations: {
+                  ...(locale && { where: { locale: locale as any } }),
+                },
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        return subcategories.map((subcategory) => ({
+          id: subcategory.id,
+          categoryId: subcategory.categoryId,
+          createdAt: subcategory.createdAt,
+          updatedAt: subcategory.updatedAt,
+          translations: subcategory.translations,
+          category: {
+            id: subcategory.category.id,
+            section: subcategory.category.section,
+            translations: subcategory.category.translations,
+          },
+        }));
+      },
+      { ttl: 300 } // 5 минут
+    );
+  }
+
+  // ==================== КАТЕГОРИИ ====================
+
+  async getAllCategories(section?: string, locale?: string) {
+    const cacheKey = `admin:categories:all:${section || 'all'}:${locale || 'all'}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const categories = await this.prisma.category.findMany({
+          where: {
+            ...(section && { section: section as any }),
+          },
+          include: {
+            translations: {
+              ...(locale && { where: { locale: locale as any } }),
+            },
+            subcategories: {
+              include: {
+                translations: {
+                  ...(locale && { where: { locale: locale as any } }),
+                },
+                _count: {
+                  select: { products: true },
+                },
+              },
+            },
+            _count: {
+              select: {
+                products: true,
+                categoryBrands: true,
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        return categories.map((category) => ({
+          id: category.id,
+          section: category.section,
+          createdAt: category.createdAt,
+          updatedAt: category.updatedAt,
+          translations: category.translations,
+          subcategories: category.subcategories.map((sub) => ({
+            id: sub.id,
+            categoryId: sub.categoryId,
+            createdAt: sub.createdAt,
+            updatedAt: sub.updatedAt,
+            translations: sub.translations,
+            productsCount: sub._count.products,
+          })),
+          stats: {
+            productsCount: category._count.products,
+            brandsCount: category._count.categoryBrands,
+            subcategoriesCount: category.subcategories.length,
+          },
+        }));
+      },
+      { ttl: 600 }
+    );
   }
 
   async getCategory(id: number) {
@@ -474,6 +570,7 @@ export class AdminCategoriesService {
   private async invalidateCache() {
     try {
       await Promise.all([
+        this.cache.invalidateByPattern('admin:categories:*'),
         this.cache.invalidateByPattern('categories:*'),
         this.cache.invalidateByPattern('subcategories:*'),
         this.cache.invalidateByPattern('brands:*'),
