@@ -5,19 +5,19 @@ import { ConfigModule } from '@nestjs/config';
 import { CacheService } from './cache/cache.service';
 import { DatabaseModule } from './database/database.module';
 import { PrismaService } from './database/prisma.service';
-import { UploadModule } from './upload/upload.module';
-import { UploadService } from './upload/upload.service';
+// import { UploadModule } from './upload/upload.module';
+// import { UploadService } from './upload/upload.service';
 
 @Global()
 @Module({
-  imports: [ConfigModule, DatabaseModule, UploadModule],
-  providers: [PrismaService, CacheService, UploadService],
+  imports: [ConfigModule, DatabaseModule], // UploadModule
+  providers: [PrismaService, CacheService], // UploadService
   exports: [
     PrismaService,
     CacheService,
-    UploadService,
+    // UploadService,
     DatabaseModule,
-    UploadModule,
+    // UploadModule,
   ],
 })
 export class CommonModule {

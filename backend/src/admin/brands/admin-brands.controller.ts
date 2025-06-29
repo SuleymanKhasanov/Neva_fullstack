@@ -9,6 +9,7 @@ import {
   Param,
   ParseIntPipe,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
@@ -33,12 +34,62 @@ export class AdminBrandsController {
 
   constructor(private readonly adminBrandsService: AdminBrandsService) {}
 
-  @Get()
-  @ApiOperation({ summary: 'Получить все бренды' })
-  async getAllBrands(@CurrentUser() user: any) {
-    this.logger.log(`Admin ${user.username} requesting all brands`);
+  @Get('admin-data')
+  @ApiOperation({ summary: 'Получить админские бренды' })
+  async getAdminBrands(
+    @Query('locale') locale?: string,
+    @Query('section') section?: string,
+    @CurrentUser() user?: any
+  ) {
+    this.logger.log(`Admin ${user?.username} requesting admin brands`);
 
-    return this.adminBrandsService.getAllBrands();
+    return this.adminBrandsService.getAdminBrands(locale, section);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Получить бренды (админские или публичные)' })
+  async getBrands(
+    @Query('locale') locale?: string,
+    @Query('section') section?: string,
+    @Query('categoryId') categoryId?: string,
+    @Query('subcategoryId') subcategoryId?: string,
+    @CurrentUser() user?: any
+  ) {
+    this.logger.log(
+      `Admin ${user?.username || 'unknown'} requesting brands with filters: locale=${locale}, section=${section}, categoryId=${categoryId}, subcategoryId=${subcategoryId}`
+    );
+
+    try {
+      // Если передан subcategoryId, находим categoryId
+      let finalCategoryId = categoryId;
+
+      if (subcategoryId && !categoryId) {
+        const subcategory = await this.adminBrandsService.getSubcategoryById(
+          parseInt(subcategoryId)
+        );
+        if (subcategory) {
+          finalCategoryId = subcategory.categoryId.toString();
+          this.logger.log(
+            `Found categoryId ${finalCategoryId} for subcategoryId ${subcategoryId}`
+          );
+        }
+      }
+
+      // Получаем админские бренды
+      const result = await this.adminBrandsService.getAdminBrandsByCategory(
+        finalCategoryId ? parseInt(finalCategoryId) : undefined,
+        locale,
+        section
+      );
+
+      this.logger.log(
+        `Returning ${result.length} brands for categoryId=${finalCategoryId}`
+      );
+      return result;
+    } catch (error) {
+      this.logger.error(`Error getting brands:`, error);
+      throw error;
+    }
   }
 
   @Get(':id')

@@ -1,5 +1,8 @@
 // src/public/public.service.ts
+import { createHash } from 'crypto';
+
 import { Injectable, Logger } from '@nestjs/common';
+
 import { Section, Locale } from '@prisma/client';
 
 import { CacheService } from '../common/cache/cache.service';
@@ -40,6 +43,7 @@ export interface SearchQuery {
 
 // Интерфейсы для ответов
 export interface ProductsResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   products: any[];
   pagination: {
     page: number;
@@ -52,23 +56,31 @@ export interface ProductsResponse {
 }
 
 export interface CategoriesResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   categories: any[];
 }
 
 export interface BrandsResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   brands: any[];
 }
 
 export interface SearchResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   products: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   categories: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   brands: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pagination: any;
   query: string;
 }
 
 export interface MenuResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   neva: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   xSolution: any[];
 }
 
@@ -80,6 +92,33 @@ export class PublicService {
     private readonly prisma: PrismaService,
     private readonly cache: CacheService
   ) {}
+
+  // ==================== УТИЛИТЫ КЕШИРОВАНИЯ ====================
+
+  private createCacheKey(
+    prefix: string,
+    data: Record<string, unknown>
+  ): string {
+    const normalizedData = Object.keys(data)
+      .sort()
+      .reduce(
+        (result, key) => {
+          if (data[key] !== undefined && data[key] !== null) {
+            result[key] = data[key];
+          }
+
+          return result;
+        },
+        {} as unknown as Record<string, unknown>
+      );
+
+    const hash = createHash('md5')
+      .update(JSON.stringify(normalizedData))
+      .digest('hex')
+      .substring(0, 8);
+
+    return `${prefix}:${hash}`;
+  }
 
   // ==================== ПРОДУКТЫ ====================
 
@@ -95,12 +134,15 @@ export class PublicService {
       search,
     } = filters;
 
-    const cacheKey = `products:${JSON.stringify(filters)}`;
+    const cacheKey = this.createCacheKey(
+      'products',
+      filters as unknown as unknown as Record<string, unknown>
+    );
 
     return this.cache.getOrSet(
       cacheKey,
       async () => {
-        const where: any = {
+        const where: Record<string, unknown> = {
           isActive: true,
           translations: {
             some: { locale: locale as Locale },
@@ -180,7 +222,7 @@ export class PublicService {
           },
         };
       },
-      { ttl: 300 } // 5 минут
+      { ttl: 600 } // 10 минут - продукты редко изменяются
     );
   }
 
@@ -237,7 +279,7 @@ export class PublicService {
 
         return this.formatProductDetail(product);
       },
-      { ttl: 600 } // 10 минут
+      { ttl: 1800 } // 30 минут - детали продукта статичны
     );
   }
 
@@ -300,7 +342,7 @@ export class PublicService {
 
         return this.formatProductDetail(product);
       },
-      { ttl: 600 }
+      { ttl: 1800 } // 30 минут - детали продукта статичны
     );
   }
 
@@ -314,7 +356,10 @@ export class PublicService {
       withBrands = true,
     } = filters;
 
-    const cacheKey = `categories:${JSON.stringify(filters)}`;
+    const cacheKey = this.createCacheKey(
+      'categories',
+      filters as unknown as Record<string, unknown>
+    );
 
     return this.cache.getOrSet(
       cacheKey,
@@ -397,6 +442,7 @@ export class PublicService {
         for (const category of categories) {
           if (category.translations.length === 0) continue;
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           let formattedCategory: any = {
             id: category.id,
             name: category.translations[0].name,
@@ -407,7 +453,9 @@ export class PublicService {
           if (withSubcategories) {
             formattedCategory.subcategories =
               category.subcategories
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 ?.filter((s: any) => s.translations.length > 0)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .map((s: any) => ({
                   id: s.id,
                   name: s.translations[0].name,
@@ -439,7 +487,9 @@ export class PublicService {
             });
 
             formattedCategory.brands = categoryBrands
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               .filter((b: any) => b.translations.length > 0)
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               .map((b: any) => ({
                 id: b.id,
                 name: b.translations[0].name,
@@ -451,7 +501,7 @@ export class PublicService {
 
         return { categories: formattedCategories };
       },
-      { ttl: 300 }
+      { ttl: 3600 } // 1 час - категории очень редко изменяются
     );
   }
 
@@ -531,13 +581,17 @@ export class PublicService {
           section: category.section,
           subcategories:
             category.subcategories
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ?.filter((s: any) => s.translations.length > 0)
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               .map((s: any) => ({
                 id: s.id,
                 name: s.translations[0].name,
               })) || [],
           brands: categoryBrands
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .filter((b: any) => b.translations.length > 0)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((b: any) => ({
               id: b.id,
               name: b.translations[0].name,
@@ -595,12 +649,15 @@ export class PublicService {
   async getBrands(filters: BrandFilters): Promise<BrandsResponse> {
     const { locale, section, categoryId } = filters;
 
-    const cacheKey = `brands:${JSON.stringify(filters)}`;
+    const cacheKey = this.createCacheKey(
+      'brands',
+      filters as unknown as Record<string, unknown>
+    );
 
     return this.cache.getOrSet(
       cacheKey,
       async () => {
-        const where: any = {
+        const where: Record<string, unknown> = {
           translations: {
             some: { locale: locale as Locale },
           },
@@ -636,7 +693,7 @@ export class PublicService {
 
         return { brands: formattedBrands };
       },
-      { ttl: 300 }
+      { ttl: 3600 } // 1 час - бренды очень редко изменяются
     );
   }
 
@@ -687,7 +744,10 @@ export class PublicService {
   async search(query: SearchQuery): Promise<SearchResponse> {
     const { query: searchTerm, locale, section, page = 1, limit = 20 } = query;
 
-    const cacheKey = `search:${JSON.stringify(query)}`;
+    const cacheKey = this.createCacheKey(
+      'search',
+      query as unknown as Record<string, unknown>
+    );
 
     return this.cache.getOrSet(
       cacheKey,
@@ -767,7 +827,7 @@ export class PublicService {
           query: searchTerm,
         };
       },
-      { ttl: 180 } // 3 минуты
+      { ttl: 300 } // 5 минут - поиск может изменяться
     );
   }
 
@@ -799,12 +859,13 @@ export class PublicService {
           xSolution: section === 'NEVA' ? [] : xSolutionCategories.categories,
         };
       },
-      { ttl: 600 } // 10 минут
+      { ttl: 3600 } // 1 час - меню очень стабильно
     );
   }
 
   // ==================== ПРИВАТНЫЕ МЕТОДЫ ====================
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private formatProduct(product: any): any {
     const translation = product.translations[0];
     const image = product.images[0];
@@ -815,6 +876,7 @@ export class PublicService {
       name: translation.name,
       description: translation.description || '',
       section: product.section,
+      slug: product.slug,
       image: image ? `${baseUrl}/public/images/${image.imageSmall}` : null,
       brand: product.brand?.translations[0]
         ? {
@@ -835,6 +897,7 @@ export class PublicService {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private formatProductDetail(product: any): any {
     const translation = product.translations[0];
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
@@ -864,6 +927,7 @@ export class PublicService {
             name: product.subcategory.translations[0].name,
           }
         : null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       images: product.images.map((img: any) => ({
         id: img.id,
         small: `${baseUrl}/public/images/${img.imageSmall}`,
@@ -872,7 +936,9 @@ export class PublicService {
         isPrimary: img.isPrimary,
       })),
       specifications: product.specifications
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((spec: any) => spec.translations.length > 0)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((spec: any) => ({
           name: spec.translations[0].name,
           value: spec.translations[0].value,

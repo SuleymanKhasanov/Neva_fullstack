@@ -139,13 +139,14 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
     [setSelectedBrand, clearError]
   );
 
-  // Обработчик для поля названия продукта
+  // Обработчики для полей названия продукта на всех языках
   const handleProductNameChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>): void => {
-      const value = event.target.value;
-      console.log('📝 Название продукта изменено:', value);
-      setProductTranslation('ru', 'name', value); // Обновляем название для локали 'ru'
-    },
+    (locale: 'ru' | 'en' | 'uz' | 'kr') =>
+      (event: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = event.target.value;
+        console.log(`📝 Название продукта (${locale}) изменено:`, value);
+        setProductTranslation(locale, 'name', value);
+      },
     [setProductTranslation]
   );
 
@@ -265,15 +266,62 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
         </div>
       </div>
 
-      <div className={styles.fieldContainer}>
-        <CustomInput
-          label={t(TranslationKeys.ProductCreateFieldsProductNameLabel)}
-          placeholder={t(
-            TranslationKeys.ProductCreateFieldsProductNamePlaceholder
-          )}
-          value={productTranslations.ru.name}
-          onChange={handleProductNameChange}
-        />
+      {/* Названия продукта на всех языках */}
+      <div className={styles.productNamesSection}>
+        <h4 className={styles.productNamesTitle}>
+          Названия продукта на всех языках
+        </h4>
+
+        <div className={styles.productNamesGrid}>
+          {/* Русский */}
+          <div className={styles.fieldContainer}>
+            <CustomInput
+              label={t(TranslationKeys.ProductCreateFieldsProductNameLabelRu)}
+              placeholder={t(
+                TranslationKeys.ProductCreateFieldsProductNamePlaceholder
+              )}
+              value={productTranslations.ru.name}
+              onChange={handleProductNameChange('ru')}
+              required
+            />
+          </div>
+
+          {/* Английский */}
+          <div className={styles.fieldContainer}>
+            <CustomInput
+              label={t(TranslationKeys.ProductCreateFieldsProductNameLabelEn)}
+              placeholder={t(
+                TranslationKeys.ProductCreateFieldsProductNamePlaceholder
+              )}
+              value={productTranslations.en.name}
+              onChange={handleProductNameChange('en')}
+            />
+          </div>
+
+          {/* Узбекский */}
+          <div className={styles.fieldContainer}>
+            <CustomInput
+              label={t(TranslationKeys.ProductCreateFieldsProductNameLabelUz)}
+              placeholder={t(
+                TranslationKeys.ProductCreateFieldsProductNamePlaceholder
+              )}
+              value={productTranslations.uz.name}
+              onChange={handleProductNameChange('uz')}
+            />
+          </div>
+
+          {/* Корейский */}
+          <div className={styles.fieldContainer}>
+            <CustomInput
+              label={t(TranslationKeys.ProductCreateFieldsProductNameLabelKr)}
+              placeholder={t(
+                TranslationKeys.ProductCreateFieldsProductNamePlaceholder
+              )}
+              value={productTranslations.kr.name}
+              onChange={handleProductNameChange('kr')}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Индикаторы загрузки */}

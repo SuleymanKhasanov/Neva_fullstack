@@ -12,6 +12,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+
 import { Section, Locale } from '@prisma/client';
 
 import { Auth } from '../../auth/decorators/auth.decorator';
@@ -59,9 +60,9 @@ export class AdminCategoriesEnhancedController {
   async getAllCategories(
     @Query('section') section?: Section,
     @Query('locale') locale?: Locale,
-    @CurrentUser() user?: any
+    @CurrentUser() user?: Record<string, unknown>
   ) {
-    this.logger.log(`Admin ${user.username} requesting categories`);
+    this.logger.log(`Admin ${user?.username} requesting categories`);
 
     const categories = await this.prisma.category.findMany({
       where: {
@@ -114,7 +115,7 @@ export class AdminCategoriesEnhancedController {
   @ApiOperation({ summary: 'Получить категорию по ID' })
   async getCategory(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} requesting category ${id}`);
 
@@ -175,7 +176,7 @@ export class AdminCategoriesEnhancedController {
   @ApiOperation({ summary: 'Создать категорию' })
   async createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(
       `Admin ${user.username} creating category: ${createCategoryDto.translations[0]?.name}`
@@ -201,7 +202,7 @@ export class AdminCategoriesEnhancedController {
   async updateCategory(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} updating category ${id}`);
 
@@ -213,7 +214,7 @@ export class AdminCategoriesEnhancedController {
       throw new Error(`Category with ID ${id} not found`);
     }
 
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
     if (updateCategoryDto.section) {
       updateData.section = updateCategoryDto.section;
     }
@@ -250,7 +251,7 @@ export class AdminCategoriesEnhancedController {
   @ApiOperation({ summary: 'Удалить категорию' })
   async deleteCategory(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} deleting category ${id}`);
 
@@ -295,9 +296,9 @@ export class AdminCategoriesEnhancedController {
   async getAllSubcategories(
     @Query('categoryId') categoryId?: number,
     @Query('locale') locale?: Locale,
-    @CurrentUser() user?: any
+    @CurrentUser() user?: Record<string, unknown>
   ) {
-    this.logger.log(`Admin ${user.username} requesting subcategories`);
+    this.logger.log(`Admin ${user?.username} requesting subcategories`);
 
     const subcategories = await this.prisma.subcategory.findMany({
       where: {
@@ -341,7 +342,7 @@ export class AdminCategoriesEnhancedController {
   @ApiOperation({ summary: 'Получить субкатегорию по ID' })
   async getSubcategory(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} requesting subcategory ${id}`);
 
@@ -382,7 +383,7 @@ export class AdminCategoriesEnhancedController {
   @ApiOperation({ summary: 'Создать субкатегорию' })
   async createSubcategory(
     @Body() createSubcategoryDto: CreateSubcategoryDto,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(
       `Admin ${user.username} creating subcategory: ${createSubcategoryDto.translations[0]?.name}`
@@ -422,7 +423,7 @@ export class AdminCategoriesEnhancedController {
   async updateSubcategory(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateSubcategoryDto: UpdateSubcategoryDto,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} updating subcategory ${id}`);
 
@@ -435,7 +436,7 @@ export class AdminCategoriesEnhancedController {
     }
 
     await this.prisma.$transaction(async (tx) => {
-      const updateData: any = {};
+      const updateData: Record<string, unknown> = {};
       if (updateSubcategoryDto.categoryId) {
         updateData.categoryId = updateSubcategoryDto.categoryId;
       }
@@ -473,7 +474,7 @@ export class AdminCategoriesEnhancedController {
   @ApiOperation({ summary: 'Удалить субкатегорию' })
   async deleteSubcategory(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(`Admin ${user.username} deleting subcategory ${id}`);
 
@@ -511,7 +512,7 @@ export class AdminCategoriesEnhancedController {
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Param('brandId', ParseIntPipe) brandId: number,
     @Body('section') section: Section,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(
       `Admin ${user.username} linking brand ${brandId} to category ${categoryId} for section ${section}`
@@ -564,7 +565,7 @@ export class AdminCategoriesEnhancedController {
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Param('brandId', ParseIntPipe) brandId: number,
     @Body('section') section: Section,
-    @CurrentUser() user: any
+    @CurrentUser() user: Record<string, unknown>
   ) {
     this.logger.log(
       `Admin ${user.username} unlinking brand ${brandId} from category ${categoryId} for section ${section}`

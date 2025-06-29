@@ -21,6 +21,15 @@
       "placeholder": "Bo'limni tanlang",
       "required": "Bo'limni tanlang"
     },
+    "productName": {
+      "label": "Model nomini kiriting *",
+      "labelRu": "Mahsulot nomi (Ruscha) *",
+      "labelEn": "Mahsulot nomi (Inglizcha)",
+      "labelUz": "Mahsulot nomi (O'zbekcha)",
+      "labelKr": "Mahsulot nomi (Koreyscha)",
+      "placeholder": "Mahsulot nomini kiriting",
+      "required": "Mahsulot nomini kiriting"
+    },
     "category": {
       "label": "Kategoriya *",
       "placeholder": "Kategoriyani tanlang",
@@ -41,11 +50,6 @@
       "loading": "Brendlar yuklanmoqda...",
       "selectSubcategoryFirst": "Avval kichik kategoriyani tanlang",
       "notAvailable": "Brendlar mavjud emas"
-    },
-    "productName": {
-      "label": "Model nomini kiriting *",
-      "placeholder": "Mahsulot nomini kiriting",
-      "required": "Mahsulot nomini kiriting"
     },
     "productDescription": {
       "label_ru": "Mahsulot ta'rifi (Ruscha) *",

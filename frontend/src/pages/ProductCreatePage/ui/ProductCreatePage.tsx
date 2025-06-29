@@ -40,7 +40,7 @@ const ProductCreatePage = () => {
     const fields = [
       Boolean(selectedSection), // Секция выбрана
       Boolean(selectedCategory), // Категория выбрана
-      Boolean(productTranslations.ru.name.trim()), // Название на русском
+      Boolean(productTranslations.ru.name.trim()), // Название на русском (обязательно)
       Boolean(productTranslations.ru.description.trim()), // Описание на русском
       productImages.length > 0, // Минимум одно изображение
     ];
@@ -49,7 +49,24 @@ const ProductCreatePage = () => {
     const total = fields.length;
     const percentage = Math.round((filled / total) * 100);
 
-    return { filled, total, percentage };
+    // Дополнительные поля (необязательные, но желательные)
+    const additionalFields = [
+      Boolean(productTranslations.en.name.trim()), // Название на английском
+      Boolean(productTranslations.uz.name.trim()), // Название на узбекском
+      Boolean(productTranslations.kr.name.trim()), // Название на корейском
+    ];
+
+    const additionalFilled = additionalFields.filter(Boolean).length;
+    const totalAdditional = additionalFields.length;
+
+    return {
+      filled,
+      total,
+      percentage,
+      additionalFilled,
+      totalAdditional,
+      hasAllLanguages: additionalFilled === totalAdditional,
+    };
   }, [selectedSection, selectedCategory, productTranslations, productImages]);
 
   // Обработчик создания продукта
@@ -109,7 +126,13 @@ const ProductCreatePage = () => {
             <div className={styles.progressDetails}>
               <span className={styles.percentage}>{progress.percentage}%</span>
               <span className={styles.details}>
-                {progress.filled} из {progress.total} полей заполнено
+                {progress.filled} из {progress.total} обязательных полей
+                заполнено
+              </span>
+              <span className={styles.additionalDetails}>
+                Названия на языках: {progress.additionalFilled} из{' '}
+                {progress.totalAdditional}
+                {progress.hasAllLanguages && ' ✅'}
               </span>
             </div>
           </div>
@@ -127,9 +150,15 @@ const ProductCreatePage = () => {
             </div>
           )}
 
-          {isFormValid && (
+          {isFormValid && !progress.hasAllLanguages && (
+            <div className={styles.warningMessage}>
+              ⚠️ Рекомендуется заполнить названия на всех языках
+            </div>
+          )}
+
+          {isFormValid && progress.hasAllLanguages && (
             <div className={styles.completeMessage}>
-              ✅ Все поля заполнены! Можно создавать продукт
+              ✅ Все поля заполнены! Продукт готов к созданию
             </div>
           )}
         </div>

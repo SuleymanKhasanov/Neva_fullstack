@@ -1,15 +1,23 @@
-// frontend/src/shared/store/adminCategoryStore.ts (ФИНАЛЬНАЯ ИСПРАВЛЕННАЯ ВЕРСИЯ)
+// frontend/src/shared/store/adminCategoryStore.ts (СТРОГО ТИПИЗИРОВАННАЯ ВЕРСИЯ)
 
 import React from 'react';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { getCurrentLocale } from '@/shared/utils/redirect';
+import type {
+  StrictLocale,
+  StrictSection,
+  StrictSelectOption,
+  StrictTranslationData,
+  StrictSpecificationData,
+  StrictProductImageData,
+  StrictProductFormData,
+  StrictLoadingState,
+  StrictApiResponse,
+} from '@/shared/types/strict-frontend.types';
 
-// ==================== СТРОГИЕ ТИПЫ ====================
-interface SelectOption {
-  readonly value: string | number;
-  readonly label: string;
-}
+// ==================== ТИПЫ ЗАМЕНЕНЫ НА СТРОГИЕ ====================
+// SelectOption заменен на StrictSelectOption из строгих типов
 
 interface Translation {
   readonly id: number;
@@ -55,6 +63,20 @@ interface ProductImage {
   readonly preview: string;
   readonly slotIndex: number;
   readonly isPrimary: boolean;
+}
+
+interface ProductSpecificationTranslation {
+  readonly ru: { readonly name: string; readonly value: string };
+  readonly en: { readonly name: string; readonly value: string };
+  readonly uz: { readonly name: string; readonly value: string };
+  readonly kr: { readonly name: string; readonly value: string };
+}
+
+interface ProductSpecification {
+  readonly id: string;
+  readonly key: string;
+  readonly sortOrder: number;
+  readonly translations: ProductSpecificationTranslation;
 }
 
 interface ProductTranslations {
@@ -109,6 +131,7 @@ interface AdminCategoryState {
   // ==================== НОВЫЕ ПОЛЯ ДЛЯ ПРОДУКТА ====================
   readonly productTranslations: ProductTranslations;
   readonly productImages: readonly ProductImage[];
+  readonly productSpecifications: readonly ProductSpecification[];
   readonly isCreatingProduct: boolean;
   readonly productCreationError: string;
 
@@ -139,6 +162,17 @@ interface AdminCategoryState {
   setPrimaryProductImage: (slotIndex: number) => void;
   reorderProductImages: (fromIndex: number, toIndex: number) => void;
 
+  // Характеристики
+  addProductSpecification: (key: string) => void;
+  removeProductSpecification: (specId: string) => void;
+  setProductSpecification: (
+    specId: string,
+    locale: keyof ProductSpecificationTranslation,
+    field: 'name' | 'value',
+    value: string
+  ) => void;
+  reorderProductSpecifications: (fromIndex: number, toIndex: number) => void;
+
   // Создание продукта
   createProduct: () => Promise<boolean>;
   setProductCreationError: (error: string) => void;
@@ -157,7 +191,7 @@ const getTranslatedName = (
 };
 
 const generateImageId = (): string => {
-  return `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `img_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 };
 
 const createImagePreview = (file: File): string => {
@@ -405,6 +439,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
 
     productTranslations: initialProductTranslations,
     productImages: [],
+    productSpecifications: [],
     isCreatingProduct: false,
     productCreationError: '',
 
@@ -675,6 +710,74 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       });
     },
 
+    // ==================== ДЕЙСТВИЯ ДЛЯ ХАРАКТЕРИСТИК ====================
+
+    addProductSpecification: (key: string) => {
+      set((state) => {
+        const newSpecification: ProductSpecification = {
+          id: `spec_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
+          key: key.toLowerCase().replace(/[^a-z0-9_]/g, '_'),
+          sortOrder: state.productSpecifications.length,
+          translations: {
+            ru: { name: '', value: '' },
+            en: { name: '', value: '' },
+            uz: { name: '', value: '' },
+            kr: { name: '', value: '' },
+          },
+        };
+
+        return {
+          productSpecifications: [
+            ...state.productSpecifications,
+            newSpecification,
+          ],
+        };
+      });
+    },
+
+    removeProductSpecification: (specId: string) => {
+      set((state) => ({
+        productSpecifications: state.productSpecifications.filter(
+          (spec) => spec.id !== specId
+        ),
+      }));
+    },
+
+    setProductSpecification: (specId: string, locale, field, value) => {
+      set((state) => ({
+        productSpecifications: state.productSpecifications.map((spec) =>
+          spec.id === specId
+            ? {
+                ...spec,
+                translations: {
+                  ...spec.translations,
+                  [locale]: {
+                    ...spec.translations[locale],
+                    [field]: value,
+                  },
+                },
+              }
+            : spec
+        ),
+      }));
+    },
+
+    reorderProductSpecifications: (fromIndex: number, toIndex: number) => {
+      set((state) => {
+        const newSpecs = [...state.productSpecifications];
+        const [movedSpec] = newSpecs.splice(fromIndex, 1);
+        newSpecs.splice(toIndex, 0, movedSpec);
+
+        // Обновляем sortOrder
+        const updatedSpecs = newSpecs.map((spec, index) => ({
+          ...spec,
+          sortOrder: index,
+        }));
+
+        return { productSpecifications: updatedSpecs };
+      });
+    },
+
     // ✅ ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ ФУНКЦИЯ createProduct (JSON + отдельные изображения)
     createProduct: async () => {
       const state = get();
@@ -739,19 +842,48 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
                 state.productTranslations.ru.marketingDescription?.trim() || '',
             },
           ],
-          specifications: [], // Пустой массив пока что
+          specifications: state.productSpecifications
+            .filter((spec) => {
+              // Включаем характеристику если есть хотя бы одно заполненное поле для русского языка
+              const ruTranslation = spec.translations.ru;
+              return ruTranslation.name.trim() || ruTranslation.value.trim();
+            })
+            .map((spec) => ({
+              key: spec.key,
+              sortOrder: spec.sortOrder,
+              translations: Object.entries(spec.translations)
+                .filter(
+                  ([, translation]) =>
+                    translation.name.trim() || translation.value.trim()
+                )
+                .map(([locale, translation]) => ({
+                  locale,
+                  name: translation.name.trim() || '',
+                  value: translation.value.trim() || '',
+                })),
+            }))
+            .filter((spec) => spec.translations.length > 0), // Только спецификации с переводами
         };
 
-        // Добавляем дополнительные переводы если заполнены
-        ['en', 'uz', 'kr'].forEach((locale) => {
+        // Добавляем дополнительные переводы если заполнено хотя бы одно поле
+        (['en', 'uz', 'kr'] as const).forEach((locale) => {
           const translation = state.productTranslations[locale];
-          if (translation.name && translation.name.trim()) {
+          const hasName = translation.name && translation.name.trim();
+          const hasDescription =
+            translation.description && translation.description.trim();
+          const hasMarketingDescription =
+            translation.marketingDescription &&
+            translation.marketingDescription.trim();
+
+          // Если есть хотя бы одно заполненное поле для этого языка
+          if (hasName || hasDescription || hasMarketingDescription) {
             productData.translations.push({
               locale,
-              name: translation.name.trim(),
-              description: translation.description?.trim() || '',
-              marketingDescription:
-                translation.marketingDescription?.trim() || '',
+              name: hasName ? translation.name.trim() : '', // Если name пустое, используем пустую строку
+              description: hasDescription ? translation.description.trim() : '',
+              marketingDescription: hasMarketingDescription
+                ? translation.marketingDescription.trim()
+                : '',
             });
           }
         });
@@ -796,24 +928,25 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
         // ✅ ШАГ 2: Загружаем изображения отдельно (если есть)
         if (state.productImages.length > 0) {
           console.log(
-            `📸 Загружаем ${state.productImages.length} изображений для продукта ${createdProduct.id}...`
+            `📸 Загружаем ${state.productImages.length} изображений для продукта ${createdProduct.productId}...`
           );
 
           try {
             const imageFormData = new FormData();
 
             // Добавляем все изображения, отсортированные по slotIndex
-            state.productImages
-              .sort((a, b) => a.slotIndex - b.slotIndex)
-              .forEach((image) => {
-                imageFormData.append('images', image.file);
-                console.log(
-                  `📤 Добавляем изображение: ${image.file.name} (${image.file.size} bytes)`
-                );
-              });
+            const sortedImages = [...state.productImages].sort(
+              (a: ProductImage, b: ProductImage) => a.slotIndex - b.slotIndex
+            );
+            sortedImages.forEach((image: ProductImage) => {
+              imageFormData.append('images', image.file);
+              console.log(
+                `📤 Добавляем изображение: ${image.file.name} (${image.file.size} bytes)`
+              );
+            });
 
             const imageResponse = await fetch(
-              `${baseUrl}/admin/products/${createdProduct.id}/images`,
+              `${baseUrl}/admin/products/${createdProduct.productId}/images`,
               {
                 method: 'POST',
                 headers: {
@@ -853,9 +986,16 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
 
         console.log('🎉 Процесс создания продукта завершен успешно!');
 
+        // Небольшая задержка для обеспечения инвалидации кеша
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
         // Сбрасываем данные формы
         get().resetProductData();
         set({ isCreatingProduct: false });
+
+        console.log(
+          '✅ Данные формы сброшены, продукт должен появиться в каталоге'
+        );
         return true;
       } catch (error) {
         console.error('💥 Критическая ошибка создания продукта:', error);
@@ -891,6 +1031,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       set({
         productTranslations: initialProductTranslations,
         productImages: [],
+        productSpecifications: [],
         productCreationError: '',
       });
     },
@@ -929,6 +1070,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
         error: '',
         productTranslations: initialProductTranslations,
         productImages: [],
+        productSpecifications: [],
         isCreatingProduct: false,
         productCreationError: '',
       });
@@ -984,6 +1126,9 @@ export const useProductTranslations = (): ProductTranslations =>
 export const useProductImages = (): readonly ProductImage[] =>
   useAdminCategoryStore((state) => state.productImages);
 
+export const useProductSpecifications = (): readonly ProductSpecification[] =>
+  useAdminCategoryStore((state) => state.productSpecifications);
+
 export const useIsCreatingProduct = (): boolean =>
   useAdminCategoryStore((state) => state.isCreatingProduct);
 
@@ -994,6 +1139,14 @@ export const useProductImageBySlot = (slotIndex: number): ProductImage | null =>
   useAdminCategoryStore(
     (state) =>
       state.productImages.find((img) => img.slotIndex === slotIndex) || null
+  );
+
+export const useProductSpecificationById = (
+  specId: string
+): ProductSpecification | null =>
+  useAdminCategoryStore(
+    (state) =>
+      state.productSpecifications.find((spec) => spec.id === specId) || null
   );
 
 // ==================== МЕМОИЗИРОВАННЫЕ СЕЛЕКТОРЫ ====================
@@ -1051,6 +1204,7 @@ export const useIsFormValid = (): boolean => {
   const selectedCategory = useSelectedCategory();
   const productTranslations = useProductTranslations();
   const productImages = useProductImages();
+  const productSpecifications = useProductSpecifications();
 
   return React.useMemo(() => {
     const isValidSection = Boolean(
@@ -1067,14 +1221,26 @@ export const useIsFormValid = (): boolean => {
 
     const isValidImages = productImages.length > 0;
 
+    // Валидация характеристик - все должны иметь name и value на русском языке
+    const isValidSpecifications = productSpecifications.every((spec) => {
+      const ruTranslation = spec.translations.ru;
+      return ruTranslation.name.trim() && ruTranslation.value.trim();
+    });
+
     const isValid =
-      isValidSection && isValidCategory && isValidTranslations && isValidImages;
+      isValidSection &&
+      isValidCategory &&
+      isValidTranslations &&
+      isValidImages &&
+      isValidSpecifications;
 
     console.log('🔍 Валидация формы:', {
       isValidSection,
       isValidCategory,
       isValidTranslations,
       isValidImages,
+      isValidSpecifications,
+      specificationsCount: productSpecifications.length,
       finalResult: isValid,
     });
 
@@ -1084,6 +1250,7 @@ export const useIsFormValid = (): boolean => {
     selectedCategory,
     productTranslations.ru.name,
     productImages.length,
+    productSpecifications,
   ]);
 };
 
@@ -1108,6 +1275,14 @@ export const useAdminCategoryActions = () => {
       removeProductImage: store.removeProductImage,
       setPrimaryProductImage: store.setPrimaryProductImage,
       reorderProductImages: store.reorderProductImages,
+
+      // Действия для характеристик
+      addProductSpecification: store.addProductSpecification,
+      removeProductSpecification: store.removeProductSpecification,
+      setProductSpecification: store.setProductSpecification,
+      reorderProductSpecifications: store.reorderProductSpecifications,
+
+      // Создание продукта
       createProduct: store.createProduct,
       setProductCreationError: store.setProductCreationError,
       clearProductCreationError: store.clearProductCreationError,

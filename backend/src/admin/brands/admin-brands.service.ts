@@ -1,6 +1,8 @@
 // src/admin/brands/admin-brands.service.ts
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
+import { Locale } from '@prisma/client';
+
 import { CacheService } from '../../common/cache/cache.service';
 import { PrismaService } from '../../common/database/prisma.service';
 
@@ -13,30 +15,147 @@ export class AdminBrandsService {
     private readonly cache: CacheService
   ) {}
 
-  async getAllBrands() {
-    const brands = await this.prisma.brand.findMany({
-      include: {
-        translations: true,
-        _count: {
-          select: {
-            products: true,
-            categoryBrands: true,
-          },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+  // ==================== АДМИНСКИЕ БРЕНДЫ ====================
 
-    return brands.map((brand) => ({
-      id: brand.id,
-      createdAt: brand.createdAt,
-      updatedAt: brand.updatedAt,
-      translations: brand.translations,
-      stats: {
-        productsCount: brand._count.products,
-        categoriesCount: brand._count.categoryBrands,
+  async getAdminBrands(locale?: string, section?: string) {
+    const cacheKey = `admin:admin-brands:${locale || 'all'}:${section || 'all'}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const brands = await this.prisma.adminBrand.findMany({
+          include: {
+            translations: {
+              ...(locale && { where: { locale: locale as Locale } }),
+            },
+            categoryBrands: {
+              ...(section && { where: { section: section as any } }),
+              include: {
+                category: {
+                  include: {
+                    translations: {
+                      ...(locale && { where: { locale: locale as Locale } }),
+                    },
+                  },
+                },
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        return brands.map((brand) => ({
+          id: brand.id,
+          createdAt: brand.createdAt,
+          updatedAt: brand.updatedAt,
+          translations: brand.translations,
+          categoryBrands: brand.categoryBrands.map((cb) => ({
+            id: cb.id,
+            section: cb.section,
+            category: {
+              id: cb.category.id,
+              section: cb.category.section,
+              translations: cb.category.translations,
+            },
+          })),
+        }));
       },
-    }));
+      { ttl: 300 }
+    );
+  }
+
+  async getSubcategoryById(subcategoryId: number) {
+    return this.prisma.adminSubcategory.findUnique({
+      where: { id: subcategoryId },
+    });
+  }
+
+  async getAdminBrandsByCategory(
+    categoryId?: number,
+    locale?: string,
+    section?: string
+  ) {
+    const cacheKey = `admin:admin-brands-by-category:${categoryId || 'all'}:${locale || 'all'}:${section || 'all'}`;
+
+    return this.cache.getOrSet(
+      cacheKey,
+      async () => {
+        const categoryBrands = await this.prisma.adminCategoryBrand.findMany({
+          where: {
+            ...(categoryId && { categoryId }),
+            ...(section && { section: section as any }),
+          },
+          include: {
+            brand: {
+              include: {
+                translations: {
+                  ...(locale && { where: { locale: locale as Locale } }),
+                },
+              },
+            },
+            category: {
+              include: {
+                translations: {
+                  ...(locale && { where: { locale: locale as Locale } }),
+                },
+              },
+            },
+          },
+          orderBy: {
+            brand: { createdAt: 'desc' },
+          },
+        });
+
+        // Убираем дубликаты брендов
+        const uniqueBrands = new Map();
+
+        categoryBrands.forEach((cb) => {
+          if (!uniqueBrands.has(cb.brand.id)) {
+            uniqueBrands.set(cb.brand.id, {
+              id: cb.brand.id,
+              createdAt: cb.brand.createdAt,
+              updatedAt: cb.brand.updatedAt,
+              translations: cb.brand.translations,
+            });
+          }
+        });
+
+        return Array.from(uniqueBrands.values());
+      },
+      { ttl: 300 }
+    );
+  }
+
+  async getAllBrands() {
+    return this.cache.getOrSet(
+      'admin:brands:all',
+      async () => {
+        const brands = await this.prisma.brand.findMany({
+          include: {
+            translations: true,
+            _count: {
+              select: {
+                products: true,
+                categoryBrands: true,
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        return brands.map((brand) => ({
+          id: brand.id,
+          createdAt: brand.createdAt,
+          updatedAt: brand.updatedAt,
+          translations: brand.translations,
+          stats: {
+            productsCount: brand._count.products,
+            categoriesCount: brand._count.categoryBrands,
+          },
+        }));
+      },
+      { ttl: 600 }
+    );
   }
 
   async getBrand(id: number) {
@@ -80,7 +199,12 @@ export class AdminBrandsService {
   }) {
     const brand = await this.prisma.brand.create({
       data: {
-        translations: { create: data.translations as any },
+        translations: {
+          create: data.translations.map((t) => ({
+            locale: t.locale as Locale,
+            name: t.name,
+          })),
+        },
       },
       include: { translations: true },
     });
@@ -110,7 +234,7 @@ export class AdminBrandsService {
         await tx.brandTranslation.createMany({
           data: data.translations!.map((t) => ({
             brandId: id,
-            locale: t.locale as any,
+            locale: t.locale as Locale,
             name: t.name,
           })),
         });
@@ -151,6 +275,7 @@ export class AdminBrandsService {
   private async invalidateCache() {
     try {
       await Promise.all([
+        this.cache.invalidateByPattern('admin:brands:*'),
         this.cache.invalidateByPattern('brands:*'),
         this.cache.invalidateByPattern('products:*'),
         this.cache.invalidateByPattern('categories:*'),

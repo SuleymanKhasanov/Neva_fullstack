@@ -11,6 +11,9 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
+import { Auth } from './decorators/auth.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { Public } from './decorators/public.decorator';
 import {
   LoginDto,
   RefreshTokenDto,
@@ -18,9 +21,6 @@ import {
   AdminProfileDto,
   TokenResponseDto,
 } from './dto/auth.dto';
-import { Auth } from './decorators/auth.decorator';
-import { CurrentUser } from './decorators/current-user.decorator';
-import { Public } from './decorators/public.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -65,6 +65,7 @@ export class AuthController {
       );
 
       this.logger.log(`Login successful for: ${loginDto.username}`);
+
       return result;
     } catch (error) {
       this.logger.error(`Login failed for ${loginDto.username}:`, error);
@@ -100,6 +101,7 @@ export class AuthController {
       );
 
       this.logger.log('Token refreshed successfully');
+
       return result;
     } catch (error) {
       this.logger.error('Token refresh failed:', error);
@@ -125,6 +127,7 @@ export class AuthController {
       const profile = await this.authService.getProfile(user.username);
 
       this.logger.log(`Profile retrieved for admin: ${user.username}`);
+
       return profile;
     } catch (error) {
       this.logger.error(

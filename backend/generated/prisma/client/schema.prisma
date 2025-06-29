@@ -21,6 +21,116 @@ enum Locale {
   uz
 }
 
+// ==================== АДМИНСКИЕ ТАБЛИЦЫ (ПРИВАТНЫЕ) ====================
+
+// Админская таблица брендов
+model AdminBrand {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  translations   AdminBrandTranslation[]
+  categoryBrands AdminCategoryBrand[]
+
+  @@map("admin_brands")
+}
+
+// Переводы админских брендов
+model AdminBrandTranslation {
+  id        Int      @id @default(autoincrement())
+  brandId   Int      @map("brand_id")
+  locale    Locale
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  brand AdminBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([brandId, locale])
+  @@map("admin_brand_translations")
+}
+
+// Админская таблица категорий
+model AdminCategory {
+  id        Int      @id @default(autoincrement())
+  section   Section
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  translations   AdminCategoryTranslation[]
+  subcategories  AdminSubcategory[]
+  categoryBrands AdminCategoryBrand[]
+
+  @@map("admin_categories")
+}
+
+// Переводы админских категорий
+model AdminCategoryTranslation {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  locale     Locale
+  name       String   @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  category AdminCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+  @@map("admin_category_translations")
+}
+
+// Админская таблица субкатегорий
+model AdminSubcategory {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  category     AdminCategory                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  translations AdminSubcategoryTranslation[]
+
+  @@map("admin_subcategories")
+}
+
+// Переводы админских субкатегорий
+model AdminSubcategoryTranslation {
+  id            Int      @id @default(autoincrement())
+  subcategoryId Int      @map("subcategory_id")
+  locale        Locale
+  name          String   @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  subcategory AdminSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+
+  @@unique([subcategoryId, locale])
+  @@map("admin_subcategory_translations")
+}
+
+// Many-to-many связь админских категорий и брендов
+model AdminCategoryBrand {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  brandId    Int      @map("brand_id")
+  section    Section
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Связи
+  category AdminCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  brand    AdminBrand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, brandId, section])
+  @@map("admin_category_brands")
+}
+
+// ==================== ПУБЛИЧНЫЕ ТАБЛИЦЫ ====================
+
 // Основная таблица брендов
 model Brand {
   id        Int      @id @default(autoincrement())

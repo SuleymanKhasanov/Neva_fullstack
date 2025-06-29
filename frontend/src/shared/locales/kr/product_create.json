@@ -21,6 +21,15 @@
       "placeholder": "섹션을 선택하세요",
       "required": "섹션을 선택하세요"
     },
+    "productName": {
+      "label": "모델명 입력 *",
+      "labelRu": "제품명 (러시아어) *",
+      "labelEn": "제품명 (영어)",
+      "labelUz": "제품명 (우즈베크어)",
+      "labelKr": "제품명 (한국어)",
+      "placeholder": "제품명을 입력하세요",
+      "required": "제품명을 입력하세요"
+    },
     "category": {
       "label": "카테고리 *",
       "placeholder": "카테고리를 선택하세요",
@@ -41,11 +50,6 @@
       "loading": "브랜드 로드 중...",
       "selectSubcategoryFirst": "먼저 하위 카테고리를 선택하세요",
       "notAvailable": "브랜드가 없습니다"
-    },
-    "productName": {
-      "label": "모델명 입력 *",
-      "placeholder": "제품명을 입력하세요",
-      "required": "제품명을 입력하세요"
     },
     "productDescription": {
       "label_ru": "제품 설명 (러시아어) *",

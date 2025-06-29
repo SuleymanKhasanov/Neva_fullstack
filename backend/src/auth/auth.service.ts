@@ -1,7 +1,7 @@
 // backend/src/auth/auth.service.ts
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 export interface JwtPayload {
   sub: string;
@@ -45,10 +45,12 @@ export class AuthService {
 
     if (username === adminUsername && password === adminPassword) {
       this.logger.log(`Admin ${username} validated successfully`);
+
       return true;
     }
 
     this.logger.warn(`Invalid credentials for username: ${username}`);
+
     return false;
   }
 

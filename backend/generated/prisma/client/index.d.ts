@@ -14,6 +14,41 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model AdminBrand
+ * 
+ */
+export type AdminBrand = $Result.DefaultSelection<Prisma.$AdminBrandPayload>
+/**
+ * Model AdminBrandTranslation
+ * 
+ */
+export type AdminBrandTranslation = $Result.DefaultSelection<Prisma.$AdminBrandTranslationPayload>
+/**
+ * Model AdminCategory
+ * 
+ */
+export type AdminCategory = $Result.DefaultSelection<Prisma.$AdminCategoryPayload>
+/**
+ * Model AdminCategoryTranslation
+ * 
+ */
+export type AdminCategoryTranslation = $Result.DefaultSelection<Prisma.$AdminCategoryTranslationPayload>
+/**
+ * Model AdminSubcategory
+ * 
+ */
+export type AdminSubcategory = $Result.DefaultSelection<Prisma.$AdminSubcategoryPayload>
+/**
+ * Model AdminSubcategoryTranslation
+ * 
+ */
+export type AdminSubcategoryTranslation = $Result.DefaultSelection<Prisma.$AdminSubcategoryTranslationPayload>
+/**
+ * Model AdminCategoryBrand
+ * 
+ */
+export type AdminCategoryBrand = $Result.DefaultSelection<Prisma.$AdminCategoryBrandPayload>
+/**
  * Model Brand
  * 
  */
@@ -112,8 +147,8 @@ export const Locale: typeof $Enums.Locale
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Brands
- * const brands = await prisma.brand.findMany()
+ * // Fetch zero or more AdminBrands
+ * const adminBrands = await prisma.adminBrand.findMany()
  * ```
  *
  *
@@ -133,8 +168,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Brands
-   * const brands = await prisma.brand.findMany()
+   * // Fetch zero or more AdminBrands
+   * const adminBrands = await prisma.adminBrand.findMany()
    * ```
    *
    *
@@ -231,6 +266,76 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.adminBrand`: Exposes CRUD operations for the **AdminBrand** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminBrands
+    * const adminBrands = await prisma.adminBrand.findMany()
+    * ```
+    */
+  get adminBrand(): Prisma.AdminBrandDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminBrandTranslation`: Exposes CRUD operations for the **AdminBrandTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminBrandTranslations
+    * const adminBrandTranslations = await prisma.adminBrandTranslation.findMany()
+    * ```
+    */
+  get adminBrandTranslation(): Prisma.AdminBrandTranslationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminCategory`: Exposes CRUD operations for the **AdminCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminCategories
+    * const adminCategories = await prisma.adminCategory.findMany()
+    * ```
+    */
+  get adminCategory(): Prisma.AdminCategoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminCategoryTranslation`: Exposes CRUD operations for the **AdminCategoryTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminCategoryTranslations
+    * const adminCategoryTranslations = await prisma.adminCategoryTranslation.findMany()
+    * ```
+    */
+  get adminCategoryTranslation(): Prisma.AdminCategoryTranslationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminSubcategory`: Exposes CRUD operations for the **AdminSubcategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminSubcategories
+    * const adminSubcategories = await prisma.adminSubcategory.findMany()
+    * ```
+    */
+  get adminSubcategory(): Prisma.AdminSubcategoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminSubcategoryTranslation`: Exposes CRUD operations for the **AdminSubcategoryTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminSubcategoryTranslations
+    * const adminSubcategoryTranslations = await prisma.adminSubcategoryTranslation.findMany()
+    * ```
+    */
+  get adminSubcategoryTranslation(): Prisma.AdminSubcategoryTranslationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminCategoryBrand`: Exposes CRUD operations for the **AdminCategoryBrand** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminCategoryBrands
+    * const adminCategoryBrands = await prisma.adminCategoryBrand.findMany()
+    * ```
+    */
+  get adminCategoryBrand(): Prisma.AdminCategoryBrandDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.brand`: Exposes CRUD operations for the **Brand** model.
     * Example usage:
     * ```ts
@@ -789,6 +894,13 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    AdminBrand: 'AdminBrand',
+    AdminBrandTranslation: 'AdminBrandTranslation',
+    AdminCategory: 'AdminCategory',
+    AdminCategoryTranslation: 'AdminCategoryTranslation',
+    AdminSubcategory: 'AdminSubcategory',
+    AdminSubcategoryTranslation: 'AdminSubcategoryTranslation',
+    AdminCategoryBrand: 'AdminCategoryBrand',
     Brand: 'Brand',
     BrandTranslation: 'BrandTranslation',
     Category: 'Category',
@@ -819,10 +931,528 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "brand" | "brandTranslation" | "category" | "categoryTranslation" | "subcategory" | "subcategoryTranslation" | "categoryBrand" | "product" | "productTranslation" | "productImage" | "productSpecification" | "productSpecificationTranslation"
+      modelProps: "adminBrand" | "adminBrandTranslation" | "adminCategory" | "adminCategoryTranslation" | "adminSubcategory" | "adminSubcategoryTranslation" | "adminCategoryBrand" | "brand" | "brandTranslation" | "category" | "categoryTranslation" | "subcategory" | "subcategoryTranslation" | "categoryBrand" | "product" | "productTranslation" | "productImage" | "productSpecification" | "productSpecificationTranslation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      AdminBrand: {
+        payload: Prisma.$AdminBrandPayload<ExtArgs>
+        fields: Prisma.AdminBrandFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminBrandFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminBrandFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminBrandFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminBrandFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>
+          }
+          findMany: {
+            args: Prisma.AdminBrandFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>[]
+          }
+          create: {
+            args: Prisma.AdminBrandCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>
+          }
+          createMany: {
+            args: Prisma.AdminBrandCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminBrandCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminBrandDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>
+          }
+          update: {
+            args: Prisma.AdminBrandUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminBrandDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminBrandUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminBrandUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminBrandUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminBrandAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminBrand>
+          }
+          groupBy: {
+            args: Prisma.AdminBrandGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminBrandGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminBrandCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminBrandCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminBrandTranslation: {
+        payload: Prisma.$AdminBrandTranslationPayload<ExtArgs>
+        fields: Prisma.AdminBrandTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminBrandTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminBrandTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminBrandTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminBrandTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.AdminBrandTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.AdminBrandTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.AdminBrandTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminBrandTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminBrandTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>
+          }
+          update: {
+            args: Prisma.AdminBrandTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminBrandTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminBrandTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminBrandTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminBrandTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminBrandTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminBrandTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminBrandTranslation>
+          }
+          groupBy: {
+            args: Prisma.AdminBrandTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminBrandTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminBrandTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminBrandTranslationCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminCategory: {
+        payload: Prisma.$AdminCategoryPayload<ExtArgs>
+        fields: Prisma.AdminCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.AdminCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.AdminCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.AdminCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>
+          }
+          update: {
+            args: Prisma.AdminCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminCategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminCategory>
+          }
+          groupBy: {
+            args: Prisma.AdminCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminCategoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminCategoryTranslation: {
+        payload: Prisma.$AdminCategoryTranslationPayload<ExtArgs>
+        fields: Prisma.AdminCategoryTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminCategoryTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminCategoryTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminCategoryTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminCategoryTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.AdminCategoryTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.AdminCategoryTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.AdminCategoryTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminCategoryTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminCategoryTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>
+          }
+          update: {
+            args: Prisma.AdminCategoryTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminCategoryTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminCategoryTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminCategoryTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminCategoryTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminCategoryTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminCategoryTranslation>
+          }
+          groupBy: {
+            args: Prisma.AdminCategoryTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminCategoryTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminCategoryTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminCategoryTranslationCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminSubcategory: {
+        payload: Prisma.$AdminSubcategoryPayload<ExtArgs>
+        fields: Prisma.AdminSubcategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminSubcategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminSubcategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminSubcategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminSubcategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>
+          }
+          findMany: {
+            args: Prisma.AdminSubcategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>[]
+          }
+          create: {
+            args: Prisma.AdminSubcategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>
+          }
+          createMany: {
+            args: Prisma.AdminSubcategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminSubcategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminSubcategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>
+          }
+          update: {
+            args: Prisma.AdminSubcategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminSubcategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminSubcategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminSubcategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminSubcategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminSubcategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminSubcategory>
+          }
+          groupBy: {
+            args: Prisma.AdminSubcategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminSubcategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminSubcategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminSubcategoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminSubcategoryTranslation: {
+        payload: Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>
+        fields: Prisma.AdminSubcategoryTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminSubcategoryTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminSubcategoryTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminSubcategoryTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminSubcategoryTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.AdminSubcategoryTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.AdminSubcategoryTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.AdminSubcategoryTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminSubcategoryTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminSubcategoryTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>
+          }
+          update: {
+            args: Prisma.AdminSubcategoryTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminSubcategoryTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminSubcategoryTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminSubcategoryTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminSubcategoryTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminSubcategoryTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminSubcategoryTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminSubcategoryTranslation>
+          }
+          groupBy: {
+            args: Prisma.AdminSubcategoryTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminSubcategoryTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminSubcategoryTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminSubcategoryTranslationCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminCategoryBrand: {
+        payload: Prisma.$AdminCategoryBrandPayload<ExtArgs>
+        fields: Prisma.AdminCategoryBrandFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminCategoryBrandFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminCategoryBrandFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminCategoryBrandFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminCategoryBrandFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>
+          }
+          findMany: {
+            args: Prisma.AdminCategoryBrandFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>[]
+          }
+          create: {
+            args: Prisma.AdminCategoryBrandCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>
+          }
+          createMany: {
+            args: Prisma.AdminCategoryBrandCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminCategoryBrandCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminCategoryBrandDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>
+          }
+          update: {
+            args: Prisma.AdminCategoryBrandUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminCategoryBrandDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminCategoryBrandUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminCategoryBrandUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminCategoryBrandUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminCategoryBrandPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminCategoryBrandAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminCategoryBrand>
+          }
+          groupBy: {
+            args: Prisma.AdminCategoryBrandGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminCategoryBrandGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminCategoryBrandCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminCategoryBrandCountAggregateOutputType> | number
+          }
+        }
+      }
       Brand: {
         payload: Prisma.$BrandPayload<ExtArgs>
         fields: Prisma.BrandFieldRefs
@@ -1795,6 +2425,13 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
+    adminBrand?: AdminBrandOmit
+    adminBrandTranslation?: AdminBrandTranslationOmit
+    adminCategory?: AdminCategoryOmit
+    adminCategoryTranslation?: AdminCategoryTranslationOmit
+    adminSubcategory?: AdminSubcategoryOmit
+    adminSubcategoryTranslation?: AdminSubcategoryTranslationOmit
+    adminCategoryBrand?: AdminCategoryBrandOmit
     brand?: BrandOmit
     brandTranslation?: BrandTranslationOmit
     category?: CategoryOmit
@@ -1894,6 +2531,126 @@ export namespace Prisma {
   /**
    * Count Types
    */
+
+
+  /**
+   * Count Type AdminBrandCountOutputType
+   */
+
+  export type AdminBrandCountOutputType = {
+    translations: number
+    categoryBrands: number
+  }
+
+  export type AdminBrandCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | AdminBrandCountOutputTypeCountTranslationsArgs
+    categoryBrands?: boolean | AdminBrandCountOutputTypeCountCategoryBrandsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AdminBrandCountOutputType without action
+   */
+  export type AdminBrandCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandCountOutputType
+     */
+    select?: AdminBrandCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AdminBrandCountOutputType without action
+   */
+  export type AdminBrandCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminBrandTranslationWhereInput
+  }
+
+  /**
+   * AdminBrandCountOutputType without action
+   */
+  export type AdminBrandCountOutputTypeCountCategoryBrandsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminCategoryBrandWhereInput
+  }
+
+
+  /**
+   * Count Type AdminCategoryCountOutputType
+   */
+
+  export type AdminCategoryCountOutputType = {
+    translations: number
+    subcategories: number
+    categoryBrands: number
+  }
+
+  export type AdminCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | AdminCategoryCountOutputTypeCountTranslationsArgs
+    subcategories?: boolean | AdminCategoryCountOutputTypeCountSubcategoriesArgs
+    categoryBrands?: boolean | AdminCategoryCountOutputTypeCountCategoryBrandsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AdminCategoryCountOutputType without action
+   */
+  export type AdminCategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryCountOutputType
+     */
+    select?: AdminCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AdminCategoryCountOutputType without action
+   */
+  export type AdminCategoryCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminCategoryTranslationWhereInput
+  }
+
+  /**
+   * AdminCategoryCountOutputType without action
+   */
+  export type AdminCategoryCountOutputTypeCountSubcategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminSubcategoryWhereInput
+  }
+
+  /**
+   * AdminCategoryCountOutputType without action
+   */
+  export type AdminCategoryCountOutputTypeCountCategoryBrandsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminCategoryBrandWhereInput
+  }
+
+
+  /**
+   * Count Type AdminSubcategoryCountOutputType
+   */
+
+  export type AdminSubcategoryCountOutputType = {
+    translations: number
+  }
+
+  export type AdminSubcategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | AdminSubcategoryCountOutputTypeCountTranslationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AdminSubcategoryCountOutputType without action
+   */
+  export type AdminSubcategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryCountOutputType
+     */
+    select?: AdminSubcategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AdminSubcategoryCountOutputType without action
+   */
+  export type AdminSubcategoryCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminSubcategoryTranslationWhereInput
+  }
 
 
   /**
@@ -2126,6 +2883,7807 @@ export namespace Prisma {
   /**
    * Models
    */
+
+  /**
+   * Model AdminBrand
+   */
+
+  export type AggregateAdminBrand = {
+    _count: AdminBrandCountAggregateOutputType | null
+    _avg: AdminBrandAvgAggregateOutputType | null
+    _sum: AdminBrandSumAggregateOutputType | null
+    _min: AdminBrandMinAggregateOutputType | null
+    _max: AdminBrandMaxAggregateOutputType | null
+  }
+
+  export type AdminBrandAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AdminBrandSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AdminBrandMinAggregateOutputType = {
+    id: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminBrandMaxAggregateOutputType = {
+    id: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminBrandCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdminBrandAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type AdminBrandSumAggregateInputType = {
+    id?: true
+  }
+
+  export type AdminBrandMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminBrandMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminBrandCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdminBrandAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminBrand to aggregate.
+     */
+    where?: AdminBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrands to fetch.
+     */
+    orderBy?: AdminBrandOrderByWithRelationInput | AdminBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminBrands
+    **/
+    _count?: true | AdminBrandCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminBrandAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminBrandSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminBrandMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminBrandMaxAggregateInputType
+  }
+
+  export type GetAdminBrandAggregateType<T extends AdminBrandAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminBrand]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminBrand[P]>
+      : GetScalarType<T[P], AggregateAdminBrand[P]>
+  }
+
+
+
+
+  export type AdminBrandGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminBrandWhereInput
+    orderBy?: AdminBrandOrderByWithAggregationInput | AdminBrandOrderByWithAggregationInput[]
+    by: AdminBrandScalarFieldEnum[] | AdminBrandScalarFieldEnum
+    having?: AdminBrandScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminBrandCountAggregateInputType | true
+    _avg?: AdminBrandAvgAggregateInputType
+    _sum?: AdminBrandSumAggregateInputType
+    _min?: AdminBrandMinAggregateInputType
+    _max?: AdminBrandMaxAggregateInputType
+  }
+
+  export type AdminBrandGroupByOutputType = {
+    id: number
+    createdAt: Date
+    updatedAt: Date
+    _count: AdminBrandCountAggregateOutputType | null
+    _avg: AdminBrandAvgAggregateOutputType | null
+    _sum: AdminBrandSumAggregateOutputType | null
+    _min: AdminBrandMinAggregateOutputType | null
+    _max: AdminBrandMaxAggregateOutputType | null
+  }
+
+  type GetAdminBrandGroupByPayload<T extends AdminBrandGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminBrandGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminBrandGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminBrandGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminBrandGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminBrandSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    translations?: boolean | AdminBrand$translationsArgs<ExtArgs>
+    categoryBrands?: boolean | AdminBrand$categoryBrandsArgs<ExtArgs>
+    _count?: boolean | AdminBrandCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminBrand"]>
+
+  export type AdminBrandSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["adminBrand"]>
+
+  export type AdminBrandSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["adminBrand"]>
+
+  export type AdminBrandSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdminBrandOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt", ExtArgs["result"]["adminBrand"]>
+  export type AdminBrandInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | AdminBrand$translationsArgs<ExtArgs>
+    categoryBrands?: boolean | AdminBrand$categoryBrandsArgs<ExtArgs>
+    _count?: boolean | AdminBrandCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AdminBrandIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AdminBrandIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $AdminBrandPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminBrand"
+    objects: {
+      translations: Prisma.$AdminBrandTranslationPayload<ExtArgs>[]
+      categoryBrands: Prisma.$AdminCategoryBrandPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adminBrand"]>
+    composites: {}
+  }
+
+  type AdminBrandGetPayload<S extends boolean | null | undefined | AdminBrandDefaultArgs> = $Result.GetResult<Prisma.$AdminBrandPayload, S>
+
+  type AdminBrandCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminBrandFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminBrandCountAggregateInputType | true
+    }
+
+  export interface AdminBrandDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminBrand'], meta: { name: 'AdminBrand' } }
+    /**
+     * Find zero or one AdminBrand that matches the filter.
+     * @param {AdminBrandFindUniqueArgs} args - Arguments to find a AdminBrand
+     * @example
+     * // Get one AdminBrand
+     * const adminBrand = await prisma.adminBrand.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminBrandFindUniqueArgs>(args: SelectSubset<T, AdminBrandFindUniqueArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminBrand that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminBrandFindUniqueOrThrowArgs} args - Arguments to find a AdminBrand
+     * @example
+     * // Get one AdminBrand
+     * const adminBrand = await prisma.adminBrand.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminBrandFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminBrandFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminBrand that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandFindFirstArgs} args - Arguments to find a AdminBrand
+     * @example
+     * // Get one AdminBrand
+     * const adminBrand = await prisma.adminBrand.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminBrandFindFirstArgs>(args?: SelectSubset<T, AdminBrandFindFirstArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminBrand that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandFindFirstOrThrowArgs} args - Arguments to find a AdminBrand
+     * @example
+     * // Get one AdminBrand
+     * const adminBrand = await prisma.adminBrand.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminBrandFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminBrandFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminBrands that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminBrands
+     * const adminBrands = await prisma.adminBrand.findMany()
+     * 
+     * // Get first 10 AdminBrands
+     * const adminBrands = await prisma.adminBrand.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminBrandWithIdOnly = await prisma.adminBrand.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminBrandFindManyArgs>(args?: SelectSubset<T, AdminBrandFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminBrand.
+     * @param {AdminBrandCreateArgs} args - Arguments to create a AdminBrand.
+     * @example
+     * // Create one AdminBrand
+     * const AdminBrand = await prisma.adminBrand.create({
+     *   data: {
+     *     // ... data to create a AdminBrand
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminBrandCreateArgs>(args: SelectSubset<T, AdminBrandCreateArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminBrands.
+     * @param {AdminBrandCreateManyArgs} args - Arguments to create many AdminBrands.
+     * @example
+     * // Create many AdminBrands
+     * const adminBrand = await prisma.adminBrand.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminBrandCreateManyArgs>(args?: SelectSubset<T, AdminBrandCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminBrands and returns the data saved in the database.
+     * @param {AdminBrandCreateManyAndReturnArgs} args - Arguments to create many AdminBrands.
+     * @example
+     * // Create many AdminBrands
+     * const adminBrand = await prisma.adminBrand.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminBrands and only return the `id`
+     * const adminBrandWithIdOnly = await prisma.adminBrand.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminBrandCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminBrandCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminBrand.
+     * @param {AdminBrandDeleteArgs} args - Arguments to delete one AdminBrand.
+     * @example
+     * // Delete one AdminBrand
+     * const AdminBrand = await prisma.adminBrand.delete({
+     *   where: {
+     *     // ... filter to delete one AdminBrand
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminBrandDeleteArgs>(args: SelectSubset<T, AdminBrandDeleteArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminBrand.
+     * @param {AdminBrandUpdateArgs} args - Arguments to update one AdminBrand.
+     * @example
+     * // Update one AdminBrand
+     * const adminBrand = await prisma.adminBrand.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminBrandUpdateArgs>(args: SelectSubset<T, AdminBrandUpdateArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminBrands.
+     * @param {AdminBrandDeleteManyArgs} args - Arguments to filter AdminBrands to delete.
+     * @example
+     * // Delete a few AdminBrands
+     * const { count } = await prisma.adminBrand.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminBrandDeleteManyArgs>(args?: SelectSubset<T, AdminBrandDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminBrands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminBrands
+     * const adminBrand = await prisma.adminBrand.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminBrandUpdateManyArgs>(args: SelectSubset<T, AdminBrandUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminBrands and returns the data updated in the database.
+     * @param {AdminBrandUpdateManyAndReturnArgs} args - Arguments to update many AdminBrands.
+     * @example
+     * // Update many AdminBrands
+     * const adminBrand = await prisma.adminBrand.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminBrands and only return the `id`
+     * const adminBrandWithIdOnly = await prisma.adminBrand.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminBrandUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminBrandUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminBrand.
+     * @param {AdminBrandUpsertArgs} args - Arguments to update or create a AdminBrand.
+     * @example
+     * // Update or create a AdminBrand
+     * const adminBrand = await prisma.adminBrand.upsert({
+     *   create: {
+     *     // ... data to create a AdminBrand
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminBrand we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminBrandUpsertArgs>(args: SelectSubset<T, AdminBrandUpsertArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminBrands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandCountArgs} args - Arguments to filter AdminBrands to count.
+     * @example
+     * // Count the number of AdminBrands
+     * const count = await prisma.adminBrand.count({
+     *   where: {
+     *     // ... the filter for the AdminBrands we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminBrandCountArgs>(
+      args?: Subset<T, AdminBrandCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminBrandCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminBrand.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminBrandAggregateArgs>(args: Subset<T, AdminBrandAggregateArgs>): Prisma.PrismaPromise<GetAdminBrandAggregateType<T>>
+
+    /**
+     * Group by AdminBrand.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminBrandGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminBrandGroupByArgs['orderBy'] }
+        : { orderBy?: AdminBrandGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminBrandGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminBrandGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminBrand model
+   */
+  readonly fields: AdminBrandFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminBrand.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminBrandClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    translations<T extends AdminBrand$translationsArgs<ExtArgs> = {}>(args?: Subset<T, AdminBrand$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    categoryBrands<T extends AdminBrand$categoryBrandsArgs<ExtArgs> = {}>(args?: Subset<T, AdminBrand$categoryBrandsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminBrand model
+   */
+  interface AdminBrandFieldRefs {
+    readonly id: FieldRef<"AdminBrand", 'Int'>
+    readonly createdAt: FieldRef<"AdminBrand", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminBrand", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminBrand findUnique
+   */
+  export type AdminBrandFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrand to fetch.
+     */
+    where: AdminBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminBrand findUniqueOrThrow
+   */
+  export type AdminBrandFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrand to fetch.
+     */
+    where: AdminBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminBrand findFirst
+   */
+  export type AdminBrandFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrand to fetch.
+     */
+    where?: AdminBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrands to fetch.
+     */
+    orderBy?: AdminBrandOrderByWithRelationInput | AdminBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminBrands.
+     */
+    cursor?: AdminBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminBrands.
+     */
+    distinct?: AdminBrandScalarFieldEnum | AdminBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrand findFirstOrThrow
+   */
+  export type AdminBrandFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrand to fetch.
+     */
+    where?: AdminBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrands to fetch.
+     */
+    orderBy?: AdminBrandOrderByWithRelationInput | AdminBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminBrands.
+     */
+    cursor?: AdminBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminBrands.
+     */
+    distinct?: AdminBrandScalarFieldEnum | AdminBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrand findMany
+   */
+  export type AdminBrandFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrands to fetch.
+     */
+    where?: AdminBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrands to fetch.
+     */
+    orderBy?: AdminBrandOrderByWithRelationInput | AdminBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminBrands.
+     */
+    cursor?: AdminBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrands.
+     */
+    skip?: number
+    distinct?: AdminBrandScalarFieldEnum | AdminBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrand create
+   */
+  export type AdminBrandCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminBrand.
+     */
+    data: XOR<AdminBrandCreateInput, AdminBrandUncheckedCreateInput>
+  }
+
+  /**
+   * AdminBrand createMany
+   */
+  export type AdminBrandCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminBrands.
+     */
+    data: AdminBrandCreateManyInput | AdminBrandCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminBrand createManyAndReturn
+   */
+  export type AdminBrandCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminBrands.
+     */
+    data: AdminBrandCreateManyInput | AdminBrandCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminBrand update
+   */
+  export type AdminBrandUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminBrand.
+     */
+    data: XOR<AdminBrandUpdateInput, AdminBrandUncheckedUpdateInput>
+    /**
+     * Choose, which AdminBrand to update.
+     */
+    where: AdminBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminBrand updateMany
+   */
+  export type AdminBrandUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminBrands.
+     */
+    data: XOR<AdminBrandUpdateManyMutationInput, AdminBrandUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminBrands to update
+     */
+    where?: AdminBrandWhereInput
+    /**
+     * Limit how many AdminBrands to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminBrand updateManyAndReturn
+   */
+  export type AdminBrandUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminBrands.
+     */
+    data: XOR<AdminBrandUpdateManyMutationInput, AdminBrandUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminBrands to update
+     */
+    where?: AdminBrandWhereInput
+    /**
+     * Limit how many AdminBrands to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminBrand upsert
+   */
+  export type AdminBrandUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminBrand to update in case it exists.
+     */
+    where: AdminBrandWhereUniqueInput
+    /**
+     * In case the AdminBrand found by the `where` argument doesn't exist, create a new AdminBrand with this data.
+     */
+    create: XOR<AdminBrandCreateInput, AdminBrandUncheckedCreateInput>
+    /**
+     * In case the AdminBrand was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminBrandUpdateInput, AdminBrandUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminBrand delete
+   */
+  export type AdminBrandDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+    /**
+     * Filter which AdminBrand to delete.
+     */
+    where: AdminBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminBrand deleteMany
+   */
+  export type AdminBrandDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminBrands to delete
+     */
+    where?: AdminBrandWhereInput
+    /**
+     * Limit how many AdminBrands to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminBrand.translations
+   */
+  export type AdminBrand$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    where?: AdminBrandTranslationWhereInput
+    orderBy?: AdminBrandTranslationOrderByWithRelationInput | AdminBrandTranslationOrderByWithRelationInput[]
+    cursor?: AdminBrandTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminBrandTranslationScalarFieldEnum | AdminBrandTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrand.categoryBrands
+   */
+  export type AdminBrand$categoryBrandsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    where?: AdminCategoryBrandWhereInput
+    orderBy?: AdminCategoryBrandOrderByWithRelationInput | AdminCategoryBrandOrderByWithRelationInput[]
+    cursor?: AdminCategoryBrandWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminCategoryBrandScalarFieldEnum | AdminCategoryBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrand without action
+   */
+  export type AdminBrandDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrand
+     */
+    select?: AdminBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrand
+     */
+    omit?: AdminBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminBrandTranslation
+   */
+
+  export type AggregateAdminBrandTranslation = {
+    _count: AdminBrandTranslationCountAggregateOutputType | null
+    _avg: AdminBrandTranslationAvgAggregateOutputType | null
+    _sum: AdminBrandTranslationSumAggregateOutputType | null
+    _min: AdminBrandTranslationMinAggregateOutputType | null
+    _max: AdminBrandTranslationMaxAggregateOutputType | null
+  }
+
+  export type AdminBrandTranslationAvgAggregateOutputType = {
+    id: number | null
+    brandId: number | null
+  }
+
+  export type AdminBrandTranslationSumAggregateOutputType = {
+    id: number | null
+    brandId: number | null
+  }
+
+  export type AdminBrandTranslationMinAggregateOutputType = {
+    id: number | null
+    brandId: number | null
+    locale: $Enums.Locale | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminBrandTranslationMaxAggregateOutputType = {
+    id: number | null
+    brandId: number | null
+    locale: $Enums.Locale | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminBrandTranslationCountAggregateOutputType = {
+    id: number
+    brandId: number
+    locale: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdminBrandTranslationAvgAggregateInputType = {
+    id?: true
+    brandId?: true
+  }
+
+  export type AdminBrandTranslationSumAggregateInputType = {
+    id?: true
+    brandId?: true
+  }
+
+  export type AdminBrandTranslationMinAggregateInputType = {
+    id?: true
+    brandId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminBrandTranslationMaxAggregateInputType = {
+    id?: true
+    brandId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminBrandTranslationCountAggregateInputType = {
+    id?: true
+    brandId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdminBrandTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminBrandTranslation to aggregate.
+     */
+    where?: AdminBrandTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrandTranslations to fetch.
+     */
+    orderBy?: AdminBrandTranslationOrderByWithRelationInput | AdminBrandTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminBrandTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrandTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrandTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminBrandTranslations
+    **/
+    _count?: true | AdminBrandTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminBrandTranslationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminBrandTranslationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminBrandTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminBrandTranslationMaxAggregateInputType
+  }
+
+  export type GetAdminBrandTranslationAggregateType<T extends AdminBrandTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminBrandTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminBrandTranslation[P]>
+      : GetScalarType<T[P], AggregateAdminBrandTranslation[P]>
+  }
+
+
+
+
+  export type AdminBrandTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminBrandTranslationWhereInput
+    orderBy?: AdminBrandTranslationOrderByWithAggregationInput | AdminBrandTranslationOrderByWithAggregationInput[]
+    by: AdminBrandTranslationScalarFieldEnum[] | AdminBrandTranslationScalarFieldEnum
+    having?: AdminBrandTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminBrandTranslationCountAggregateInputType | true
+    _avg?: AdminBrandTranslationAvgAggregateInputType
+    _sum?: AdminBrandTranslationSumAggregateInputType
+    _min?: AdminBrandTranslationMinAggregateInputType
+    _max?: AdminBrandTranslationMaxAggregateInputType
+  }
+
+  export type AdminBrandTranslationGroupByOutputType = {
+    id: number
+    brandId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt: Date
+    updatedAt: Date
+    _count: AdminBrandTranslationCountAggregateOutputType | null
+    _avg: AdminBrandTranslationAvgAggregateOutputType | null
+    _sum: AdminBrandTranslationSumAggregateOutputType | null
+    _min: AdminBrandTranslationMinAggregateOutputType | null
+    _max: AdminBrandTranslationMaxAggregateOutputType | null
+  }
+
+  type GetAdminBrandTranslationGroupByPayload<T extends AdminBrandTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminBrandTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminBrandTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminBrandTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminBrandTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminBrandTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminBrandTranslation"]>
+
+  export type AdminBrandTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminBrandTranslation"]>
+
+  export type AdminBrandTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminBrandTranslation"]>
+
+  export type AdminBrandTranslationSelectScalar = {
+    id?: boolean
+    brandId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdminBrandTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "brandId" | "locale" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["adminBrandTranslation"]>
+  export type AdminBrandTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }
+  export type AdminBrandTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }
+  export type AdminBrandTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminBrandTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminBrandTranslation"
+    objects: {
+      brand: Prisma.$AdminBrandPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      brandId: number
+      locale: $Enums.Locale
+      name: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adminBrandTranslation"]>
+    composites: {}
+  }
+
+  type AdminBrandTranslationGetPayload<S extends boolean | null | undefined | AdminBrandTranslationDefaultArgs> = $Result.GetResult<Prisma.$AdminBrandTranslationPayload, S>
+
+  type AdminBrandTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminBrandTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminBrandTranslationCountAggregateInputType | true
+    }
+
+  export interface AdminBrandTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminBrandTranslation'], meta: { name: 'AdminBrandTranslation' } }
+    /**
+     * Find zero or one AdminBrandTranslation that matches the filter.
+     * @param {AdminBrandTranslationFindUniqueArgs} args - Arguments to find a AdminBrandTranslation
+     * @example
+     * // Get one AdminBrandTranslation
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminBrandTranslationFindUniqueArgs>(args: SelectSubset<T, AdminBrandTranslationFindUniqueArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminBrandTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminBrandTranslationFindUniqueOrThrowArgs} args - Arguments to find a AdminBrandTranslation
+     * @example
+     * // Get one AdminBrandTranslation
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminBrandTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminBrandTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminBrandTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandTranslationFindFirstArgs} args - Arguments to find a AdminBrandTranslation
+     * @example
+     * // Get one AdminBrandTranslation
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminBrandTranslationFindFirstArgs>(args?: SelectSubset<T, AdminBrandTranslationFindFirstArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminBrandTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandTranslationFindFirstOrThrowArgs} args - Arguments to find a AdminBrandTranslation
+     * @example
+     * // Get one AdminBrandTranslation
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminBrandTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminBrandTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminBrandTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminBrandTranslations
+     * const adminBrandTranslations = await prisma.adminBrandTranslation.findMany()
+     * 
+     * // Get first 10 AdminBrandTranslations
+     * const adminBrandTranslations = await prisma.adminBrandTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminBrandTranslationWithIdOnly = await prisma.adminBrandTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminBrandTranslationFindManyArgs>(args?: SelectSubset<T, AdminBrandTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminBrandTranslation.
+     * @param {AdminBrandTranslationCreateArgs} args - Arguments to create a AdminBrandTranslation.
+     * @example
+     * // Create one AdminBrandTranslation
+     * const AdminBrandTranslation = await prisma.adminBrandTranslation.create({
+     *   data: {
+     *     // ... data to create a AdminBrandTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminBrandTranslationCreateArgs>(args: SelectSubset<T, AdminBrandTranslationCreateArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminBrandTranslations.
+     * @param {AdminBrandTranslationCreateManyArgs} args - Arguments to create many AdminBrandTranslations.
+     * @example
+     * // Create many AdminBrandTranslations
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminBrandTranslationCreateManyArgs>(args?: SelectSubset<T, AdminBrandTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminBrandTranslations and returns the data saved in the database.
+     * @param {AdminBrandTranslationCreateManyAndReturnArgs} args - Arguments to create many AdminBrandTranslations.
+     * @example
+     * // Create many AdminBrandTranslations
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminBrandTranslations and only return the `id`
+     * const adminBrandTranslationWithIdOnly = await prisma.adminBrandTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminBrandTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminBrandTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminBrandTranslation.
+     * @param {AdminBrandTranslationDeleteArgs} args - Arguments to delete one AdminBrandTranslation.
+     * @example
+     * // Delete one AdminBrandTranslation
+     * const AdminBrandTranslation = await prisma.adminBrandTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one AdminBrandTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminBrandTranslationDeleteArgs>(args: SelectSubset<T, AdminBrandTranslationDeleteArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminBrandTranslation.
+     * @param {AdminBrandTranslationUpdateArgs} args - Arguments to update one AdminBrandTranslation.
+     * @example
+     * // Update one AdminBrandTranslation
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminBrandTranslationUpdateArgs>(args: SelectSubset<T, AdminBrandTranslationUpdateArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminBrandTranslations.
+     * @param {AdminBrandTranslationDeleteManyArgs} args - Arguments to filter AdminBrandTranslations to delete.
+     * @example
+     * // Delete a few AdminBrandTranslations
+     * const { count } = await prisma.adminBrandTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminBrandTranslationDeleteManyArgs>(args?: SelectSubset<T, AdminBrandTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminBrandTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminBrandTranslations
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminBrandTranslationUpdateManyArgs>(args: SelectSubset<T, AdminBrandTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminBrandTranslations and returns the data updated in the database.
+     * @param {AdminBrandTranslationUpdateManyAndReturnArgs} args - Arguments to update many AdminBrandTranslations.
+     * @example
+     * // Update many AdminBrandTranslations
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminBrandTranslations and only return the `id`
+     * const adminBrandTranslationWithIdOnly = await prisma.adminBrandTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminBrandTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminBrandTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminBrandTranslation.
+     * @param {AdminBrandTranslationUpsertArgs} args - Arguments to update or create a AdminBrandTranslation.
+     * @example
+     * // Update or create a AdminBrandTranslation
+     * const adminBrandTranslation = await prisma.adminBrandTranslation.upsert({
+     *   create: {
+     *     // ... data to create a AdminBrandTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminBrandTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminBrandTranslationUpsertArgs>(args: SelectSubset<T, AdminBrandTranslationUpsertArgs<ExtArgs>>): Prisma__AdminBrandTranslationClient<$Result.GetResult<Prisma.$AdminBrandTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminBrandTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandTranslationCountArgs} args - Arguments to filter AdminBrandTranslations to count.
+     * @example
+     * // Count the number of AdminBrandTranslations
+     * const count = await prisma.adminBrandTranslation.count({
+     *   where: {
+     *     // ... the filter for the AdminBrandTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminBrandTranslationCountArgs>(
+      args?: Subset<T, AdminBrandTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminBrandTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminBrandTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminBrandTranslationAggregateArgs>(args: Subset<T, AdminBrandTranslationAggregateArgs>): Prisma.PrismaPromise<GetAdminBrandTranslationAggregateType<T>>
+
+    /**
+     * Group by AdminBrandTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminBrandTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminBrandTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminBrandTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: AdminBrandTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminBrandTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminBrandTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminBrandTranslation model
+   */
+  readonly fields: AdminBrandTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminBrandTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminBrandTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    brand<T extends AdminBrandDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminBrandDefaultArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminBrandTranslation model
+   */
+  interface AdminBrandTranslationFieldRefs {
+    readonly id: FieldRef<"AdminBrandTranslation", 'Int'>
+    readonly brandId: FieldRef<"AdminBrandTranslation", 'Int'>
+    readonly locale: FieldRef<"AdminBrandTranslation", 'Locale'>
+    readonly name: FieldRef<"AdminBrandTranslation", 'String'>
+    readonly createdAt: FieldRef<"AdminBrandTranslation", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminBrandTranslation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminBrandTranslation findUnique
+   */
+  export type AdminBrandTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrandTranslation to fetch.
+     */
+    where: AdminBrandTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminBrandTranslation findUniqueOrThrow
+   */
+  export type AdminBrandTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrandTranslation to fetch.
+     */
+    where: AdminBrandTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminBrandTranslation findFirst
+   */
+  export type AdminBrandTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrandTranslation to fetch.
+     */
+    where?: AdminBrandTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrandTranslations to fetch.
+     */
+    orderBy?: AdminBrandTranslationOrderByWithRelationInput | AdminBrandTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminBrandTranslations.
+     */
+    cursor?: AdminBrandTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrandTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrandTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminBrandTranslations.
+     */
+    distinct?: AdminBrandTranslationScalarFieldEnum | AdminBrandTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrandTranslation findFirstOrThrow
+   */
+  export type AdminBrandTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrandTranslation to fetch.
+     */
+    where?: AdminBrandTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrandTranslations to fetch.
+     */
+    orderBy?: AdminBrandTranslationOrderByWithRelationInput | AdminBrandTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminBrandTranslations.
+     */
+    cursor?: AdminBrandTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrandTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrandTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminBrandTranslations.
+     */
+    distinct?: AdminBrandTranslationScalarFieldEnum | AdminBrandTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrandTranslation findMany
+   */
+  export type AdminBrandTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminBrandTranslations to fetch.
+     */
+    where?: AdminBrandTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminBrandTranslations to fetch.
+     */
+    orderBy?: AdminBrandTranslationOrderByWithRelationInput | AdminBrandTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminBrandTranslations.
+     */
+    cursor?: AdminBrandTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminBrandTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminBrandTranslations.
+     */
+    skip?: number
+    distinct?: AdminBrandTranslationScalarFieldEnum | AdminBrandTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminBrandTranslation create
+   */
+  export type AdminBrandTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminBrandTranslation.
+     */
+    data: XOR<AdminBrandTranslationCreateInput, AdminBrandTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * AdminBrandTranslation createMany
+   */
+  export type AdminBrandTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminBrandTranslations.
+     */
+    data: AdminBrandTranslationCreateManyInput | AdminBrandTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminBrandTranslation createManyAndReturn
+   */
+  export type AdminBrandTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminBrandTranslations.
+     */
+    data: AdminBrandTranslationCreateManyInput | AdminBrandTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminBrandTranslation update
+   */
+  export type AdminBrandTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminBrandTranslation.
+     */
+    data: XOR<AdminBrandTranslationUpdateInput, AdminBrandTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which AdminBrandTranslation to update.
+     */
+    where: AdminBrandTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminBrandTranslation updateMany
+   */
+  export type AdminBrandTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminBrandTranslations.
+     */
+    data: XOR<AdminBrandTranslationUpdateManyMutationInput, AdminBrandTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminBrandTranslations to update
+     */
+    where?: AdminBrandTranslationWhereInput
+    /**
+     * Limit how many AdminBrandTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminBrandTranslation updateManyAndReturn
+   */
+  export type AdminBrandTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminBrandTranslations.
+     */
+    data: XOR<AdminBrandTranslationUpdateManyMutationInput, AdminBrandTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminBrandTranslations to update
+     */
+    where?: AdminBrandTranslationWhereInput
+    /**
+     * Limit how many AdminBrandTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminBrandTranslation upsert
+   */
+  export type AdminBrandTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminBrandTranslation to update in case it exists.
+     */
+    where: AdminBrandTranslationWhereUniqueInput
+    /**
+     * In case the AdminBrandTranslation found by the `where` argument doesn't exist, create a new AdminBrandTranslation with this data.
+     */
+    create: XOR<AdminBrandTranslationCreateInput, AdminBrandTranslationUncheckedCreateInput>
+    /**
+     * In case the AdminBrandTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminBrandTranslationUpdateInput, AdminBrandTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminBrandTranslation delete
+   */
+  export type AdminBrandTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which AdminBrandTranslation to delete.
+     */
+    where: AdminBrandTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminBrandTranslation deleteMany
+   */
+  export type AdminBrandTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminBrandTranslations to delete
+     */
+    where?: AdminBrandTranslationWhereInput
+    /**
+     * Limit how many AdminBrandTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminBrandTranslation without action
+   */
+  export type AdminBrandTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminBrandTranslation
+     */
+    select?: AdminBrandTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminBrandTranslation
+     */
+    omit?: AdminBrandTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminBrandTranslationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminCategory
+   */
+
+  export type AggregateAdminCategory = {
+    _count: AdminCategoryCountAggregateOutputType | null
+    _avg: AdminCategoryAvgAggregateOutputType | null
+    _sum: AdminCategorySumAggregateOutputType | null
+    _min: AdminCategoryMinAggregateOutputType | null
+    _max: AdminCategoryMaxAggregateOutputType | null
+  }
+
+  export type AdminCategoryAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AdminCategorySumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AdminCategoryMinAggregateOutputType = {
+    id: number | null
+    section: $Enums.Section | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminCategoryMaxAggregateOutputType = {
+    id: number | null
+    section: $Enums.Section | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminCategoryCountAggregateOutputType = {
+    id: number
+    section: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdminCategoryAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type AdminCategorySumAggregateInputType = {
+    id?: true
+  }
+
+  export type AdminCategoryMinAggregateInputType = {
+    id?: true
+    section?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminCategoryMaxAggregateInputType = {
+    id?: true
+    section?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminCategoryCountAggregateInputType = {
+    id?: true
+    section?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdminCategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminCategory to aggregate.
+     */
+    where?: AdminCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategories to fetch.
+     */
+    orderBy?: AdminCategoryOrderByWithRelationInput | AdminCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminCategories
+    **/
+    _count?: true | AdminCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminCategoryMaxAggregateInputType
+  }
+
+  export type GetAdminCategoryAggregateType<T extends AdminCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminCategory[P]>
+      : GetScalarType<T[P], AggregateAdminCategory[P]>
+  }
+
+
+
+
+  export type AdminCategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminCategoryWhereInput
+    orderBy?: AdminCategoryOrderByWithAggregationInput | AdminCategoryOrderByWithAggregationInput[]
+    by: AdminCategoryScalarFieldEnum[] | AdminCategoryScalarFieldEnum
+    having?: AdminCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminCategoryCountAggregateInputType | true
+    _avg?: AdminCategoryAvgAggregateInputType
+    _sum?: AdminCategorySumAggregateInputType
+    _min?: AdminCategoryMinAggregateInputType
+    _max?: AdminCategoryMaxAggregateInputType
+  }
+
+  export type AdminCategoryGroupByOutputType = {
+    id: number
+    section: $Enums.Section
+    createdAt: Date
+    updatedAt: Date
+    _count: AdminCategoryCountAggregateOutputType | null
+    _avg: AdminCategoryAvgAggregateOutputType | null
+    _sum: AdminCategorySumAggregateOutputType | null
+    _min: AdminCategoryMinAggregateOutputType | null
+    _max: AdminCategoryMaxAggregateOutputType | null
+  }
+
+  type GetAdminCategoryGroupByPayload<T extends AdminCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminCategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    section?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    translations?: boolean | AdminCategory$translationsArgs<ExtArgs>
+    subcategories?: boolean | AdminCategory$subcategoriesArgs<ExtArgs>
+    categoryBrands?: boolean | AdminCategory$categoryBrandsArgs<ExtArgs>
+    _count?: boolean | AdminCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminCategory"]>
+
+  export type AdminCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    section?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["adminCategory"]>
+
+  export type AdminCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    section?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["adminCategory"]>
+
+  export type AdminCategorySelectScalar = {
+    id?: boolean
+    section?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdminCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "section" | "createdAt" | "updatedAt", ExtArgs["result"]["adminCategory"]>
+  export type AdminCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | AdminCategory$translationsArgs<ExtArgs>
+    subcategories?: boolean | AdminCategory$subcategoriesArgs<ExtArgs>
+    categoryBrands?: boolean | AdminCategory$categoryBrandsArgs<ExtArgs>
+    _count?: boolean | AdminCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AdminCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AdminCategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $AdminCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminCategory"
+    objects: {
+      translations: Prisma.$AdminCategoryTranslationPayload<ExtArgs>[]
+      subcategories: Prisma.$AdminSubcategoryPayload<ExtArgs>[]
+      categoryBrands: Prisma.$AdminCategoryBrandPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      section: $Enums.Section
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adminCategory"]>
+    composites: {}
+  }
+
+  type AdminCategoryGetPayload<S extends boolean | null | undefined | AdminCategoryDefaultArgs> = $Result.GetResult<Prisma.$AdminCategoryPayload, S>
+
+  type AdminCategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminCategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminCategoryCountAggregateInputType | true
+    }
+
+  export interface AdminCategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminCategory'], meta: { name: 'AdminCategory' } }
+    /**
+     * Find zero or one AdminCategory that matches the filter.
+     * @param {AdminCategoryFindUniqueArgs} args - Arguments to find a AdminCategory
+     * @example
+     * // Get one AdminCategory
+     * const adminCategory = await prisma.adminCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminCategoryFindUniqueArgs>(args: SelectSubset<T, AdminCategoryFindUniqueArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminCategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminCategoryFindUniqueOrThrowArgs} args - Arguments to find a AdminCategory
+     * @example
+     * // Get one AdminCategory
+     * const adminCategory = await prisma.adminCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminCategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminCategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryFindFirstArgs} args - Arguments to find a AdminCategory
+     * @example
+     * // Get one AdminCategory
+     * const adminCategory = await prisma.adminCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminCategoryFindFirstArgs>(args?: SelectSubset<T, AdminCategoryFindFirstArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryFindFirstOrThrowArgs} args - Arguments to find a AdminCategory
+     * @example
+     * // Get one AdminCategory
+     * const adminCategory = await prisma.adminCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminCategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminCategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminCategories
+     * const adminCategories = await prisma.adminCategory.findMany()
+     * 
+     * // Get first 10 AdminCategories
+     * const adminCategories = await prisma.adminCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminCategoryWithIdOnly = await prisma.adminCategory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminCategoryFindManyArgs>(args?: SelectSubset<T, AdminCategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminCategory.
+     * @param {AdminCategoryCreateArgs} args - Arguments to create a AdminCategory.
+     * @example
+     * // Create one AdminCategory
+     * const AdminCategory = await prisma.adminCategory.create({
+     *   data: {
+     *     // ... data to create a AdminCategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminCategoryCreateArgs>(args: SelectSubset<T, AdminCategoryCreateArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminCategories.
+     * @param {AdminCategoryCreateManyArgs} args - Arguments to create many AdminCategories.
+     * @example
+     * // Create many AdminCategories
+     * const adminCategory = await prisma.adminCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminCategoryCreateManyArgs>(args?: SelectSubset<T, AdminCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminCategories and returns the data saved in the database.
+     * @param {AdminCategoryCreateManyAndReturnArgs} args - Arguments to create many AdminCategories.
+     * @example
+     * // Create many AdminCategories
+     * const adminCategory = await prisma.adminCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminCategories and only return the `id`
+     * const adminCategoryWithIdOnly = await prisma.adminCategory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminCategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminCategory.
+     * @param {AdminCategoryDeleteArgs} args - Arguments to delete one AdminCategory.
+     * @example
+     * // Delete one AdminCategory
+     * const AdminCategory = await prisma.adminCategory.delete({
+     *   where: {
+     *     // ... filter to delete one AdminCategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminCategoryDeleteArgs>(args: SelectSubset<T, AdminCategoryDeleteArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminCategory.
+     * @param {AdminCategoryUpdateArgs} args - Arguments to update one AdminCategory.
+     * @example
+     * // Update one AdminCategory
+     * const adminCategory = await prisma.adminCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminCategoryUpdateArgs>(args: SelectSubset<T, AdminCategoryUpdateArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminCategories.
+     * @param {AdminCategoryDeleteManyArgs} args - Arguments to filter AdminCategories to delete.
+     * @example
+     * // Delete a few AdminCategories
+     * const { count } = await prisma.adminCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminCategoryDeleteManyArgs>(args?: SelectSubset<T, AdminCategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminCategories
+     * const adminCategory = await prisma.adminCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminCategoryUpdateManyArgs>(args: SelectSubset<T, AdminCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminCategories and returns the data updated in the database.
+     * @param {AdminCategoryUpdateManyAndReturnArgs} args - Arguments to update many AdminCategories.
+     * @example
+     * // Update many AdminCategories
+     * const adminCategory = await prisma.adminCategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminCategories and only return the `id`
+     * const adminCategoryWithIdOnly = await prisma.adminCategory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminCategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminCategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminCategory.
+     * @param {AdminCategoryUpsertArgs} args - Arguments to update or create a AdminCategory.
+     * @example
+     * // Update or create a AdminCategory
+     * const adminCategory = await prisma.adminCategory.upsert({
+     *   create: {
+     *     // ... data to create a AdminCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminCategoryUpsertArgs>(args: SelectSubset<T, AdminCategoryUpsertArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryCountArgs} args - Arguments to filter AdminCategories to count.
+     * @example
+     * // Count the number of AdminCategories
+     * const count = await prisma.adminCategory.count({
+     *   where: {
+     *     // ... the filter for the AdminCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminCategoryCountArgs>(
+      args?: Subset<T, AdminCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminCategoryAggregateArgs>(args: Subset<T, AdminCategoryAggregateArgs>): Prisma.PrismaPromise<GetAdminCategoryAggregateType<T>>
+
+    /**
+     * Group by AdminCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: AdminCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminCategory model
+   */
+  readonly fields: AdminCategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    translations<T extends AdminCategory$translationsArgs<ExtArgs> = {}>(args?: Subset<T, AdminCategory$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    subcategories<T extends AdminCategory$subcategoriesArgs<ExtArgs> = {}>(args?: Subset<T, AdminCategory$subcategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    categoryBrands<T extends AdminCategory$categoryBrandsArgs<ExtArgs> = {}>(args?: Subset<T, AdminCategory$categoryBrandsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminCategory model
+   */
+  interface AdminCategoryFieldRefs {
+    readonly id: FieldRef<"AdminCategory", 'Int'>
+    readonly section: FieldRef<"AdminCategory", 'Section'>
+    readonly createdAt: FieldRef<"AdminCategory", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminCategory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminCategory findUnique
+   */
+  export type AdminCategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategory to fetch.
+     */
+    where: AdminCategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminCategory findUniqueOrThrow
+   */
+  export type AdminCategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategory to fetch.
+     */
+    where: AdminCategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminCategory findFirst
+   */
+  export type AdminCategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategory to fetch.
+     */
+    where?: AdminCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategories to fetch.
+     */
+    orderBy?: AdminCategoryOrderByWithRelationInput | AdminCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminCategories.
+     */
+    cursor?: AdminCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminCategories.
+     */
+    distinct?: AdminCategoryScalarFieldEnum | AdminCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategory findFirstOrThrow
+   */
+  export type AdminCategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategory to fetch.
+     */
+    where?: AdminCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategories to fetch.
+     */
+    orderBy?: AdminCategoryOrderByWithRelationInput | AdminCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminCategories.
+     */
+    cursor?: AdminCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminCategories.
+     */
+    distinct?: AdminCategoryScalarFieldEnum | AdminCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategory findMany
+   */
+  export type AdminCategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategories to fetch.
+     */
+    where?: AdminCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategories to fetch.
+     */
+    orderBy?: AdminCategoryOrderByWithRelationInput | AdminCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminCategories.
+     */
+    cursor?: AdminCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategories.
+     */
+    skip?: number
+    distinct?: AdminCategoryScalarFieldEnum | AdminCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategory create
+   */
+  export type AdminCategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminCategory.
+     */
+    data: XOR<AdminCategoryCreateInput, AdminCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * AdminCategory createMany
+   */
+  export type AdminCategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminCategories.
+     */
+    data: AdminCategoryCreateManyInput | AdminCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminCategory createManyAndReturn
+   */
+  export type AdminCategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminCategories.
+     */
+    data: AdminCategoryCreateManyInput | AdminCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminCategory update
+   */
+  export type AdminCategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminCategory.
+     */
+    data: XOR<AdminCategoryUpdateInput, AdminCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which AdminCategory to update.
+     */
+    where: AdminCategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminCategory updateMany
+   */
+  export type AdminCategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminCategories.
+     */
+    data: XOR<AdminCategoryUpdateManyMutationInput, AdminCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminCategories to update
+     */
+    where?: AdminCategoryWhereInput
+    /**
+     * Limit how many AdminCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminCategory updateManyAndReturn
+   */
+  export type AdminCategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminCategories.
+     */
+    data: XOR<AdminCategoryUpdateManyMutationInput, AdminCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminCategories to update
+     */
+    where?: AdminCategoryWhereInput
+    /**
+     * Limit how many AdminCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminCategory upsert
+   */
+  export type AdminCategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminCategory to update in case it exists.
+     */
+    where: AdminCategoryWhereUniqueInput
+    /**
+     * In case the AdminCategory found by the `where` argument doesn't exist, create a new AdminCategory with this data.
+     */
+    create: XOR<AdminCategoryCreateInput, AdminCategoryUncheckedCreateInput>
+    /**
+     * In case the AdminCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminCategoryUpdateInput, AdminCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminCategory delete
+   */
+  export type AdminCategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which AdminCategory to delete.
+     */
+    where: AdminCategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminCategory deleteMany
+   */
+  export type AdminCategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminCategories to delete
+     */
+    where?: AdminCategoryWhereInput
+    /**
+     * Limit how many AdminCategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminCategory.translations
+   */
+  export type AdminCategory$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    where?: AdminCategoryTranslationWhereInput
+    orderBy?: AdminCategoryTranslationOrderByWithRelationInput | AdminCategoryTranslationOrderByWithRelationInput[]
+    cursor?: AdminCategoryTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminCategoryTranslationScalarFieldEnum | AdminCategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategory.subcategories
+   */
+  export type AdminCategory$subcategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    where?: AdminSubcategoryWhereInput
+    orderBy?: AdminSubcategoryOrderByWithRelationInput | AdminSubcategoryOrderByWithRelationInput[]
+    cursor?: AdminSubcategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminSubcategoryScalarFieldEnum | AdminSubcategoryScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategory.categoryBrands
+   */
+  export type AdminCategory$categoryBrandsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    where?: AdminCategoryBrandWhereInput
+    orderBy?: AdminCategoryBrandOrderByWithRelationInput | AdminCategoryBrandOrderByWithRelationInput[]
+    cursor?: AdminCategoryBrandWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminCategoryBrandScalarFieldEnum | AdminCategoryBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategory without action
+   */
+  export type AdminCategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategory
+     */
+    select?: AdminCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategory
+     */
+    omit?: AdminCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminCategoryTranslation
+   */
+
+  export type AggregateAdminCategoryTranslation = {
+    _count: AdminCategoryTranslationCountAggregateOutputType | null
+    _avg: AdminCategoryTranslationAvgAggregateOutputType | null
+    _sum: AdminCategoryTranslationSumAggregateOutputType | null
+    _min: AdminCategoryTranslationMinAggregateOutputType | null
+    _max: AdminCategoryTranslationMaxAggregateOutputType | null
+  }
+
+  export type AdminCategoryTranslationAvgAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+  }
+
+  export type AdminCategoryTranslationSumAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+  }
+
+  export type AdminCategoryTranslationMinAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    locale: $Enums.Locale | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminCategoryTranslationMaxAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    locale: $Enums.Locale | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminCategoryTranslationCountAggregateOutputType = {
+    id: number
+    categoryId: number
+    locale: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdminCategoryTranslationAvgAggregateInputType = {
+    id?: true
+    categoryId?: true
+  }
+
+  export type AdminCategoryTranslationSumAggregateInputType = {
+    id?: true
+    categoryId?: true
+  }
+
+  export type AdminCategoryTranslationMinAggregateInputType = {
+    id?: true
+    categoryId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminCategoryTranslationMaxAggregateInputType = {
+    id?: true
+    categoryId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminCategoryTranslationCountAggregateInputType = {
+    id?: true
+    categoryId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdminCategoryTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminCategoryTranslation to aggregate.
+     */
+    where?: AdminCategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryTranslations to fetch.
+     */
+    orderBy?: AdminCategoryTranslationOrderByWithRelationInput | AdminCategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminCategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminCategoryTranslations
+    **/
+    _count?: true | AdminCategoryTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminCategoryTranslationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminCategoryTranslationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminCategoryTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminCategoryTranslationMaxAggregateInputType
+  }
+
+  export type GetAdminCategoryTranslationAggregateType<T extends AdminCategoryTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminCategoryTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminCategoryTranslation[P]>
+      : GetScalarType<T[P], AggregateAdminCategoryTranslation[P]>
+  }
+
+
+
+
+  export type AdminCategoryTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminCategoryTranslationWhereInput
+    orderBy?: AdminCategoryTranslationOrderByWithAggregationInput | AdminCategoryTranslationOrderByWithAggregationInput[]
+    by: AdminCategoryTranslationScalarFieldEnum[] | AdminCategoryTranslationScalarFieldEnum
+    having?: AdminCategoryTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminCategoryTranslationCountAggregateInputType | true
+    _avg?: AdminCategoryTranslationAvgAggregateInputType
+    _sum?: AdminCategoryTranslationSumAggregateInputType
+    _min?: AdminCategoryTranslationMinAggregateInputType
+    _max?: AdminCategoryTranslationMaxAggregateInputType
+  }
+
+  export type AdminCategoryTranslationGroupByOutputType = {
+    id: number
+    categoryId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt: Date
+    updatedAt: Date
+    _count: AdminCategoryTranslationCountAggregateOutputType | null
+    _avg: AdminCategoryTranslationAvgAggregateOutputType | null
+    _sum: AdminCategoryTranslationSumAggregateOutputType | null
+    _min: AdminCategoryTranslationMinAggregateOutputType | null
+    _max: AdminCategoryTranslationMaxAggregateOutputType | null
+  }
+
+  type GetAdminCategoryTranslationGroupByPayload<T extends AdminCategoryTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminCategoryTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminCategoryTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminCategoryTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminCategoryTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminCategoryTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminCategoryTranslation"]>
+
+  export type AdminCategoryTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminCategoryTranslation"]>
+
+  export type AdminCategoryTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminCategoryTranslation"]>
+
+  export type AdminCategoryTranslationSelectScalar = {
+    id?: boolean
+    categoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdminCategoryTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "categoryId" | "locale" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["adminCategoryTranslation"]>
+  export type AdminCategoryTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }
+  export type AdminCategoryTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }
+  export type AdminCategoryTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminCategoryTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminCategoryTranslation"
+    objects: {
+      category: Prisma.$AdminCategoryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      categoryId: number
+      locale: $Enums.Locale
+      name: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adminCategoryTranslation"]>
+    composites: {}
+  }
+
+  type AdminCategoryTranslationGetPayload<S extends boolean | null | undefined | AdminCategoryTranslationDefaultArgs> = $Result.GetResult<Prisma.$AdminCategoryTranslationPayload, S>
+
+  type AdminCategoryTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminCategoryTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminCategoryTranslationCountAggregateInputType | true
+    }
+
+  export interface AdminCategoryTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminCategoryTranslation'], meta: { name: 'AdminCategoryTranslation' } }
+    /**
+     * Find zero or one AdminCategoryTranslation that matches the filter.
+     * @param {AdminCategoryTranslationFindUniqueArgs} args - Arguments to find a AdminCategoryTranslation
+     * @example
+     * // Get one AdminCategoryTranslation
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminCategoryTranslationFindUniqueArgs>(args: SelectSubset<T, AdminCategoryTranslationFindUniqueArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminCategoryTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminCategoryTranslationFindUniqueOrThrowArgs} args - Arguments to find a AdminCategoryTranslation
+     * @example
+     * // Get one AdminCategoryTranslation
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminCategoryTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminCategoryTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminCategoryTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryTranslationFindFirstArgs} args - Arguments to find a AdminCategoryTranslation
+     * @example
+     * // Get one AdminCategoryTranslation
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminCategoryTranslationFindFirstArgs>(args?: SelectSubset<T, AdminCategoryTranslationFindFirstArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminCategoryTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryTranslationFindFirstOrThrowArgs} args - Arguments to find a AdminCategoryTranslation
+     * @example
+     * // Get one AdminCategoryTranslation
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminCategoryTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminCategoryTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminCategoryTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminCategoryTranslations
+     * const adminCategoryTranslations = await prisma.adminCategoryTranslation.findMany()
+     * 
+     * // Get first 10 AdminCategoryTranslations
+     * const adminCategoryTranslations = await prisma.adminCategoryTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminCategoryTranslationWithIdOnly = await prisma.adminCategoryTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminCategoryTranslationFindManyArgs>(args?: SelectSubset<T, AdminCategoryTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminCategoryTranslation.
+     * @param {AdminCategoryTranslationCreateArgs} args - Arguments to create a AdminCategoryTranslation.
+     * @example
+     * // Create one AdminCategoryTranslation
+     * const AdminCategoryTranslation = await prisma.adminCategoryTranslation.create({
+     *   data: {
+     *     // ... data to create a AdminCategoryTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminCategoryTranslationCreateArgs>(args: SelectSubset<T, AdminCategoryTranslationCreateArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminCategoryTranslations.
+     * @param {AdminCategoryTranslationCreateManyArgs} args - Arguments to create many AdminCategoryTranslations.
+     * @example
+     * // Create many AdminCategoryTranslations
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminCategoryTranslationCreateManyArgs>(args?: SelectSubset<T, AdminCategoryTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminCategoryTranslations and returns the data saved in the database.
+     * @param {AdminCategoryTranslationCreateManyAndReturnArgs} args - Arguments to create many AdminCategoryTranslations.
+     * @example
+     * // Create many AdminCategoryTranslations
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminCategoryTranslations and only return the `id`
+     * const adminCategoryTranslationWithIdOnly = await prisma.adminCategoryTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminCategoryTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminCategoryTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminCategoryTranslation.
+     * @param {AdminCategoryTranslationDeleteArgs} args - Arguments to delete one AdminCategoryTranslation.
+     * @example
+     * // Delete one AdminCategoryTranslation
+     * const AdminCategoryTranslation = await prisma.adminCategoryTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one AdminCategoryTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminCategoryTranslationDeleteArgs>(args: SelectSubset<T, AdminCategoryTranslationDeleteArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminCategoryTranslation.
+     * @param {AdminCategoryTranslationUpdateArgs} args - Arguments to update one AdminCategoryTranslation.
+     * @example
+     * // Update one AdminCategoryTranslation
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminCategoryTranslationUpdateArgs>(args: SelectSubset<T, AdminCategoryTranslationUpdateArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminCategoryTranslations.
+     * @param {AdminCategoryTranslationDeleteManyArgs} args - Arguments to filter AdminCategoryTranslations to delete.
+     * @example
+     * // Delete a few AdminCategoryTranslations
+     * const { count } = await prisma.adminCategoryTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminCategoryTranslationDeleteManyArgs>(args?: SelectSubset<T, AdminCategoryTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminCategoryTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminCategoryTranslations
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminCategoryTranslationUpdateManyArgs>(args: SelectSubset<T, AdminCategoryTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminCategoryTranslations and returns the data updated in the database.
+     * @param {AdminCategoryTranslationUpdateManyAndReturnArgs} args - Arguments to update many AdminCategoryTranslations.
+     * @example
+     * // Update many AdminCategoryTranslations
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminCategoryTranslations and only return the `id`
+     * const adminCategoryTranslationWithIdOnly = await prisma.adminCategoryTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminCategoryTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminCategoryTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminCategoryTranslation.
+     * @param {AdminCategoryTranslationUpsertArgs} args - Arguments to update or create a AdminCategoryTranslation.
+     * @example
+     * // Update or create a AdminCategoryTranslation
+     * const adminCategoryTranslation = await prisma.adminCategoryTranslation.upsert({
+     *   create: {
+     *     // ... data to create a AdminCategoryTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminCategoryTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminCategoryTranslationUpsertArgs>(args: SelectSubset<T, AdminCategoryTranslationUpsertArgs<ExtArgs>>): Prisma__AdminCategoryTranslationClient<$Result.GetResult<Prisma.$AdminCategoryTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminCategoryTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryTranslationCountArgs} args - Arguments to filter AdminCategoryTranslations to count.
+     * @example
+     * // Count the number of AdminCategoryTranslations
+     * const count = await prisma.adminCategoryTranslation.count({
+     *   where: {
+     *     // ... the filter for the AdminCategoryTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminCategoryTranslationCountArgs>(
+      args?: Subset<T, AdminCategoryTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminCategoryTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminCategoryTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminCategoryTranslationAggregateArgs>(args: Subset<T, AdminCategoryTranslationAggregateArgs>): Prisma.PrismaPromise<GetAdminCategoryTranslationAggregateType<T>>
+
+    /**
+     * Group by AdminCategoryTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminCategoryTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminCategoryTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: AdminCategoryTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminCategoryTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminCategoryTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminCategoryTranslation model
+   */
+  readonly fields: AdminCategoryTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminCategoryTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminCategoryTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    category<T extends AdminCategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminCategoryDefaultArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminCategoryTranslation model
+   */
+  interface AdminCategoryTranslationFieldRefs {
+    readonly id: FieldRef<"AdminCategoryTranslation", 'Int'>
+    readonly categoryId: FieldRef<"AdminCategoryTranslation", 'Int'>
+    readonly locale: FieldRef<"AdminCategoryTranslation", 'Locale'>
+    readonly name: FieldRef<"AdminCategoryTranslation", 'String'>
+    readonly createdAt: FieldRef<"AdminCategoryTranslation", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminCategoryTranslation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminCategoryTranslation findUnique
+   */
+  export type AdminCategoryTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryTranslation to fetch.
+     */
+    where: AdminCategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryTranslation findUniqueOrThrow
+   */
+  export type AdminCategoryTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryTranslation to fetch.
+     */
+    where: AdminCategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryTranslation findFirst
+   */
+  export type AdminCategoryTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryTranslation to fetch.
+     */
+    where?: AdminCategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryTranslations to fetch.
+     */
+    orderBy?: AdminCategoryTranslationOrderByWithRelationInput | AdminCategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminCategoryTranslations.
+     */
+    cursor?: AdminCategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminCategoryTranslations.
+     */
+    distinct?: AdminCategoryTranslationScalarFieldEnum | AdminCategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategoryTranslation findFirstOrThrow
+   */
+  export type AdminCategoryTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryTranslation to fetch.
+     */
+    where?: AdminCategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryTranslations to fetch.
+     */
+    orderBy?: AdminCategoryTranslationOrderByWithRelationInput | AdminCategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminCategoryTranslations.
+     */
+    cursor?: AdminCategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminCategoryTranslations.
+     */
+    distinct?: AdminCategoryTranslationScalarFieldEnum | AdminCategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategoryTranslation findMany
+   */
+  export type AdminCategoryTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryTranslations to fetch.
+     */
+    where?: AdminCategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryTranslations to fetch.
+     */
+    orderBy?: AdminCategoryTranslationOrderByWithRelationInput | AdminCategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminCategoryTranslations.
+     */
+    cursor?: AdminCategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryTranslations.
+     */
+    skip?: number
+    distinct?: AdminCategoryTranslationScalarFieldEnum | AdminCategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategoryTranslation create
+   */
+  export type AdminCategoryTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminCategoryTranslation.
+     */
+    data: XOR<AdminCategoryTranslationCreateInput, AdminCategoryTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * AdminCategoryTranslation createMany
+   */
+  export type AdminCategoryTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminCategoryTranslations.
+     */
+    data: AdminCategoryTranslationCreateManyInput | AdminCategoryTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminCategoryTranslation createManyAndReturn
+   */
+  export type AdminCategoryTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminCategoryTranslations.
+     */
+    data: AdminCategoryTranslationCreateManyInput | AdminCategoryTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminCategoryTranslation update
+   */
+  export type AdminCategoryTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminCategoryTranslation.
+     */
+    data: XOR<AdminCategoryTranslationUpdateInput, AdminCategoryTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which AdminCategoryTranslation to update.
+     */
+    where: AdminCategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryTranslation updateMany
+   */
+  export type AdminCategoryTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminCategoryTranslations.
+     */
+    data: XOR<AdminCategoryTranslationUpdateManyMutationInput, AdminCategoryTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminCategoryTranslations to update
+     */
+    where?: AdminCategoryTranslationWhereInput
+    /**
+     * Limit how many AdminCategoryTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminCategoryTranslation updateManyAndReturn
+   */
+  export type AdminCategoryTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminCategoryTranslations.
+     */
+    data: XOR<AdminCategoryTranslationUpdateManyMutationInput, AdminCategoryTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminCategoryTranslations to update
+     */
+    where?: AdminCategoryTranslationWhereInput
+    /**
+     * Limit how many AdminCategoryTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminCategoryTranslation upsert
+   */
+  export type AdminCategoryTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminCategoryTranslation to update in case it exists.
+     */
+    where: AdminCategoryTranslationWhereUniqueInput
+    /**
+     * In case the AdminCategoryTranslation found by the `where` argument doesn't exist, create a new AdminCategoryTranslation with this data.
+     */
+    create: XOR<AdminCategoryTranslationCreateInput, AdminCategoryTranslationUncheckedCreateInput>
+    /**
+     * In case the AdminCategoryTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminCategoryTranslationUpdateInput, AdminCategoryTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminCategoryTranslation delete
+   */
+  export type AdminCategoryTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which AdminCategoryTranslation to delete.
+     */
+    where: AdminCategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryTranslation deleteMany
+   */
+  export type AdminCategoryTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminCategoryTranslations to delete
+     */
+    where?: AdminCategoryTranslationWhereInput
+    /**
+     * Limit how many AdminCategoryTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminCategoryTranslation without action
+   */
+  export type AdminCategoryTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryTranslation
+     */
+    select?: AdminCategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryTranslation
+     */
+    omit?: AdminCategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryTranslationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminSubcategory
+   */
+
+  export type AggregateAdminSubcategory = {
+    _count: AdminSubcategoryCountAggregateOutputType | null
+    _avg: AdminSubcategoryAvgAggregateOutputType | null
+    _sum: AdminSubcategorySumAggregateOutputType | null
+    _min: AdminSubcategoryMinAggregateOutputType | null
+    _max: AdminSubcategoryMaxAggregateOutputType | null
+  }
+
+  export type AdminSubcategoryAvgAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+  }
+
+  export type AdminSubcategorySumAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+  }
+
+  export type AdminSubcategoryMinAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminSubcategoryMaxAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminSubcategoryCountAggregateOutputType = {
+    id: number
+    categoryId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdminSubcategoryAvgAggregateInputType = {
+    id?: true
+    categoryId?: true
+  }
+
+  export type AdminSubcategorySumAggregateInputType = {
+    id?: true
+    categoryId?: true
+  }
+
+  export type AdminSubcategoryMinAggregateInputType = {
+    id?: true
+    categoryId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminSubcategoryMaxAggregateInputType = {
+    id?: true
+    categoryId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminSubcategoryCountAggregateInputType = {
+    id?: true
+    categoryId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdminSubcategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminSubcategory to aggregate.
+     */
+    where?: AdminSubcategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategories to fetch.
+     */
+    orderBy?: AdminSubcategoryOrderByWithRelationInput | AdminSubcategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminSubcategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminSubcategories
+    **/
+    _count?: true | AdminSubcategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminSubcategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminSubcategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminSubcategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminSubcategoryMaxAggregateInputType
+  }
+
+  export type GetAdminSubcategoryAggregateType<T extends AdminSubcategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminSubcategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminSubcategory[P]>
+      : GetScalarType<T[P], AggregateAdminSubcategory[P]>
+  }
+
+
+
+
+  export type AdminSubcategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminSubcategoryWhereInput
+    orderBy?: AdminSubcategoryOrderByWithAggregationInput | AdminSubcategoryOrderByWithAggregationInput[]
+    by: AdminSubcategoryScalarFieldEnum[] | AdminSubcategoryScalarFieldEnum
+    having?: AdminSubcategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminSubcategoryCountAggregateInputType | true
+    _avg?: AdminSubcategoryAvgAggregateInputType
+    _sum?: AdminSubcategorySumAggregateInputType
+    _min?: AdminSubcategoryMinAggregateInputType
+    _max?: AdminSubcategoryMaxAggregateInputType
+  }
+
+  export type AdminSubcategoryGroupByOutputType = {
+    id: number
+    categoryId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: AdminSubcategoryCountAggregateOutputType | null
+    _avg: AdminSubcategoryAvgAggregateOutputType | null
+    _sum: AdminSubcategorySumAggregateOutputType | null
+    _min: AdminSubcategoryMinAggregateOutputType | null
+    _max: AdminSubcategoryMaxAggregateOutputType | null
+  }
+
+  type GetAdminSubcategoryGroupByPayload<T extends AdminSubcategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminSubcategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminSubcategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminSubcategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminSubcategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminSubcategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    translations?: boolean | AdminSubcategory$translationsArgs<ExtArgs>
+    _count?: boolean | AdminSubcategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSubcategory"]>
+
+  export type AdminSubcategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSubcategory"]>
+
+  export type AdminSubcategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSubcategory"]>
+
+  export type AdminSubcategorySelectScalar = {
+    id?: boolean
+    categoryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdminSubcategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["adminSubcategory"]>
+  export type AdminSubcategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    translations?: boolean | AdminSubcategory$translationsArgs<ExtArgs>
+    _count?: boolean | AdminSubcategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AdminSubcategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }
+  export type AdminSubcategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminSubcategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminSubcategory"
+    objects: {
+      category: Prisma.$AdminCategoryPayload<ExtArgs>
+      translations: Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      categoryId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adminSubcategory"]>
+    composites: {}
+  }
+
+  type AdminSubcategoryGetPayload<S extends boolean | null | undefined | AdminSubcategoryDefaultArgs> = $Result.GetResult<Prisma.$AdminSubcategoryPayload, S>
+
+  type AdminSubcategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminSubcategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminSubcategoryCountAggregateInputType | true
+    }
+
+  export interface AdminSubcategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminSubcategory'], meta: { name: 'AdminSubcategory' } }
+    /**
+     * Find zero or one AdminSubcategory that matches the filter.
+     * @param {AdminSubcategoryFindUniqueArgs} args - Arguments to find a AdminSubcategory
+     * @example
+     * // Get one AdminSubcategory
+     * const adminSubcategory = await prisma.adminSubcategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminSubcategoryFindUniqueArgs>(args: SelectSubset<T, AdminSubcategoryFindUniqueArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminSubcategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminSubcategoryFindUniqueOrThrowArgs} args - Arguments to find a AdminSubcategory
+     * @example
+     * // Get one AdminSubcategory
+     * const adminSubcategory = await prisma.adminSubcategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminSubcategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminSubcategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminSubcategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryFindFirstArgs} args - Arguments to find a AdminSubcategory
+     * @example
+     * // Get one AdminSubcategory
+     * const adminSubcategory = await prisma.adminSubcategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminSubcategoryFindFirstArgs>(args?: SelectSubset<T, AdminSubcategoryFindFirstArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminSubcategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryFindFirstOrThrowArgs} args - Arguments to find a AdminSubcategory
+     * @example
+     * // Get one AdminSubcategory
+     * const adminSubcategory = await prisma.adminSubcategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminSubcategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminSubcategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminSubcategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminSubcategories
+     * const adminSubcategories = await prisma.adminSubcategory.findMany()
+     * 
+     * // Get first 10 AdminSubcategories
+     * const adminSubcategories = await prisma.adminSubcategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminSubcategoryWithIdOnly = await prisma.adminSubcategory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminSubcategoryFindManyArgs>(args?: SelectSubset<T, AdminSubcategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminSubcategory.
+     * @param {AdminSubcategoryCreateArgs} args - Arguments to create a AdminSubcategory.
+     * @example
+     * // Create one AdminSubcategory
+     * const AdminSubcategory = await prisma.adminSubcategory.create({
+     *   data: {
+     *     // ... data to create a AdminSubcategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminSubcategoryCreateArgs>(args: SelectSubset<T, AdminSubcategoryCreateArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminSubcategories.
+     * @param {AdminSubcategoryCreateManyArgs} args - Arguments to create many AdminSubcategories.
+     * @example
+     * // Create many AdminSubcategories
+     * const adminSubcategory = await prisma.adminSubcategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminSubcategoryCreateManyArgs>(args?: SelectSubset<T, AdminSubcategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminSubcategories and returns the data saved in the database.
+     * @param {AdminSubcategoryCreateManyAndReturnArgs} args - Arguments to create many AdminSubcategories.
+     * @example
+     * // Create many AdminSubcategories
+     * const adminSubcategory = await prisma.adminSubcategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminSubcategories and only return the `id`
+     * const adminSubcategoryWithIdOnly = await prisma.adminSubcategory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminSubcategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminSubcategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminSubcategory.
+     * @param {AdminSubcategoryDeleteArgs} args - Arguments to delete one AdminSubcategory.
+     * @example
+     * // Delete one AdminSubcategory
+     * const AdminSubcategory = await prisma.adminSubcategory.delete({
+     *   where: {
+     *     // ... filter to delete one AdminSubcategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminSubcategoryDeleteArgs>(args: SelectSubset<T, AdminSubcategoryDeleteArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminSubcategory.
+     * @param {AdminSubcategoryUpdateArgs} args - Arguments to update one AdminSubcategory.
+     * @example
+     * // Update one AdminSubcategory
+     * const adminSubcategory = await prisma.adminSubcategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminSubcategoryUpdateArgs>(args: SelectSubset<T, AdminSubcategoryUpdateArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminSubcategories.
+     * @param {AdminSubcategoryDeleteManyArgs} args - Arguments to filter AdminSubcategories to delete.
+     * @example
+     * // Delete a few AdminSubcategories
+     * const { count } = await prisma.adminSubcategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminSubcategoryDeleteManyArgs>(args?: SelectSubset<T, AdminSubcategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminSubcategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminSubcategories
+     * const adminSubcategory = await prisma.adminSubcategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminSubcategoryUpdateManyArgs>(args: SelectSubset<T, AdminSubcategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminSubcategories and returns the data updated in the database.
+     * @param {AdminSubcategoryUpdateManyAndReturnArgs} args - Arguments to update many AdminSubcategories.
+     * @example
+     * // Update many AdminSubcategories
+     * const adminSubcategory = await prisma.adminSubcategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminSubcategories and only return the `id`
+     * const adminSubcategoryWithIdOnly = await prisma.adminSubcategory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminSubcategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminSubcategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminSubcategory.
+     * @param {AdminSubcategoryUpsertArgs} args - Arguments to update or create a AdminSubcategory.
+     * @example
+     * // Update or create a AdminSubcategory
+     * const adminSubcategory = await prisma.adminSubcategory.upsert({
+     *   create: {
+     *     // ... data to create a AdminSubcategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminSubcategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminSubcategoryUpsertArgs>(args: SelectSubset<T, AdminSubcategoryUpsertArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminSubcategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryCountArgs} args - Arguments to filter AdminSubcategories to count.
+     * @example
+     * // Count the number of AdminSubcategories
+     * const count = await prisma.adminSubcategory.count({
+     *   where: {
+     *     // ... the filter for the AdminSubcategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminSubcategoryCountArgs>(
+      args?: Subset<T, AdminSubcategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminSubcategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminSubcategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminSubcategoryAggregateArgs>(args: Subset<T, AdminSubcategoryAggregateArgs>): Prisma.PrismaPromise<GetAdminSubcategoryAggregateType<T>>
+
+    /**
+     * Group by AdminSubcategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminSubcategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminSubcategoryGroupByArgs['orderBy'] }
+        : { orderBy?: AdminSubcategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminSubcategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminSubcategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminSubcategory model
+   */
+  readonly fields: AdminSubcategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminSubcategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminSubcategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    category<T extends AdminCategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminCategoryDefaultArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    translations<T extends AdminSubcategory$translationsArgs<ExtArgs> = {}>(args?: Subset<T, AdminSubcategory$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminSubcategory model
+   */
+  interface AdminSubcategoryFieldRefs {
+    readonly id: FieldRef<"AdminSubcategory", 'Int'>
+    readonly categoryId: FieldRef<"AdminSubcategory", 'Int'>
+    readonly createdAt: FieldRef<"AdminSubcategory", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminSubcategory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminSubcategory findUnique
+   */
+  export type AdminSubcategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategory to fetch.
+     */
+    where: AdminSubcategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategory findUniqueOrThrow
+   */
+  export type AdminSubcategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategory to fetch.
+     */
+    where: AdminSubcategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategory findFirst
+   */
+  export type AdminSubcategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategory to fetch.
+     */
+    where?: AdminSubcategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategories to fetch.
+     */
+    orderBy?: AdminSubcategoryOrderByWithRelationInput | AdminSubcategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminSubcategories.
+     */
+    cursor?: AdminSubcategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminSubcategories.
+     */
+    distinct?: AdminSubcategoryScalarFieldEnum | AdminSubcategoryScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSubcategory findFirstOrThrow
+   */
+  export type AdminSubcategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategory to fetch.
+     */
+    where?: AdminSubcategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategories to fetch.
+     */
+    orderBy?: AdminSubcategoryOrderByWithRelationInput | AdminSubcategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminSubcategories.
+     */
+    cursor?: AdminSubcategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminSubcategories.
+     */
+    distinct?: AdminSubcategoryScalarFieldEnum | AdminSubcategoryScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSubcategory findMany
+   */
+  export type AdminSubcategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategories to fetch.
+     */
+    where?: AdminSubcategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategories to fetch.
+     */
+    orderBy?: AdminSubcategoryOrderByWithRelationInput | AdminSubcategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminSubcategories.
+     */
+    cursor?: AdminSubcategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategories.
+     */
+    skip?: number
+    distinct?: AdminSubcategoryScalarFieldEnum | AdminSubcategoryScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSubcategory create
+   */
+  export type AdminSubcategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminSubcategory.
+     */
+    data: XOR<AdminSubcategoryCreateInput, AdminSubcategoryUncheckedCreateInput>
+  }
+
+  /**
+   * AdminSubcategory createMany
+   */
+  export type AdminSubcategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminSubcategories.
+     */
+    data: AdminSubcategoryCreateManyInput | AdminSubcategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminSubcategory createManyAndReturn
+   */
+  export type AdminSubcategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminSubcategories.
+     */
+    data: AdminSubcategoryCreateManyInput | AdminSubcategoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminSubcategory update
+   */
+  export type AdminSubcategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminSubcategory.
+     */
+    data: XOR<AdminSubcategoryUpdateInput, AdminSubcategoryUncheckedUpdateInput>
+    /**
+     * Choose, which AdminSubcategory to update.
+     */
+    where: AdminSubcategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategory updateMany
+   */
+  export type AdminSubcategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminSubcategories.
+     */
+    data: XOR<AdminSubcategoryUpdateManyMutationInput, AdminSubcategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminSubcategories to update
+     */
+    where?: AdminSubcategoryWhereInput
+    /**
+     * Limit how many AdminSubcategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminSubcategory updateManyAndReturn
+   */
+  export type AdminSubcategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminSubcategories.
+     */
+    data: XOR<AdminSubcategoryUpdateManyMutationInput, AdminSubcategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminSubcategories to update
+     */
+    where?: AdminSubcategoryWhereInput
+    /**
+     * Limit how many AdminSubcategories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminSubcategory upsert
+   */
+  export type AdminSubcategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminSubcategory to update in case it exists.
+     */
+    where: AdminSubcategoryWhereUniqueInput
+    /**
+     * In case the AdminSubcategory found by the `where` argument doesn't exist, create a new AdminSubcategory with this data.
+     */
+    create: XOR<AdminSubcategoryCreateInput, AdminSubcategoryUncheckedCreateInput>
+    /**
+     * In case the AdminSubcategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminSubcategoryUpdateInput, AdminSubcategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminSubcategory delete
+   */
+  export type AdminSubcategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+    /**
+     * Filter which AdminSubcategory to delete.
+     */
+    where: AdminSubcategoryWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategory deleteMany
+   */
+  export type AdminSubcategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminSubcategories to delete
+     */
+    where?: AdminSubcategoryWhereInput
+    /**
+     * Limit how many AdminSubcategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminSubcategory.translations
+   */
+  export type AdminSubcategory$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    where?: AdminSubcategoryTranslationWhereInput
+    orderBy?: AdminSubcategoryTranslationOrderByWithRelationInput | AdminSubcategoryTranslationOrderByWithRelationInput[]
+    cursor?: AdminSubcategoryTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminSubcategoryTranslationScalarFieldEnum | AdminSubcategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSubcategory without action
+   */
+  export type AdminSubcategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategory
+     */
+    select?: AdminSubcategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategory
+     */
+    omit?: AdminSubcategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminSubcategoryTranslation
+   */
+
+  export type AggregateAdminSubcategoryTranslation = {
+    _count: AdminSubcategoryTranslationCountAggregateOutputType | null
+    _avg: AdminSubcategoryTranslationAvgAggregateOutputType | null
+    _sum: AdminSubcategoryTranslationSumAggregateOutputType | null
+    _min: AdminSubcategoryTranslationMinAggregateOutputType | null
+    _max: AdminSubcategoryTranslationMaxAggregateOutputType | null
+  }
+
+  export type AdminSubcategoryTranslationAvgAggregateOutputType = {
+    id: number | null
+    subcategoryId: number | null
+  }
+
+  export type AdminSubcategoryTranslationSumAggregateOutputType = {
+    id: number | null
+    subcategoryId: number | null
+  }
+
+  export type AdminSubcategoryTranslationMinAggregateOutputType = {
+    id: number | null
+    subcategoryId: number | null
+    locale: $Enums.Locale | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminSubcategoryTranslationMaxAggregateOutputType = {
+    id: number | null
+    subcategoryId: number | null
+    locale: $Enums.Locale | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminSubcategoryTranslationCountAggregateOutputType = {
+    id: number
+    subcategoryId: number
+    locale: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdminSubcategoryTranslationAvgAggregateInputType = {
+    id?: true
+    subcategoryId?: true
+  }
+
+  export type AdminSubcategoryTranslationSumAggregateInputType = {
+    id?: true
+    subcategoryId?: true
+  }
+
+  export type AdminSubcategoryTranslationMinAggregateInputType = {
+    id?: true
+    subcategoryId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminSubcategoryTranslationMaxAggregateInputType = {
+    id?: true
+    subcategoryId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminSubcategoryTranslationCountAggregateInputType = {
+    id?: true
+    subcategoryId?: true
+    locale?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdminSubcategoryTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminSubcategoryTranslation to aggregate.
+     */
+    where?: AdminSubcategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategoryTranslations to fetch.
+     */
+    orderBy?: AdminSubcategoryTranslationOrderByWithRelationInput | AdminSubcategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminSubcategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategoryTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminSubcategoryTranslations
+    **/
+    _count?: true | AdminSubcategoryTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminSubcategoryTranslationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminSubcategoryTranslationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminSubcategoryTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminSubcategoryTranslationMaxAggregateInputType
+  }
+
+  export type GetAdminSubcategoryTranslationAggregateType<T extends AdminSubcategoryTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminSubcategoryTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminSubcategoryTranslation[P]>
+      : GetScalarType<T[P], AggregateAdminSubcategoryTranslation[P]>
+  }
+
+
+
+
+  export type AdminSubcategoryTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminSubcategoryTranslationWhereInput
+    orderBy?: AdminSubcategoryTranslationOrderByWithAggregationInput | AdminSubcategoryTranslationOrderByWithAggregationInput[]
+    by: AdminSubcategoryTranslationScalarFieldEnum[] | AdminSubcategoryTranslationScalarFieldEnum
+    having?: AdminSubcategoryTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminSubcategoryTranslationCountAggregateInputType | true
+    _avg?: AdminSubcategoryTranslationAvgAggregateInputType
+    _sum?: AdminSubcategoryTranslationSumAggregateInputType
+    _min?: AdminSubcategoryTranslationMinAggregateInputType
+    _max?: AdminSubcategoryTranslationMaxAggregateInputType
+  }
+
+  export type AdminSubcategoryTranslationGroupByOutputType = {
+    id: number
+    subcategoryId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt: Date
+    updatedAt: Date
+    _count: AdminSubcategoryTranslationCountAggregateOutputType | null
+    _avg: AdminSubcategoryTranslationAvgAggregateOutputType | null
+    _sum: AdminSubcategoryTranslationSumAggregateOutputType | null
+    _min: AdminSubcategoryTranslationMinAggregateOutputType | null
+    _max: AdminSubcategoryTranslationMaxAggregateOutputType | null
+  }
+
+  type GetAdminSubcategoryTranslationGroupByPayload<T extends AdminSubcategoryTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminSubcategoryTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminSubcategoryTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminSubcategoryTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminSubcategoryTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminSubcategoryTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subcategoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    subcategory?: boolean | AdminSubcategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSubcategoryTranslation"]>
+
+  export type AdminSubcategoryTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subcategoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    subcategory?: boolean | AdminSubcategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSubcategoryTranslation"]>
+
+  export type AdminSubcategoryTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subcategoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    subcategory?: boolean | AdminSubcategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminSubcategoryTranslation"]>
+
+  export type AdminSubcategoryTranslationSelectScalar = {
+    id?: boolean
+    subcategoryId?: boolean
+    locale?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdminSubcategoryTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "subcategoryId" | "locale" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["adminSubcategoryTranslation"]>
+  export type AdminSubcategoryTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subcategory?: boolean | AdminSubcategoryDefaultArgs<ExtArgs>
+  }
+  export type AdminSubcategoryTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subcategory?: boolean | AdminSubcategoryDefaultArgs<ExtArgs>
+  }
+  export type AdminSubcategoryTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subcategory?: boolean | AdminSubcategoryDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminSubcategoryTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminSubcategoryTranslation"
+    objects: {
+      subcategory: Prisma.$AdminSubcategoryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      subcategoryId: number
+      locale: $Enums.Locale
+      name: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adminSubcategoryTranslation"]>
+    composites: {}
+  }
+
+  type AdminSubcategoryTranslationGetPayload<S extends boolean | null | undefined | AdminSubcategoryTranslationDefaultArgs> = $Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload, S>
+
+  type AdminSubcategoryTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminSubcategoryTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminSubcategoryTranslationCountAggregateInputType | true
+    }
+
+  export interface AdminSubcategoryTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminSubcategoryTranslation'], meta: { name: 'AdminSubcategoryTranslation' } }
+    /**
+     * Find zero or one AdminSubcategoryTranslation that matches the filter.
+     * @param {AdminSubcategoryTranslationFindUniqueArgs} args - Arguments to find a AdminSubcategoryTranslation
+     * @example
+     * // Get one AdminSubcategoryTranslation
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminSubcategoryTranslationFindUniqueArgs>(args: SelectSubset<T, AdminSubcategoryTranslationFindUniqueArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminSubcategoryTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminSubcategoryTranslationFindUniqueOrThrowArgs} args - Arguments to find a AdminSubcategoryTranslation
+     * @example
+     * // Get one AdminSubcategoryTranslation
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminSubcategoryTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminSubcategoryTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminSubcategoryTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryTranslationFindFirstArgs} args - Arguments to find a AdminSubcategoryTranslation
+     * @example
+     * // Get one AdminSubcategoryTranslation
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminSubcategoryTranslationFindFirstArgs>(args?: SelectSubset<T, AdminSubcategoryTranslationFindFirstArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminSubcategoryTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryTranslationFindFirstOrThrowArgs} args - Arguments to find a AdminSubcategoryTranslation
+     * @example
+     * // Get one AdminSubcategoryTranslation
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminSubcategoryTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminSubcategoryTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminSubcategoryTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminSubcategoryTranslations
+     * const adminSubcategoryTranslations = await prisma.adminSubcategoryTranslation.findMany()
+     * 
+     * // Get first 10 AdminSubcategoryTranslations
+     * const adminSubcategoryTranslations = await prisma.adminSubcategoryTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminSubcategoryTranslationWithIdOnly = await prisma.adminSubcategoryTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminSubcategoryTranslationFindManyArgs>(args?: SelectSubset<T, AdminSubcategoryTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminSubcategoryTranslation.
+     * @param {AdminSubcategoryTranslationCreateArgs} args - Arguments to create a AdminSubcategoryTranslation.
+     * @example
+     * // Create one AdminSubcategoryTranslation
+     * const AdminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.create({
+     *   data: {
+     *     // ... data to create a AdminSubcategoryTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminSubcategoryTranslationCreateArgs>(args: SelectSubset<T, AdminSubcategoryTranslationCreateArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminSubcategoryTranslations.
+     * @param {AdminSubcategoryTranslationCreateManyArgs} args - Arguments to create many AdminSubcategoryTranslations.
+     * @example
+     * // Create many AdminSubcategoryTranslations
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminSubcategoryTranslationCreateManyArgs>(args?: SelectSubset<T, AdminSubcategoryTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminSubcategoryTranslations and returns the data saved in the database.
+     * @param {AdminSubcategoryTranslationCreateManyAndReturnArgs} args - Arguments to create many AdminSubcategoryTranslations.
+     * @example
+     * // Create many AdminSubcategoryTranslations
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminSubcategoryTranslations and only return the `id`
+     * const adminSubcategoryTranslationWithIdOnly = await prisma.adminSubcategoryTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminSubcategoryTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminSubcategoryTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminSubcategoryTranslation.
+     * @param {AdminSubcategoryTranslationDeleteArgs} args - Arguments to delete one AdminSubcategoryTranslation.
+     * @example
+     * // Delete one AdminSubcategoryTranslation
+     * const AdminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one AdminSubcategoryTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminSubcategoryTranslationDeleteArgs>(args: SelectSubset<T, AdminSubcategoryTranslationDeleteArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminSubcategoryTranslation.
+     * @param {AdminSubcategoryTranslationUpdateArgs} args - Arguments to update one AdminSubcategoryTranslation.
+     * @example
+     * // Update one AdminSubcategoryTranslation
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminSubcategoryTranslationUpdateArgs>(args: SelectSubset<T, AdminSubcategoryTranslationUpdateArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminSubcategoryTranslations.
+     * @param {AdminSubcategoryTranslationDeleteManyArgs} args - Arguments to filter AdminSubcategoryTranslations to delete.
+     * @example
+     * // Delete a few AdminSubcategoryTranslations
+     * const { count } = await prisma.adminSubcategoryTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminSubcategoryTranslationDeleteManyArgs>(args?: SelectSubset<T, AdminSubcategoryTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminSubcategoryTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminSubcategoryTranslations
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminSubcategoryTranslationUpdateManyArgs>(args: SelectSubset<T, AdminSubcategoryTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminSubcategoryTranslations and returns the data updated in the database.
+     * @param {AdminSubcategoryTranslationUpdateManyAndReturnArgs} args - Arguments to update many AdminSubcategoryTranslations.
+     * @example
+     * // Update many AdminSubcategoryTranslations
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminSubcategoryTranslations and only return the `id`
+     * const adminSubcategoryTranslationWithIdOnly = await prisma.adminSubcategoryTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminSubcategoryTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminSubcategoryTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminSubcategoryTranslation.
+     * @param {AdminSubcategoryTranslationUpsertArgs} args - Arguments to update or create a AdminSubcategoryTranslation.
+     * @example
+     * // Update or create a AdminSubcategoryTranslation
+     * const adminSubcategoryTranslation = await prisma.adminSubcategoryTranslation.upsert({
+     *   create: {
+     *     // ... data to create a AdminSubcategoryTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminSubcategoryTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminSubcategoryTranslationUpsertArgs>(args: SelectSubset<T, AdminSubcategoryTranslationUpsertArgs<ExtArgs>>): Prisma__AdminSubcategoryTranslationClient<$Result.GetResult<Prisma.$AdminSubcategoryTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminSubcategoryTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryTranslationCountArgs} args - Arguments to filter AdminSubcategoryTranslations to count.
+     * @example
+     * // Count the number of AdminSubcategoryTranslations
+     * const count = await prisma.adminSubcategoryTranslation.count({
+     *   where: {
+     *     // ... the filter for the AdminSubcategoryTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminSubcategoryTranslationCountArgs>(
+      args?: Subset<T, AdminSubcategoryTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminSubcategoryTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminSubcategoryTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminSubcategoryTranslationAggregateArgs>(args: Subset<T, AdminSubcategoryTranslationAggregateArgs>): Prisma.PrismaPromise<GetAdminSubcategoryTranslationAggregateType<T>>
+
+    /**
+     * Group by AdminSubcategoryTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminSubcategoryTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminSubcategoryTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminSubcategoryTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: AdminSubcategoryTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminSubcategoryTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminSubcategoryTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminSubcategoryTranslation model
+   */
+  readonly fields: AdminSubcategoryTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminSubcategoryTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminSubcategoryTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    subcategory<T extends AdminSubcategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminSubcategoryDefaultArgs<ExtArgs>>): Prisma__AdminSubcategoryClient<$Result.GetResult<Prisma.$AdminSubcategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminSubcategoryTranslation model
+   */
+  interface AdminSubcategoryTranslationFieldRefs {
+    readonly id: FieldRef<"AdminSubcategoryTranslation", 'Int'>
+    readonly subcategoryId: FieldRef<"AdminSubcategoryTranslation", 'Int'>
+    readonly locale: FieldRef<"AdminSubcategoryTranslation", 'Locale'>
+    readonly name: FieldRef<"AdminSubcategoryTranslation", 'String'>
+    readonly createdAt: FieldRef<"AdminSubcategoryTranslation", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminSubcategoryTranslation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminSubcategoryTranslation findUnique
+   */
+  export type AdminSubcategoryTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategoryTranslation to fetch.
+     */
+    where: AdminSubcategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategoryTranslation findUniqueOrThrow
+   */
+  export type AdminSubcategoryTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategoryTranslation to fetch.
+     */
+    where: AdminSubcategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategoryTranslation findFirst
+   */
+  export type AdminSubcategoryTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategoryTranslation to fetch.
+     */
+    where?: AdminSubcategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategoryTranslations to fetch.
+     */
+    orderBy?: AdminSubcategoryTranslationOrderByWithRelationInput | AdminSubcategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminSubcategoryTranslations.
+     */
+    cursor?: AdminSubcategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategoryTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminSubcategoryTranslations.
+     */
+    distinct?: AdminSubcategoryTranslationScalarFieldEnum | AdminSubcategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSubcategoryTranslation findFirstOrThrow
+   */
+  export type AdminSubcategoryTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategoryTranslation to fetch.
+     */
+    where?: AdminSubcategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategoryTranslations to fetch.
+     */
+    orderBy?: AdminSubcategoryTranslationOrderByWithRelationInput | AdminSubcategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminSubcategoryTranslations.
+     */
+    cursor?: AdminSubcategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategoryTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminSubcategoryTranslations.
+     */
+    distinct?: AdminSubcategoryTranslationScalarFieldEnum | AdminSubcategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSubcategoryTranslation findMany
+   */
+  export type AdminSubcategoryTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminSubcategoryTranslations to fetch.
+     */
+    where?: AdminSubcategoryTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminSubcategoryTranslations to fetch.
+     */
+    orderBy?: AdminSubcategoryTranslationOrderByWithRelationInput | AdminSubcategoryTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminSubcategoryTranslations.
+     */
+    cursor?: AdminSubcategoryTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminSubcategoryTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminSubcategoryTranslations.
+     */
+    skip?: number
+    distinct?: AdminSubcategoryTranslationScalarFieldEnum | AdminSubcategoryTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * AdminSubcategoryTranslation create
+   */
+  export type AdminSubcategoryTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminSubcategoryTranslation.
+     */
+    data: XOR<AdminSubcategoryTranslationCreateInput, AdminSubcategoryTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * AdminSubcategoryTranslation createMany
+   */
+  export type AdminSubcategoryTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminSubcategoryTranslations.
+     */
+    data: AdminSubcategoryTranslationCreateManyInput | AdminSubcategoryTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminSubcategoryTranslation createManyAndReturn
+   */
+  export type AdminSubcategoryTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminSubcategoryTranslations.
+     */
+    data: AdminSubcategoryTranslationCreateManyInput | AdminSubcategoryTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminSubcategoryTranslation update
+   */
+  export type AdminSubcategoryTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminSubcategoryTranslation.
+     */
+    data: XOR<AdminSubcategoryTranslationUpdateInput, AdminSubcategoryTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which AdminSubcategoryTranslation to update.
+     */
+    where: AdminSubcategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategoryTranslation updateMany
+   */
+  export type AdminSubcategoryTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminSubcategoryTranslations.
+     */
+    data: XOR<AdminSubcategoryTranslationUpdateManyMutationInput, AdminSubcategoryTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminSubcategoryTranslations to update
+     */
+    where?: AdminSubcategoryTranslationWhereInput
+    /**
+     * Limit how many AdminSubcategoryTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminSubcategoryTranslation updateManyAndReturn
+   */
+  export type AdminSubcategoryTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminSubcategoryTranslations.
+     */
+    data: XOR<AdminSubcategoryTranslationUpdateManyMutationInput, AdminSubcategoryTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminSubcategoryTranslations to update
+     */
+    where?: AdminSubcategoryTranslationWhereInput
+    /**
+     * Limit how many AdminSubcategoryTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminSubcategoryTranslation upsert
+   */
+  export type AdminSubcategoryTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminSubcategoryTranslation to update in case it exists.
+     */
+    where: AdminSubcategoryTranslationWhereUniqueInput
+    /**
+     * In case the AdminSubcategoryTranslation found by the `where` argument doesn't exist, create a new AdminSubcategoryTranslation with this data.
+     */
+    create: XOR<AdminSubcategoryTranslationCreateInput, AdminSubcategoryTranslationUncheckedCreateInput>
+    /**
+     * In case the AdminSubcategoryTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminSubcategoryTranslationUpdateInput, AdminSubcategoryTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminSubcategoryTranslation delete
+   */
+  export type AdminSubcategoryTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which AdminSubcategoryTranslation to delete.
+     */
+    where: AdminSubcategoryTranslationWhereUniqueInput
+  }
+
+  /**
+   * AdminSubcategoryTranslation deleteMany
+   */
+  export type AdminSubcategoryTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminSubcategoryTranslations to delete
+     */
+    where?: AdminSubcategoryTranslationWhereInput
+    /**
+     * Limit how many AdminSubcategoryTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminSubcategoryTranslation without action
+   */
+  export type AdminSubcategoryTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminSubcategoryTranslation
+     */
+    select?: AdminSubcategoryTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminSubcategoryTranslation
+     */
+    omit?: AdminSubcategoryTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminSubcategoryTranslationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminCategoryBrand
+   */
+
+  export type AggregateAdminCategoryBrand = {
+    _count: AdminCategoryBrandCountAggregateOutputType | null
+    _avg: AdminCategoryBrandAvgAggregateOutputType | null
+    _sum: AdminCategoryBrandSumAggregateOutputType | null
+    _min: AdminCategoryBrandMinAggregateOutputType | null
+    _max: AdminCategoryBrandMaxAggregateOutputType | null
+  }
+
+  export type AdminCategoryBrandAvgAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    brandId: number | null
+  }
+
+  export type AdminCategoryBrandSumAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    brandId: number | null
+  }
+
+  export type AdminCategoryBrandMinAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    brandId: number | null
+    section: $Enums.Section | null
+    createdAt: Date | null
+  }
+
+  export type AdminCategoryBrandMaxAggregateOutputType = {
+    id: number | null
+    categoryId: number | null
+    brandId: number | null
+    section: $Enums.Section | null
+    createdAt: Date | null
+  }
+
+  export type AdminCategoryBrandCountAggregateOutputType = {
+    id: number
+    categoryId: number
+    brandId: number
+    section: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AdminCategoryBrandAvgAggregateInputType = {
+    id?: true
+    categoryId?: true
+    brandId?: true
+  }
+
+  export type AdminCategoryBrandSumAggregateInputType = {
+    id?: true
+    categoryId?: true
+    brandId?: true
+  }
+
+  export type AdminCategoryBrandMinAggregateInputType = {
+    id?: true
+    categoryId?: true
+    brandId?: true
+    section?: true
+    createdAt?: true
+  }
+
+  export type AdminCategoryBrandMaxAggregateInputType = {
+    id?: true
+    categoryId?: true
+    brandId?: true
+    section?: true
+    createdAt?: true
+  }
+
+  export type AdminCategoryBrandCountAggregateInputType = {
+    id?: true
+    categoryId?: true
+    brandId?: true
+    section?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AdminCategoryBrandAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminCategoryBrand to aggregate.
+     */
+    where?: AdminCategoryBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryBrands to fetch.
+     */
+    orderBy?: AdminCategoryBrandOrderByWithRelationInput | AdminCategoryBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminCategoryBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminCategoryBrands
+    **/
+    _count?: true | AdminCategoryBrandCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminCategoryBrandAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminCategoryBrandSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminCategoryBrandMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminCategoryBrandMaxAggregateInputType
+  }
+
+  export type GetAdminCategoryBrandAggregateType<T extends AdminCategoryBrandAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminCategoryBrand]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminCategoryBrand[P]>
+      : GetScalarType<T[P], AggregateAdminCategoryBrand[P]>
+  }
+
+
+
+
+  export type AdminCategoryBrandGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminCategoryBrandWhereInput
+    orderBy?: AdminCategoryBrandOrderByWithAggregationInput | AdminCategoryBrandOrderByWithAggregationInput[]
+    by: AdminCategoryBrandScalarFieldEnum[] | AdminCategoryBrandScalarFieldEnum
+    having?: AdminCategoryBrandScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminCategoryBrandCountAggregateInputType | true
+    _avg?: AdminCategoryBrandAvgAggregateInputType
+    _sum?: AdminCategoryBrandSumAggregateInputType
+    _min?: AdminCategoryBrandMinAggregateInputType
+    _max?: AdminCategoryBrandMaxAggregateInputType
+  }
+
+  export type AdminCategoryBrandGroupByOutputType = {
+    id: number
+    categoryId: number
+    brandId: number
+    section: $Enums.Section
+    createdAt: Date
+    _count: AdminCategoryBrandCountAggregateOutputType | null
+    _avg: AdminCategoryBrandAvgAggregateOutputType | null
+    _sum: AdminCategoryBrandSumAggregateOutputType | null
+    _min: AdminCategoryBrandMinAggregateOutputType | null
+    _max: AdminCategoryBrandMaxAggregateOutputType | null
+  }
+
+  type GetAdminCategoryBrandGroupByPayload<T extends AdminCategoryBrandGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminCategoryBrandGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminCategoryBrandGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminCategoryBrandGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminCategoryBrandGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminCategoryBrandSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    brandId?: boolean
+    section?: boolean
+    createdAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminCategoryBrand"]>
+
+  export type AdminCategoryBrandSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    brandId?: boolean
+    section?: boolean
+    createdAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminCategoryBrand"]>
+
+  export type AdminCategoryBrandSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    brandId?: boolean
+    section?: boolean
+    createdAt?: boolean
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminCategoryBrand"]>
+
+  export type AdminCategoryBrandSelectScalar = {
+    id?: boolean
+    categoryId?: boolean
+    brandId?: boolean
+    section?: boolean
+    createdAt?: boolean
+  }
+
+  export type AdminCategoryBrandOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "categoryId" | "brandId" | "section" | "createdAt", ExtArgs["result"]["adminCategoryBrand"]>
+  export type AdminCategoryBrandInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }
+  export type AdminCategoryBrandIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }
+  export type AdminCategoryBrandIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | AdminCategoryDefaultArgs<ExtArgs>
+    brand?: boolean | AdminBrandDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminCategoryBrandPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminCategoryBrand"
+    objects: {
+      category: Prisma.$AdminCategoryPayload<ExtArgs>
+      brand: Prisma.$AdminBrandPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      categoryId: number
+      brandId: number
+      section: $Enums.Section
+      createdAt: Date
+    }, ExtArgs["result"]["adminCategoryBrand"]>
+    composites: {}
+  }
+
+  type AdminCategoryBrandGetPayload<S extends boolean | null | undefined | AdminCategoryBrandDefaultArgs> = $Result.GetResult<Prisma.$AdminCategoryBrandPayload, S>
+
+  type AdminCategoryBrandCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminCategoryBrandFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminCategoryBrandCountAggregateInputType | true
+    }
+
+  export interface AdminCategoryBrandDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminCategoryBrand'], meta: { name: 'AdminCategoryBrand' } }
+    /**
+     * Find zero or one AdminCategoryBrand that matches the filter.
+     * @param {AdminCategoryBrandFindUniqueArgs} args - Arguments to find a AdminCategoryBrand
+     * @example
+     * // Get one AdminCategoryBrand
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminCategoryBrandFindUniqueArgs>(args: SelectSubset<T, AdminCategoryBrandFindUniqueArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminCategoryBrand that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminCategoryBrandFindUniqueOrThrowArgs} args - Arguments to find a AdminCategoryBrand
+     * @example
+     * // Get one AdminCategoryBrand
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminCategoryBrandFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminCategoryBrandFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminCategoryBrand that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryBrandFindFirstArgs} args - Arguments to find a AdminCategoryBrand
+     * @example
+     * // Get one AdminCategoryBrand
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminCategoryBrandFindFirstArgs>(args?: SelectSubset<T, AdminCategoryBrandFindFirstArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminCategoryBrand that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryBrandFindFirstOrThrowArgs} args - Arguments to find a AdminCategoryBrand
+     * @example
+     * // Get one AdminCategoryBrand
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminCategoryBrandFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminCategoryBrandFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminCategoryBrands that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryBrandFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminCategoryBrands
+     * const adminCategoryBrands = await prisma.adminCategoryBrand.findMany()
+     * 
+     * // Get first 10 AdminCategoryBrands
+     * const adminCategoryBrands = await prisma.adminCategoryBrand.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminCategoryBrandWithIdOnly = await prisma.adminCategoryBrand.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminCategoryBrandFindManyArgs>(args?: SelectSubset<T, AdminCategoryBrandFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminCategoryBrand.
+     * @param {AdminCategoryBrandCreateArgs} args - Arguments to create a AdminCategoryBrand.
+     * @example
+     * // Create one AdminCategoryBrand
+     * const AdminCategoryBrand = await prisma.adminCategoryBrand.create({
+     *   data: {
+     *     // ... data to create a AdminCategoryBrand
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminCategoryBrandCreateArgs>(args: SelectSubset<T, AdminCategoryBrandCreateArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminCategoryBrands.
+     * @param {AdminCategoryBrandCreateManyArgs} args - Arguments to create many AdminCategoryBrands.
+     * @example
+     * // Create many AdminCategoryBrands
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminCategoryBrandCreateManyArgs>(args?: SelectSubset<T, AdminCategoryBrandCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminCategoryBrands and returns the data saved in the database.
+     * @param {AdminCategoryBrandCreateManyAndReturnArgs} args - Arguments to create many AdminCategoryBrands.
+     * @example
+     * // Create many AdminCategoryBrands
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminCategoryBrands and only return the `id`
+     * const adminCategoryBrandWithIdOnly = await prisma.adminCategoryBrand.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminCategoryBrandCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminCategoryBrandCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminCategoryBrand.
+     * @param {AdminCategoryBrandDeleteArgs} args - Arguments to delete one AdminCategoryBrand.
+     * @example
+     * // Delete one AdminCategoryBrand
+     * const AdminCategoryBrand = await prisma.adminCategoryBrand.delete({
+     *   where: {
+     *     // ... filter to delete one AdminCategoryBrand
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminCategoryBrandDeleteArgs>(args: SelectSubset<T, AdminCategoryBrandDeleteArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminCategoryBrand.
+     * @param {AdminCategoryBrandUpdateArgs} args - Arguments to update one AdminCategoryBrand.
+     * @example
+     * // Update one AdminCategoryBrand
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminCategoryBrandUpdateArgs>(args: SelectSubset<T, AdminCategoryBrandUpdateArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminCategoryBrands.
+     * @param {AdminCategoryBrandDeleteManyArgs} args - Arguments to filter AdminCategoryBrands to delete.
+     * @example
+     * // Delete a few AdminCategoryBrands
+     * const { count } = await prisma.adminCategoryBrand.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminCategoryBrandDeleteManyArgs>(args?: SelectSubset<T, AdminCategoryBrandDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminCategoryBrands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryBrandUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminCategoryBrands
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminCategoryBrandUpdateManyArgs>(args: SelectSubset<T, AdminCategoryBrandUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminCategoryBrands and returns the data updated in the database.
+     * @param {AdminCategoryBrandUpdateManyAndReturnArgs} args - Arguments to update many AdminCategoryBrands.
+     * @example
+     * // Update many AdminCategoryBrands
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminCategoryBrands and only return the `id`
+     * const adminCategoryBrandWithIdOnly = await prisma.adminCategoryBrand.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminCategoryBrandUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminCategoryBrandUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminCategoryBrand.
+     * @param {AdminCategoryBrandUpsertArgs} args - Arguments to update or create a AdminCategoryBrand.
+     * @example
+     * // Update or create a AdminCategoryBrand
+     * const adminCategoryBrand = await prisma.adminCategoryBrand.upsert({
+     *   create: {
+     *     // ... data to create a AdminCategoryBrand
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminCategoryBrand we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminCategoryBrandUpsertArgs>(args: SelectSubset<T, AdminCategoryBrandUpsertArgs<ExtArgs>>): Prisma__AdminCategoryBrandClient<$Result.GetResult<Prisma.$AdminCategoryBrandPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminCategoryBrands.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryBrandCountArgs} args - Arguments to filter AdminCategoryBrands to count.
+     * @example
+     * // Count the number of AdminCategoryBrands
+     * const count = await prisma.adminCategoryBrand.count({
+     *   where: {
+     *     // ... the filter for the AdminCategoryBrands we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminCategoryBrandCountArgs>(
+      args?: Subset<T, AdminCategoryBrandCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminCategoryBrandCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminCategoryBrand.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryBrandAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminCategoryBrandAggregateArgs>(args: Subset<T, AdminCategoryBrandAggregateArgs>): Prisma.PrismaPromise<GetAdminCategoryBrandAggregateType<T>>
+
+    /**
+     * Group by AdminCategoryBrand.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminCategoryBrandGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminCategoryBrandGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminCategoryBrandGroupByArgs['orderBy'] }
+        : { orderBy?: AdminCategoryBrandGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminCategoryBrandGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminCategoryBrandGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminCategoryBrand model
+   */
+  readonly fields: AdminCategoryBrandFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminCategoryBrand.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminCategoryBrandClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    category<T extends AdminCategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminCategoryDefaultArgs<ExtArgs>>): Prisma__AdminCategoryClient<$Result.GetResult<Prisma.$AdminCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    brand<T extends AdminBrandDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminBrandDefaultArgs<ExtArgs>>): Prisma__AdminBrandClient<$Result.GetResult<Prisma.$AdminBrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminCategoryBrand model
+   */
+  interface AdminCategoryBrandFieldRefs {
+    readonly id: FieldRef<"AdminCategoryBrand", 'Int'>
+    readonly categoryId: FieldRef<"AdminCategoryBrand", 'Int'>
+    readonly brandId: FieldRef<"AdminCategoryBrand", 'Int'>
+    readonly section: FieldRef<"AdminCategoryBrand", 'Section'>
+    readonly createdAt: FieldRef<"AdminCategoryBrand", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminCategoryBrand findUnique
+   */
+  export type AdminCategoryBrandFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryBrand to fetch.
+     */
+    where: AdminCategoryBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryBrand findUniqueOrThrow
+   */
+  export type AdminCategoryBrandFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryBrand to fetch.
+     */
+    where: AdminCategoryBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryBrand findFirst
+   */
+  export type AdminCategoryBrandFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryBrand to fetch.
+     */
+    where?: AdminCategoryBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryBrands to fetch.
+     */
+    orderBy?: AdminCategoryBrandOrderByWithRelationInput | AdminCategoryBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminCategoryBrands.
+     */
+    cursor?: AdminCategoryBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminCategoryBrands.
+     */
+    distinct?: AdminCategoryBrandScalarFieldEnum | AdminCategoryBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategoryBrand findFirstOrThrow
+   */
+  export type AdminCategoryBrandFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryBrand to fetch.
+     */
+    where?: AdminCategoryBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryBrands to fetch.
+     */
+    orderBy?: AdminCategoryBrandOrderByWithRelationInput | AdminCategoryBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminCategoryBrands.
+     */
+    cursor?: AdminCategoryBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryBrands.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminCategoryBrands.
+     */
+    distinct?: AdminCategoryBrandScalarFieldEnum | AdminCategoryBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategoryBrand findMany
+   */
+  export type AdminCategoryBrandFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminCategoryBrands to fetch.
+     */
+    where?: AdminCategoryBrandWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminCategoryBrands to fetch.
+     */
+    orderBy?: AdminCategoryBrandOrderByWithRelationInput | AdminCategoryBrandOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminCategoryBrands.
+     */
+    cursor?: AdminCategoryBrandWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminCategoryBrands from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminCategoryBrands.
+     */
+    skip?: number
+    distinct?: AdminCategoryBrandScalarFieldEnum | AdminCategoryBrandScalarFieldEnum[]
+  }
+
+  /**
+   * AdminCategoryBrand create
+   */
+  export type AdminCategoryBrandCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminCategoryBrand.
+     */
+    data: XOR<AdminCategoryBrandCreateInput, AdminCategoryBrandUncheckedCreateInput>
+  }
+
+  /**
+   * AdminCategoryBrand createMany
+   */
+  export type AdminCategoryBrandCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminCategoryBrands.
+     */
+    data: AdminCategoryBrandCreateManyInput | AdminCategoryBrandCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminCategoryBrand createManyAndReturn
+   */
+  export type AdminCategoryBrandCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminCategoryBrands.
+     */
+    data: AdminCategoryBrandCreateManyInput | AdminCategoryBrandCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminCategoryBrand update
+   */
+  export type AdminCategoryBrandUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminCategoryBrand.
+     */
+    data: XOR<AdminCategoryBrandUpdateInput, AdminCategoryBrandUncheckedUpdateInput>
+    /**
+     * Choose, which AdminCategoryBrand to update.
+     */
+    where: AdminCategoryBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryBrand updateMany
+   */
+  export type AdminCategoryBrandUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminCategoryBrands.
+     */
+    data: XOR<AdminCategoryBrandUpdateManyMutationInput, AdminCategoryBrandUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminCategoryBrands to update
+     */
+    where?: AdminCategoryBrandWhereInput
+    /**
+     * Limit how many AdminCategoryBrands to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminCategoryBrand updateManyAndReturn
+   */
+  export type AdminCategoryBrandUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminCategoryBrands.
+     */
+    data: XOR<AdminCategoryBrandUpdateManyMutationInput, AdminCategoryBrandUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminCategoryBrands to update
+     */
+    where?: AdminCategoryBrandWhereInput
+    /**
+     * Limit how many AdminCategoryBrands to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminCategoryBrand upsert
+   */
+  export type AdminCategoryBrandUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminCategoryBrand to update in case it exists.
+     */
+    where: AdminCategoryBrandWhereUniqueInput
+    /**
+     * In case the AdminCategoryBrand found by the `where` argument doesn't exist, create a new AdminCategoryBrand with this data.
+     */
+    create: XOR<AdminCategoryBrandCreateInput, AdminCategoryBrandUncheckedCreateInput>
+    /**
+     * In case the AdminCategoryBrand was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminCategoryBrandUpdateInput, AdminCategoryBrandUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminCategoryBrand delete
+   */
+  export type AdminCategoryBrandDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+    /**
+     * Filter which AdminCategoryBrand to delete.
+     */
+    where: AdminCategoryBrandWhereUniqueInput
+  }
+
+  /**
+   * AdminCategoryBrand deleteMany
+   */
+  export type AdminCategoryBrandDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminCategoryBrands to delete
+     */
+    where?: AdminCategoryBrandWhereInput
+    /**
+     * Limit how many AdminCategoryBrands to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminCategoryBrand without action
+   */
+  export type AdminCategoryBrandDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCategoryBrand
+     */
+    select?: AdminCategoryBrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminCategoryBrand
+     */
+    omit?: AdminCategoryBrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminCategoryBrandInclude<ExtArgs> | null
+  }
+
 
   /**
    * Model Brand
@@ -15913,6 +24471,82 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const AdminBrandScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdminBrandScalarFieldEnum = (typeof AdminBrandScalarFieldEnum)[keyof typeof AdminBrandScalarFieldEnum]
+
+
+  export const AdminBrandTranslationScalarFieldEnum: {
+    id: 'id',
+    brandId: 'brandId',
+    locale: 'locale',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdminBrandTranslationScalarFieldEnum = (typeof AdminBrandTranslationScalarFieldEnum)[keyof typeof AdminBrandTranslationScalarFieldEnum]
+
+
+  export const AdminCategoryScalarFieldEnum: {
+    id: 'id',
+    section: 'section',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdminCategoryScalarFieldEnum = (typeof AdminCategoryScalarFieldEnum)[keyof typeof AdminCategoryScalarFieldEnum]
+
+
+  export const AdminCategoryTranslationScalarFieldEnum: {
+    id: 'id',
+    categoryId: 'categoryId',
+    locale: 'locale',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdminCategoryTranslationScalarFieldEnum = (typeof AdminCategoryTranslationScalarFieldEnum)[keyof typeof AdminCategoryTranslationScalarFieldEnum]
+
+
+  export const AdminSubcategoryScalarFieldEnum: {
+    id: 'id',
+    categoryId: 'categoryId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdminSubcategoryScalarFieldEnum = (typeof AdminSubcategoryScalarFieldEnum)[keyof typeof AdminSubcategoryScalarFieldEnum]
+
+
+  export const AdminSubcategoryTranslationScalarFieldEnum: {
+    id: 'id',
+    subcategoryId: 'subcategoryId',
+    locale: 'locale',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdminSubcategoryTranslationScalarFieldEnum = (typeof AdminSubcategoryTranslationScalarFieldEnum)[keyof typeof AdminSubcategoryTranslationScalarFieldEnum]
+
+
+  export const AdminCategoryBrandScalarFieldEnum: {
+    id: 'id',
+    categoryId: 'categoryId',
+    brandId: 'brandId',
+    section: 'section',
+    createdAt: 'createdAt'
+  };
+
+  export type AdminCategoryBrandScalarFieldEnum = (typeof AdminCategoryBrandScalarFieldEnum)[keyof typeof AdminCategoryBrandScalarFieldEnum]
+
+
   export const BrandScalarFieldEnum: {
     id: 'id',
     createdAt: 'createdAt',
@@ -16183,6 +24817,419 @@ export namespace Prisma {
    * Deep Input Types
    */
 
+
+  export type AdminBrandWhereInput = {
+    AND?: AdminBrandWhereInput | AdminBrandWhereInput[]
+    OR?: AdminBrandWhereInput[]
+    NOT?: AdminBrandWhereInput | AdminBrandWhereInput[]
+    id?: IntFilter<"AdminBrand"> | number
+    createdAt?: DateTimeFilter<"AdminBrand"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminBrand"> | Date | string
+    translations?: AdminBrandTranslationListRelationFilter
+    categoryBrands?: AdminCategoryBrandListRelationFilter
+  }
+
+  export type AdminBrandOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    translations?: AdminBrandTranslationOrderByRelationAggregateInput
+    categoryBrands?: AdminCategoryBrandOrderByRelationAggregateInput
+  }
+
+  export type AdminBrandWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AdminBrandWhereInput | AdminBrandWhereInput[]
+    OR?: AdminBrandWhereInput[]
+    NOT?: AdminBrandWhereInput | AdminBrandWhereInput[]
+    createdAt?: DateTimeFilter<"AdminBrand"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminBrand"> | Date | string
+    translations?: AdminBrandTranslationListRelationFilter
+    categoryBrands?: AdminCategoryBrandListRelationFilter
+  }, "id">
+
+  export type AdminBrandOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdminBrandCountOrderByAggregateInput
+    _avg?: AdminBrandAvgOrderByAggregateInput
+    _max?: AdminBrandMaxOrderByAggregateInput
+    _min?: AdminBrandMinOrderByAggregateInput
+    _sum?: AdminBrandSumOrderByAggregateInput
+  }
+
+  export type AdminBrandScalarWhereWithAggregatesInput = {
+    AND?: AdminBrandScalarWhereWithAggregatesInput | AdminBrandScalarWhereWithAggregatesInput[]
+    OR?: AdminBrandScalarWhereWithAggregatesInput[]
+    NOT?: AdminBrandScalarWhereWithAggregatesInput | AdminBrandScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AdminBrand"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"AdminBrand"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminBrand"> | Date | string
+  }
+
+  export type AdminBrandTranslationWhereInput = {
+    AND?: AdminBrandTranslationWhereInput | AdminBrandTranslationWhereInput[]
+    OR?: AdminBrandTranslationWhereInput[]
+    NOT?: AdminBrandTranslationWhereInput | AdminBrandTranslationWhereInput[]
+    id?: IntFilter<"AdminBrandTranslation"> | number
+    brandId?: IntFilter<"AdminBrandTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminBrandTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminBrandTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminBrandTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminBrandTranslation"> | Date | string
+    brand?: XOR<AdminBrandScalarRelationFilter, AdminBrandWhereInput>
+  }
+
+  export type AdminBrandTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    brandId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    brand?: AdminBrandOrderByWithRelationInput
+  }
+
+  export type AdminBrandTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    brandId_locale?: AdminBrandTranslationBrandIdLocaleCompoundUniqueInput
+    AND?: AdminBrandTranslationWhereInput | AdminBrandTranslationWhereInput[]
+    OR?: AdminBrandTranslationWhereInput[]
+    NOT?: AdminBrandTranslationWhereInput | AdminBrandTranslationWhereInput[]
+    brandId?: IntFilter<"AdminBrandTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminBrandTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminBrandTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminBrandTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminBrandTranslation"> | Date | string
+    brand?: XOR<AdminBrandScalarRelationFilter, AdminBrandWhereInput>
+  }, "id" | "brandId_locale">
+
+  export type AdminBrandTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    brandId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdminBrandTranslationCountOrderByAggregateInput
+    _avg?: AdminBrandTranslationAvgOrderByAggregateInput
+    _max?: AdminBrandTranslationMaxOrderByAggregateInput
+    _min?: AdminBrandTranslationMinOrderByAggregateInput
+    _sum?: AdminBrandTranslationSumOrderByAggregateInput
+  }
+
+  export type AdminBrandTranslationScalarWhereWithAggregatesInput = {
+    AND?: AdminBrandTranslationScalarWhereWithAggregatesInput | AdminBrandTranslationScalarWhereWithAggregatesInput[]
+    OR?: AdminBrandTranslationScalarWhereWithAggregatesInput[]
+    NOT?: AdminBrandTranslationScalarWhereWithAggregatesInput | AdminBrandTranslationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AdminBrandTranslation"> | number
+    brandId?: IntWithAggregatesFilter<"AdminBrandTranslation"> | number
+    locale?: EnumLocaleWithAggregatesFilter<"AdminBrandTranslation"> | $Enums.Locale
+    name?: StringWithAggregatesFilter<"AdminBrandTranslation"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AdminBrandTranslation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminBrandTranslation"> | Date | string
+  }
+
+  export type AdminCategoryWhereInput = {
+    AND?: AdminCategoryWhereInput | AdminCategoryWhereInput[]
+    OR?: AdminCategoryWhereInput[]
+    NOT?: AdminCategoryWhereInput | AdminCategoryWhereInput[]
+    id?: IntFilter<"AdminCategory"> | number
+    section?: EnumSectionFilter<"AdminCategory"> | $Enums.Section
+    createdAt?: DateTimeFilter<"AdminCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminCategory"> | Date | string
+    translations?: AdminCategoryTranslationListRelationFilter
+    subcategories?: AdminSubcategoryListRelationFilter
+    categoryBrands?: AdminCategoryBrandListRelationFilter
+  }
+
+  export type AdminCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    translations?: AdminCategoryTranslationOrderByRelationAggregateInput
+    subcategories?: AdminSubcategoryOrderByRelationAggregateInput
+    categoryBrands?: AdminCategoryBrandOrderByRelationAggregateInput
+  }
+
+  export type AdminCategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AdminCategoryWhereInput | AdminCategoryWhereInput[]
+    OR?: AdminCategoryWhereInput[]
+    NOT?: AdminCategoryWhereInput | AdminCategoryWhereInput[]
+    section?: EnumSectionFilter<"AdminCategory"> | $Enums.Section
+    createdAt?: DateTimeFilter<"AdminCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminCategory"> | Date | string
+    translations?: AdminCategoryTranslationListRelationFilter
+    subcategories?: AdminSubcategoryListRelationFilter
+    categoryBrands?: AdminCategoryBrandListRelationFilter
+  }, "id">
+
+  export type AdminCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdminCategoryCountOrderByAggregateInput
+    _avg?: AdminCategoryAvgOrderByAggregateInput
+    _max?: AdminCategoryMaxOrderByAggregateInput
+    _min?: AdminCategoryMinOrderByAggregateInput
+    _sum?: AdminCategorySumOrderByAggregateInput
+  }
+
+  export type AdminCategoryScalarWhereWithAggregatesInput = {
+    AND?: AdminCategoryScalarWhereWithAggregatesInput | AdminCategoryScalarWhereWithAggregatesInput[]
+    OR?: AdminCategoryScalarWhereWithAggregatesInput[]
+    NOT?: AdminCategoryScalarWhereWithAggregatesInput | AdminCategoryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AdminCategory"> | number
+    section?: EnumSectionWithAggregatesFilter<"AdminCategory"> | $Enums.Section
+    createdAt?: DateTimeWithAggregatesFilter<"AdminCategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminCategory"> | Date | string
+  }
+
+  export type AdminCategoryTranslationWhereInput = {
+    AND?: AdminCategoryTranslationWhereInput | AdminCategoryTranslationWhereInput[]
+    OR?: AdminCategoryTranslationWhereInput[]
+    NOT?: AdminCategoryTranslationWhereInput | AdminCategoryTranslationWhereInput[]
+    id?: IntFilter<"AdminCategoryTranslation"> | number
+    categoryId?: IntFilter<"AdminCategoryTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminCategoryTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminCategoryTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminCategoryTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminCategoryTranslation"> | Date | string
+    category?: XOR<AdminCategoryScalarRelationFilter, AdminCategoryWhereInput>
+  }
+
+  export type AdminCategoryTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    category?: AdminCategoryOrderByWithRelationInput
+  }
+
+  export type AdminCategoryTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    categoryId_locale?: AdminCategoryTranslationCategoryIdLocaleCompoundUniqueInput
+    AND?: AdminCategoryTranslationWhereInput | AdminCategoryTranslationWhereInput[]
+    OR?: AdminCategoryTranslationWhereInput[]
+    NOT?: AdminCategoryTranslationWhereInput | AdminCategoryTranslationWhereInput[]
+    categoryId?: IntFilter<"AdminCategoryTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminCategoryTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminCategoryTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminCategoryTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminCategoryTranslation"> | Date | string
+    category?: XOR<AdminCategoryScalarRelationFilter, AdminCategoryWhereInput>
+  }, "id" | "categoryId_locale">
+
+  export type AdminCategoryTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdminCategoryTranslationCountOrderByAggregateInput
+    _avg?: AdminCategoryTranslationAvgOrderByAggregateInput
+    _max?: AdminCategoryTranslationMaxOrderByAggregateInput
+    _min?: AdminCategoryTranslationMinOrderByAggregateInput
+    _sum?: AdminCategoryTranslationSumOrderByAggregateInput
+  }
+
+  export type AdminCategoryTranslationScalarWhereWithAggregatesInput = {
+    AND?: AdminCategoryTranslationScalarWhereWithAggregatesInput | AdminCategoryTranslationScalarWhereWithAggregatesInput[]
+    OR?: AdminCategoryTranslationScalarWhereWithAggregatesInput[]
+    NOT?: AdminCategoryTranslationScalarWhereWithAggregatesInput | AdminCategoryTranslationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AdminCategoryTranslation"> | number
+    categoryId?: IntWithAggregatesFilter<"AdminCategoryTranslation"> | number
+    locale?: EnumLocaleWithAggregatesFilter<"AdminCategoryTranslation"> | $Enums.Locale
+    name?: StringWithAggregatesFilter<"AdminCategoryTranslation"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AdminCategoryTranslation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminCategoryTranslation"> | Date | string
+  }
+
+  export type AdminSubcategoryWhereInput = {
+    AND?: AdminSubcategoryWhereInput | AdminSubcategoryWhereInput[]
+    OR?: AdminSubcategoryWhereInput[]
+    NOT?: AdminSubcategoryWhereInput | AdminSubcategoryWhereInput[]
+    id?: IntFilter<"AdminSubcategory"> | number
+    categoryId?: IntFilter<"AdminSubcategory"> | number
+    createdAt?: DateTimeFilter<"AdminSubcategory"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminSubcategory"> | Date | string
+    category?: XOR<AdminCategoryScalarRelationFilter, AdminCategoryWhereInput>
+    translations?: AdminSubcategoryTranslationListRelationFilter
+  }
+
+  export type AdminSubcategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    category?: AdminCategoryOrderByWithRelationInput
+    translations?: AdminSubcategoryTranslationOrderByRelationAggregateInput
+  }
+
+  export type AdminSubcategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AdminSubcategoryWhereInput | AdminSubcategoryWhereInput[]
+    OR?: AdminSubcategoryWhereInput[]
+    NOT?: AdminSubcategoryWhereInput | AdminSubcategoryWhereInput[]
+    categoryId?: IntFilter<"AdminSubcategory"> | number
+    createdAt?: DateTimeFilter<"AdminSubcategory"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminSubcategory"> | Date | string
+    category?: XOR<AdminCategoryScalarRelationFilter, AdminCategoryWhereInput>
+    translations?: AdminSubcategoryTranslationListRelationFilter
+  }, "id">
+
+  export type AdminSubcategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdminSubcategoryCountOrderByAggregateInput
+    _avg?: AdminSubcategoryAvgOrderByAggregateInput
+    _max?: AdminSubcategoryMaxOrderByAggregateInput
+    _min?: AdminSubcategoryMinOrderByAggregateInput
+    _sum?: AdminSubcategorySumOrderByAggregateInput
+  }
+
+  export type AdminSubcategoryScalarWhereWithAggregatesInput = {
+    AND?: AdminSubcategoryScalarWhereWithAggregatesInput | AdminSubcategoryScalarWhereWithAggregatesInput[]
+    OR?: AdminSubcategoryScalarWhereWithAggregatesInput[]
+    NOT?: AdminSubcategoryScalarWhereWithAggregatesInput | AdminSubcategoryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AdminSubcategory"> | number
+    categoryId?: IntWithAggregatesFilter<"AdminSubcategory"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"AdminSubcategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminSubcategory"> | Date | string
+  }
+
+  export type AdminSubcategoryTranslationWhereInput = {
+    AND?: AdminSubcategoryTranslationWhereInput | AdminSubcategoryTranslationWhereInput[]
+    OR?: AdminSubcategoryTranslationWhereInput[]
+    NOT?: AdminSubcategoryTranslationWhereInput | AdminSubcategoryTranslationWhereInput[]
+    id?: IntFilter<"AdminSubcategoryTranslation"> | number
+    subcategoryId?: IntFilter<"AdminSubcategoryTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminSubcategoryTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminSubcategoryTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminSubcategoryTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminSubcategoryTranslation"> | Date | string
+    subcategory?: XOR<AdminSubcategoryScalarRelationFilter, AdminSubcategoryWhereInput>
+  }
+
+  export type AdminSubcategoryTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    subcategoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    subcategory?: AdminSubcategoryOrderByWithRelationInput
+  }
+
+  export type AdminSubcategoryTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    subcategoryId_locale?: AdminSubcategoryTranslationSubcategoryIdLocaleCompoundUniqueInput
+    AND?: AdminSubcategoryTranslationWhereInput | AdminSubcategoryTranslationWhereInput[]
+    OR?: AdminSubcategoryTranslationWhereInput[]
+    NOT?: AdminSubcategoryTranslationWhereInput | AdminSubcategoryTranslationWhereInput[]
+    subcategoryId?: IntFilter<"AdminSubcategoryTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminSubcategoryTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminSubcategoryTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminSubcategoryTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminSubcategoryTranslation"> | Date | string
+    subcategory?: XOR<AdminSubcategoryScalarRelationFilter, AdminSubcategoryWhereInput>
+  }, "id" | "subcategoryId_locale">
+
+  export type AdminSubcategoryTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    subcategoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdminSubcategoryTranslationCountOrderByAggregateInput
+    _avg?: AdminSubcategoryTranslationAvgOrderByAggregateInput
+    _max?: AdminSubcategoryTranslationMaxOrderByAggregateInput
+    _min?: AdminSubcategoryTranslationMinOrderByAggregateInput
+    _sum?: AdminSubcategoryTranslationSumOrderByAggregateInput
+  }
+
+  export type AdminSubcategoryTranslationScalarWhereWithAggregatesInput = {
+    AND?: AdminSubcategoryTranslationScalarWhereWithAggregatesInput | AdminSubcategoryTranslationScalarWhereWithAggregatesInput[]
+    OR?: AdminSubcategoryTranslationScalarWhereWithAggregatesInput[]
+    NOT?: AdminSubcategoryTranslationScalarWhereWithAggregatesInput | AdminSubcategoryTranslationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AdminSubcategoryTranslation"> | number
+    subcategoryId?: IntWithAggregatesFilter<"AdminSubcategoryTranslation"> | number
+    locale?: EnumLocaleWithAggregatesFilter<"AdminSubcategoryTranslation"> | $Enums.Locale
+    name?: StringWithAggregatesFilter<"AdminSubcategoryTranslation"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AdminSubcategoryTranslation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminSubcategoryTranslation"> | Date | string
+  }
+
+  export type AdminCategoryBrandWhereInput = {
+    AND?: AdminCategoryBrandWhereInput | AdminCategoryBrandWhereInput[]
+    OR?: AdminCategoryBrandWhereInput[]
+    NOT?: AdminCategoryBrandWhereInput | AdminCategoryBrandWhereInput[]
+    id?: IntFilter<"AdminCategoryBrand"> | number
+    categoryId?: IntFilter<"AdminCategoryBrand"> | number
+    brandId?: IntFilter<"AdminCategoryBrand"> | number
+    section?: EnumSectionFilter<"AdminCategoryBrand"> | $Enums.Section
+    createdAt?: DateTimeFilter<"AdminCategoryBrand"> | Date | string
+    category?: XOR<AdminCategoryScalarRelationFilter, AdminCategoryWhereInput>
+    brand?: XOR<AdminBrandScalarRelationFilter, AdminBrandWhereInput>
+  }
+
+  export type AdminCategoryBrandOrderByWithRelationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    brandId?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+    category?: AdminCategoryOrderByWithRelationInput
+    brand?: AdminBrandOrderByWithRelationInput
+  }
+
+  export type AdminCategoryBrandWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    categoryId_brandId_section?: AdminCategoryBrandCategoryIdBrandIdSectionCompoundUniqueInput
+    AND?: AdminCategoryBrandWhereInput | AdminCategoryBrandWhereInput[]
+    OR?: AdminCategoryBrandWhereInput[]
+    NOT?: AdminCategoryBrandWhereInput | AdminCategoryBrandWhereInput[]
+    categoryId?: IntFilter<"AdminCategoryBrand"> | number
+    brandId?: IntFilter<"AdminCategoryBrand"> | number
+    section?: EnumSectionFilter<"AdminCategoryBrand"> | $Enums.Section
+    createdAt?: DateTimeFilter<"AdminCategoryBrand"> | Date | string
+    category?: XOR<AdminCategoryScalarRelationFilter, AdminCategoryWhereInput>
+    brand?: XOR<AdminBrandScalarRelationFilter, AdminBrandWhereInput>
+  }, "id" | "categoryId_brandId_section">
+
+  export type AdminCategoryBrandOrderByWithAggregationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    brandId?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+    _count?: AdminCategoryBrandCountOrderByAggregateInput
+    _avg?: AdminCategoryBrandAvgOrderByAggregateInput
+    _max?: AdminCategoryBrandMaxOrderByAggregateInput
+    _min?: AdminCategoryBrandMinOrderByAggregateInput
+    _sum?: AdminCategoryBrandSumOrderByAggregateInput
+  }
+
+  export type AdminCategoryBrandScalarWhereWithAggregatesInput = {
+    AND?: AdminCategoryBrandScalarWhereWithAggregatesInput | AdminCategoryBrandScalarWhereWithAggregatesInput[]
+    OR?: AdminCategoryBrandScalarWhereWithAggregatesInput[]
+    NOT?: AdminCategoryBrandScalarWhereWithAggregatesInput | AdminCategoryBrandScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AdminCategoryBrand"> | number
+    categoryId?: IntWithAggregatesFilter<"AdminCategoryBrand"> | number
+    brandId?: IntWithAggregatesFilter<"AdminCategoryBrand"> | number
+    section?: EnumSectionWithAggregatesFilter<"AdminCategoryBrand"> | $Enums.Section
+    createdAt?: DateTimeWithAggregatesFilter<"AdminCategoryBrand"> | Date | string
+  }
 
   export type BrandWhereInput = {
     AND?: BrandWhereInput | BrandWhereInput[]
@@ -16997,6 +26044,388 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ProductSpecificationTranslation"> | Date | string
   }
 
+  export type AdminBrandCreateInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminBrandTranslationCreateNestedManyWithoutBrandInput
+    categoryBrands?: AdminCategoryBrandCreateNestedManyWithoutBrandInput
+  }
+
+  export type AdminBrandUncheckedCreateInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminBrandTranslationUncheckedCreateNestedManyWithoutBrandInput
+    categoryBrands?: AdminCategoryBrandUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type AdminBrandUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminBrandTranslationUpdateManyWithoutBrandNestedInput
+    categoryBrands?: AdminCategoryBrandUpdateManyWithoutBrandNestedInput
+  }
+
+  export type AdminBrandUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminBrandTranslationUncheckedUpdateManyWithoutBrandNestedInput
+    categoryBrands?: AdminCategoryBrandUncheckedUpdateManyWithoutBrandNestedInput
+  }
+
+  export type AdminBrandCreateManyInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminBrandUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminBrandUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminBrandTranslationCreateInput = {
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    brand: AdminBrandCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type AdminBrandTranslationUncheckedCreateInput = {
+    id?: number
+    brandId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminBrandTranslationUpdateInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: AdminBrandUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type AdminBrandTranslationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    brandId?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminBrandTranslationCreateManyInput = {
+    id?: number
+    brandId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminBrandTranslationUpdateManyMutationInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminBrandTranslationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    brandId?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryCreateInput = {
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminCategoryTranslationCreateNestedManyWithoutCategoryInput
+    subcategories?: AdminSubcategoryCreateNestedManyWithoutCategoryInput
+    categoryBrands?: AdminCategoryBrandCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryUncheckedCreateInput = {
+    id?: number
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminCategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    subcategories?: AdminSubcategoryUncheckedCreateNestedManyWithoutCategoryInput
+    categoryBrands?: AdminCategoryBrandUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryUpdateInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminCategoryTranslationUpdateManyWithoutCategoryNestedInput
+    subcategories?: AdminSubcategoryUpdateManyWithoutCategoryNestedInput
+    categoryBrands?: AdminCategoryBrandUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminCategoryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminCategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    subcategories?: AdminSubcategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    categoryBrands?: AdminCategoryBrandUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminCategoryCreateManyInput = {
+    id?: number
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCategoryUpdateManyMutationInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryTranslationCreateInput = {
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    category: AdminCategoryCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type AdminCategoryTranslationUncheckedCreateInput = {
+    id?: number
+    categoryId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCategoryTranslationUpdateInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: AdminCategoryUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type AdminCategoryTranslationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryTranslationCreateManyInput = {
+    id?: number
+    categoryId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCategoryTranslationUpdateManyMutationInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryTranslationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryCreateInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    category: AdminCategoryCreateNestedOneWithoutSubcategoriesInput
+    translations?: AdminSubcategoryTranslationCreateNestedManyWithoutSubcategoryInput
+  }
+
+  export type AdminSubcategoryUncheckedCreateInput = {
+    id?: number
+    categoryId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminSubcategoryTranslationUncheckedCreateNestedManyWithoutSubcategoryInput
+  }
+
+  export type AdminSubcategoryUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: AdminCategoryUpdateOneRequiredWithoutSubcategoriesNestedInput
+    translations?: AdminSubcategoryTranslationUpdateManyWithoutSubcategoryNestedInput
+  }
+
+  export type AdminSubcategoryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminSubcategoryTranslationUncheckedUpdateManyWithoutSubcategoryNestedInput
+  }
+
+  export type AdminSubcategoryCreateManyInput = {
+    id?: number
+    categoryId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryTranslationCreateInput = {
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    subcategory: AdminSubcategoryCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type AdminSubcategoryTranslationUncheckedCreateInput = {
+    id?: number
+    subcategoryId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryTranslationUpdateInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subcategory?: AdminSubcategoryUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type AdminSubcategoryTranslationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    subcategoryId?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryTranslationCreateManyInput = {
+    id?: number
+    subcategoryId: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryTranslationUpdateManyMutationInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryTranslationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    subcategoryId?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryBrandCreateInput = {
+    section: $Enums.Section
+    createdAt?: Date | string
+    category: AdminCategoryCreateNestedOneWithoutCategoryBrandsInput
+    brand: AdminBrandCreateNestedOneWithoutCategoryBrandsInput
+  }
+
+  export type AdminCategoryBrandUncheckedCreateInput = {
+    id?: number
+    categoryId: number
+    brandId: number
+    section: $Enums.Section
+    createdAt?: Date | string
+  }
+
+  export type AdminCategoryBrandUpdateInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: AdminCategoryUpdateOneRequiredWithoutCategoryBrandsNestedInput
+    brand?: AdminBrandUpdateOneRequiredWithoutCategoryBrandsNestedInput
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    brandId?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryBrandCreateManyInput = {
+    id?: number
+    categoryId: number
+    brandId: number
+    section: $Enums.Section
+    createdAt?: Date | string
+  }
+
+  export type AdminCategoryBrandUpdateManyMutationInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    brandId?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BrandCreateInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17806,6 +27235,422 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type AdminBrandTranslationListRelationFilter = {
+    every?: AdminBrandTranslationWhereInput
+    some?: AdminBrandTranslationWhereInput
+    none?: AdminBrandTranslationWhereInput
+  }
+
+  export type AdminCategoryBrandListRelationFilter = {
+    every?: AdminCategoryBrandWhereInput
+    some?: AdminCategoryBrandWhereInput
+    none?: AdminCategoryBrandWhereInput
+  }
+
+  export type AdminBrandTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminCategoryBrandOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminBrandCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminBrandAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AdminBrandMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminBrandMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminBrandSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type EnumLocaleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Locale | EnumLocaleFieldRefInput<$PrismaModel>
+    in?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
+    not?: NestedEnumLocaleFilter<$PrismaModel> | $Enums.Locale
+  }
+
+  export type StringFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type AdminBrandScalarRelationFilter = {
+    is?: AdminBrandWhereInput
+    isNot?: AdminBrandWhereInput
+  }
+
+  export type AdminBrandTranslationBrandIdLocaleCompoundUniqueInput = {
+    brandId: number
+    locale: $Enums.Locale
+  }
+
+  export type AdminBrandTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    brandId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminBrandTranslationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    brandId?: SortOrder
+  }
+
+  export type AdminBrandTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    brandId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminBrandTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    brandId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminBrandTranslationSumOrderByAggregateInput = {
+    id?: SortOrder
+    brandId?: SortOrder
+  }
+
+  export type EnumLocaleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Locale | EnumLocaleFieldRefInput<$PrismaModel>
+    in?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
+    not?: NestedEnumLocaleWithAggregatesFilter<$PrismaModel> | $Enums.Locale
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLocaleFilter<$PrismaModel>
+    _max?: NestedEnumLocaleFilter<$PrismaModel>
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type EnumSectionFilter<$PrismaModel = never> = {
+    equals?: $Enums.Section | EnumSectionFieldRefInput<$PrismaModel>
+    in?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumSectionFilter<$PrismaModel> | $Enums.Section
+  }
+
+  export type AdminCategoryTranslationListRelationFilter = {
+    every?: AdminCategoryTranslationWhereInput
+    some?: AdminCategoryTranslationWhereInput
+    none?: AdminCategoryTranslationWhereInput
+  }
+
+  export type AdminSubcategoryListRelationFilter = {
+    every?: AdminSubcategoryWhereInput
+    some?: AdminSubcategoryWhereInput
+    none?: AdminSubcategoryWhereInput
+  }
+
+  export type AdminCategoryTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminSubcategoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminCategoryAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AdminCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminCategorySumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumSectionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Section | EnumSectionFieldRefInput<$PrismaModel>
+    in?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumSectionWithAggregatesFilter<$PrismaModel> | $Enums.Section
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSectionFilter<$PrismaModel>
+    _max?: NestedEnumSectionFilter<$PrismaModel>
+  }
+
+  export type AdminCategoryScalarRelationFilter = {
+    is?: AdminCategoryWhereInput
+    isNot?: AdminCategoryWhereInput
+  }
+
+  export type AdminCategoryTranslationCategoryIdLocaleCompoundUniqueInput = {
+    categoryId: number
+    locale: $Enums.Locale
+  }
+
+  export type AdminCategoryTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminCategoryTranslationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+  }
+
+  export type AdminCategoryTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminCategoryTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminCategoryTranslationSumOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+  }
+
+  export type AdminSubcategoryTranslationListRelationFilter = {
+    every?: AdminSubcategoryTranslationWhereInput
+    some?: AdminSubcategoryTranslationWhereInput
+    none?: AdminSubcategoryTranslationWhereInput
+  }
+
+  export type AdminSubcategoryTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminSubcategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminSubcategoryAvgOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+  }
+
+  export type AdminSubcategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminSubcategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminSubcategorySumOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+  }
+
+  export type AdminSubcategoryScalarRelationFilter = {
+    is?: AdminSubcategoryWhereInput
+    isNot?: AdminSubcategoryWhereInput
+  }
+
+  export type AdminSubcategoryTranslationSubcategoryIdLocaleCompoundUniqueInput = {
+    subcategoryId: number
+    locale: $Enums.Locale
+  }
+
+  export type AdminSubcategoryTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    subcategoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminSubcategoryTranslationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    subcategoryId?: SortOrder
+  }
+
+  export type AdminSubcategoryTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    subcategoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminSubcategoryTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    subcategoryId?: SortOrder
+    locale?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminSubcategoryTranslationSumOrderByAggregateInput = {
+    id?: SortOrder
+    subcategoryId?: SortOrder
+  }
+
+  export type AdminCategoryBrandCategoryIdBrandIdSectionCompoundUniqueInput = {
+    categoryId: number
+    brandId: number
+    section: $Enums.Section
+  }
+
+  export type AdminCategoryBrandCountOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    brandId?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdminCategoryBrandAvgOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    brandId?: SortOrder
+  }
+
+  export type AdminCategoryBrandMaxOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    brandId?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdminCategoryBrandMinOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    brandId?: SortOrder
+    section?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdminCategoryBrandSumOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    brandId?: SortOrder
+  }
+
   export type BrandTranslationListRelationFilter = {
     every?: BrandTranslationWhereInput
     some?: BrandTranslationWhereInput
@@ -17862,58 +27707,6 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type EnumLocaleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Locale | EnumLocaleFieldRefInput<$PrismaModel>
-    in?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
-    not?: NestedEnumLocaleFilter<$PrismaModel> | $Enums.Locale
-  }
-
-  export type StringFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringFilter<$PrismaModel> | string
-  }
-
   export type BrandScalarRelationFilter = {
     is?: BrandWhereInput
     isNot?: BrandWhereInput
@@ -17959,41 +27752,6 @@ export namespace Prisma {
   export type BrandTranslationSumOrderByAggregateInput = {
     id?: SortOrder
     brandId?: SortOrder
-  }
-
-  export type EnumLocaleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Locale | EnumLocaleFieldRefInput<$PrismaModel>
-    in?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Locale[] | ListEnumLocaleFieldRefInput<$PrismaModel>
-    not?: NestedEnumLocaleWithAggregatesFilter<$PrismaModel> | $Enums.Locale
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLocaleFilter<$PrismaModel>
-    _max?: NestedEnumLocaleFilter<$PrismaModel>
-  }
-
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type EnumSectionFilter<$PrismaModel = never> = {
-    equals?: $Enums.Section | EnumSectionFieldRefInput<$PrismaModel>
-    in?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumSectionFilter<$PrismaModel> | $Enums.Section
   }
 
   export type CategoryTranslationListRelationFilter = {
@@ -18043,16 +27801,6 @@ export namespace Prisma {
 
   export type CategorySumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type EnumSectionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Section | EnumSectionFieldRefInput<$PrismaModel>
-    in?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Section[] | ListEnumSectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumSectionWithAggregatesFilter<$PrismaModel> | $Enums.Section
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSectionFilter<$PrismaModel>
-    _max?: NestedEnumSectionFilter<$PrismaModel>
   }
 
   export type CategoryScalarRelationFilter = {
@@ -18614,6 +28362,366 @@ export namespace Prisma {
     specificationId?: SortOrder
   }
 
+  export type AdminBrandTranslationCreateNestedManyWithoutBrandInput = {
+    create?: XOR<AdminBrandTranslationCreateWithoutBrandInput, AdminBrandTranslationUncheckedCreateWithoutBrandInput> | AdminBrandTranslationCreateWithoutBrandInput[] | AdminBrandTranslationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminBrandTranslationCreateOrConnectWithoutBrandInput | AdminBrandTranslationCreateOrConnectWithoutBrandInput[]
+    createMany?: AdminBrandTranslationCreateManyBrandInputEnvelope
+    connect?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+  }
+
+  export type AdminCategoryBrandCreateNestedManyWithoutBrandInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutBrandInput, AdminCategoryBrandUncheckedCreateWithoutBrandInput> | AdminCategoryBrandCreateWithoutBrandInput[] | AdminCategoryBrandUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutBrandInput | AdminCategoryBrandCreateOrConnectWithoutBrandInput[]
+    createMany?: AdminCategoryBrandCreateManyBrandInputEnvelope
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+  }
+
+  export type AdminBrandTranslationUncheckedCreateNestedManyWithoutBrandInput = {
+    create?: XOR<AdminBrandTranslationCreateWithoutBrandInput, AdminBrandTranslationUncheckedCreateWithoutBrandInput> | AdminBrandTranslationCreateWithoutBrandInput[] | AdminBrandTranslationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminBrandTranslationCreateOrConnectWithoutBrandInput | AdminBrandTranslationCreateOrConnectWithoutBrandInput[]
+    createMany?: AdminBrandTranslationCreateManyBrandInputEnvelope
+    connect?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+  }
+
+  export type AdminCategoryBrandUncheckedCreateNestedManyWithoutBrandInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutBrandInput, AdminCategoryBrandUncheckedCreateWithoutBrandInput> | AdminCategoryBrandCreateWithoutBrandInput[] | AdminCategoryBrandUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutBrandInput | AdminCategoryBrandCreateOrConnectWithoutBrandInput[]
+    createMany?: AdminCategoryBrandCreateManyBrandInputEnvelope
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type AdminBrandTranslationUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<AdminBrandTranslationCreateWithoutBrandInput, AdminBrandTranslationUncheckedCreateWithoutBrandInput> | AdminBrandTranslationCreateWithoutBrandInput[] | AdminBrandTranslationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminBrandTranslationCreateOrConnectWithoutBrandInput | AdminBrandTranslationCreateOrConnectWithoutBrandInput[]
+    upsert?: AdminBrandTranslationUpsertWithWhereUniqueWithoutBrandInput | AdminBrandTranslationUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: AdminBrandTranslationCreateManyBrandInputEnvelope
+    set?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    disconnect?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    delete?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    connect?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    update?: AdminBrandTranslationUpdateWithWhereUniqueWithoutBrandInput | AdminBrandTranslationUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: AdminBrandTranslationUpdateManyWithWhereWithoutBrandInput | AdminBrandTranslationUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: AdminBrandTranslationScalarWhereInput | AdminBrandTranslationScalarWhereInput[]
+  }
+
+  export type AdminCategoryBrandUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutBrandInput, AdminCategoryBrandUncheckedCreateWithoutBrandInput> | AdminCategoryBrandCreateWithoutBrandInput[] | AdminCategoryBrandUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutBrandInput | AdminCategoryBrandCreateOrConnectWithoutBrandInput[]
+    upsert?: AdminCategoryBrandUpsertWithWhereUniqueWithoutBrandInput | AdminCategoryBrandUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: AdminCategoryBrandCreateManyBrandInputEnvelope
+    set?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    disconnect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    delete?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    update?: AdminCategoryBrandUpdateWithWhereUniqueWithoutBrandInput | AdminCategoryBrandUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: AdminCategoryBrandUpdateManyWithWhereWithoutBrandInput | AdminCategoryBrandUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: AdminCategoryBrandScalarWhereInput | AdminCategoryBrandScalarWhereInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type AdminBrandTranslationUncheckedUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<AdminBrandTranslationCreateWithoutBrandInput, AdminBrandTranslationUncheckedCreateWithoutBrandInput> | AdminBrandTranslationCreateWithoutBrandInput[] | AdminBrandTranslationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminBrandTranslationCreateOrConnectWithoutBrandInput | AdminBrandTranslationCreateOrConnectWithoutBrandInput[]
+    upsert?: AdminBrandTranslationUpsertWithWhereUniqueWithoutBrandInput | AdminBrandTranslationUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: AdminBrandTranslationCreateManyBrandInputEnvelope
+    set?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    disconnect?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    delete?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    connect?: AdminBrandTranslationWhereUniqueInput | AdminBrandTranslationWhereUniqueInput[]
+    update?: AdminBrandTranslationUpdateWithWhereUniqueWithoutBrandInput | AdminBrandTranslationUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: AdminBrandTranslationUpdateManyWithWhereWithoutBrandInput | AdminBrandTranslationUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: AdminBrandTranslationScalarWhereInput | AdminBrandTranslationScalarWhereInput[]
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutBrandInput, AdminCategoryBrandUncheckedCreateWithoutBrandInput> | AdminCategoryBrandCreateWithoutBrandInput[] | AdminCategoryBrandUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutBrandInput | AdminCategoryBrandCreateOrConnectWithoutBrandInput[]
+    upsert?: AdminCategoryBrandUpsertWithWhereUniqueWithoutBrandInput | AdminCategoryBrandUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: AdminCategoryBrandCreateManyBrandInputEnvelope
+    set?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    disconnect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    delete?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    update?: AdminCategoryBrandUpdateWithWhereUniqueWithoutBrandInput | AdminCategoryBrandUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: AdminCategoryBrandUpdateManyWithWhereWithoutBrandInput | AdminCategoryBrandUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: AdminCategoryBrandScalarWhereInput | AdminCategoryBrandScalarWhereInput[]
+  }
+
+  export type AdminBrandCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<AdminBrandCreateWithoutTranslationsInput, AdminBrandUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: AdminBrandCreateOrConnectWithoutTranslationsInput
+    connect?: AdminBrandWhereUniqueInput
+  }
+
+  export type EnumLocaleFieldUpdateOperationsInput = {
+    set?: $Enums.Locale
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
+  export type AdminBrandUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<AdminBrandCreateWithoutTranslationsInput, AdminBrandUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: AdminBrandCreateOrConnectWithoutTranslationsInput
+    upsert?: AdminBrandUpsertWithoutTranslationsInput
+    connect?: AdminBrandWhereUniqueInput
+    update?: XOR<XOR<AdminBrandUpdateToOneWithWhereWithoutTranslationsInput, AdminBrandUpdateWithoutTranslationsInput>, AdminBrandUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type AdminCategoryTranslationCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<AdminCategoryTranslationCreateWithoutCategoryInput, AdminCategoryTranslationUncheckedCreateWithoutCategoryInput> | AdminCategoryTranslationCreateWithoutCategoryInput[] | AdminCategoryTranslationUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryTranslationCreateOrConnectWithoutCategoryInput | AdminCategoryTranslationCreateOrConnectWithoutCategoryInput[]
+    createMany?: AdminCategoryTranslationCreateManyCategoryInputEnvelope
+    connect?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+  }
+
+  export type AdminSubcategoryCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<AdminSubcategoryCreateWithoutCategoryInput, AdminSubcategoryUncheckedCreateWithoutCategoryInput> | AdminSubcategoryCreateWithoutCategoryInput[] | AdminSubcategoryUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminSubcategoryCreateOrConnectWithoutCategoryInput | AdminSubcategoryCreateOrConnectWithoutCategoryInput[]
+    createMany?: AdminSubcategoryCreateManyCategoryInputEnvelope
+    connect?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+  }
+
+  export type AdminCategoryBrandCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutCategoryInput, AdminCategoryBrandUncheckedCreateWithoutCategoryInput> | AdminCategoryBrandCreateWithoutCategoryInput[] | AdminCategoryBrandUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutCategoryInput | AdminCategoryBrandCreateOrConnectWithoutCategoryInput[]
+    createMany?: AdminCategoryBrandCreateManyCategoryInputEnvelope
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+  }
+
+  export type AdminCategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<AdminCategoryTranslationCreateWithoutCategoryInput, AdminCategoryTranslationUncheckedCreateWithoutCategoryInput> | AdminCategoryTranslationCreateWithoutCategoryInput[] | AdminCategoryTranslationUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryTranslationCreateOrConnectWithoutCategoryInput | AdminCategoryTranslationCreateOrConnectWithoutCategoryInput[]
+    createMany?: AdminCategoryTranslationCreateManyCategoryInputEnvelope
+    connect?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+  }
+
+  export type AdminSubcategoryUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<AdminSubcategoryCreateWithoutCategoryInput, AdminSubcategoryUncheckedCreateWithoutCategoryInput> | AdminSubcategoryCreateWithoutCategoryInput[] | AdminSubcategoryUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminSubcategoryCreateOrConnectWithoutCategoryInput | AdminSubcategoryCreateOrConnectWithoutCategoryInput[]
+    createMany?: AdminSubcategoryCreateManyCategoryInputEnvelope
+    connect?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+  }
+
+  export type AdminCategoryBrandUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutCategoryInput, AdminCategoryBrandUncheckedCreateWithoutCategoryInput> | AdminCategoryBrandCreateWithoutCategoryInput[] | AdminCategoryBrandUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutCategoryInput | AdminCategoryBrandCreateOrConnectWithoutCategoryInput[]
+    createMany?: AdminCategoryBrandCreateManyCategoryInputEnvelope
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+  }
+
+  export type EnumSectionFieldUpdateOperationsInput = {
+    set?: $Enums.Section
+  }
+
+  export type AdminCategoryTranslationUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<AdminCategoryTranslationCreateWithoutCategoryInput, AdminCategoryTranslationUncheckedCreateWithoutCategoryInput> | AdminCategoryTranslationCreateWithoutCategoryInput[] | AdminCategoryTranslationUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryTranslationCreateOrConnectWithoutCategoryInput | AdminCategoryTranslationCreateOrConnectWithoutCategoryInput[]
+    upsert?: AdminCategoryTranslationUpsertWithWhereUniqueWithoutCategoryInput | AdminCategoryTranslationUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: AdminCategoryTranslationCreateManyCategoryInputEnvelope
+    set?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    disconnect?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    delete?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    connect?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    update?: AdminCategoryTranslationUpdateWithWhereUniqueWithoutCategoryInput | AdminCategoryTranslationUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: AdminCategoryTranslationUpdateManyWithWhereWithoutCategoryInput | AdminCategoryTranslationUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: AdminCategoryTranslationScalarWhereInput | AdminCategoryTranslationScalarWhereInput[]
+  }
+
+  export type AdminSubcategoryUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<AdminSubcategoryCreateWithoutCategoryInput, AdminSubcategoryUncheckedCreateWithoutCategoryInput> | AdminSubcategoryCreateWithoutCategoryInput[] | AdminSubcategoryUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminSubcategoryCreateOrConnectWithoutCategoryInput | AdminSubcategoryCreateOrConnectWithoutCategoryInput[]
+    upsert?: AdminSubcategoryUpsertWithWhereUniqueWithoutCategoryInput | AdminSubcategoryUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: AdminSubcategoryCreateManyCategoryInputEnvelope
+    set?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    disconnect?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    delete?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    connect?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    update?: AdminSubcategoryUpdateWithWhereUniqueWithoutCategoryInput | AdminSubcategoryUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: AdminSubcategoryUpdateManyWithWhereWithoutCategoryInput | AdminSubcategoryUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: AdminSubcategoryScalarWhereInput | AdminSubcategoryScalarWhereInput[]
+  }
+
+  export type AdminCategoryBrandUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutCategoryInput, AdminCategoryBrandUncheckedCreateWithoutCategoryInput> | AdminCategoryBrandCreateWithoutCategoryInput[] | AdminCategoryBrandUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutCategoryInput | AdminCategoryBrandCreateOrConnectWithoutCategoryInput[]
+    upsert?: AdminCategoryBrandUpsertWithWhereUniqueWithoutCategoryInput | AdminCategoryBrandUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: AdminCategoryBrandCreateManyCategoryInputEnvelope
+    set?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    disconnect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    delete?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    update?: AdminCategoryBrandUpdateWithWhereUniqueWithoutCategoryInput | AdminCategoryBrandUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: AdminCategoryBrandUpdateManyWithWhereWithoutCategoryInput | AdminCategoryBrandUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: AdminCategoryBrandScalarWhereInput | AdminCategoryBrandScalarWhereInput[]
+  }
+
+  export type AdminCategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<AdminCategoryTranslationCreateWithoutCategoryInput, AdminCategoryTranslationUncheckedCreateWithoutCategoryInput> | AdminCategoryTranslationCreateWithoutCategoryInput[] | AdminCategoryTranslationUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryTranslationCreateOrConnectWithoutCategoryInput | AdminCategoryTranslationCreateOrConnectWithoutCategoryInput[]
+    upsert?: AdminCategoryTranslationUpsertWithWhereUniqueWithoutCategoryInput | AdminCategoryTranslationUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: AdminCategoryTranslationCreateManyCategoryInputEnvelope
+    set?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    disconnect?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    delete?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    connect?: AdminCategoryTranslationWhereUniqueInput | AdminCategoryTranslationWhereUniqueInput[]
+    update?: AdminCategoryTranslationUpdateWithWhereUniqueWithoutCategoryInput | AdminCategoryTranslationUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: AdminCategoryTranslationUpdateManyWithWhereWithoutCategoryInput | AdminCategoryTranslationUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: AdminCategoryTranslationScalarWhereInput | AdminCategoryTranslationScalarWhereInput[]
+  }
+
+  export type AdminSubcategoryUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<AdminSubcategoryCreateWithoutCategoryInput, AdminSubcategoryUncheckedCreateWithoutCategoryInput> | AdminSubcategoryCreateWithoutCategoryInput[] | AdminSubcategoryUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminSubcategoryCreateOrConnectWithoutCategoryInput | AdminSubcategoryCreateOrConnectWithoutCategoryInput[]
+    upsert?: AdminSubcategoryUpsertWithWhereUniqueWithoutCategoryInput | AdminSubcategoryUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: AdminSubcategoryCreateManyCategoryInputEnvelope
+    set?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    disconnect?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    delete?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    connect?: AdminSubcategoryWhereUniqueInput | AdminSubcategoryWhereUniqueInput[]
+    update?: AdminSubcategoryUpdateWithWhereUniqueWithoutCategoryInput | AdminSubcategoryUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: AdminSubcategoryUpdateManyWithWhereWithoutCategoryInput | AdminSubcategoryUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: AdminSubcategoryScalarWhereInput | AdminSubcategoryScalarWhereInput[]
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<AdminCategoryBrandCreateWithoutCategoryInput, AdminCategoryBrandUncheckedCreateWithoutCategoryInput> | AdminCategoryBrandCreateWithoutCategoryInput[] | AdminCategoryBrandUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: AdminCategoryBrandCreateOrConnectWithoutCategoryInput | AdminCategoryBrandCreateOrConnectWithoutCategoryInput[]
+    upsert?: AdminCategoryBrandUpsertWithWhereUniqueWithoutCategoryInput | AdminCategoryBrandUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: AdminCategoryBrandCreateManyCategoryInputEnvelope
+    set?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    disconnect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    delete?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    connect?: AdminCategoryBrandWhereUniqueInput | AdminCategoryBrandWhereUniqueInput[]
+    update?: AdminCategoryBrandUpdateWithWhereUniqueWithoutCategoryInput | AdminCategoryBrandUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: AdminCategoryBrandUpdateManyWithWhereWithoutCategoryInput | AdminCategoryBrandUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: AdminCategoryBrandScalarWhereInput | AdminCategoryBrandScalarWhereInput[]
+  }
+
+  export type AdminCategoryCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<AdminCategoryCreateWithoutTranslationsInput, AdminCategoryUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: AdminCategoryCreateOrConnectWithoutTranslationsInput
+    connect?: AdminCategoryWhereUniqueInput
+  }
+
+  export type AdminCategoryUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<AdminCategoryCreateWithoutTranslationsInput, AdminCategoryUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: AdminCategoryCreateOrConnectWithoutTranslationsInput
+    upsert?: AdminCategoryUpsertWithoutTranslationsInput
+    connect?: AdminCategoryWhereUniqueInput
+    update?: XOR<XOR<AdminCategoryUpdateToOneWithWhereWithoutTranslationsInput, AdminCategoryUpdateWithoutTranslationsInput>, AdminCategoryUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type AdminCategoryCreateNestedOneWithoutSubcategoriesInput = {
+    create?: XOR<AdminCategoryCreateWithoutSubcategoriesInput, AdminCategoryUncheckedCreateWithoutSubcategoriesInput>
+    connectOrCreate?: AdminCategoryCreateOrConnectWithoutSubcategoriesInput
+    connect?: AdminCategoryWhereUniqueInput
+  }
+
+  export type AdminSubcategoryTranslationCreateNestedManyWithoutSubcategoryInput = {
+    create?: XOR<AdminSubcategoryTranslationCreateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput> | AdminSubcategoryTranslationCreateWithoutSubcategoryInput[] | AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput[]
+    connectOrCreate?: AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput | AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput[]
+    createMany?: AdminSubcategoryTranslationCreateManySubcategoryInputEnvelope
+    connect?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+  }
+
+  export type AdminSubcategoryTranslationUncheckedCreateNestedManyWithoutSubcategoryInput = {
+    create?: XOR<AdminSubcategoryTranslationCreateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput> | AdminSubcategoryTranslationCreateWithoutSubcategoryInput[] | AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput[]
+    connectOrCreate?: AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput | AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput[]
+    createMany?: AdminSubcategoryTranslationCreateManySubcategoryInputEnvelope
+    connect?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+  }
+
+  export type AdminCategoryUpdateOneRequiredWithoutSubcategoriesNestedInput = {
+    create?: XOR<AdminCategoryCreateWithoutSubcategoriesInput, AdminCategoryUncheckedCreateWithoutSubcategoriesInput>
+    connectOrCreate?: AdminCategoryCreateOrConnectWithoutSubcategoriesInput
+    upsert?: AdminCategoryUpsertWithoutSubcategoriesInput
+    connect?: AdminCategoryWhereUniqueInput
+    update?: XOR<XOR<AdminCategoryUpdateToOneWithWhereWithoutSubcategoriesInput, AdminCategoryUpdateWithoutSubcategoriesInput>, AdminCategoryUncheckedUpdateWithoutSubcategoriesInput>
+  }
+
+  export type AdminSubcategoryTranslationUpdateManyWithoutSubcategoryNestedInput = {
+    create?: XOR<AdminSubcategoryTranslationCreateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput> | AdminSubcategoryTranslationCreateWithoutSubcategoryInput[] | AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput[]
+    connectOrCreate?: AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput | AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput[]
+    upsert?: AdminSubcategoryTranslationUpsertWithWhereUniqueWithoutSubcategoryInput | AdminSubcategoryTranslationUpsertWithWhereUniqueWithoutSubcategoryInput[]
+    createMany?: AdminSubcategoryTranslationCreateManySubcategoryInputEnvelope
+    set?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    disconnect?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    delete?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    connect?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    update?: AdminSubcategoryTranslationUpdateWithWhereUniqueWithoutSubcategoryInput | AdminSubcategoryTranslationUpdateWithWhereUniqueWithoutSubcategoryInput[]
+    updateMany?: AdminSubcategoryTranslationUpdateManyWithWhereWithoutSubcategoryInput | AdminSubcategoryTranslationUpdateManyWithWhereWithoutSubcategoryInput[]
+    deleteMany?: AdminSubcategoryTranslationScalarWhereInput | AdminSubcategoryTranslationScalarWhereInput[]
+  }
+
+  export type AdminSubcategoryTranslationUncheckedUpdateManyWithoutSubcategoryNestedInput = {
+    create?: XOR<AdminSubcategoryTranslationCreateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput> | AdminSubcategoryTranslationCreateWithoutSubcategoryInput[] | AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput[]
+    connectOrCreate?: AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput | AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput[]
+    upsert?: AdminSubcategoryTranslationUpsertWithWhereUniqueWithoutSubcategoryInput | AdminSubcategoryTranslationUpsertWithWhereUniqueWithoutSubcategoryInput[]
+    createMany?: AdminSubcategoryTranslationCreateManySubcategoryInputEnvelope
+    set?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    disconnect?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    delete?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    connect?: AdminSubcategoryTranslationWhereUniqueInput | AdminSubcategoryTranslationWhereUniqueInput[]
+    update?: AdminSubcategoryTranslationUpdateWithWhereUniqueWithoutSubcategoryInput | AdminSubcategoryTranslationUpdateWithWhereUniqueWithoutSubcategoryInput[]
+    updateMany?: AdminSubcategoryTranslationUpdateManyWithWhereWithoutSubcategoryInput | AdminSubcategoryTranslationUpdateManyWithWhereWithoutSubcategoryInput[]
+    deleteMany?: AdminSubcategoryTranslationScalarWhereInput | AdminSubcategoryTranslationScalarWhereInput[]
+  }
+
+  export type AdminSubcategoryCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<AdminSubcategoryCreateWithoutTranslationsInput, AdminSubcategoryUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: AdminSubcategoryCreateOrConnectWithoutTranslationsInput
+    connect?: AdminSubcategoryWhereUniqueInput
+  }
+
+  export type AdminSubcategoryUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<AdminSubcategoryCreateWithoutTranslationsInput, AdminSubcategoryUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: AdminSubcategoryCreateOrConnectWithoutTranslationsInput
+    upsert?: AdminSubcategoryUpsertWithoutTranslationsInput
+    connect?: AdminSubcategoryWhereUniqueInput
+    update?: XOR<XOR<AdminSubcategoryUpdateToOneWithWhereWithoutTranslationsInput, AdminSubcategoryUpdateWithoutTranslationsInput>, AdminSubcategoryUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type AdminCategoryCreateNestedOneWithoutCategoryBrandsInput = {
+    create?: XOR<AdminCategoryCreateWithoutCategoryBrandsInput, AdminCategoryUncheckedCreateWithoutCategoryBrandsInput>
+    connectOrCreate?: AdminCategoryCreateOrConnectWithoutCategoryBrandsInput
+    connect?: AdminCategoryWhereUniqueInput
+  }
+
+  export type AdminBrandCreateNestedOneWithoutCategoryBrandsInput = {
+    create?: XOR<AdminBrandCreateWithoutCategoryBrandsInput, AdminBrandUncheckedCreateWithoutCategoryBrandsInput>
+    connectOrCreate?: AdminBrandCreateOrConnectWithoutCategoryBrandsInput
+    connect?: AdminBrandWhereUniqueInput
+  }
+
+  export type AdminCategoryUpdateOneRequiredWithoutCategoryBrandsNestedInput = {
+    create?: XOR<AdminCategoryCreateWithoutCategoryBrandsInput, AdminCategoryUncheckedCreateWithoutCategoryBrandsInput>
+    connectOrCreate?: AdminCategoryCreateOrConnectWithoutCategoryBrandsInput
+    upsert?: AdminCategoryUpsertWithoutCategoryBrandsInput
+    connect?: AdminCategoryWhereUniqueInput
+    update?: XOR<XOR<AdminCategoryUpdateToOneWithWhereWithoutCategoryBrandsInput, AdminCategoryUpdateWithoutCategoryBrandsInput>, AdminCategoryUncheckedUpdateWithoutCategoryBrandsInput>
+  }
+
+  export type AdminBrandUpdateOneRequiredWithoutCategoryBrandsNestedInput = {
+    create?: XOR<AdminBrandCreateWithoutCategoryBrandsInput, AdminBrandUncheckedCreateWithoutCategoryBrandsInput>
+    connectOrCreate?: AdminBrandCreateOrConnectWithoutCategoryBrandsInput
+    upsert?: AdminBrandUpsertWithoutCategoryBrandsInput
+    connect?: AdminBrandWhereUniqueInput
+    update?: XOR<XOR<AdminBrandUpdateToOneWithWhereWithoutCategoryBrandsInput, AdminBrandUpdateWithoutCategoryBrandsInput>, AdminBrandUncheckedUpdateWithoutCategoryBrandsInput>
+  }
+
   export type BrandTranslationCreateNestedManyWithoutBrandInput = {
     create?: XOR<BrandTranslationCreateWithoutBrandInput, BrandTranslationUncheckedCreateWithoutBrandInput> | BrandTranslationCreateWithoutBrandInput[] | BrandTranslationUncheckedCreateWithoutBrandInput[]
     connectOrCreate?: BrandTranslationCreateOrConnectWithoutBrandInput | BrandTranslationCreateOrConnectWithoutBrandInput[]
@@ -18656,10 +28764,6 @@ export namespace Prisma {
     connect?: CategoryBrandWhereUniqueInput | CategoryBrandWhereUniqueInput[]
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
-  }
-
   export type BrandTranslationUpdateManyWithoutBrandNestedInput = {
     create?: XOR<BrandTranslationCreateWithoutBrandInput, BrandTranslationUncheckedCreateWithoutBrandInput> | BrandTranslationCreateWithoutBrandInput[] | BrandTranslationUncheckedCreateWithoutBrandInput[]
     connectOrCreate?: BrandTranslationCreateOrConnectWithoutBrandInput | BrandTranslationCreateOrConnectWithoutBrandInput[]
@@ -18700,14 +28804,6 @@ export namespace Prisma {
     update?: CategoryBrandUpdateWithWhereUniqueWithoutBrandInput | CategoryBrandUpdateWithWhereUniqueWithoutBrandInput[]
     updateMany?: CategoryBrandUpdateManyWithWhereWithoutBrandInput | CategoryBrandUpdateManyWithWhereWithoutBrandInput[]
     deleteMany?: CategoryBrandScalarWhereInput | CategoryBrandScalarWhereInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type BrandTranslationUncheckedUpdateManyWithoutBrandNestedInput = {
@@ -18756,14 +28852,6 @@ export namespace Prisma {
     create?: XOR<BrandCreateWithoutTranslationsInput, BrandUncheckedCreateWithoutTranslationsInput>
     connectOrCreate?: BrandCreateOrConnectWithoutTranslationsInput
     connect?: BrandWhereUniqueInput
-  }
-
-  export type EnumLocaleFieldUpdateOperationsInput = {
-    set?: $Enums.Locale
-  }
-
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
   }
 
   export type BrandUpdateOneRequiredWithoutTranslationsNestedInput = {
@@ -18828,10 +28916,6 @@ export namespace Prisma {
     connectOrCreate?: CategoryBrandCreateOrConnectWithoutCategoryInput | CategoryBrandCreateOrConnectWithoutCategoryInput[]
     createMany?: CategoryBrandCreateManyCategoryInputEnvelope
     connect?: CategoryBrandWhereUniqueInput | CategoryBrandWhereUniqueInput[]
-  }
-
-  export type EnumSectionFieldUpdateOperationsInput = {
-    set?: $Enums.Section
   }
 
   export type CategoryTranslationUpdateManyWithoutCategoryNestedInput = {
@@ -19594,6 +29678,579 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type AdminBrandTranslationCreateWithoutBrandInput = {
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminBrandTranslationUncheckedCreateWithoutBrandInput = {
+    id?: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminBrandTranslationCreateOrConnectWithoutBrandInput = {
+    where: AdminBrandTranslationWhereUniqueInput
+    create: XOR<AdminBrandTranslationCreateWithoutBrandInput, AdminBrandTranslationUncheckedCreateWithoutBrandInput>
+  }
+
+  export type AdminBrandTranslationCreateManyBrandInputEnvelope = {
+    data: AdminBrandTranslationCreateManyBrandInput | AdminBrandTranslationCreateManyBrandInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminCategoryBrandCreateWithoutBrandInput = {
+    section: $Enums.Section
+    createdAt?: Date | string
+    category: AdminCategoryCreateNestedOneWithoutCategoryBrandsInput
+  }
+
+  export type AdminCategoryBrandUncheckedCreateWithoutBrandInput = {
+    id?: number
+    categoryId: number
+    section: $Enums.Section
+    createdAt?: Date | string
+  }
+
+  export type AdminCategoryBrandCreateOrConnectWithoutBrandInput = {
+    where: AdminCategoryBrandWhereUniqueInput
+    create: XOR<AdminCategoryBrandCreateWithoutBrandInput, AdminCategoryBrandUncheckedCreateWithoutBrandInput>
+  }
+
+  export type AdminCategoryBrandCreateManyBrandInputEnvelope = {
+    data: AdminCategoryBrandCreateManyBrandInput | AdminCategoryBrandCreateManyBrandInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminBrandTranslationUpsertWithWhereUniqueWithoutBrandInput = {
+    where: AdminBrandTranslationWhereUniqueInput
+    update: XOR<AdminBrandTranslationUpdateWithoutBrandInput, AdminBrandTranslationUncheckedUpdateWithoutBrandInput>
+    create: XOR<AdminBrandTranslationCreateWithoutBrandInput, AdminBrandTranslationUncheckedCreateWithoutBrandInput>
+  }
+
+  export type AdminBrandTranslationUpdateWithWhereUniqueWithoutBrandInput = {
+    where: AdminBrandTranslationWhereUniqueInput
+    data: XOR<AdminBrandTranslationUpdateWithoutBrandInput, AdminBrandTranslationUncheckedUpdateWithoutBrandInput>
+  }
+
+  export type AdminBrandTranslationUpdateManyWithWhereWithoutBrandInput = {
+    where: AdminBrandTranslationScalarWhereInput
+    data: XOR<AdminBrandTranslationUpdateManyMutationInput, AdminBrandTranslationUncheckedUpdateManyWithoutBrandInput>
+  }
+
+  export type AdminBrandTranslationScalarWhereInput = {
+    AND?: AdminBrandTranslationScalarWhereInput | AdminBrandTranslationScalarWhereInput[]
+    OR?: AdminBrandTranslationScalarWhereInput[]
+    NOT?: AdminBrandTranslationScalarWhereInput | AdminBrandTranslationScalarWhereInput[]
+    id?: IntFilter<"AdminBrandTranslation"> | number
+    brandId?: IntFilter<"AdminBrandTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminBrandTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminBrandTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminBrandTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminBrandTranslation"> | Date | string
+  }
+
+  export type AdminCategoryBrandUpsertWithWhereUniqueWithoutBrandInput = {
+    where: AdminCategoryBrandWhereUniqueInput
+    update: XOR<AdminCategoryBrandUpdateWithoutBrandInput, AdminCategoryBrandUncheckedUpdateWithoutBrandInput>
+    create: XOR<AdminCategoryBrandCreateWithoutBrandInput, AdminCategoryBrandUncheckedCreateWithoutBrandInput>
+  }
+
+  export type AdminCategoryBrandUpdateWithWhereUniqueWithoutBrandInput = {
+    where: AdminCategoryBrandWhereUniqueInput
+    data: XOR<AdminCategoryBrandUpdateWithoutBrandInput, AdminCategoryBrandUncheckedUpdateWithoutBrandInput>
+  }
+
+  export type AdminCategoryBrandUpdateManyWithWhereWithoutBrandInput = {
+    where: AdminCategoryBrandScalarWhereInput
+    data: XOR<AdminCategoryBrandUpdateManyMutationInput, AdminCategoryBrandUncheckedUpdateManyWithoutBrandInput>
+  }
+
+  export type AdminCategoryBrandScalarWhereInput = {
+    AND?: AdminCategoryBrandScalarWhereInput | AdminCategoryBrandScalarWhereInput[]
+    OR?: AdminCategoryBrandScalarWhereInput[]
+    NOT?: AdminCategoryBrandScalarWhereInput | AdminCategoryBrandScalarWhereInput[]
+    id?: IntFilter<"AdminCategoryBrand"> | number
+    categoryId?: IntFilter<"AdminCategoryBrand"> | number
+    brandId?: IntFilter<"AdminCategoryBrand"> | number
+    section?: EnumSectionFilter<"AdminCategoryBrand"> | $Enums.Section
+    createdAt?: DateTimeFilter<"AdminCategoryBrand"> | Date | string
+  }
+
+  export type AdminBrandCreateWithoutTranslationsInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categoryBrands?: AdminCategoryBrandCreateNestedManyWithoutBrandInput
+  }
+
+  export type AdminBrandUncheckedCreateWithoutTranslationsInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categoryBrands?: AdminCategoryBrandUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type AdminBrandCreateOrConnectWithoutTranslationsInput = {
+    where: AdminBrandWhereUniqueInput
+    create: XOR<AdminBrandCreateWithoutTranslationsInput, AdminBrandUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type AdminBrandUpsertWithoutTranslationsInput = {
+    update: XOR<AdminBrandUpdateWithoutTranslationsInput, AdminBrandUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<AdminBrandCreateWithoutTranslationsInput, AdminBrandUncheckedCreateWithoutTranslationsInput>
+    where?: AdminBrandWhereInput
+  }
+
+  export type AdminBrandUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: AdminBrandWhereInput
+    data: XOR<AdminBrandUpdateWithoutTranslationsInput, AdminBrandUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type AdminBrandUpdateWithoutTranslationsInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryBrands?: AdminCategoryBrandUpdateManyWithoutBrandNestedInput
+  }
+
+  export type AdminBrandUncheckedUpdateWithoutTranslationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryBrands?: AdminCategoryBrandUncheckedUpdateManyWithoutBrandNestedInput
+  }
+
+  export type AdminCategoryTranslationCreateWithoutCategoryInput = {
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCategoryTranslationUncheckedCreateWithoutCategoryInput = {
+    id?: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCategoryTranslationCreateOrConnectWithoutCategoryInput = {
+    where: AdminCategoryTranslationWhereUniqueInput
+    create: XOR<AdminCategoryTranslationCreateWithoutCategoryInput, AdminCategoryTranslationUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type AdminCategoryTranslationCreateManyCategoryInputEnvelope = {
+    data: AdminCategoryTranslationCreateManyCategoryInput | AdminCategoryTranslationCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminSubcategoryCreateWithoutCategoryInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminSubcategoryTranslationCreateNestedManyWithoutSubcategoryInput
+  }
+
+  export type AdminSubcategoryUncheckedCreateWithoutCategoryInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminSubcategoryTranslationUncheckedCreateNestedManyWithoutSubcategoryInput
+  }
+
+  export type AdminSubcategoryCreateOrConnectWithoutCategoryInput = {
+    where: AdminSubcategoryWhereUniqueInput
+    create: XOR<AdminSubcategoryCreateWithoutCategoryInput, AdminSubcategoryUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type AdminSubcategoryCreateManyCategoryInputEnvelope = {
+    data: AdminSubcategoryCreateManyCategoryInput | AdminSubcategoryCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminCategoryBrandCreateWithoutCategoryInput = {
+    section: $Enums.Section
+    createdAt?: Date | string
+    brand: AdminBrandCreateNestedOneWithoutCategoryBrandsInput
+  }
+
+  export type AdminCategoryBrandUncheckedCreateWithoutCategoryInput = {
+    id?: number
+    brandId: number
+    section: $Enums.Section
+    createdAt?: Date | string
+  }
+
+  export type AdminCategoryBrandCreateOrConnectWithoutCategoryInput = {
+    where: AdminCategoryBrandWhereUniqueInput
+    create: XOR<AdminCategoryBrandCreateWithoutCategoryInput, AdminCategoryBrandUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type AdminCategoryBrandCreateManyCategoryInputEnvelope = {
+    data: AdminCategoryBrandCreateManyCategoryInput | AdminCategoryBrandCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminCategoryTranslationUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: AdminCategoryTranslationWhereUniqueInput
+    update: XOR<AdminCategoryTranslationUpdateWithoutCategoryInput, AdminCategoryTranslationUncheckedUpdateWithoutCategoryInput>
+    create: XOR<AdminCategoryTranslationCreateWithoutCategoryInput, AdminCategoryTranslationUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type AdminCategoryTranslationUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: AdminCategoryTranslationWhereUniqueInput
+    data: XOR<AdminCategoryTranslationUpdateWithoutCategoryInput, AdminCategoryTranslationUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type AdminCategoryTranslationUpdateManyWithWhereWithoutCategoryInput = {
+    where: AdminCategoryTranslationScalarWhereInput
+    data: XOR<AdminCategoryTranslationUpdateManyMutationInput, AdminCategoryTranslationUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type AdminCategoryTranslationScalarWhereInput = {
+    AND?: AdminCategoryTranslationScalarWhereInput | AdminCategoryTranslationScalarWhereInput[]
+    OR?: AdminCategoryTranslationScalarWhereInput[]
+    NOT?: AdminCategoryTranslationScalarWhereInput | AdminCategoryTranslationScalarWhereInput[]
+    id?: IntFilter<"AdminCategoryTranslation"> | number
+    categoryId?: IntFilter<"AdminCategoryTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminCategoryTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminCategoryTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminCategoryTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminCategoryTranslation"> | Date | string
+  }
+
+  export type AdminSubcategoryUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: AdminSubcategoryWhereUniqueInput
+    update: XOR<AdminSubcategoryUpdateWithoutCategoryInput, AdminSubcategoryUncheckedUpdateWithoutCategoryInput>
+    create: XOR<AdminSubcategoryCreateWithoutCategoryInput, AdminSubcategoryUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type AdminSubcategoryUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: AdminSubcategoryWhereUniqueInput
+    data: XOR<AdminSubcategoryUpdateWithoutCategoryInput, AdminSubcategoryUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type AdminSubcategoryUpdateManyWithWhereWithoutCategoryInput = {
+    where: AdminSubcategoryScalarWhereInput
+    data: XOR<AdminSubcategoryUpdateManyMutationInput, AdminSubcategoryUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type AdminSubcategoryScalarWhereInput = {
+    AND?: AdminSubcategoryScalarWhereInput | AdminSubcategoryScalarWhereInput[]
+    OR?: AdminSubcategoryScalarWhereInput[]
+    NOT?: AdminSubcategoryScalarWhereInput | AdminSubcategoryScalarWhereInput[]
+    id?: IntFilter<"AdminSubcategory"> | number
+    categoryId?: IntFilter<"AdminSubcategory"> | number
+    createdAt?: DateTimeFilter<"AdminSubcategory"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminSubcategory"> | Date | string
+  }
+
+  export type AdminCategoryBrandUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: AdminCategoryBrandWhereUniqueInput
+    update: XOR<AdminCategoryBrandUpdateWithoutCategoryInput, AdminCategoryBrandUncheckedUpdateWithoutCategoryInput>
+    create: XOR<AdminCategoryBrandCreateWithoutCategoryInput, AdminCategoryBrandUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type AdminCategoryBrandUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: AdminCategoryBrandWhereUniqueInput
+    data: XOR<AdminCategoryBrandUpdateWithoutCategoryInput, AdminCategoryBrandUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type AdminCategoryBrandUpdateManyWithWhereWithoutCategoryInput = {
+    where: AdminCategoryBrandScalarWhereInput
+    data: XOR<AdminCategoryBrandUpdateManyMutationInput, AdminCategoryBrandUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type AdminCategoryCreateWithoutTranslationsInput = {
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    subcategories?: AdminSubcategoryCreateNestedManyWithoutCategoryInput
+    categoryBrands?: AdminCategoryBrandCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryUncheckedCreateWithoutTranslationsInput = {
+    id?: number
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    subcategories?: AdminSubcategoryUncheckedCreateNestedManyWithoutCategoryInput
+    categoryBrands?: AdminCategoryBrandUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryCreateOrConnectWithoutTranslationsInput = {
+    where: AdminCategoryWhereUniqueInput
+    create: XOR<AdminCategoryCreateWithoutTranslationsInput, AdminCategoryUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type AdminCategoryUpsertWithoutTranslationsInput = {
+    update: XOR<AdminCategoryUpdateWithoutTranslationsInput, AdminCategoryUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<AdminCategoryCreateWithoutTranslationsInput, AdminCategoryUncheckedCreateWithoutTranslationsInput>
+    where?: AdminCategoryWhereInput
+  }
+
+  export type AdminCategoryUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: AdminCategoryWhereInput
+    data: XOR<AdminCategoryUpdateWithoutTranslationsInput, AdminCategoryUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type AdminCategoryUpdateWithoutTranslationsInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subcategories?: AdminSubcategoryUpdateManyWithoutCategoryNestedInput
+    categoryBrands?: AdminCategoryBrandUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminCategoryUncheckedUpdateWithoutTranslationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subcategories?: AdminSubcategoryUncheckedUpdateManyWithoutCategoryNestedInput
+    categoryBrands?: AdminCategoryBrandUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminCategoryCreateWithoutSubcategoriesInput = {
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminCategoryTranslationCreateNestedManyWithoutCategoryInput
+    categoryBrands?: AdminCategoryBrandCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryUncheckedCreateWithoutSubcategoriesInput = {
+    id?: number
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminCategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    categoryBrands?: AdminCategoryBrandUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryCreateOrConnectWithoutSubcategoriesInput = {
+    where: AdminCategoryWhereUniqueInput
+    create: XOR<AdminCategoryCreateWithoutSubcategoriesInput, AdminCategoryUncheckedCreateWithoutSubcategoriesInput>
+  }
+
+  export type AdminSubcategoryTranslationCreateWithoutSubcategoryInput = {
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput = {
+    id?: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryTranslationCreateOrConnectWithoutSubcategoryInput = {
+    where: AdminSubcategoryTranslationWhereUniqueInput
+    create: XOR<AdminSubcategoryTranslationCreateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput>
+  }
+
+  export type AdminSubcategoryTranslationCreateManySubcategoryInputEnvelope = {
+    data: AdminSubcategoryTranslationCreateManySubcategoryInput | AdminSubcategoryTranslationCreateManySubcategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminCategoryUpsertWithoutSubcategoriesInput = {
+    update: XOR<AdminCategoryUpdateWithoutSubcategoriesInput, AdminCategoryUncheckedUpdateWithoutSubcategoriesInput>
+    create: XOR<AdminCategoryCreateWithoutSubcategoriesInput, AdminCategoryUncheckedCreateWithoutSubcategoriesInput>
+    where?: AdminCategoryWhereInput
+  }
+
+  export type AdminCategoryUpdateToOneWithWhereWithoutSubcategoriesInput = {
+    where?: AdminCategoryWhereInput
+    data: XOR<AdminCategoryUpdateWithoutSubcategoriesInput, AdminCategoryUncheckedUpdateWithoutSubcategoriesInput>
+  }
+
+  export type AdminCategoryUpdateWithoutSubcategoriesInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminCategoryTranslationUpdateManyWithoutCategoryNestedInput
+    categoryBrands?: AdminCategoryBrandUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminCategoryUncheckedUpdateWithoutSubcategoriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminCategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    categoryBrands?: AdminCategoryBrandUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminSubcategoryTranslationUpsertWithWhereUniqueWithoutSubcategoryInput = {
+    where: AdminSubcategoryTranslationWhereUniqueInput
+    update: XOR<AdminSubcategoryTranslationUpdateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedUpdateWithoutSubcategoryInput>
+    create: XOR<AdminSubcategoryTranslationCreateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedCreateWithoutSubcategoryInput>
+  }
+
+  export type AdminSubcategoryTranslationUpdateWithWhereUniqueWithoutSubcategoryInput = {
+    where: AdminSubcategoryTranslationWhereUniqueInput
+    data: XOR<AdminSubcategoryTranslationUpdateWithoutSubcategoryInput, AdminSubcategoryTranslationUncheckedUpdateWithoutSubcategoryInput>
+  }
+
+  export type AdminSubcategoryTranslationUpdateManyWithWhereWithoutSubcategoryInput = {
+    where: AdminSubcategoryTranslationScalarWhereInput
+    data: XOR<AdminSubcategoryTranslationUpdateManyMutationInput, AdminSubcategoryTranslationUncheckedUpdateManyWithoutSubcategoryInput>
+  }
+
+  export type AdminSubcategoryTranslationScalarWhereInput = {
+    AND?: AdminSubcategoryTranslationScalarWhereInput | AdminSubcategoryTranslationScalarWhereInput[]
+    OR?: AdminSubcategoryTranslationScalarWhereInput[]
+    NOT?: AdminSubcategoryTranslationScalarWhereInput | AdminSubcategoryTranslationScalarWhereInput[]
+    id?: IntFilter<"AdminSubcategoryTranslation"> | number
+    subcategoryId?: IntFilter<"AdminSubcategoryTranslation"> | number
+    locale?: EnumLocaleFilter<"AdminSubcategoryTranslation"> | $Enums.Locale
+    name?: StringFilter<"AdminSubcategoryTranslation"> | string
+    createdAt?: DateTimeFilter<"AdminSubcategoryTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminSubcategoryTranslation"> | Date | string
+  }
+
+  export type AdminSubcategoryCreateWithoutTranslationsInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    category: AdminCategoryCreateNestedOneWithoutSubcategoriesInput
+  }
+
+  export type AdminSubcategoryUncheckedCreateWithoutTranslationsInput = {
+    id?: number
+    categoryId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryCreateOrConnectWithoutTranslationsInput = {
+    where: AdminSubcategoryWhereUniqueInput
+    create: XOR<AdminSubcategoryCreateWithoutTranslationsInput, AdminSubcategoryUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type AdminSubcategoryUpsertWithoutTranslationsInput = {
+    update: XOR<AdminSubcategoryUpdateWithoutTranslationsInput, AdminSubcategoryUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<AdminSubcategoryCreateWithoutTranslationsInput, AdminSubcategoryUncheckedCreateWithoutTranslationsInput>
+    where?: AdminSubcategoryWhereInput
+  }
+
+  export type AdminSubcategoryUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: AdminSubcategoryWhereInput
+    data: XOR<AdminSubcategoryUpdateWithoutTranslationsInput, AdminSubcategoryUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type AdminSubcategoryUpdateWithoutTranslationsInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: AdminCategoryUpdateOneRequiredWithoutSubcategoriesNestedInput
+  }
+
+  export type AdminSubcategoryUncheckedUpdateWithoutTranslationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryCreateWithoutCategoryBrandsInput = {
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminCategoryTranslationCreateNestedManyWithoutCategoryInput
+    subcategories?: AdminSubcategoryCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryUncheckedCreateWithoutCategoryBrandsInput = {
+    id?: number
+    section: $Enums.Section
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminCategoryTranslationUncheckedCreateNestedManyWithoutCategoryInput
+    subcategories?: AdminSubcategoryUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type AdminCategoryCreateOrConnectWithoutCategoryBrandsInput = {
+    where: AdminCategoryWhereUniqueInput
+    create: XOR<AdminCategoryCreateWithoutCategoryBrandsInput, AdminCategoryUncheckedCreateWithoutCategoryBrandsInput>
+  }
+
+  export type AdminBrandCreateWithoutCategoryBrandsInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminBrandTranslationCreateNestedManyWithoutBrandInput
+  }
+
+  export type AdminBrandUncheckedCreateWithoutCategoryBrandsInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    translations?: AdminBrandTranslationUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type AdminBrandCreateOrConnectWithoutCategoryBrandsInput = {
+    where: AdminBrandWhereUniqueInput
+    create: XOR<AdminBrandCreateWithoutCategoryBrandsInput, AdminBrandUncheckedCreateWithoutCategoryBrandsInput>
+  }
+
+  export type AdminCategoryUpsertWithoutCategoryBrandsInput = {
+    update: XOR<AdminCategoryUpdateWithoutCategoryBrandsInput, AdminCategoryUncheckedUpdateWithoutCategoryBrandsInput>
+    create: XOR<AdminCategoryCreateWithoutCategoryBrandsInput, AdminCategoryUncheckedCreateWithoutCategoryBrandsInput>
+    where?: AdminCategoryWhereInput
+  }
+
+  export type AdminCategoryUpdateToOneWithWhereWithoutCategoryBrandsInput = {
+    where?: AdminCategoryWhereInput
+    data: XOR<AdminCategoryUpdateWithoutCategoryBrandsInput, AdminCategoryUncheckedUpdateWithoutCategoryBrandsInput>
+  }
+
+  export type AdminCategoryUpdateWithoutCategoryBrandsInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminCategoryTranslationUpdateManyWithoutCategoryNestedInput
+    subcategories?: AdminSubcategoryUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminCategoryUncheckedUpdateWithoutCategoryBrandsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminCategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
+    subcategories?: AdminSubcategoryUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type AdminBrandUpsertWithoutCategoryBrandsInput = {
+    update: XOR<AdminBrandUpdateWithoutCategoryBrandsInput, AdminBrandUncheckedUpdateWithoutCategoryBrandsInput>
+    create: XOR<AdminBrandCreateWithoutCategoryBrandsInput, AdminBrandUncheckedCreateWithoutCategoryBrandsInput>
+    where?: AdminBrandWhereInput
+  }
+
+  export type AdminBrandUpdateToOneWithWhereWithoutCategoryBrandsInput = {
+    where?: AdminBrandWhereInput
+    data: XOR<AdminBrandUpdateWithoutCategoryBrandsInput, AdminBrandUncheckedUpdateWithoutCategoryBrandsInput>
+  }
+
+  export type AdminBrandUpdateWithoutCategoryBrandsInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminBrandTranslationUpdateManyWithoutBrandNestedInput
+  }
+
+  export type AdminBrandUncheckedUpdateWithoutCategoryBrandsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminBrandTranslationUncheckedUpdateManyWithoutBrandNestedInput
   }
 
   export type BrandTranslationCreateWithoutBrandInput = {
@@ -21012,6 +31669,178 @@ export namespace Prisma {
     productId?: IntFieldUpdateOperationsInput | number
     specKey?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminBrandTranslationCreateManyBrandInput = {
+    id?: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCategoryBrandCreateManyBrandInput = {
+    id?: number
+    categoryId: number
+    section: $Enums.Section
+    createdAt?: Date | string
+  }
+
+  export type AdminBrandTranslationUpdateWithoutBrandInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminBrandTranslationUncheckedUpdateWithoutBrandInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminBrandTranslationUncheckedUpdateManyWithoutBrandInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryBrandUpdateWithoutBrandInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: AdminCategoryUpdateOneRequiredWithoutCategoryBrandsNestedInput
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateWithoutBrandInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateManyWithoutBrandInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryTranslationCreateManyCategoryInput = {
+    id?: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryCreateManyCategoryInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCategoryBrandCreateManyCategoryInput = {
+    id?: number
+    brandId: number
+    section: $Enums.Section
+    createdAt?: Date | string
+  }
+
+  export type AdminCategoryTranslationUpdateWithoutCategoryInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryTranslationUncheckedUpdateWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryTranslationUncheckedUpdateManyWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryUpdateWithoutCategoryInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminSubcategoryTranslationUpdateManyWithoutSubcategoryNestedInput
+  }
+
+  export type AdminSubcategoryUncheckedUpdateWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: AdminSubcategoryTranslationUncheckedUpdateManyWithoutSubcategoryNestedInput
+  }
+
+  export type AdminSubcategoryUncheckedUpdateManyWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryBrandUpdateWithoutCategoryInput = {
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: AdminBrandUpdateOneRequiredWithoutCategoryBrandsNestedInput
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    brandId?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminCategoryBrandUncheckedUpdateManyWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    brandId?: IntFieldUpdateOperationsInput | number
+    section?: EnumSectionFieldUpdateOperationsInput | $Enums.Section
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryTranslationCreateManySubcategoryInput = {
+    id?: number
+    locale: $Enums.Locale
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminSubcategoryTranslationUpdateWithoutSubcategoryInput = {
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryTranslationUncheckedUpdateWithoutSubcategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminSubcategoryTranslationUncheckedUpdateManyWithoutSubcategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    locale?: EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

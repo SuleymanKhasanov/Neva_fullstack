@@ -53,9 +53,11 @@ export class CacheService {
       } else {
         this.logger.debug(`❌ Cache miss: ${key}`);
       }
+
       return value || null;
     } catch (error) {
       this.logger.error(`Cache get error for key ${key}:`, error);
+
       return null;
     }
   }
@@ -108,6 +110,7 @@ export class CacheService {
       if (client && typeof client.flushdb === 'function') {
         await client.flushdb();
         this.logger.log('✅ Cache reset completed using Redis flushdb');
+
         return;
       }
 
@@ -126,6 +129,7 @@ export class CacheService {
           this.logger.log(
             `✅ Cache reset completed by deleting ${keys.length} keys`
           );
+
           return;
         }
       }
@@ -169,21 +173,25 @@ export class CacheService {
           this.logger.log(
             `✅ Invalidated ${keys.length} keys matching pattern: ${pattern}`
           );
+
           return keys.length;
         }
         this.logger.log(`🔍 No keys found matching pattern: ${pattern}`);
+
         return 0;
       }
 
       this.logger.warn(
         `⚠️ Pattern invalidation not available for pattern: ${pattern}`
       );
+
       return 0;
     } catch (error) {
       this.logger.error(
         `❌ Pattern invalidation error for pattern ${pattern}:`,
         error
       );
+
       return 0;
     }
   }
@@ -203,6 +211,7 @@ export class CacheService {
 
     const value = await factory();
     await this.set(key, value, options);
+
     return value;
   }
 
@@ -318,6 +327,7 @@ export class CacheService {
       };
     } catch (error) {
       this.logger.error('Cache stats error:', error);
+
       return {
         error: error instanceof Error ? error.message : 'Unknown error',
         connected: false,

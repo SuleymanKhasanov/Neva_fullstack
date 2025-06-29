@@ -120,6 +120,61 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.AdminBrandScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdminBrandTranslationScalarFieldEnum = {
+  id: 'id',
+  brandId: 'brandId',
+  locale: 'locale',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdminCategoryScalarFieldEnum = {
+  id: 'id',
+  section: 'section',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdminCategoryTranslationScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  locale: 'locale',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdminSubcategoryScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdminSubcategoryTranslationScalarFieldEnum = {
+  id: 'id',
+  subcategoryId: 'subcategoryId',
+  locale: 'locale',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdminCategoryBrandScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  brandId: 'brandId',
+  section: 'section',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.BrandScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -259,6 +314,13 @@ exports.Section = exports.$Enums.Section = {
 };
 
 exports.Prisma.ModelName = {
+  AdminBrand: 'AdminBrand',
+  AdminBrandTranslation: 'AdminBrandTranslation',
+  AdminCategory: 'AdminCategory',
+  AdminCategoryTranslation: 'AdminCategoryTranslation',
+  AdminSubcategory: 'AdminSubcategory',
+  AdminSubcategoryTranslation: 'AdminSubcategoryTranslation',
+  AdminCategoryBrand: 'AdminCategoryBrand',
   Brand: 'Brand',
   BrandTranslation: 'BrandTranslation',
   Category: 'Category',

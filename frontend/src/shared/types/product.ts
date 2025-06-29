@@ -14,21 +14,36 @@ export interface ProductCategory {
   section: string;
 }
 
+export interface ProductImage {
+  id: number;
+  small: string;
+  large: string;
+  altText?: string;
+  isPrimary: boolean;
+}
+
+export interface ProductSpecification {
+  name: string;
+  value: string;
+}
+
 export interface ProductDetail {
   id: number;
   name: string;
   description: string;
-  image: string;
-  fullImage: string;
-  locale: string;
+  marketingDescription?: string;
+  metaTitle?: string;
+  metaDescription?: string;
   section: string;
   slug: string;
   brand: ProductBrand;
   category: ProductCategory;
-  seoTitle: string;
-  seoDescription: string;
-  createdAt: string;
-  updatedAt: string;
+  subcategory?: {
+    id: number;
+    name: string;
+  };
+  images: ProductImage[];
+  specifications: ProductSpecification[];
 }
 
 export interface ProductApiResponse {
@@ -52,7 +67,7 @@ export interface ProductListItem {
 export interface ProductPath {
   locale: string;
   id: string;
-  slug: string;
+  slug: string; // Всегда должен быть валидной строкой
 }
 
 export interface AllProductsApiResponse {
