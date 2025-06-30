@@ -268,10 +268,6 @@ const AdminCreateCategory: React.FC<AdminCreateCategoryProps> = ({
 
       {/* Названия продукта на всех языках */}
       <div className={styles.productNamesSection}>
-        <h4 className={styles.productNamesTitle}>
-          Названия продукта на всех языках
-        </h4>
-
         <div className={styles.productNamesGrid}>
           {/* Русский */}
           <div className={styles.fieldContainer}>

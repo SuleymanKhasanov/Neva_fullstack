@@ -8,15 +8,20 @@ import { TranslationKeys } from '@/shared/config/i18n/types';
 import { useTranslations } from 'next-intl';
 import { ProductImagesUpload } from '@/widgets/ProductImagesUpload';
 import { ProductDetails } from '@/widgets/ProductDetails';
+import { ProductFormProgress } from '@/widgets/ProductFormProgress';
 import {
   useSelectedSection,
   useSelectedCategory,
+  useSelectedSubcategory,
+  useSelectedBrand,
   useProductTranslations,
   useProductImages,
   useAdminCategoryActions,
   useIsCreatingProduct,
   useProductCreationError,
   useIsFormValid,
+  useTemporaryMessage,
+  useShowTemporaryMessage,
 } from '@/shared/store/adminCategoryStore';
 
 const ProductCreatePage = () => {
@@ -25,49 +30,76 @@ const ProductCreatePage = () => {
   // Состояние из zustand store
   const selectedSection = useSelectedSection();
   const selectedCategory = useSelectedCategory();
+  const selectedSubcategory = useSelectedSubcategory();
+  const selectedBrand = useSelectedBrand();
   const productTranslations = useProductTranslations();
   const productImages = useProductImages();
   const isCreatingProduct = useIsCreatingProduct();
   const productCreationError = useProductCreationError();
   const isFormValid = useIsFormValid();
+  const temporaryMessage = useTemporaryMessage();
+  const isShowingTemporaryMessage = useShowTemporaryMessage();
 
   // Действия
-  const { createProduct, resetForm, clearProductCreationError } =
-    useAdminCategoryActions();
+  const {
+    createProduct,
+    resetForm,
+    clearProductCreationError,
+    showTemporaryMessage,
+  } = useAdminCategoryActions();
 
   // Расчет прогресса заполнения
   const progress = useMemo(() => {
+    // Структура формы: 17 полей = 100%
     const fields = [
+      // 4 поля выбора
       Boolean(selectedSection), // Секция выбрана
       Boolean(selectedCategory), // Категория выбрана
-      Boolean(productTranslations.ru.name.trim()), // Название на русском (обязательно)
-      Boolean(productTranslations.ru.description.trim()), // Описание на русском
+      Boolean(selectedSubcategory), // Подкатегория выбрана
+      Boolean(selectedBrand), // Бренд выбран
+
+      // 1 поле изображений
       productImages.length > 0, // Минимум одно изображение
+
+      // 4 поля названий для всех локалей (ru, en, uz, kr)
+      Boolean(productTranslations.ru.name.trim()),
+      Boolean(productTranslations.en.name.trim()),
+      Boolean(productTranslations.uz.name.trim()),
+      Boolean(productTranslations.kr.name.trim()),
+
+      // 4 поля описаний для всех локалей (ru, en, uz, kr)
+      Boolean(productTranslations.ru.description.trim()),
+      Boolean(productTranslations.en.description.trim()),
+      Boolean(productTranslations.uz.description.trim()),
+      Boolean(productTranslations.kr.description.trim()),
+
+      // 4 поля характеристик для всех локалей (ru, en, uz, kr)
+      Boolean(productTranslations.ru.specifications.trim()),
+      Boolean(productTranslations.en.specifications.trim()),
+      Boolean(productTranslations.uz.specifications.trim()),
+      Boolean(productTranslations.kr.specifications.trim()),
     ];
 
     const filled = fields.filter(Boolean).length;
     const total = fields.length;
     const percentage = Math.round((filled / total) * 100);
 
-    // Дополнительные поля (необязательные, но желательные)
-    const additionalFields = [
-      Boolean(productTranslations.en.name.trim()), // Название на английском
-      Boolean(productTranslations.uz.name.trim()), // Название на узбекском
-      Boolean(productTranslations.kr.name.trim()), // Название на корейском
-    ];
-
-    const additionalFilled = additionalFields.filter(Boolean).length;
-    const totalAdditional = additionalFields.length;
-
     return {
       filled,
       total,
       percentage,
-      additionalFilled,
-      totalAdditional,
-      hasAllLanguages: additionalFilled === totalAdditional,
+      additionalFilled: 0,
+      totalAdditional: 0,
+      hasAllLanguages: filled === total,
     };
-  }, [selectedSection, selectedCategory, productTranslations, productImages]);
+  }, [
+    selectedSection,
+    selectedCategory,
+    selectedSubcategory,
+    selectedBrand,
+    productTranslations,
+    productImages,
+  ]);
 
   // Обработчик создания продукта
   const handleSubmit = async () => {
@@ -85,7 +117,7 @@ const ProductCreatePage = () => {
 
       if (success) {
         console.log('✅ Продукт успешно создан!');
-        alert('🎉 Продукт успешно создан!');
+        showTemporaryMessage('🎉 Продукт успешно создан!');
       } else {
         console.error('❌ Создание продукта не удалось');
       }
@@ -96,10 +128,9 @@ const ProductCreatePage = () => {
 
   // Обработчик сброса формы
   const handleReset = () => {
-    if (confirm('Вы уверены, что хотите сбросить все данные?')) {
-      resetForm();
-      console.log('🔄 Форма сброшена');
-    }
+    resetForm();
+    showTemporaryMessage('🔄 Форма сброшена');
+    console.log('🔄 Форма сброшена');
   };
 
   return (
@@ -118,121 +149,18 @@ const ProductCreatePage = () => {
       <ProductImagesUpload />
       <ProductDetails />
 
-      {/* ВРЕМЕННАЯ ПАНЕЛЬ ДЕЙСТВИЙ */}
-      <div className={styles.actionPanel}>
-        <div className={styles.progressSection}>
-          <div className={styles.progressInfo}>
-            <h3 className={styles.progressTitle}>Прогресс заполнения</h3>
-            <div className={styles.progressDetails}>
-              <span className={styles.percentage}>{progress.percentage}%</span>
-              <span className={styles.details}>
-                {progress.filled} из {progress.total} обязательных полей
-                заполнено
-              </span>
-              <span className={styles.additionalDetails}>
-                Названия на языках: {progress.additionalFilled} из{' '}
-                {progress.totalAdditional}
-                {progress.hasAllLanguages && ' ✅'}
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.progressBar}>
-            <div
-              className={styles.progressFill}
-              style={{ width: `${progress.percentage}%` }}
-            />
-          </div>
-
-          {!isFormValid && (
-            <div className={styles.statusMessage}>
-              ⚠️ Заполните все обязательные поля для создания продукта
-            </div>
-          )}
-
-          {isFormValid && !progress.hasAllLanguages && (
-            <div className={styles.warningMessage}>
-              ⚠️ Рекомендуется заполнить названия на всех языках
-            </div>
-          )}
-
-          {isFormValid && progress.hasAllLanguages && (
-            <div className={styles.completeMessage}>
-              ✅ Все поля заполнены! Продукт готов к созданию
-            </div>
-          )}
-        </div>
-
-        {/* Кнопки действий */}
-        <div className={styles.actions}>
-          <button
-            type="button"
-            onClick={handleReset}
-            className={styles.resetButton}
-            disabled={isCreatingProduct}
-          >
-            🔄 Сбросить форму
-          </button>
-
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className={`${styles.submitButton} ${
-              isFormValid ? styles.complete : styles.incomplete
-            }`}
-            disabled={isCreatingProduct || !isFormValid}
-          >
-            {isCreatingProduct ? (
-              <>
-                <span className={styles.spinner} />
-                Создание...
-              </>
-            ) : (
-              <>
-                {isFormValid ? '✅ ' : '❌ '}
-                Создать продукт
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Отображение ошибок */}
-      {productCreationError && (
-        <div className={styles.errorMessage}>
-          <span className={styles.errorIcon}>⚠️</span>
-          <span>{productCreationError}</span>
-          <button
-            className={styles.closeError}
-            onClick={clearProductCreationError}
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
-      {/* Отладочная информация */}
-      <details className={styles.debugInfo}>
-        <summary>🔍 Отладочная информация</summary>
-        <pre className={styles.debugData}>
-          {JSON.stringify(
-            {
-              selectedSection,
-              selectedCategory,
-              hasImages: productImages.length,
-              hasRuName: Boolean(productTranslations.ru.name.trim()),
-              hasRuDescription: Boolean(
-                productTranslations.ru.description.trim()
-              ),
-              isFormValid,
-              isCreatingProduct,
-              progress,
-            },
-            null,
-            2
-          )}
-        </pre>
-      </details>
+      {/* Компонент прогресса с фиксированной позицией */}
+      <ProductFormProgress
+        progress={progress}
+        isFormValid={isFormValid}
+        isCreatingProduct={isCreatingProduct}
+        productCreationError={productCreationError}
+        temporaryMessage={temporaryMessage}
+        showTemporaryMessage={isShowingTemporaryMessage}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+        onClearError={clearProductCreationError}
+      />
     </div>
   );
 };
