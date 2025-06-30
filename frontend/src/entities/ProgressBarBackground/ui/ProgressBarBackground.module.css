@@ -1,0 +1,30 @@
+.progressBackground {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 5;
+  background: var(--acrylic-bg);
+  backdrop-filter: var(--acrylic-blur);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 10px var(--shadow-content);
+  border-radius: var(--radius);
+}
+
+.progressContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .progressContent {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .progressContent {
+    padding: 1rem;
+  }
+}

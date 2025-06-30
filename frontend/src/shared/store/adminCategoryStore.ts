@@ -4,20 +4,12 @@ import React from 'react';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { getCurrentLocale } from '@/shared/utils/redirect';
-import type {
-  StrictLocale,
-  StrictSection,
-  StrictSelectOption,
-  StrictTranslationData,
-  StrictSpecificationData,
-  StrictProductImageData,
-  StrictProductFormData,
-  StrictLoadingState,
-  StrictApiResponse,
-} from '@/shared/types/strict-frontend.types';
 
-// ==================== ТИПЫ ЗАМЕНЕНЫ НА СТРОГИЕ ====================
-// SelectOption заменен на StrictSelectOption из строгих типов
+// ==================== СТРОГИЕ ТИПЫ ====================
+interface SelectOption {
+  readonly value: string | number;
+  readonly label: string;
+}
 
 interface Translation {
   readonly id: number;
@@ -134,6 +126,8 @@ interface AdminCategoryState {
   readonly productSpecifications: readonly ProductSpecification[];
   readonly isCreatingProduct: boolean;
   readonly productCreationError: string;
+  readonly temporaryMessage: string;
+  readonly isShowingTempMessage: boolean;
 
   // ==================== ДЕЙСТВИЯ ====================
   setSelectedSection: (section: string) => void;
@@ -178,6 +172,10 @@ interface AdminCategoryState {
   setProductCreationError: (error: string) => void;
   clearProductCreationError: () => void;
   resetProductData: () => void;
+
+  // Временные сообщения
+  showTemporaryMessage: (message: string, duration?: number) => void;
+  hideTemporaryMessage: () => void;
 }
 
 // ==================== УТИЛИТЫ ====================
@@ -442,6 +440,8 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
     productSpecifications: [],
     isCreatingProduct: false,
     productCreationError: '',
+    temporaryMessage: '',
+    isShowingTempMessage: false,
 
     // ==================== ДЕЙСТВИЯ ====================
 
@@ -1036,6 +1036,21 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
       });
     },
 
+    // Временные сообщения
+    showTemporaryMessage: (message: string, duration = 3000) => {
+      set({ temporaryMessage: message, isShowingTempMessage: true });
+
+      // Автоматически скрыть сообщение через указанное время
+      setTimeout(() => {
+        const currentState = get();
+        currentState.hideTemporaryMessage();
+      }, duration);
+    },
+
+    hideTemporaryMessage: () => {
+      set({ temporaryMessage: '', isShowingTempMessage: false });
+    },
+
     // ==================== УТИЛИТЫ ====================
 
     setError: (error: string) => {
@@ -1135,6 +1150,12 @@ export const useIsCreatingProduct = (): boolean =>
 export const useProductCreationError = (): string =>
   useAdminCategoryStore((state) => state.productCreationError);
 
+export const useTemporaryMessage = (): string =>
+  useAdminCategoryStore((state) => state.temporaryMessage);
+
+export const useShowTemporaryMessage = (): boolean =>
+  useAdminCategoryStore((state) => state.isShowingTempMessage);
+
 export const useProductImageBySlot = (slotIndex: number): ProductImage | null =>
   useAdminCategoryStore(
     (state) =>
@@ -1202,6 +1223,8 @@ export const useFormData = (): FormDataShape => {
 export const useIsFormValid = (): boolean => {
   const selectedSection = useSelectedSection();
   const selectedCategory = useSelectedCategory();
+  const selectedSubcategory = useSelectedSubcategory();
+  const selectedBrand = useSelectedBrand();
   const productTranslations = useProductTranslations();
   const productImages = useProductImages();
   const productSpecifications = useProductSpecifications();
@@ -1214,9 +1237,29 @@ export const useIsFormValid = (): boolean => {
     );
 
     const isValidCategory = Boolean(selectedCategory && selectedCategory > 0);
+    const isValidSubcategory = Boolean(
+      selectedSubcategory && selectedSubcategory > 0
+    );
+    const isValidBrand = Boolean(selectedBrand && selectedBrand > 0);
 
+    // Проверка всех полей переводов: name, description, specifications для всех локалей
     const isValidTranslations = Boolean(
-      productTranslations.ru.name.trim().length >= 2
+      // Русский (обязательно)
+      productTranslations.ru.name.trim().length >= 2 &&
+        productTranslations.ru.description.trim() &&
+        productTranslations.ru.specifications.trim() &&
+        // Английский
+        productTranslations.en.name.trim() &&
+        productTranslations.en.description.trim() &&
+        productTranslations.en.specifications.trim() &&
+        // Узбекский
+        productTranslations.uz.name.trim() &&
+        productTranslations.uz.description.trim() &&
+        productTranslations.uz.specifications.trim() &&
+        // Корейский
+        productTranslations.kr.name.trim() &&
+        productTranslations.kr.description.trim() &&
+        productTranslations.kr.specifications.trim()
     );
 
     const isValidImages = productImages.length > 0;
@@ -1230,13 +1273,17 @@ export const useIsFormValid = (): boolean => {
     const isValid =
       isValidSection &&
       isValidCategory &&
+      isValidSubcategory &&
+      isValidBrand &&
       isValidTranslations &&
       isValidImages &&
       isValidSpecifications;
 
-    console.log('🔍 Валидация формы:', {
+    console.log('🔍 Валидация формы (17 полей = 100%):', {
       isValidSection,
       isValidCategory,
+      isValidSubcategory,
+      isValidBrand,
       isValidTranslations,
       isValidImages,
       isValidSpecifications,
@@ -1248,7 +1295,9 @@ export const useIsFormValid = (): boolean => {
   }, [
     selectedSection,
     selectedCategory,
-    productTranslations.ru.name,
+    selectedSubcategory,
+    selectedBrand,
+    productTranslations,
     productImages.length,
     productSpecifications,
   ]);
@@ -1287,6 +1336,10 @@ export const useAdminCategoryActions = () => {
       setProductCreationError: store.setProductCreationError,
       clearProductCreationError: store.clearProductCreationError,
       resetProductData: store.resetProductData,
+
+      // Временные сообщения
+      showTemporaryMessage: store.showTemporaryMessage,
+      hideTemporaryMessage: store.hideTemporaryMessage,
     }),
     [store]
   );

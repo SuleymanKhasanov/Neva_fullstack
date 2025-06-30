@@ -1,0 +1,291 @@
+.progressContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.progressSection {
+  flex: 1;
+  width: 100%;
+}
+
+.progressInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.progressInfoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 2rem;
+}
+
+.progressTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.5rem 0;
+}
+
+.progressDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.percentage {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.details {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+}
+
+.additionalDetails {
+  font-size: 1.3rem;
+  color: var(--text-muted);
+}
+
+/* Прогресс бар */
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  min-width: 0;
+}
+
+/* Временное сообщение */
+.temporaryMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 80px;
+}
+
+.temporaryMessageText {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #059669;
+  text-align: center;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Сообщения о статусе */
+.statusMessage,
+.warningMessage,
+.completeMessage {
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusMessage {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.warningMessage {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.completeMessage {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #059669;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* Кнопки действий */
+.actionsSection {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.resetButton,
+.submitButton {
+  padding: 1rem 2rem;
+  border-radius: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.resetButton {
+  background-color: var(--muted);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.resetButton:hover:not(:disabled) {
+  background-color: var(--card);
+  color: var(--foreground);
+  transform: translateY(-2px);
+}
+
+.submitButton {
+  background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: linear-gradient(90deg, #b91c1c 0%, #dc2626 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.submitButton:disabled,
+.resetButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submitButton.incomplete {
+  background: linear-gradient(90deg, #6b7280 0%, #9ca3af 100%);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.submitButton.complete {
+  background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+}
+
+/* Спиннер */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ошибки */
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 0.8rem;
+  color: #dc2626;
+  margin-top: 1rem;
+}
+
+.errorIcon {
+  font-size: 1.6rem;
+}
+
+.closeError {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  margin-left: auto;
+  border-radius: 0.4rem;
+  transition: background-color 0.2s ease;
+}
+
+.closeError:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .progressContainer {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .progressSection {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .actionsSection {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .resetButton,
+  .submitButton {
+    flex: 1;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .progressTitle {
+    font-size: 1.6rem;
+  }
+
+  .percentage {
+    font-size: 2rem;
+  }
+
+  .actionsSection {
+    flex-direction: column;
+  }
+
+  .resetButton,
+  .submitButton {
+    width: 100%;
+  }
+}

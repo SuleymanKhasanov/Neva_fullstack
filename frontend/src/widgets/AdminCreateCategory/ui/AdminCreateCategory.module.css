@@ -550,28 +550,8 @@
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  margin-top: 1rem;
-  padding: 2.4rem;
-  background-color: var(--background);
-  border: 0.1rem solid var(--border);
-  border-radius: var(--radius);
-  position: relative;
-}
-
-.productNamesSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0.4rem;
-  background: linear-gradient(
-    90deg,
-    var(--primary) 0%,
-    rgba(227, 30, 36, 0.6) 50%,
-    var(--primary) 100%
-  );
-  border-radius: var(--radius) var(--radius) 0 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
 }
 
 .productNamesTitle {
@@ -591,20 +571,6 @@
   width: 100%;
 }
 
-/* Особые стили для полей названий */
-.productNamesSection .fieldContainer {
-  position: relative;
-  padding: 1.8rem;
-  background: linear-gradient(
-    135deg,
-    var(--background) 0%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
-  border: 0.1rem solid var(--border);
-  border-radius: var(--radius);
-  transition: all 0.3s ease;
-}
-
 .productNamesSection .fieldContainer:hover {
   transform: translateY(-0.2rem);
   box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.08);
@@ -616,58 +582,21 @@
   box-shadow: 0 0 0 0.3rem rgba(227, 30, 36, 0.1);
 }
 
-/* Языковые индикаторы */
-.productNamesSection .fieldContainer:nth-child(1)::after {
-  content: '🇷🇺';
-  position: absolute;
-  top: 0.8rem;
-  right: 1.2rem;
-  font-size: 1.2rem;
-  opacity: 0.7;
-}
-
-.productNamesSection .fieldContainer:nth-child(2)::after {
-  content: '🇺🇸';
-  position: absolute;
-  top: 0.8rem;
-  right: 1.2rem;
-  font-size: 1.2rem;
-  opacity: 0.7;
-}
-
-.productNamesSection .fieldContainer:nth-child(3)::after {
-  content: '🇺🇿';
-  position: absolute;
-  top: 0.8rem;
-  right: 1.2rem;
-  font-size: 1.2rem;
-  opacity: 0.7;
-}
-
-.productNamesSection .fieldContainer:nth-child(4)::after {
-  content: '🇰🇷';
-  position: absolute;
-  top: 0.8rem;
-  right: 1.2rem;
-  font-size: 1.2rem;
-  opacity: 0.7;
-}
-
 /* Адаптивность для названий продукта */
 @media (max-width: 768px) {
   .productNamesGrid {
     grid-template-columns: 1fr;
     gap: 1.2rem;
   }
-  
+
   .productNamesSection {
     padding: 2rem;
   }
-  
+
   .productNamesTitle {
     font-size: 1.6rem;
   }
-  
+
   .productNamesSection .fieldContainer {
     padding: 1.4rem;
   }
@@ -677,11 +606,11 @@
   .productNamesSection {
     padding: 1.6rem;
   }
-  
+
   .productNamesTitle {
     font-size: 1.4rem;
   }
-  
+
   .productNamesSection .fieldContainer {
     padding: 1.2rem;
   }
