@@ -87,8 +87,8 @@ const AdminSidebar = ({
       id: 'products-list',
       label: getTranslation(TranslationKeys.SidebarProductsList), // 👈 ИСПОЛЬЗОВАНИЕ ENUM
       icon: LuList,
-      href: `/${locale}/admin/products`,
-      disabled: true, // Пока отключено, сделаем позже
+      href: `/${locale}/admin/dashboard/products`,
+      disabled: false, // Активируем список продуктов
     },
   ];
 

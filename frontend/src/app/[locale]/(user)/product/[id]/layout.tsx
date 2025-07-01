@@ -71,9 +71,9 @@ export async function generateMetadata({
   }
 
   // Используем SEO данные из API
-  const title = product.seoTitle || `${product.name} | Neva App`;
+  const title = product.metaTitle || `${product.name} | Neva App`;
   const description =
-    product.seoDescription ||
+    product.metaDescription ||
     (product.description.length > 160
       ? `${product.description.substring(0, 157)}...`
       : product.description);

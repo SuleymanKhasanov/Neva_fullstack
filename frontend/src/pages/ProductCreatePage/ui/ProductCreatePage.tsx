@@ -117,7 +117,9 @@ const ProductCreatePage = () => {
 
       if (success) {
         console.log('✅ Продукт успешно создан!');
-        showTemporaryMessage('🎉 Продукт успешно создан!');
+        showTemporaryMessage(
+          t(TranslationKeys.ProgressIndicatorSuccessMessage)
+        );
       } else {
         console.error('❌ Создание продукта не удалось');
       }
@@ -129,7 +131,7 @@ const ProductCreatePage = () => {
   // Обработчик сброса формы
   const handleReset = () => {
     resetForm();
-    showTemporaryMessage('🔄 Форма сброшена');
+    showTemporaryMessage(t(TranslationKeys.ProgressIndicatorResetMessage));
     console.log('🔄 Форма сброшена');
   };
 
