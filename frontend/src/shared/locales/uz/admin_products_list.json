@@ -1,0 +1,21 @@
+{
+  "title": "Mahsulotlar ro'yxati",
+  "totalProducts": "Jami mahsulotlar",
+  "loadedProducts": "mahsulot yuklandi",
+  "deleteModeActive": "O'chirish rejimi faol",
+  "loadMore": "Yana yuklash",
+  "loading": "Yuklanmoqda...",
+  "authCheck": "Avtorizatsiya tekshirilmoqda...",
+  "confirmDelete": {
+    "title": "O'chirishni tasdiqlang",
+    "message": "Ushbu mahsulotni o'chirishni xohlaysizmi?",
+    "cancel": "Bekor qilish",
+    "confirm": "O'chirish"
+  },
+  "productDeleted": "Mahsulot muvaffaqiyatli o'chirildi",
+  "hint": {
+    "title": "O'chirish rejimi",
+    "description": "Shift tugmasini bosib turing va mahsulotlarni o'chirish uchun bosing"
+  },
+  "modeInfo": "O'chirish rejimini faollashtirish uchun Shift tugmasini bosing"
+}

@@ -117,6 +117,31 @@ export enum TranslationKeys {
   ProductCreateFieldsProductNameLabelEn = 'product_create.fields.productName.labelEn',
   ProductCreateFieldsProductNameLabelUz = 'product_create.fields.productName.labelUz',
   ProductCreateFieldsProductNameLabelKr = 'product_create.fields.productName.labelKr',
+
+  // Admin Products List
+  AdminProductsListTitle = 'admin_products_list.title',
+  AdminProductsListTotalProducts = 'admin_products_list.totalProducts',
+  AdminProductsListLoadedProducts = 'admin_products_list.loadedProducts',
+  AdminProductsListDeleteModeActive = 'admin_products_list.deleteModeActive',
+  AdminProductsListLoadMore = 'admin_products_list.loadMore',
+  AdminProductsListLoading = 'admin_products_list.loading',
+  AdminProductsListAuthCheck = 'admin_products_list.authCheck',
+  AdminProductsListConfirmDeleteTitle = 'admin_products_list.confirmDelete.title',
+  AdminProductsListConfirmDeleteMessage = 'admin_products_list.confirmDelete.message',
+  AdminProductsListConfirmDeleteCancel = 'admin_products_list.confirmDelete.cancel',
+  AdminProductsListConfirmDeleteConfirm = 'admin_products_list.confirmDelete.confirm',
+  AdminProductsListProductDeletedMessage = 'admin_products_list.productDeleted',
+  AdminProductsListHintTitle = 'admin_products_list.hint.title',
+  AdminProductsListHintDescription = 'admin_products_list.hint.description',
+  AdminProductsListModeInfo = 'admin_products_list.modeInfo',
+
+  // Progress Indicator
+  ProgressIndicatorTitle = 'progress_indicator.title',
+  ProgressIndicatorCompleted = 'progress_indicator.completed',
+  ProgressIndicatorCreateProduct = 'progress_indicator.createProduct',
+  ProgressIndicatorReset = 'progress_indicator.reset',
+  ProgressIndicatorResetMessage = 'progress_indicator.resetMessage',
+  ProgressIndicatorSuccessMessage = 'progress_indicator.successMessage',
 }
 
 export type Header = {
@@ -293,6 +318,39 @@ export type ProductCreate = {
   [key: string]: unknown;
 };
 
+export type AdminProductsList = {
+  title: string;
+  totalProducts: string;
+  loadedProducts: string;
+  deleteModeActive: string;
+  loadMore: string;
+  loading: string;
+  authCheck: string;
+  confirmDelete: {
+    title: string;
+    message: string;
+    cancel: string;
+    confirm: string;
+  };
+  productDeleted: string;
+  hint: {
+    title: string;
+    description: string;
+  };
+  modeInfo: string;
+  [key: string]: unknown;
+};
+
+export type ProgressIndicator = {
+  title: string;
+  completed: string;
+  createProduct: string;
+  reset: string;
+  resetMessage: string;
+  successMessage: string;
+  [key: string]: unknown;
+};
+
 export type TranslationType = {
   header: Header;
   card: Card;
@@ -303,6 +361,8 @@ export type TranslationType = {
   admin_home: AdminHome;
   sidebar: Sidebar;
   product_create: ProductCreate;
+  admin_products_list: AdminProductsList;
+  progress_indicator: ProgressIndicator;
   [key: string]: unknown;
 };
 

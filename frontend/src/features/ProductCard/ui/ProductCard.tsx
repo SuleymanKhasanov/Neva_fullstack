@@ -10,6 +10,11 @@ interface ProductCardProps {
   product: ProductListItem;
   messages: TranslationType;
   locale: string;
+  // Админские пропсы (опциональные)
+  isAdminMode?: boolean;
+  isDeleteMode?: boolean;
+  isDeleting?: boolean;
+  onDelete?: (product: ProductListItem) => void;
 }
 
 const truncateText = (text: string, maxLength: number): string => {
@@ -28,74 +33,123 @@ const createSlug = (name: string): string => {
     .trim();
 };
 
-const ProductCard = memo<ProductCardProps>(({ product, messages, locale }) => {
-  const truncatedDescription = useMemo(
-    () => truncateText(product.description, 50),
-    [product.description]
-  );
+const ProductCard = memo<ProductCardProps>(
+  ({
+    product,
+    messages,
+    locale,
+    isAdminMode = false,
+    isDeleteMode = false,
+    isDeleting = false,
+    onDelete,
+  }) => {
+    const truncatedDescription = useMemo(
+      () => truncateText(product.description, 50),
+      [product.description]
+    );
 
-  const truncatedName = useMemo(
-    () => truncateText(product.name, 60),
-    [product.name]
-  );
+    const truncatedName = useMemo(
+      () => truncateText(product.name, 60),
+      [product.name]
+    );
 
-  // Используем slug из API, если доступен, иначе создаем временный
-  const productSlug = useMemo(() => {
-    // Если в GraphQL ответе будет slug - используем его
-    // Пока создаем из названия
-    return createSlug(product.name);
-  }, [product.name]);
+    // Используем slug из API, если доступен, иначе создаем временный
+    const productSlug = useMemo(() => {
+      // Если в GraphQL ответе будет slug - используем его
+      // Пока создаем из названия
+      return createSlug(product.name);
+    }, [product.name]);
 
-  const productUrl = useMemo(
-    () => `/${locale}/product/${product.id}/${productSlug}`,
-    [locale, product.id, productSlug]
-  );
+    const productUrl = useMemo(
+      () => `/${locale}/product/${product.id}/${productSlug}`,
+      [locale, product.id, productSlug]
+    );
 
-  const t = (key: string): string => {
-    const keyPart = key.split('.')[1];
-    const cardMessages = messages?.card;
+    const t = (key: string): string => {
+      const keyPart = key.split('.')[1];
+      const cardMessages = messages?.card;
 
-    if (
-      cardMessages &&
-      typeof cardMessages === 'object' &&
-      keyPart in cardMessages
-    ) {
-      const value = (cardMessages as Record<string, unknown>)[keyPart];
-      return typeof value === 'string' ? value : keyPart;
-    }
+      if (
+        cardMessages &&
+        typeof cardMessages === 'object' &&
+        keyPart in cardMessages
+      ) {
+        const value = (cardMessages as Record<string, unknown>)[keyPart];
+        return typeof value === 'string' ? value : keyPart;
+      }
 
-    return keyPart;
-  };
+      return keyPart;
+    };
 
-  return (
-    <div className={styles.productCard}>
-      <div className={styles.imageContainer}>
-        {product.image ? (
-          <Image
-            src={product.image}
-            alt={product.name}
-            className={styles.image}
-            loading="lazy"
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="(max-width: 500px) 100vw, (max-width: 768px) 50vw, (max-width: 1440px) 25vw, 20vw"
-          />
-        ) : (
-          <div className={styles.placeholder}>Изображение отсутствует</div>
+    // Обработчик удаления
+    const handleDeleteClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (onDelete && !isDeleting) {
+        onDelete(product);
+      }
+    };
+
+    // Классы для карточки
+    const cardClasses = [
+      styles.productCard,
+      isAdminMode && isDeleteMode ? styles.deleteMode : '',
+      isDeleting ? styles.deleting : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    return (
+      <div className={cardClasses}>
+        {/* Кнопка удаления (только в админ режиме при зажатом Shift) */}
+        {isAdminMode && isDeleteMode && (
+          <button
+            className={styles.deleteButton}
+            onClick={handleDeleteClick}
+            disabled={isDeleting}
+            aria-label={`Удалить ${product.name}`}
+          >
+            <span className={styles.deleteIcon}>✕</span>
+          </button>
         )}
-      </div>
-      <div className={styles.textBlock}>
-        <h4>{truncatedName}</h4>
-        <p>{truncatedDescription}</p>
-        <div className={styles.buttonContainer}>
-          <Link href={productUrl} passHref>
-            <Button>{t(TranslationKeys.MoreDetails)}</Button>
-          </Link>
+
+        {/* Оверлей загрузки при удалении */}
+        {isDeleting && (
+          <div className={styles.deletingOverlay}>
+            <div className={styles.deletingSpinner} />
+          </div>
+        )}
+
+        <div className={styles.imageContainer}>
+          {product.image ? (
+            <Image
+              src={product.image}
+              alt={product.name}
+              className={styles.image}
+              loading="lazy"
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 500px) 100vw, (max-width: 768px) 50vw, (max-width: 1440px) 25vw, 20vw"
+            />
+          ) : (
+            <div className={styles.placeholder}>Изображение отсутствует</div>
+          )}
+        </div>
+        <div className={styles.textBlock}>
+          <h4>{truncatedName}</h4>
+          <p>{truncatedDescription}</p>
+          <div className={styles.buttonContainer}>
+            <Link href={productUrl} passHref>
+              <Button disabled={isDeleting}>
+                {t(TranslationKeys.MoreDetails)}
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 ProductCard.displayName = 'ProductCard';
 

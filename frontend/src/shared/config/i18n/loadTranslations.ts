@@ -163,6 +163,37 @@ export async function loadTranslations(locale: string) {
         brands: 'brands',
       },
     },
+
+    admin_products_list: {
+      title: 'Products List',
+      totalProducts: 'Total products',
+      loadedProducts: 'products loaded',
+      deleteModeActive: 'Delete Mode Active',
+      loadMore: 'Load More',
+      loading: 'Loading...',
+      authCheck: 'Checking authorization...',
+      confirmDelete: {
+        title: 'Confirm Delete',
+        message: 'Are you sure you want to delete this product?',
+        cancel: 'Cancel',
+        confirm: 'Delete',
+      },
+      productDeleted: 'Product successfully deleted',
+      hint: {
+        title: 'Delete Mode',
+        description: 'Hold Shift and click on products to delete them',
+      },
+      modeInfo: 'Press Shift to activate delete mode',
+    },
+
+    progress_indicator: {
+      title: 'Progress',
+      completed: 'Completed',
+      createProduct: 'Create Product',
+      reset: 'Reset',
+      resetMessage: 'Fields successfully reset!',
+      successMessage: 'Product created successfully!',
+    },
   };
 
   try {
@@ -229,6 +260,20 @@ export async function loadTranslations(locale: string) {
       () => defaultTranslations.product_create
     );
 
+    const adminProductsListTranslations = await import(
+      `@/shared/locales/${locale}/admin_products_list.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.admin_products_list
+    );
+
+    const progressIndicatorTranslations = await import(
+      `@/shared/locales/${locale}/progress_indicator.json`
+    ).then(
+      (module) => module.default,
+      () => defaultTranslations.progress_indicator
+    );
+
     return {
       header: headerTranslations,
       card: cardTranslations,
@@ -239,6 +284,8 @@ export async function loadTranslations(locale: string) {
       admin_home: adminHomeTranslations,
       sidebar: sidebarTranslations,
       product_create: productCreateTranslations,
+      admin_products_list: adminProductsListTranslations,
+      progress_indicator: progressIndicatorTranslations,
     };
   } catch (error) {
     console.error(

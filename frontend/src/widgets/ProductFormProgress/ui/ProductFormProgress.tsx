@@ -2,6 +2,8 @@ import React from 'react';
 import { ProgressBarBackground } from '@/entities/ProgressBarBackground';
 import styles from './ProductFormProgress.module.css';
 import { Button } from '@/shared/ui/Button/Button';
+import { useTranslations } from 'next-intl';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 
 interface ProgressData {
   filled: number;
@@ -35,6 +37,7 @@ export const ProductFormProgress: React.FC<ProductFormProgressProps> = ({
   onReset,
   onClearError,
 }) => {
+  const t = useTranslations();
   return (
     <ProgressBarBackground>
       <div className={styles.progressContainer}>
@@ -51,7 +54,9 @@ export const ProductFormProgress: React.FC<ProductFormProgressProps> = ({
             <>
               <div className={styles.progressInfo}>
                 <div className={styles.progressInfoWrapper}>
-                  <h3 className={styles.progressTitle}>Прогресс заполнения</h3>
+                  <h3 className={styles.progressTitle}>
+                    {t(TranslationKeys.ProgressIndicatorTitle)}
+                  </h3>
                   <div className={styles.progressDetails}>
                     <span className={styles.percentage}>
                       {progress.percentage}%
@@ -77,7 +82,7 @@ export const ProductFormProgress: React.FC<ProductFormProgressProps> = ({
             className={styles.resetButton}
             disabled={isCreatingProduct}
           >
-            Сбросить форму
+            {t(TranslationKeys.ProgressIndicatorReset)}
           </Button>
 
           <Button
@@ -91,10 +96,10 @@ export const ProductFormProgress: React.FC<ProductFormProgressProps> = ({
             {isCreatingProduct ? (
               <>
                 <span className={styles.spinner} />
-                Создание...
+                {t(TranslationKeys.ProgressIndicatorCreateProduct)}...
               </>
             ) : (
-              <>Создать продукт</>
+              <>{t(TranslationKeys.ProgressIndicatorCreateProduct)}</>
             )}
           </Button>
         </div>
