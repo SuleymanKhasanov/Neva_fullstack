@@ -97,7 +97,7 @@
 /* Сетка продуктов */
 .productsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
@@ -343,16 +343,19 @@
 }
 
 /* Адаптивность */
-@media (max-width: 102.4rem) {
+@media (max-width: 768px) {
   .productsGrid {
-    grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
-@media (max-width: 76.8rem) {
+@media (max-width: 480px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+
   .container {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 
   .title {
@@ -365,26 +368,12 @@
     gap: 0.5rem;
   }
 
-  .productsGrid {
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  }
-
   .modalContent {
     padding: 1.5rem;
   }
 
   .modalActions {
     flex-direction: column;
-  }
-}
-
-@media (max-width: 48rem) {
-  .container {
-    padding: 0.5rem;
-  }
-
-  .productsGrid {
-    grid-template-columns: 1fr;
   }
 
   .pagination {

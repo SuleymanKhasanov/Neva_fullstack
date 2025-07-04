@@ -1,0 +1,11 @@
+{
+  "save": "Save",
+  "reset": "Reset",
+  "progressTitle": "Completion Progress",
+  "fieldsFilledText": "fields filled",
+  "fillRequiredFields": "Fill all required fields to create product",
+  "allFieldsFilled": "All fields filled! Ready to create product",
+  "creating": "Creating...",
+  "submit": "Submit",
+  "of": "of"
+}

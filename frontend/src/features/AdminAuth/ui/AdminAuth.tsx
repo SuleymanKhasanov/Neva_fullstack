@@ -163,7 +163,7 @@ const AdminAuth = () => {
       if (result.success) {
         console.log('✅ Login successful, redirecting...');
         // Успешная авторизация - перенаправляем на dashboard
-        redirectToLocalized('admin/dashboard');
+        redirectToLocalized('admin/dashboard/home');
       } else {
         console.log('❌ Login failed:', result.error);
 

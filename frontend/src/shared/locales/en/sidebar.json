@@ -1,5 +1,11 @@
 {
   "dashboard": "Dashboard",
   "productsCreate": "Create Product",
-  "productsList": "Products List"
+  "productsList": "Products List",
+  "brandsCreate": "Create Brand",
+  "closeMenu": "Close menu",
+  "adminNavigation": "Admin navigation",
+  "logoTitle": "East Telecom",
+  "logoSubtitle": "B2B Catalog Admin Panel",
+  "back": "Back"
 }

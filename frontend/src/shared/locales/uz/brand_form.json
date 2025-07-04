@@ -1,0 +1,16 @@
+{
+  "basicInfo": "Asosiy ma'lumotlar",
+  "description": "Bo'limni, kategoriyani tanlang va brend nomini kiriting. Subkategoriya ixtiyoriy.",
+  "sectionLabel": "Bo'lim *",
+  "selectSection": "Bo'limni tanlang",
+  "categoryLabel": "Kategoriya *",
+  "loadingCategories": "Kategoriyalar yuklanmoqda...",
+  "selectCategory": "Kategoriyani tanlang",
+  "selectSectionFirst": "Avval bo'limni tanlang",
+  "subcategoryLabel": "Subkategoriya (ixtiyoriy)",
+  "loadingSubcategories": "Subkategoriyalar yuklanmoqda...",
+  "selectSubcategory": "Subkategoriyani tanlang (ixtiyoriy)",
+  "selectCategoryFirst": "Avval kategoriyani tanlang",
+  "brandNameLabel": "Brend nomi *",
+  "enterBrandName": "Brend nomini kiriting"
+}

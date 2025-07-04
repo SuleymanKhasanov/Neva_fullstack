@@ -66,6 +66,12 @@ export enum TranslationKeys {
   SidebarDashboard = 'sidebar.dashboard',
   SidebarProductsCreate = 'sidebar.productsCreate',
   SidebarProductsList = 'sidebar.productsList',
+  SidebarBrandsCreate = 'sidebar.brandsCreate',
+  SidebarCloseMenu = 'sidebar.closeMenu',
+  SidebarAdminNavigation = 'sidebar.adminNavigation',
+  SidebarLogoTitle = 'sidebar.logoTitle',
+  SidebarLogoSubtitle = 'sidebar.logoSubtitle',
+  SidebarBack = 'sidebar.back',
 
   // Product Create
   ProductCreateTitle = 'product_create.title',
@@ -142,6 +148,87 @@ export enum TranslationKeys {
   ProgressIndicatorReset = 'progress_indicator.reset',
   ProgressIndicatorResetMessage = 'progress_indicator.resetMessage',
   ProgressIndicatorSuccessMessage = 'progress_indicator.successMessage',
+
+  // Brand Create
+  BrandCreateTitle = 'brand_create.title',
+  BrandCreateSubtitle = 'brand_create.subtitle',
+  BrandCreateAuthTokenNotFound = 'brand_create.authTokenNotFound',
+  BrandCreateCreateError = 'brand_create.createError',
+  BrandCreateCreateSuccess = 'brand_create.createSuccess',
+  BrandCreateFormReset = 'brand_create.formReset',
+  BrandCreateSubmitButton = 'brand_create.submitButton',
+  BrandCreateResetButton = 'brand_create.resetButton',
+  BrandCreateProgressTitle = 'brand_create.progressTitle',
+  BrandCreateCreating = 'brand_create.creating',
+
+  // Brand Form
+  BrandFormBasicInfo = 'brand_form.basicInfo',
+  BrandFormDescription = 'brand_form.description',
+  BrandFormSectionLabel = 'brand_form.sectionLabel',
+  BrandFormSelectSection = 'brand_form.selectSection',
+  BrandFormCategoryLabel = 'brand_form.categoryLabel',
+  BrandFormLoadingCategories = 'brand_form.loadingCategories',
+  BrandFormSelectCategory = 'brand_form.selectCategory',
+  BrandFormSelectSectionFirst = 'brand_form.selectSectionFirst',
+  BrandFormSubcategoryLabel = 'brand_form.subcategoryLabel',
+  BrandFormLoadingSubcategories = 'brand_form.loadingSubcategories',
+  BrandFormSelectSubcategory = 'brand_form.selectSubcategory',
+  BrandFormSelectCategoryFirst = 'brand_form.selectCategoryFirst',
+  BrandFormBrandNameLabel = 'brand_form.brandNameLabel',
+  BrandFormEnterBrandName = 'brand_form.enterBrandName',
+
+  // Product Detail
+  ProductDetailImageAlt = 'product_detail.imageAlt',
+  ProductDetailImageUnavailable = 'product_detail.imageUnavailable',
+  ProductDetailSpecifications = 'product_detail.specifications',
+  ProductDetailNoSpecifications = 'product_detail.noSpecifications',
+  ProductDetailCallToLearnMore = 'product_detail.callToLearnMore',
+
+  // Product Card
+  ProductCardDelete = 'product_card.delete',
+  ProductCardNoImage = 'product_card.noImage',
+
+  // Category Modal
+  CategoryModalNoCategories = 'category_modal.noCategories',
+  CategoryModalBack = 'category_modal.back',
+  CategoryModalNoBrands = 'category_modal.noBrands',
+  CategoryModalTitle = 'category_modal.title',
+
+  // Image Slot
+  ImageSlotFormatError = 'image_slot.formatError',
+  ImageSlotSizeError = 'image_slot.sizeError',
+  ImageSlotImageLabel = 'image_slot.imageLabel',
+  ImageSlotAddImageLabel = 'image_slot.addImageLabel',
+  ImageSlotSetPrimary = 'image_slot.setPrimary',
+  ImageSlotSetPrimaryImage = 'image_slot.setPrimaryImage',
+  ImageSlotDeleteImage = 'image_slot.deleteImage',
+  ImageSlotPrimary = 'image_slot.primary',
+
+  // Action Bar
+  ActionBarSave = 'action_bar.save',
+  ActionBarReset = 'action_bar.reset',
+  ActionBarFilled = 'action_bar.filled',
+  ActionBarSaving = 'action_bar.saving',
+  ActionBarFillRequired = 'action_bar.fillRequired',
+
+  // Inline Action Bar
+  InlineActionBarSave = 'inline_action_bar.save',
+  InlineActionBarReset = 'inline_action_bar.reset',
+  InlineActionBarProgressTitle = 'inline_action_bar.progressTitle',
+  InlineActionBarFieldsFilledText = 'inline_action_bar.fieldsFilledText',
+  InlineActionBarFillRequiredFields = 'inline_action_bar.fillRequiredFields',
+  InlineActionBarAllFieldsFilled = 'inline_action_bar.allFieldsFilled',
+  InlineActionBarCreating = 'inline_action_bar.creating',
+  InlineActionBarSubmit = 'inline_action_bar.submit',
+  InlineActionBarOf = 'inline_action_bar.of',
+
+  // Form Progress
+  FormProgressCloseError = 'form_progress.closeError',
+
+  // Selects
+  SelectDefaultPlaceholder = 'select.defaultPlaceholder',
+  SearchSelectDefaultPlaceholder = 'search_select.defaultPlaceholder',
+  SearchSelectSearchPlaceholder = 'search_select.searchPlaceholder',
 }
 
 export type Header = {
@@ -245,6 +332,12 @@ export type Sidebar = {
   dashboard: string;
   productsCreate: string;
   productsList: string;
+  brandsCreate: string;
+  closeMenu: string;
+  adminNavigation: string;
+  logoTitle: string;
+  logoSubtitle: string;
+  back: string;
   [key: string]: unknown;
 };
 
@@ -351,6 +444,111 @@ export type ProgressIndicator = {
   [key: string]: unknown;
 };
 
+export type BrandCreate = {
+  title: string;
+  subtitle: string;
+  authTokenNotFound: string;
+  createError: string;
+  createSuccess: string;
+  formReset: string;
+  submitButton: string;
+  resetButton: string;
+  progressTitle: string;
+  creating: string;
+  [key: string]: unknown;
+};
+
+export type BrandForm = {
+  basicInfo: string;
+  description: string;
+  sectionLabel: string;
+  selectSection: string;
+  categoryLabel: string;
+  loadingCategories: string;
+  selectCategory: string;
+  selectSectionFirst: string;
+  subcategoryLabel: string;
+  loadingSubcategories: string;
+  selectSubcategory: string;
+  selectCategoryFirst: string;
+  brandNameLabel: string;
+  enterBrandName: string;
+  [key: string]: unknown;
+};
+
+export type ProductDetail = {
+  imageAlt: string;
+  imageUnavailable: string;
+  specifications: string;
+  noSpecifications: string;
+  callToLearnMore: string;
+  [key: string]: unknown;
+};
+
+export type ProductCard = {
+  delete: string;
+  noImage: string;
+  [key: string]: unknown;
+};
+
+export type CategoryModal = {
+  noCategories: string;
+  back: string;
+  noBrands: string;
+  title: string;
+  [key: string]: unknown;
+};
+
+export type ImageSlot = {
+  formatError: string;
+  sizeError: string;
+  imageLabel: string;
+  addImageLabel: string;
+  setPrimary: string;
+  setPrimaryImage: string;
+  deleteImage: string;
+  primary: string;
+  [key: string]: unknown;
+};
+
+export type ActionBar = {
+  save: string;
+  reset: string;
+  filled: string;
+  saving: string;
+  fillRequired: string;
+  [key: string]: unknown;
+};
+
+export type InlineActionBar = {
+  save: string;
+  reset: string;
+  progressTitle: string;
+  fieldsFilledText: string;
+  fillRequiredFields: string;
+  allFieldsFilled: string;
+  creating: string;
+  submit: string;
+  of: string;
+  [key: string]: unknown;
+};
+
+export type FormProgress = {
+  closeError: string;
+  [key: string]: unknown;
+};
+
+export type Select = {
+  defaultPlaceholder: string;
+  [key: string]: unknown;
+};
+
+export type SearchSelect = {
+  defaultPlaceholder: string;
+  searchPlaceholder: string;
+  [key: string]: unknown;
+};
+
 export type TranslationType = {
   header: Header;
   card: Card;
@@ -363,6 +561,17 @@ export type TranslationType = {
   product_create: ProductCreate;
   admin_products_list: AdminProductsList;
   progress_indicator: ProgressIndicator;
+  brand_create: BrandCreate;
+  brand_form: BrandForm;
+  product_detail: ProductDetail;
+  product_card: ProductCard;
+  category_modal: CategoryModal;
+  image_slot: ImageSlot;
+  action_bar: ActionBar;
+  inline_action_bar: InlineActionBar;
+  form_progress: FormProgress;
+  select: Select;
+  search_select: SearchSelect;
   [key: string]: unknown;
 };
 

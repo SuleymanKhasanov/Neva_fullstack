@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 import { LuChevronDown } from 'react-icons/lu';
 import styles from './CustomSelect.module.css';
 
@@ -24,10 +26,13 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   label,
   options = [],
   value,
-  placeholder = 'Выберите опцию',
+  placeholder,
   disabled = false,
   onChange,
 }) => {
+  const t = useTranslations();
+  const finalPlaceholder =
+    placeholder || t(TranslationKeys.SelectDefaultPlaceholder);
   // ==================== СОСТОЯНИЕ ====================
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -139,13 +144,13 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
         onKeyDown={handleKeyDown}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-label={label || placeholder}
+        aria-label={label || finalPlaceholder}
       >
         <span className={styles.selectedText}>
           {selectedOption ? (
             <span className={styles.selectedValue}>{selectedOption.label}</span>
           ) : (
-            <span className={styles.placeholder}>{placeholder}</span>
+            <span className={styles.placeholder}>{finalPlaceholder}</span>
           )}
         </span>
 
@@ -165,9 +170,9 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
-              placeholder="Поиск..."
+              placeholder={t(TranslationKeys.SearchSelectSearchPlaceholder)}
               className={styles.searchInput}
-              aria-label="Поиск по опциям"
+              aria-label={t(TranslationKeys.SearchSelectSearchPlaceholder)}
             />
           </div>
 

@@ -1,10 +1,19 @@
 // src/admin/brands/admin-brands.service.ts
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 
-import { Locale } from '@prisma/client';
+import { Locale, Section } from '@prisma/client';
 
 import { CacheService } from '../../common/cache/cache.service';
 import { PrismaService } from '../../common/database/prisma.service';
+import {
+  CreateBrandEnhancedDto,
+  BrandCreatedResponseDto,
+} from '../dto/create-brand-enhanced.dto';
 
 @Injectable()
 export class AdminBrandsService {
@@ -106,16 +115,20 @@ export class AdminBrandsService {
           },
         });
 
-        // Убираем дубликаты брендов
+        // Убираем дубликаты брендов и форматируем как categories API
         const uniqueBrands = new Map();
 
         categoryBrands.forEach((cb) => {
           if (!uniqueBrands.has(cb.brand.id)) {
+            // Извлекаем название из переводов (как в categories API)
+            const translation = cb.brand.translations?.[0];
+            const name = translation?.name || 'Без названия';
+
             uniqueBrands.set(cb.brand.id, {
               id: cb.brand.id,
+              name: name, // Прямое поле name вместо translations
               createdAt: cb.brand.createdAt,
               updatedAt: cb.brand.updatedAt,
-              translations: cb.brand.translations,
             });
           }
         });
@@ -191,6 +204,118 @@ export class AdminBrandsService {
         translations: cb.category.translations,
       })),
       productsCount: brand._count.products,
+    };
+  }
+
+  // ==================== СОЗДАНИЕ БРЕНДА С КАТЕГОРИЯМИ ====================
+
+  async createBrandWithCategories(
+    dto: CreateBrandEnhancedDto
+  ): Promise<BrandCreatedResponseDto> {
+    this.logger.log(
+      `Creating brand with categories. Section: ${dto.section}, Categories: ${dto.categoryIds.length}`
+    );
+
+    // Валидация категорий
+    const categories = await this.prisma.adminCategory.findMany({
+      where: {
+        id: { in: dto.categoryIds },
+        section: dto.section as Section,
+      },
+    });
+
+    if (categories.length !== dto.categoryIds.length) {
+      const missingCategories = dto.categoryIds.filter(
+        (id) => !categories.find((cat) => cat.id === id)
+      );
+      throw new BadRequestException(
+        `Категории не найдены или не соответствуют секции ${dto.section}: ${missingCategories.join(', ')}`
+      );
+    }
+
+    // Валидация подкатегорий (если указаны)
+    if (dto.subcategoryIds && dto.subcategoryIds.length > 0) {
+      const subcategories = await this.prisma.adminSubcategory.findMany({
+        where: {
+          id: { in: dto.subcategoryIds },
+          categoryId: { in: dto.categoryIds },
+        },
+      });
+
+      if (subcategories.length !== dto.subcategoryIds.length) {
+        const missingSubcategories = dto.subcategoryIds.filter(
+          (id) => !subcategories.find((sub) => sub.id === id)
+        );
+        throw new BadRequestException(
+          `Подкатегории не найдены или не соответствуют выбранным категориям: ${missingSubcategories.join(', ')}`
+        );
+      }
+    }
+
+    // Проверяем, что есть обязательный русский перевод
+    const ruTranslation = dto.translations.find((t) => t.locale === 'ru');
+    if (!ruTranslation) {
+      throw new BadRequestException(
+        'Обязательно укажите название бренда на русском языке'
+      );
+    }
+
+    // Транзакция для создания бренда
+    const result = await this.prisma.$transaction(async (tx) => {
+      // 1. Создаем бренд в админских таблицах
+      const adminBrand = await tx.adminBrand.create({
+        data: {
+          translations: {
+            createMany: {
+              data: dto.translations.map((t) => ({
+                locale: t.locale as Locale,
+                name: t.name,
+              })),
+            },
+          },
+        },
+        include: { translations: true },
+      });
+
+      // 2. Создаем связи с категориями
+      const categoryBrandData = dto.categoryIds.map((categoryId) => ({
+        brandId: adminBrand.id,
+        categoryId: categoryId,
+        section: dto.section as Section,
+      }));
+
+      await tx.adminCategoryBrand.createMany({
+        data: categoryBrandData,
+      });
+
+      // 3. Создаем связи с подкатегориями (если указаны)
+      if (dto.subcategoryIds && dto.subcategoryIds.length > 0) {
+        // Пока пропустим подкатегории, так как в схеме БД нет связи AdminBrand -> AdminSubcategory
+        this.logger.log(
+          `Subcategories specified but not linked in current schema: ${dto.subcategoryIds.join(', ')}`
+        );
+      }
+
+      return adminBrand;
+    });
+
+    // Инвалидируем кеш
+    await this.invalidateAdminCache();
+
+    this.logger.log(`Brand created successfully with ID: ${result.id}`);
+
+    // Формируем ответ
+    return {
+      id: result.id,
+      section: dto.section,
+      translations: result.translations.map((t) => ({
+        locale: t.locale as any,
+        name: t.name,
+      })),
+      categoriesCount: dto.categoryIds.length,
+      subcategoriesCount: dto.subcategoryIds?.length || 0,
+      createdAt: result.createdAt,
+      message: 'Бренд успешно создан и привязан к выбранным категориям',
     };
   }
 
@@ -284,6 +409,22 @@ export class AdminBrandsService {
       this.logger.log('Cache invalidated for brands');
     } catch (error) {
       this.logger.warn('Failed to invalidate cache:', error);
+    }
+  }
+
+  private async invalidateAdminCache() {
+    try {
+      await Promise.all([
+        this.cache.invalidateByPattern('admin:admin-brands:*'),
+        this.cache.invalidateByPattern('admin:admin-brands-by-category:*'),
+        this.cache.invalidateByPattern('admin:categories:*'),
+        this.cache.invalidateByPattern('admin:subcategories:*'),
+        this.cache.invalidateByPattern('brands:*'),
+        this.cache.invalidateByPattern('menu:*'),
+      ]);
+      this.logger.log('Admin cache invalidated for brands');
+    } catch (error) {
+      this.logger.warn('Failed to invalidate admin cache:', error);
     }
   }
 }

@@ -1,0 +1,11 @@
+{
+  "save": "저장",
+  "reset": "초기화",
+  "progressTitle": "완료 진행률",
+  "fieldsFilledText": "필드 완료됨",
+  "fillRequiredFields": "제품을 생성하려면 모든 필수 필드를 채우세요",
+  "allFieldsFilled": "모든 필드가 완료되었습니다! 제품을 생성할 수 있습니다",
+  "creating": "생성 중...",
+  "submit": "제출",
+  "of": "의"
+}

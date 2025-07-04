@@ -1,0 +1,16 @@
+{
+  "basicInfo": "Основная информация",
+  "description": "Выберите секцию, категорию и введите название бренда. Подкатегория опциональна.",
+  "sectionLabel": "Секция *",
+  "selectSection": "Выберите секцию",
+  "categoryLabel": "Категория *",
+  "loadingCategories": "Загрузка категорий...",
+  "selectCategory": "Выберите категорию",
+  "selectSectionFirst": "Сначала выберите секцию",
+  "subcategoryLabel": "Подкатегория (опционально)",
+  "loadingSubcategories": "Загрузка подкатегорий...",
+  "selectSubcategory": "Выберите подкатегорию (опционально)",
+  "selectCategoryFirst": "Сначала выберите категорию",
+  "brandNameLabel": "Название бренда *",
+  "enterBrandName": "Введите название бренда"
+}

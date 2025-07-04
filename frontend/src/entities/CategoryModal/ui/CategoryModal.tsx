@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { fetchCategories } from '@/shared/services/api/fetchCategories';
 import { CategoryWithBrands } from '@/shared/types/category';
@@ -20,6 +22,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
   onClose,
   locale,
 }) => {
+  const t = useTranslations();
   const [nevaCategories, setNevaCategories] = useState<CategoryWithBrands[]>(
     []
   );
@@ -77,7 +80,11 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
       return <p className={styles.error}>{error}</p>;
     }
     if (!categories.length) {
-      return <p className={styles.empty}>Нет категорий</p>;
+      return (
+        <p className={styles.empty}>
+          {t(TranslationKeys.CategoryModalNoCategories)}
+        </p>
+      );
     }
 
     const selectedCategory = selectedCategoryId
@@ -94,7 +101,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
               className={styles.backButton}
             >
               <ChevronRight className={styles.backArrow} />
-              Назад
+              {t(TranslationKeys.CategoryModalBack)}
             </Button>
             <ul className={styles.brandList}>
               {selectedCategory.brands.length > 0 ? (
@@ -104,7 +111,9 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
                   </li>
                 ))
               ) : (
-                <p className={styles.empty}>Нет брендов</p>
+                <p className={styles.empty}>
+                  {t(TranslationKeys.CategoryModalNoBrands)}
+                </p>
               )}
             </ul>
           </>
@@ -136,7 +145,9 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>Категории</h2>
+          <h2 className={styles.modalTitle}>
+            {t(TranslationKeys.CategoryModalTitle)}
+          </h2>
           <Button
             variant="secondary"
             onClick={onClose}

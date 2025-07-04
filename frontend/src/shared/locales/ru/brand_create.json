@@ -1,0 +1,47 @@
+{
+  "title": "Создание бренда",
+  "subtitle": "Создайте новый бренд и привяжите его к категориям",
+  "form": {
+    "basic_info": "Основная информация",
+    "description": "Выберите секцию, категорию и введите название бренда. Подкатегория опциональна.",
+    "section_label": "Секция *",
+    "section_placeholder": "Выберите секцию",
+    "category_label": "Категория *",
+    "category_placeholder": "Выберите категорию",
+    "category_placeholder_loading": "Загрузка категорий...",
+    "category_placeholder_disabled": "Сначала выберите секцию",
+    "subcategory_label": "Подкатегория (опционально)",
+    "subcategory_placeholder": "Выберите подкатегорию (опционально)",
+    "subcategory_placeholder_loading": "Загрузка подкатегорий...",
+    "subcategory_placeholder_disabled": "Сначала выберите категорию",
+    "brand_name_label": "Название бренда *",
+    "brand_name_placeholder": "Введите название бренда"
+  },
+  "progress": {
+    "title": "Заполнение формы",
+    "required_fields": "Обязательные поля",
+    "optional_fields": "Дополнительные поля"
+  },
+  "buttons": {
+    "create": "Создать бренд",
+    "creating": "Создание бренда...",
+    "reset": "Сбросить"
+  },
+  "messages": {
+    "success": "Бренд успешно создан!",
+    "form_reset": "Форма сброшена",
+    "error_section": "Выберите секцию (NEVA или X-Solution)",
+    "error_category": "Выберите категорию",
+    "error_brand_name": "Введите название бренда (минимум 2 символа)",
+    "error_network": "Ошибка соединения с сервером",
+    "error_auth": "Сессия истекла. Войдите в систему заново."
+  },
+  "authTokenNotFound": "Токен авторизации не найден",
+  "createError": "Ошибка создания бренда",
+  "createSuccess": "Бренд успешно создан!",
+  "formReset": "Форма сброшена",
+  "submitButton": "Создать бренд",
+  "resetButton": "Сбросить",
+  "progressTitle": "Заполнение формы",
+  "creating": "Создание бренда..."
+}

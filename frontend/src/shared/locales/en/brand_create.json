@@ -1,0 +1,47 @@
+{
+  "title": "Create Brand",
+  "subtitle": "Create a new brand and link it to categories",
+  "form": {
+    "basic_info": "Basic Information",
+    "description": "Select section, category and enter brand name. Subcategory is optional.",
+    "section_label": "Section *",
+    "section_placeholder": "Select section",
+    "category_label": "Category *",
+    "category_placeholder": "Select category",
+    "category_placeholder_loading": "Loading categories...",
+    "category_placeholder_disabled": "Select section first",
+    "subcategory_label": "Subcategory (optional)",
+    "subcategory_placeholder": "Select subcategory (optional)",
+    "subcategory_placeholder_loading": "Loading subcategories...",
+    "subcategory_placeholder_disabled": "Select category first",
+    "brand_name_label": "Brand Name *",
+    "brand_name_placeholder": "Enter brand name"
+  },
+  "progress": {
+    "title": "Form Completion",
+    "required_fields": "Required fields",
+    "optional_fields": "Optional fields"
+  },
+  "buttons": {
+    "create": "Create Brand",
+    "creating": "Creating brand...",
+    "reset": "Reset"
+  },
+  "messages": {
+    "success": "Brand created successfully!",
+    "form_reset": "Form reset",
+    "error_section": "Select section (NEVA or X-Solution)",
+    "error_category": "Select category",
+    "error_brand_name": "Enter brand name (minimum 2 characters)",
+    "error_network": "Server connection error",
+    "error_auth": "Session expired. Please log in again."
+  },
+  "authTokenNotFound": "Authorization token not found",
+  "createError": "Brand creation error",
+  "createSuccess": "Brand created successfully!",
+  "formReset": "Form reset",
+  "submitButton": "Create Brand",
+  "resetButton": "Reset",
+  "progressTitle": "Form Completion",
+  "creating": "Creating brand..."
+}

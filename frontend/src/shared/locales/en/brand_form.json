@@ -1,0 +1,16 @@
+{
+  "basicInfo": "Basic Information",
+  "description": "Select section, category and enter brand name. Subcategory is optional.",
+  "sectionLabel": "Section *",
+  "selectSection": "Select section",
+  "categoryLabel": "Category *",
+  "loadingCategories": "Loading categories...",
+  "selectCategory": "Select category",
+  "selectSectionFirst": "Select section first",
+  "subcategoryLabel": "Subcategory (optional)",
+  "loadingSubcategories": "Loading subcategories...",
+  "selectSubcategory": "Select subcategory (optional)",
+  "selectCategoryFirst": "Select category first",
+  "brandNameLabel": "Brand Name *",
+  "enterBrandName": "Enter brand name"
+}
