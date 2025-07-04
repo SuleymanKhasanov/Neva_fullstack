@@ -1,0 +1,10 @@
+{
+  "formatError": "JPEG, PNG, WebP 형식만 지원됩니다",
+  "sizeError": "최대 파일 크기는 10MB입니다",
+  "imageLabel": "이미지",
+  "addImageLabel": "이미지 추가",
+  "setPrimary": "기본 이미지로 설정",
+  "setPrimaryImage": "기본 이미지로 설정",
+  "deleteImage": "이미지 삭제",
+  "primary": "기본"
+}

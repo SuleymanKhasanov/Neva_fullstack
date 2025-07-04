@@ -2,7 +2,7 @@
 'use client';
 
 import { TranslationType, TranslationKeys } from '@/shared/config/i18n/types';
-import { LuHouse, LuPlus, LuList } from 'react-icons/lu';
+import { LuHouse, LuPlus, LuList, LuTag } from 'react-icons/lu';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
@@ -90,6 +90,13 @@ const AdminSidebar = ({
       href: `/${locale}/admin/dashboard/products`,
       disabled: false, // Активируем список продуктов
     },
+    {
+      id: 'brands-create',
+      label: messages.sidebar.brandsCreate,
+      icon: LuTag,
+      href: `/${locale}/admin/dashboard/brands/create`,
+      disabled: false,
+    },
   ];
 
   const isActiveItem = useCallback(
@@ -133,7 +140,7 @@ const AdminSidebar = ({
           onClick={handleOverlayClick}
           role="button"
           tabIndex={0}
-          aria-label="Закрыть меню"
+          aria-label={messages.sidebar.closeMenu}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               handleOverlayClick();
@@ -145,7 +152,7 @@ const AdminSidebar = ({
       <aside
         className={`${styles.sidebar} ${!isOpen ? styles.closed : ''} ${isMobile && isOpen ? styles.open : ''}`}
         role="navigation"
-        aria-label="Административная навигация"
+        aria-label={messages.sidebar.adminNavigation}
       >
         <div className={styles.sidebarContent}>
           {/* Заголовок с логотипом */}
@@ -156,8 +163,12 @@ const AdminSidebar = ({
               </div>
               {isOpen && (
                 <div className={styles.logoText}>
-                  <h1 className={styles.logoTitle}>East Telecom</h1>
-                  <p className={styles.logoSubtitle}>B2B Catalog Admin Panel</p>
+                  <h1 className={styles.logoTitle}>
+                    {messages.sidebar.logoTitle}
+                  </h1>
+                  <p className={styles.logoSubtitle}>
+                    {messages.sidebar.logoSubtitle}
+                  </p>
                 </div>
               )}
             </div>

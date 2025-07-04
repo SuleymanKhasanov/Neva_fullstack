@@ -1,5 +1,23 @@
 import React from 'react';
-import { AdminProductsListPage } from '@/pages/AdminProductsListPage';
+import dynamic from 'next/dynamic';
+
+// Динамический импорт AdminProductsListPage для улучшения производительности
+const AdminProductsListPage = dynamic(
+  () =>
+    import('@/pages/AdminProductsListPage').then((mod) => ({
+      default: mod.AdminProductsListPage,
+    })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p>Загрузка списка продуктов...</p>
+        </div>
+      </div>
+    ),
+  }
+);
 import { loadTranslations } from '@/shared/config/i18n/loadTranslations';
 
 interface AdminProductsPageProps {

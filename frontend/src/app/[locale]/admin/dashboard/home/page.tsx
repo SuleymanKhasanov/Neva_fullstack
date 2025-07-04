@@ -1,6 +1,24 @@
 // app/[locale]/admin/dashboard/home/page.tsx
 import { AdminRouteGuard } from '@/shared/components/AdminRouteGuard';
-import { AdminHomePage } from '@/pages/AdminHomePage';
+import dynamic from 'next/dynamic';
+
+// Динамический импорт AdminHomePage для улучшения производительности
+const AdminHomePage = dynamic(
+  () =>
+    import('@/pages/AdminHomePage').then((mod) => ({
+      default: mod.AdminHomePage,
+    })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p>Загрузка панели управления...</p>
+        </div>
+      </div>
+    ),
+  }
+);
 import { getRequestConfig } from '@/shared/config/i18n/i18n';
 import {
   Locale,

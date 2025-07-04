@@ -2,6 +2,8 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 import styles from './FloatingActionBar.module.css';
 
 interface ProgressInfo {
@@ -27,11 +29,15 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
   canSubmit = true,
   onSubmit,
   onReset,
-  submitText = 'Сохранить',
-  resetText = 'Сбросить',
+  submitText,
+  resetText,
   className,
 }) => {
+  const t = useTranslations();
   const isComplete = progress.percentage === 100;
+
+  const defaultSubmitText = submitText || t(TranslationKeys.ActionBarSubmit);
+  const defaultResetText = resetText || t(TranslationKeys.ActionBarReset);
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
@@ -49,7 +55,8 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
           <div className={styles.progressText}>
             <span className={styles.percentage}>{progress.percentage}%</span>
             <span className={styles.details}>
-              {progress.filled}/{progress.total} заполнено
+              {progress.filled}/{progress.total}{' '}
+              {t(TranslationKeys.ActionBarFilledText)}
             </span>
           </div>
         </div>
@@ -62,7 +69,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
             className={styles.resetButton}
             disabled={isLoading}
           >
-            {resetText}
+            {defaultResetText}
           </button>
 
           <button
@@ -76,12 +83,12 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
             {isLoading ? (
               <>
                 <span className={styles.spinner} />
-                Сохранение...
+                {t(TranslationKeys.ActionBarSaving)}
               </>
             ) : (
               <>
                 {isComplete ? '✓ ' : ''}
-                {submitText}
+                {defaultSubmitText}
               </>
             )}
           </button>
@@ -90,7 +97,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
         {/* Статус */}
         {!isComplete && (
           <div className={styles.statusMessage}>
-            Заполните все обязательные поля для сохранения
+            {t(TranslationKeys.ActionBarFillRequiredFields)}
           </div>
         )}
       </div>

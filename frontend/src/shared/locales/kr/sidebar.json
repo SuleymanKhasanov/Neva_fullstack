@@ -1,5 +1,11 @@
 {
   "dashboard": "대시보드",
   "productsCreate": "제품 생성",
-  "productsList": "제품 목록"
+  "productsList": "제품 목록",
+  "brandsCreate": "브랜드 생성",
+  "closeMenu": "메뉴 닫기",
+  "adminNavigation": "관리자 네비게이션",
+  "logoTitle": "East Telecom",
+  "logoSubtitle": "B2B 카탈로그 관리 패널",
+  "back": "뒤로"
 }

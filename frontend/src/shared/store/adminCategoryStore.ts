@@ -3,7 +3,6 @@
 import React from 'react';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { getCurrentLocale } from '@/shared/utils/redirect';
 
 // ==================== СТРОГИЕ ТИПЫ ====================
 interface SelectOption {
@@ -20,18 +19,19 @@ interface Translation {
 interface CategoryData {
   readonly id: number;
   readonly section: string;
-  readonly translations: readonly Translation[];
+  readonly name: string;
+  readonly subcategories?: readonly SubcategoryData[];
 }
 
 interface SubcategoryData {
   readonly id: number;
-  readonly categoryId: number;
-  readonly translations: readonly Translation[];
+  readonly categoryId?: number;
+  readonly name: string;
 }
 
 interface BrandData {
   readonly id: number;
-  readonly translations: readonly Translation[];
+  readonly name: string;
 }
 
 interface LoadingState {
@@ -180,12 +180,10 @@ interface AdminCategoryState {
 
 // ==================== УТИЛИТЫ ====================
 
-const getTranslatedName = (
-  translations: readonly Translation[],
-  locale = 'ru'
+const getItemName = (
+  item: CategoryData | SubcategoryData | BrandData
 ): string => {
-  const translation = translations.find((t) => t.locale === locale);
-  return translation?.name || translations[0]?.name || 'Без названия';
+  return item.name || 'Без названия';
 };
 
 const generateImageId = (): string => {
@@ -264,13 +262,38 @@ const makeApiRequest = async (endpoint: string): Promise<Response> => {
 
   console.log(`🌐 API запрос: ${fullUrl}`);
 
-  const response = await fetch(fullUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const response = await fetch(fullUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      // Добавляем таймаут и обработку ошибок
+      signal: AbortSignal.timeout(10000), // 10 секунд таймаут
+    });
+
+    console.log(`📡 Ответ сервера: ${response.status} ${response.statusText}`);
+    return response;
+  } catch (error) {
+    console.error('💥 Ошибка сетевого запроса:', error);
+
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        throw new Error(
+          'Превышено время ожидания запроса. Проверьте подключение к серверу.'
+        );
+      }
+      if (error.message.includes('fetch')) {
+        throw new Error(
+          'Не удается подключиться к серверу. Убедитесь что бэкенд запущен на ' +
+            baseUrl
+        );
+      }
+    }
+
+    throw error;
+  }
 
   console.log(`📡 Ответ сервера: ${response.status} ${response.statusText}`);
 
@@ -300,7 +323,7 @@ const fetchCategories = async (
   locale: string
 ): Promise<readonly CategoryData[]> => {
   const response = await makeApiRequest(
-    `/admin/categories?section=${section}&locale=${locale}`
+    `/admin/master-data/categories?section=${section}&locale=${locale}`
   );
 
   const rawData: unknown = await response.json();
@@ -338,7 +361,7 @@ const fetchSubcategories = async (
   locale: string
 ): Promise<readonly SubcategoryData[]> => {
   const response = await makeApiRequest(
-    `/admin/categories/subcategories/all?categoryId=${categoryId}&locale=${locale}`
+    `/admin/master-data/subcategories?categoryId=${categoryId}&locale=${locale}`
   );
 
   const rawData: unknown = await response.json();
@@ -494,7 +517,7 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
     // ==================== ЗАГРУЗКА ДАННЫХ ====================
 
     loadCategories: async (section: string) => {
-      const locale = getCurrentLocale();
+      const locale = 'ru';
 
       set((state) => ({
         loading: { ...state.loading, categories: true },
@@ -532,47 +555,54 @@ export const useAdminCategoryStore = create<AdminCategoryState>()(
     },
 
     loadSubcategories: async (categoryId: number) => {
-      const locale = getCurrentLocale();
-
       set((state) => ({
         loading: { ...state.loading, subcategories: true },
         error: '',
       }));
 
       try {
-        console.log(
-          '🔄 Загрузка субкатегорий для категории:',
-          categoryId,
-          'локаль:',
-          locale
-        );
+        // Ищем категорию в уже загруженных данных
+        const state = get();
+        const category = state.categories.find((c) => c.id === categoryId);
 
-        const subcategories = await fetchSubcategories(categoryId, locale);
+        if (category && category.subcategories) {
+          // Используем подкатегории из уже загруженных данных
+          set({
+            subcategories: category.subcategories,
+            loading: { ...state.loading, subcategories: false },
+          });
 
-        set((state) => ({
-          subcategories,
-          loading: { ...state.loading, subcategories: false },
-        }));
+          console.log(
+            `✅ Загружено ${category.subcategories.length} подкатегорий для категории ${categoryId}:`,
+            category.subcategories.map((s) => s.name).join(', ')
+          );
+        } else {
+          // Если подкатегорий нет в данных, устанавливаем пустой массив
+          set({
+            subcategories: [],
+            loading: { ...state.loading, subcategories: false },
+          });
 
-        console.log('✅ Субкатегории загружены:', subcategories.length);
+          console.log(`✅ Подкатегории для категории ${categoryId} не найдены`);
+        }
       } catch (error) {
-        console.error('💥 Ошибка загрузки субкатегорий:', error);
-
         const errorMessage =
           error instanceof Error
             ? error.message
-            : 'Ошибка загрузки субкатегорий';
+            : 'Ошибка загрузки подкатегорий';
 
-        set((state) => ({
+        set({
           subcategories: [],
-          loading: { ...state.loading, subcategories: false },
           error: errorMessage,
-        }));
+          loading: { ...get().loading, subcategories: false },
+        });
+
+        console.error('❗ Ошибка загрузки подкатегорий:', error);
       }
     },
 
     loadBrands: async (subcategoryId?: number) => {
-      const locale = getCurrentLocale();
+      const locale = 'ru';
 
       set((state) => ({
         loading: { ...state.loading, brands: true },
@@ -1099,12 +1129,11 @@ const createSelectOptions = (
   items:
     | readonly CategoryData[]
     | readonly SubcategoryData[]
-    | readonly BrandData[],
-  locale: string
+    | readonly BrandData[]
 ): SelectOption[] => {
   return items.map((item) => ({
     value: item.id,
-    label: getTranslatedName(item.translations, locale),
+    label: getItemName(item),
   }));
 };
 
@@ -1174,32 +1203,23 @@ export const useProductSpecificationById = (
 
 export const useCategoryOptions = (): SelectOption[] => {
   const categories = useCategories();
-  const locale = getCurrentLocale();
 
-  return React.useMemo(
-    () => createSelectOptions(categories, locale),
-    [categories, locale]
-  );
+  return React.useMemo(() => createSelectOptions(categories), [categories]);
 };
 
 export const useSubcategoryOptions = (): SelectOption[] => {
   const subcategories = useSubcategories();
-  const locale = getCurrentLocale();
 
   return React.useMemo(
-    () => createSelectOptions(subcategories, locale),
-    [subcategories, locale]
+    () => createSelectOptions(subcategories),
+    [subcategories]
   );
 };
 
 export const useBrandOptions = (): SelectOption[] => {
   const brands = useBrands();
-  const locale = getCurrentLocale();
 
-  return React.useMemo(
-    () => createSelectOptions(brands, locale),
-    [brands, locale]
-  );
+  return React.useMemo(() => createSelectOptions(brands), [brands]);
 };
 
 // ✅ ИСПРАВЛЕННАЯ ТИПИЗАЦИЯ

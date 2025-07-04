@@ -84,13 +84,17 @@ export async function loadTranslations(locale: string) {
         demo: 'Demo data shown',
       },
     },
-    // ==================== НОВОЕ: ДЕФОЛТНЫЕ ПЕРЕВОДЫ ДЛЯ САЙДБАРА ====================
     sidebar: {
       dashboard: 'Dashboard',
       productsCreate: 'Create Product',
       productsList: 'Products List',
+      brandsCreate: 'Create Brand',
+      closeMenu: 'Close menu',
+      adminNavigation: 'Admin navigation',
+      logoTitle: 'East Telecom',
+      logoSubtitle: 'B2B Catalog Admin Panel',
+      back: 'Back',
     },
-
     product_create: {
       title: 'Create Product',
       subtitle: 'Fill in all required fields to create a new product',
@@ -163,7 +167,6 @@ export async function loadTranslations(locale: string) {
         brands: 'brands',
       },
     },
-
     admin_products_list: {
       title: 'Products List',
       totalProducts: 'Total products',
@@ -185,7 +188,6 @@ export async function loadTranslations(locale: string) {
       },
       modeInfo: 'Press Shift to activate delete mode',
     },
-
     progress_indicator: {
       title: 'Progress',
       completed: 'Completed',
@@ -194,99 +196,153 @@ export async function loadTranslations(locale: string) {
       resetMessage: 'Fields successfully reset!',
       successMessage: 'Product created successfully!',
     },
+    brand_create: {
+      title: 'Create Brand',
+      subtitle: 'Create a new brand and link it to categories',
+      authTokenNotFound: 'Authorization token not found',
+      createError: 'Brand creation error',
+      createSuccess: 'Brand created successfully!',
+      formReset: 'Form reset',
+      submitButton: 'Create Brand',
+      resetButton: 'Reset',
+      progressTitle: 'Form Completion',
+      creating: 'Creating brand...',
+    },
+    brand_form: {
+      basicInfo: 'Basic Information',
+      description:
+        'Select section, category and enter brand name. Subcategory is optional.',
+      sectionLabel: 'Section *',
+      selectSection: 'Select section',
+      categoryLabel: 'Category *',
+      loadingCategories: 'Loading categories...',
+      selectCategory: 'Select category',
+      selectSectionFirst: 'Select section first',
+      subcategoryLabel: 'Subcategory (optional)',
+      loadingSubcategories: 'Loading subcategories...',
+      selectSubcategory: 'Select subcategory (optional)',
+      selectCategoryFirst: 'Select category first',
+      brandNameLabel: 'Brand Name *',
+      enterBrandName: 'Enter brand name',
+    },
+    product_detail: {
+      imageAlt: 'image',
+      imageUnavailable: 'Image unavailable',
+      specifications: 'Technical Specifications',
+      noSpecifications:
+        'Please contact our managers for product specifications',
+      callToLearnMore: 'Call us to learn more',
+    },
+    product_card: {
+      delete: 'Delete',
+      noImage: 'No image available',
+    },
+    category_modal: {
+      noCategories: 'No categories',
+      back: 'Back',
+      noBrands: 'No brands',
+      title: 'Categories',
+    },
+    image_slot: {
+      formatError: 'Only JPEG, PNG and WebP formats are supported',
+      sizeError: 'Maximum file size is 10MB',
+      imageLabel: 'Image',
+      addImageLabel: 'Add image',
+      setPrimary: 'Set as primary',
+      setPrimaryImage: 'Set as primary image',
+      deleteImage: 'Delete image',
+      primary: 'Primary',
+    },
+    action_bar: {
+      save: 'Save',
+      reset: 'Reset',
+      filled: 'filled',
+      saving: 'Saving...',
+      fillRequired: 'Fill all required fields to save',
+    },
+    inline_action_bar: {
+      save: 'Save',
+      reset: 'Reset',
+      progressTitle: 'Completion Progress',
+      of: 'of',
+      fieldsFilledText: 'fields filled',
+      fillRequiredFields: 'Fill all required fields to create product',
+      allFieldsFilled: 'All fields filled! Ready to create product',
+      creating: 'Creating...',
+      submit: 'Submit',
+    },
+    form_progress: {
+      closeError: 'Close error',
+    },
+    select: {
+      defaultPlaceholder: 'Select option',
+    },
+    search_select: {
+      defaultPlaceholder: 'Select...',
+      searchPlaceholder: 'Search...',
+    },
   };
 
+  // Список всех файлов переводов
+  const translationFiles = [
+    'header',
+    'card',
+    'filters',
+    'products',
+    'errors',
+    'auth',
+    'admin_home',
+    'sidebar',
+    'product_create',
+    'admin_products_list',
+    'progress_indicator',
+    'brand_create',
+    'brand_form',
+    'product_detail',
+    'product_card',
+    'category_modal',
+    'image_slot',
+    'action_bar',
+    'inline_action_bar',
+    'form_progress',
+    'select',
+    'search_select',
+  ];
+
   try {
-    const headerTranslations = await import(
-      `@/shared/locales/${locale}/header.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.header
-    );
+    // Загружаем все переводы параллельно
+    const translationPromises = translationFiles.map(async (file) => {
+      try {
+        const module = await import(`@/shared/locales/${locale}/${file}.json`);
+        return { [file]: module.default };
+      } catch (error) {
+        console.warn(
+          `Failed to load translation file: ${file}.json for locale: ${locale}`,
+          error
+        );
+        return { [file]: (defaultTranslations as any)[file] };
+      }
+    });
 
-    const cardTranslations = await import(
-      `@/shared/locales/${locale}/card.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.card
-    );
+    const translationResults = await Promise.allSettled(translationPromises);
 
-    const filtersTranslations = await import(
-      `@/shared/locales/${locale}/filters.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.filters
-    );
+    // Объединяем результаты
+    const translations = translationResults.reduce((acc, result) => {
+      if (result.status === 'fulfilled') {
+        return { ...acc, ...result.value };
+      }
+      return acc;
+    }, {} as any);
 
-    const productsTranslations = await import(
-      `@/shared/locales/${locale}/products.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.products
-    );
+    // Проверяем, что все переводы загружены, и используем дефолтные для отсутствующих
+    const finalTranslations = { ...defaultTranslations };
+    translationFiles.forEach((file) => {
+      if (translations[file]) {
+        finalTranslations[file] = translations[file];
+      }
+    });
 
-    const errorsTranslations = await import(
-      `@/shared/locales/${locale}/errors.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.errors
-    );
-
-    const authTranslations = await import(
-      `@/shared/locales/${locale}/auth.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.auth
-    );
-
-    const adminHomeTranslations = await import(
-      `@/shared/locales/${locale}/admin_home.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.admin_home
-    );
-
-    const sidebarTranslations = await import(
-      `@/shared/locales/${locale}/sidebar.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.sidebar
-    );
-
-    const productCreateTranslations = await import(
-      `@/shared/locales/${locale}/product_create.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.product_create
-    );
-
-    const adminProductsListTranslations = await import(
-      `@/shared/locales/${locale}/admin_products_list.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.admin_products_list
-    );
-
-    const progressIndicatorTranslations = await import(
-      `@/shared/locales/${locale}/progress_indicator.json`
-    ).then(
-      (module) => module.default,
-      () => defaultTranslations.progress_indicator
-    );
-
-    return {
-      header: headerTranslations,
-      card: cardTranslations,
-      filters: filtersTranslations,
-      products: productsTranslations,
-      errors: errorsTranslations,
-      auth: authTranslations,
-      admin_home: adminHomeTranslations,
-      sidebar: sidebarTranslations,
-      product_create: productCreateTranslations,
-      admin_products_list: adminProductsListTranslations,
-      progress_indicator: progressIndicatorTranslations,
-    };
+    return finalTranslations;
   } catch (error) {
     console.error(
       `Unexpected error in loadTranslations for locale "${locale}":`,

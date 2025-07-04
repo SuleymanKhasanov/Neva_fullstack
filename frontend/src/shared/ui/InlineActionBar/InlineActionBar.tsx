@@ -2,6 +2,8 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 import styles from './InlineActionBar.module.css';
 
 interface ProgressInfo {
@@ -27,11 +29,16 @@ export const InlineActionBar: React.FC<InlineActionBarProps> = ({
   canSubmit = true,
   onSubmit,
   onReset,
-  submitText = 'Сохранить',
-  resetText = 'Сбросить',
+  submitText,
+  resetText,
   className,
 }) => {
+  const t = useTranslations();
   const isComplete = progress.percentage === 100;
+
+  const defaultSubmitText =
+    submitText || t(TranslationKeys.InlineActionBarSubmit);
+  const defaultResetText = resetText || t(TranslationKeys.InlineActionBarReset);
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
@@ -41,11 +48,15 @@ export const InlineActionBar: React.FC<InlineActionBarProps> = ({
         {/* Прогресс */}
         <div className={styles.progressSection}>
           <div className={styles.progressInfo}>
-            <h3 className={styles.progressTitle}>Прогресс заполнения</h3>
+            <h3 className={styles.progressTitle}>
+              {t(TranslationKeys.InlineActionBarProgressTitle)}
+            </h3>
             <div className={styles.progressDetails}>
               <span className={styles.percentage}>{progress.percentage}%</span>
               <span className={styles.details}>
-                {progress.filled} из {progress.total} полей заполнено
+                {progress.filled} {t(TranslationKeys.InlineActionBarOf)}{' '}
+                {progress.total}{' '}
+                {t(TranslationKeys.InlineActionBarFieldsFilled)}
               </span>
             </div>
           </div>
@@ -59,13 +70,13 @@ export const InlineActionBar: React.FC<InlineActionBarProps> = ({
 
           {!isComplete && (
             <div className={styles.statusMessage}>
-              Заполните все обязательные поля для создания продукта
+              {t(TranslationKeys.InlineActionBarFillRequiredFields)}
             </div>
           )}
 
           {isComplete && (
             <div className={styles.completeMessage}>
-              ✅ Все поля заполнены! Можно создавать продукт
+              {t(TranslationKeys.InlineActionBarAllFieldsFilled)}
             </div>
           )}
         </div>
@@ -78,7 +89,7 @@ export const InlineActionBar: React.FC<InlineActionBarProps> = ({
             className={styles.resetButton}
             disabled={isLoading}
           >
-            {resetText}
+            {defaultResetText}
           </button>
 
           <button
@@ -92,12 +103,12 @@ export const InlineActionBar: React.FC<InlineActionBarProps> = ({
             {isLoading ? (
               <>
                 <span className={styles.spinner} />
-                Создание...
+                {t(TranslationKeys.InlineActionBarCreating)}
               </>
             ) : (
               <>
                 {isComplete ? '✓ ' : ''}
-                {submitText}
+                {defaultSubmitText}
               </>
             )}
           </button>

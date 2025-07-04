@@ -3,9 +3,14 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { ProductDetail } from '@/shared/types/product';
-import { Locale, TranslationType } from '@/shared/config/i18n/types';
+import {
+  Locale,
+  TranslationType,
+  TranslationKeys,
+} from '@/shared/config/i18n/types';
 import { Button } from '@/shared/ui/Button/Button';
 import styles from './ProductDetailPage.module.css';
 
@@ -16,6 +21,7 @@ interface ProductDetailPageProps {
 }
 
 export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
+  const t = useTranslations();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   return (
@@ -48,7 +54,7 @@ export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
                     >
                       <Image
                         src={image.small}
-                        alt={`${product.name} - изображение ${index + 1}`}
+                        alt={`${product.name} - ${t(TranslationKeys.ProductDetailImageAlt)} ${index + 1}`}
                         fill
                         className={styles.thumbImage}
                       />
@@ -60,7 +66,7 @@ export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
           ) : (
             <div className={styles.placeholderContainer}>
               <div className={styles.placeholderText}>
-                Изображение недоступно
+                {t(TranslationKeys.ProductDetailImageUnavailable)}
               </div>
             </div>
           )}
@@ -84,7 +90,9 @@ export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
           {/* Характеристики */}
           <div className={styles.divider}></div>
           <div className={styles.specificationsSection}>
-            <h3 className={styles.sectionTitle}>Технические характеристики</h3>
+            <h3 className={styles.sectionTitle}>
+              {t(TranslationKeys.ProductDetailSpecifications)}
+            </h3>
             {product.specifications && product.specifications.length > 0 ? (
               <div className={styles.specificationsGrid}>
                 {product.specifications.map((spec, index) => (
@@ -97,7 +105,7 @@ export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
             ) : (
               <div className={styles.noSpecifications}>
                 <p className={styles.noSpecText}>
-                  Характеристики данного продукта уточняйте у наших менеджеров
+                  {t(TranslationKeys.ProductDetailNoSpecifications)}
                 </p>
               </div>
             )}
@@ -107,7 +115,7 @@ export function ProductDetailPage({ product, locale }: ProductDetailPageProps) {
           <div className={styles.actionsSection}>
             <a href="+998781500000">
               <Button variant="primary">
-                Позвоните нам что-бы узнать больше
+                {t(TranslationKeys.ProductDetailCallToLearnMore)}
               </Button>
             </a>
           </div>

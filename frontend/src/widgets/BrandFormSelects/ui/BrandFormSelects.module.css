@@ -1,0 +1,200 @@
+/* BrandFormSelects.module.css - Основано на AdminCreateCategory.module.css */
+
+.container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 3rem;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.8rem 2.4rem var(--shadow-content);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.sectionTitle {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+  padding: 0;
+  margin: 0;
+}
+
+.sectionDescription {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  max-width: 60rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
+  gap: 2rem;
+  width: 100%;
+}
+
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  border: 0.1rem solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: all 0.3s ease;
+  justify-content: center;
+}
+
+.fieldContainer:hover {
+  box-shadow: 0 0.4rem 1.2rem var(--shadow-content);
+}
+
+.select,
+.input {
+  width: 100%;
+}
+
+/* ==================== АДАПТИВНОСТЬ ==================== */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem;
+    gap: 2rem;
+    margin: 0 1rem;
+    max-width: none;
+  }
+
+  .sectionTitle {
+    font-size: 2.4rem;
+  }
+
+  .sectionDescription {
+    font-size: 1.4rem;
+  }
+
+  /* Одна колонка на мобильных */
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .fieldContainer {
+    padding: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem;
+    gap: 1.6rem;
+    margin: 0 0.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionDescription {
+    font-size: 1.3rem;
+  }
+
+  .formGrid {
+    gap: 1.6rem;
+  }
+
+  .fieldContainer {
+    padding: 1.2rem;
+  }
+}
+
+/* ==================== АНИМАЦИИ ПОЯВЛЕНИЯ ==================== */
+.container > * {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.container > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.container > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.fieldContainer:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.fieldContainer:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.fieldContainer:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.fieldContainer:nth-child(4) {
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== УЛУЧШЕННЫЕ ПЕРЕХОДЫ ==================== */
+.container * {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* ==================== ГРАДИЕНТЫ И ЭФФЕКТЫ ==================== */
+.container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(227, 30, 36, 0.03) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.container:hover::before {
+  opacity: 1;
+}
+
+/* ==================== ТЕМНАЯ ТЕМА ==================== */
+[data-theme='dark'] .fieldContainer,
+.dark .fieldContainer {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .fieldContainer:hover,
+.dark .fieldContainer:hover {
+  border-color: var(--primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}

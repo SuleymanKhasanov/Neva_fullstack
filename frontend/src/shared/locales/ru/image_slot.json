@@ -1,0 +1,10 @@
+{
+  "formatError": "Поддерживаются только JPEG, PNG и WebP форматы",
+  "sizeError": "Максимальный размер файла 10MB",
+  "imageLabel": "Изображение",
+  "addImageLabel": "Добавить изображение",
+  "setPrimary": "Сделать основным",
+  "setPrimaryImage": "Сделать основным изображением",
+  "deleteImage": "Удалить изображение",
+  "primary": "Основное"
+}

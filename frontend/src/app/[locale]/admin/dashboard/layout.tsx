@@ -1,6 +1,24 @@
 // frontend/src/app/[locale]/admin/dashboard/layout.tsx
 import { ReactNode } from 'react';
-import { AdminDashboard } from '@/widgets/AdminDashboard';
+import dynamic from 'next/dynamic';
+
+// Динамический импорт AdminDashboard для улучшения производительности
+const AdminDashboard = dynamic(
+  () =>
+    import('@/widgets/AdminDashboard').then((mod) => ({
+      default: mod.AdminDashboard,
+    })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p>Загрузка панели администратора...</p>
+        </div>
+      </div>
+    ),
+  }
+);
 import {
   Locale,
   TranslationType,

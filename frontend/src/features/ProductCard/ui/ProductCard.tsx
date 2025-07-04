@@ -1,14 +1,14 @@
 import React, { memo, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import styles from './ProductCard.module.css';
 import { Button } from '@/shared/ui/Button/Button';
-import { TranslationType, TranslationKeys } from '@/shared/config/i18n/types';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 import { ProductListItem } from '@/shared/types/product';
 
 interface ProductCardProps {
   product: ProductListItem;
-  messages: TranslationType;
   locale: string;
   // Админские пропсы (опциональные)
   isAdminMode?: boolean;
@@ -36,13 +36,13 @@ const createSlug = (name: string): string => {
 const ProductCard = memo<ProductCardProps>(
   ({
     product,
-    messages,
     locale,
     isAdminMode = false,
     isDeleteMode = false,
     isDeleting = false,
     onDelete,
   }) => {
+    const t = useTranslations();
     const truncatedDescription = useMemo(
       () => truncateText(product.description, 50),
       [product.description]
@@ -64,22 +64,6 @@ const ProductCard = memo<ProductCardProps>(
       () => `/${locale}/product/${product.id}/${productSlug}`,
       [locale, product.id, productSlug]
     );
-
-    const t = (key: string): string => {
-      const keyPart = key.split('.')[1];
-      const cardMessages = messages?.card;
-
-      if (
-        cardMessages &&
-        typeof cardMessages === 'object' &&
-        keyPart in cardMessages
-      ) {
-        const value = (cardMessages as Record<string, unknown>)[keyPart];
-        return typeof value === 'string' ? value : keyPart;
-      }
-
-      return keyPart;
-    };
 
     // Обработчик удаления
     const handleDeleteClick = (e: React.MouseEvent) => {
@@ -107,7 +91,7 @@ const ProductCard = memo<ProductCardProps>(
             className={styles.deleteButton}
             onClick={handleDeleteClick}
             disabled={isDeleting}
-            aria-label={`Удалить ${product.name}`}
+            aria-label={`${t(TranslationKeys.ProductCardDelete)} ${product.name}`}
           >
             <span className={styles.deleteIcon}>✕</span>
           </button>
@@ -132,7 +116,9 @@ const ProductCard = memo<ProductCardProps>(
               sizes="(max-width: 500px) 100vw, (max-width: 768px) 50vw, (max-width: 1440px) 25vw, 20vw"
             />
           ) : (
-            <div className={styles.placeholder}>Изображение отсутствует</div>
+            <div className={styles.placeholder}>
+              {t(TranslationKeys.ProductCardNoImage)}
+            </div>
           )}
         </div>
         <div className={styles.textBlock}>

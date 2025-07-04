@@ -1,0 +1,63 @@
+/* Копия ProductCreatePage.module.css для консистентности стилей */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  overflow-x: hidden;
+  padding-bottom: 12rem; /* Отступ для фиксированной панели прогресса */
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 1rem;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: var(--muted-foreground);
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0;
+    padding-bottom: 10rem; /* Меньший отступ на мобильных */
+  }
+
+  .title {
+    font-size: 2.4rem;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.3rem;
+  }
+}
+
+/* Темная тема */
+.dark .container {
+  background: var(--background);
+}

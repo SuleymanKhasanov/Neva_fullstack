@@ -2,6 +2,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { TranslationKeys } from '@/shared/config/i18n/types';
 import styles from './SearchableSelect.module.css';
 
 interface Option {
@@ -25,8 +27,8 @@ interface SearchableSelectProps {
 export const SearchableSelect: React.FC<SearchableSelectProps> = ({
   options,
   value,
-  placeholder = 'Выберите...',
-  searchPlaceholder = 'Поиск...',
+  placeholder,
+  searchPlaceholder,
   isLoading = false,
   disabled = false,
   error,
@@ -34,6 +36,12 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
   onSearch,
   className,
 }) => {
+  const t = useTranslations();
+  const finalPlaceholder =
+    placeholder || t(TranslationKeys.SearchSelectDefaultPlaceholder);
+  const finalSearchPlaceholder =
+    searchPlaceholder || t(TranslationKeys.SearchSelectSearchPlaceholder);
+
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredOptions, setFilteredOptions] = useState(options);
@@ -118,7 +126,9 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
         }}
       >
         <span className={styles.value}>
-          {isLoading ? 'Загрузка...' : selectedOption?.label || placeholder}
+          {isLoading
+            ? 'Загрузка...'
+            : selectedOption?.label || finalPlaceholder}
         </span>
 
         <div className={styles.actions}>
@@ -149,7 +159,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={searchPlaceholder}
+              placeholder={finalSearchPlaceholder}
               className={styles.searchInput}
             />
           </div>

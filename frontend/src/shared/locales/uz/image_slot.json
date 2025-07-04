@@ -1,0 +1,10 @@
+{
+  "formatError": "Faqat JPEG, PNG va WebP formatlar qo'llab-quvvatlanadi",
+  "sizeError": "Maksimal fayl hajmi 10MB",
+  "imageLabel": "Rasm",
+  "addImageLabel": "Rasm qo'shish",
+  "setPrimary": "Asosiy qilib belgilash",
+  "setPrimaryImage": "Asosiy rasm qilib belgilash",
+  "deleteImage": "Rasmni o'chirish",
+  "primary": "Asosiy"
+}

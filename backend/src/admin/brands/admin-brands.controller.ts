@@ -17,6 +17,7 @@ import { Auth } from '../../auth/decorators/auth.decorator';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 import { AdminBrandsService } from './admin-brands.service';
+import { CreateBrandEnhancedDto } from '../dto/create-brand-enhanced.dto';
 
 interface CreateBrandDto {
   translations: { locale: string; name: string }[];
@@ -128,6 +129,24 @@ export class AdminBrandsController {
     this.logger.log(`Admin ${user.username} updating brand ${id}`);
 
     return this.adminBrandsService.updateBrand(id, updateBrandDto);
+  }
+
+  @Post('create-with-categories')
+  @ApiOperation({ summary: 'Создать бренд с категориями' })
+  async createBrandWithCategories(
+    @Body() dto: CreateBrandEnhancedDto,
+    @CurrentUser() user: any
+  ) {
+    this.logger.log(
+      `Admin ${user.username} creating brand with categories. Section: ${dto.section}, Categories: ${dto.categoryIds.length}`
+    );
+
+    const result = await this.adminBrandsService.createBrandWithCategories(dto);
+
+    return {
+      success: true,
+      data: result,
+    };
   }
 
   @Delete(':id')
