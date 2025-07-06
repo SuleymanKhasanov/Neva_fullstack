@@ -4,14 +4,14 @@
   justify-content: center;
   background-color: var(--secondary);
   border: 0.1rem solid var(--border);
-  padding: 1rem; /* 10px */
-  border-radius: 1.5rem; /* 15px */
-  width: 4.1rem; /* 40px (иконка) + 2 * 10px (padding) */
-  height: 4.1rem; /* Делаем кнопку квадратной */
+  padding: 1rem;
+  border-radius: 1.5rem;
+  width: 4.1rem;
+  height: 4.1rem;
   cursor: pointer;
 }
 
 .switcher > * {
-  font-size: 4rem; /* Размер иконки 40px */
+  font-size: 4rem;
   color: var(--foreground);
 }

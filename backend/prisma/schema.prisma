@@ -1,6 +1,6 @@
+// backend/prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma/client"
 }
 
 datasource db {
@@ -8,41 +8,329 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Brand {
-  id          Int       @id @default(autoincrement())
-  categoryId  Int
-  name        String
-  locale      String
-  section     Section
-  category    Category  @relation(fields: [categoryId], references: [id])
-  products    Product[] @relation("ProductToBrand")
-  @@unique([name, locale])
-}
-
-model Category {
-  id          Int       @id @default(autoincrement())
-  locale      String
-  name        String
-  section     Section
-  brands      Brand[]   @relation
-  products    Product[] @relation("ProductToCategory")
-}
-
-model Product {
-  id          Int       @id @default(autoincrement())
-  brandId     Int?
-  categoryId  Int
-  locale      String
-  name        String
-  image       String?
-  fullImage   String?  
-  description String
-  section     Section
-  brand       Brand?    @relation("ProductToBrand", fields: [brandId], references: [id])
-  category    Category  @relation("ProductToCategory", fields: [categoryId], references: [id])
-}
-
 enum Section {
   NEVA
   X_SOLUTION
+}
+
+enum Locale {
+  ru
+  en
+  kr
+  uz
+}
+
+// ==================== АДМИНСКИЕ ТАБЛИЦЫ (ПРИВАТНЫЕ) ====================
+
+// Админская таблица брендов
+model AdminBrand {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  translations     AdminBrandTranslation[]
+  categoryBrands   AdminCategoryBrand[]
+
+  @@map("admin_brands")
+}
+
+// Переводы админских брендов
+model AdminBrandTranslation {
+  id        Int      @id @default(autoincrement())
+  brandId   Int      @map("brand_id")
+  locale    Locale
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  brand AdminBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([brandId, locale])
+  @@map("admin_brand_translations")
+}
+
+// Админская таблица категорий
+model AdminCategory {
+  id        Int      @id @default(autoincrement())
+  section   Section
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  translations       AdminCategoryTranslation[]
+  subcategories      AdminSubcategory[]
+  categoryBrands     AdminCategoryBrand[]
+
+  @@map("admin_categories")
+}
+
+// Переводы админских категорий
+model AdminCategoryTranslation {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  locale     Locale
+  name       String   @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  category AdminCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+  @@map("admin_category_translations")
+}
+
+// Админская таблица субкатегорий
+model AdminSubcategory {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  category     AdminCategory                  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  translations AdminSubcategoryTranslation[]
+
+  @@map("admin_subcategories")
+}
+
+// Переводы админских субкатегорий
+model AdminSubcategoryTranslation {
+  id            Int      @id @default(autoincrement())
+  subcategoryId Int      @map("subcategory_id")
+  locale        Locale
+  name          String   @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  subcategory AdminSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+
+  @@unique([subcategoryId, locale])
+  @@map("admin_subcategory_translations")
+}
+
+// Many-to-many связь админских категорий и брендов
+model AdminCategoryBrand {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  brandId    Int      @map("brand_id")
+  section    Section
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Связи
+  category AdminCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  brand    AdminBrand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, brandId, section])
+  @@map("admin_category_brands")
+}
+
+// ==================== ПУБЛИЧНЫЕ ТАБЛИЦЫ ====================
+
+// Основная таблица брендов
+model Brand {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  translations   BrandTranslation[]
+  products       Product[]
+  categoryBrands CategoryBrand[]
+
+  @@map("brands")
+}
+
+// Переводы брендов
+model BrandTranslation {
+  id        Int      @id @default(autoincrement())
+  brandId   Int      @map("brand_id")
+  locale    Locale
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  brand Brand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([brandId, locale])
+  @@map("brand_translations")
+}
+
+// Основная таблица категорий
+model Category {
+  id        Int      @id @default(autoincrement())
+  section   Section
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  translations       CategoryTranslation[]
+  subcategories      Subcategory[]
+  products           Product[]
+  categoryBrands     CategoryBrand[]
+
+  @@map("categories")
+}
+
+// Переводы категорий
+model CategoryTranslation {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  locale     Locale
+  name       String   @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+  @@map("category_translations")
+}
+
+// 🆕 Основная таблица субкатегорий
+model Subcategory {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  category     Category                  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  translations SubcategoryTranslation[]
+  products     Product[]
+
+  @@map("subcategories")
+}
+
+// 🆕 Переводы субкатегорий
+model SubcategoryTranslation {
+  id            Int      @id @default(autoincrement())
+  subcategoryId Int      @map("subcategory_id")
+  locale        Locale
+  name          String   @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  subcategory Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+
+  @@unique([subcategoryId, locale])
+  @@map("subcategory_translations")
+}
+
+// Many-to-many связь категорий и брендов
+model CategoryBrand {
+  id         Int      @id @default(autoincrement())
+  categoryId Int      @map("category_id")
+  brandId    Int      @map("brand_id")
+  section    Section
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Связи
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  brand    Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, brandId, section])
+  @@map("category_brands")
+}
+
+// Основная таблица продуктов
+model Product {
+  id            Int      @id @default(autoincrement())
+  brandId       Int?     @map("brand_id")
+  categoryId    Int      @map("category_id")
+  subcategoryId Int?     @map("subcategory_id") // 🆕 Опциональная субкатегория
+  section       Section
+  slug          String?  @db.VarChar(255)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  brand           Brand?                   @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  category        Category                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategory     Subcategory?             @relation(fields: [subcategoryId], references: [id], onDelete: SetNull) // 🆕
+  translations    ProductTranslation[]
+  images          ProductImage[]
+  specifications  ProductSpecification[]
+
+  @@map("products")
+}
+
+// Переводы продуктов
+model ProductTranslation {
+  id                   Int      @id @default(autoincrement())
+  productId            Int      @map("product_id")
+  locale               Locale
+  name                 String   @db.VarChar(500)
+  description          String?  @db.Text
+  marketingDescription String?  @map("marketing_description") @db.Text
+  metaTitle            String?  @map("meta_title") @db.VarChar(255)
+  metaDescription      String?  @map("meta_description") @db.VarChar(255)
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, locale])
+  @@map("product_translations")
+}
+
+// Изображения продуктов
+model ProductImage {
+  id               Int      @id @default(autoincrement())
+  productId        Int      @map("product_id")
+  originalFilename String   @map("original_filename") @db.VarChar(255)
+  imageSmall       String   @map("image_small") @db.VarChar(255)
+  imageLarge       String   @map("image_large") @db.VarChar(255)
+  altText          String?  @map("alt_text") @db.VarChar(255)
+  sortOrder        Int      @default(0) @map("sort_order")
+  isPrimary        Boolean  @default(false) @map("is_primary")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// Характеристики продуктов
+model ProductSpecification {
+  id        Int      @id @default(autoincrement())
+  productId Int      @map("product_id")
+  specKey   String   @map("spec_key") @db.VarChar(255)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  product      Product                           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  translations ProductSpecificationTranslation[]
+
+  @@unique([productId, specKey])
+  @@map("product_specifications")
+}
+
+// Переводы характеристик
+model ProductSpecificationTranslation {
+  id              Int      @id @default(autoincrement())
+  specificationId Int      @map("specification_id")
+  locale          Locale
+  name            String   @db.VarChar(255)
+  value           String   @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Связи
+  specification ProductSpecification @relation(fields: [specificationId], references: [id], onDelete: Cascade)
+
+  @@unique([specificationId, locale])
+  @@map("product_specification_translations")
 }

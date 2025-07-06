@@ -1,0 +1,28 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Manage products, categories and system",
+  "stats": {
+    "products": {
+      "title": "Products",
+      "description": "Total number of products in catalog"
+    },
+    "categories": {
+      "title": "Categories",
+      "description": "Number of main categories"
+    },
+    "subcategories": {
+      "title": "Subcategories",
+      "description": "Number of subcategories in all sections"
+    },
+    "brands": {
+      "title": "Brands",
+      "description": "Total number of brands in system"
+    }
+  },
+  "loading": "Loading...",
+  "error": {
+    "title": "Loading Error",
+    "description": "Failed to load statistics",
+    "demo": "Demo data shown"
+  }
+}

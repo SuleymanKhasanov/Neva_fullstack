@@ -1,0 +1,11 @@
+{
+  "save": "Saqlash",
+  "reset": "Qayta tiklash",
+  "progressTitle": "To'ldirish jarayoni",
+  "fieldsFilledText": "maydonlar to'ldirildi",
+  "fillRequiredFields": "Mahsulot yaratish uchun barcha majburiy maydonlarni to'ldiring",
+  "allFieldsFilled": "Barcha maydonlar to'ldirildi! Mahsulot yaratishga tayyor",
+  "creating": "Yaratilmoqda...",
+  "submit": "Yuborish",
+  "of": "dan"
+}

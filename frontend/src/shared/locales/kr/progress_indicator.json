@@ -1,0 +1,8 @@
+{
+  "title": "진행률",
+  "completed": "완료됨",
+  "createProduct": "제품 생성",
+  "reset": "재설정",
+  "resetMessage": "필드가 성공적으로 재설정되었습니다!",
+  "successMessage": "제품이 성공적으로 생성되었습니다!"
+}

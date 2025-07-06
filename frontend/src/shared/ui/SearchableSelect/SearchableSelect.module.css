@@ -1,0 +1,225 @@
+/* frontend/src/shared/ui/SearchableSelect/SearchableSelect.module.css */
+
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.6rem;
+  background: var(--content-box);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  outline: none;
+}
+
+.trigger:hover:not(.disabled) {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+}
+
+.trigger:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+}
+
+.trigger.error {
+  border-color: #dc2626;
+}
+
+.trigger.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--secondary);
+}
+
+.value {
+  flex: 1;
+  text-align: left;
+  color: var(--foreground);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: var(--secondary);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.clearButton:hover {
+  background: var(--border);
+  color: var(--foreground);
+}
+
+.arrow {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--content-box);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+  max-height: 32rem;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.searchContainer {
+  padding: 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  background: var(--background);
+  color: var(--foreground);
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.searchInput::placeholder {
+  color: var(--text-secondary);
+}
+
+.optionsList {
+  max-height: 24rem;
+  overflow-y: auto;
+  padding: 0.4rem;
+}
+
+.option {
+  width: 100%;
+  display: block;
+  padding: 1rem 1.2rem;
+  background: transparent;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  color: var(--foreground);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  outline: none;
+  user-select: none;
+}
+
+.option:hover {
+  background: var(--secondary);
+}
+
+.option.selected {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.option.selected:hover {
+  background: var(--primary);
+}
+
+.noOptions {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+}
+
+.errorText {
+  margin-top: 0.6rem;
+  font-size: 1.2rem;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Кастомный скроллбар */
+.optionsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.optionsList::-webkit-scrollbar-track {
+  background: var(--secondary);
+  border-radius: 3px;
+}
+
+.optionsList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.optionsList::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Темная тема */
+.dark .dropdown {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .trigger {
+    padding: 1rem 1.4rem;
+  }
+
+  .dropdown {
+    max-height: 24rem;
+  }
+
+  .optionsList {
+    max-height: 18rem;
+  }
+}

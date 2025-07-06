@@ -1,0 +1,47 @@
+{
+  "title": "브랜드 생성",
+  "subtitle": "새 브랜드를 만들고 카테고리에 연결하세요",
+  "form": {
+    "basic_info": "기본 정보",
+    "description": "섹션, 카테고리를 선택하고 브랜드 이름을 입력하세요. 하위 카테고리는 선택사항입니다.",
+    "section_label": "섹션 *",
+    "section_placeholder": "섹션 선택",
+    "category_label": "카테고리 *",
+    "category_placeholder": "카테고리 선택",
+    "category_placeholder_loading": "카테고리 로딩 중...",
+    "category_placeholder_disabled": "먼저 섹션을 선택하세요",
+    "subcategory_label": "하위 카테고리 (선택사항)",
+    "subcategory_placeholder": "하위 카테고리 선택 (선택사항)",
+    "subcategory_placeholder_loading": "하위 카테고리 로딩 중...",
+    "subcategory_placeholder_disabled": "먼저 카테고리를 선택하세요",
+    "brand_name_label": "브랜드 이름 *",
+    "brand_name_placeholder": "브랜드 이름 입력"
+  },
+  "progress": {
+    "title": "양식 완성도",
+    "required_fields": "필수 필드",
+    "optional_fields": "선택 필드"
+  },
+  "buttons": {
+    "create": "브랜드 생성",
+    "creating": "브랜드 생성 중...",
+    "reset": "재설정"
+  },
+  "messages": {
+    "success": "브랜드가 성공적으로 생성되었습니다!",
+    "form_reset": "양식 재설정됨",
+    "error_section": "섹션을 선택하세요 (NEVA 또는 X-Solution)",
+    "error_category": "카테고리를 선택하세요",
+    "error_brand_name": "브랜드 이름을 입력하세요 (최소 2자)",
+    "error_network": "서버 연결 오류",
+    "error_auth": "세션이 만료되었습니다. 다시 로그인하세요."
+  },
+  "authTokenNotFound": "인증 토큰을 찾을 수 없습니다",
+  "createError": "브랜드 생성 오류",
+  "createSuccess": "브랜드가 성공적으로 생성되었습니다!",
+  "formReset": "양식 재설정됨",
+  "submitButton": "브랜드 생성",
+  "resetButton": "재설정",
+  "progressTitle": "양식 완성도",
+  "creating": "브랜드 생성 중..."
+}

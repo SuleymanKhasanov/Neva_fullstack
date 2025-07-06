@@ -1,0 +1,24 @@
+/* frontend/src/widgets/AdminDashboard/ui/AdminDashboard.module.css */
+.dashboard {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.mainArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.mainArea.expanded {
+  margin-left: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .mainArea {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "title": "Create Product",
+  "subtitle": "Fill in all required fields to create a new product",
+  "sections": {
+    "basicInfo": {
+      "title": "Basic Information",
+      "description": "Select section, category, subcategory, brand, and enter the product model name"
+    },
+    "images": {
+      "title": "Images",
+      "description": "Upload images and photos of the product"
+    },
+    "details": {
+      "title": "Description and Specifications",
+      "description": "Add detailed description and technical specifications"
+    }
+  },
+  "fields": {
+    "section": {
+      "label": "Section *",
+      "placeholder": "Select section",
+      "required": "Please select a section"
+    },
+    "productName": {
+      "label": "Enter model name *",
+      "labelRu": "Product Name (Russian) *",
+      "labelEn": "Product Name (English)",
+      "labelUz": "Product Name (Uzbek)",
+      "labelKr": "Product Name (Korean)",
+      "placeholder": "Enter product name",
+      "required": "Please enter the product name"
+    },
+    "category": {
+      "label": "Category *",
+      "placeholder": "Select category",
+      "loading": "Loading categories...",
+      "selectSectionFirst": "Please select a section first",
+      "required": "Please select a category"
+    },
+    "subcategory": {
+      "label": "Subcategory",
+      "placeholder": "Select subcategory",
+      "loading": "Loading subcategories...",
+      "selectCategoryFirst": "Please select a category first",
+      "notAvailable": "No subcategories available"
+    },
+    "brand": {
+      "label": "Brand",
+      "placeholder": "Select brand",
+      "loading": "Loading brands...",
+      "selectSubcategoryFirst": "Please select a subcategory first",
+      "notAvailable": "No brands available"
+    },
+    "productDescription": {
+      "label_ru": "Product Description (Russian) *",
+      "label_en": "Product Description (English) *",
+      "label_uz": "Product Description (Uzbek) *",
+      "label_kr": "Product Description (Korean) *",
+      "placeholder": "Enter product description",
+      "specifications": {
+        "label": "Technical Specifications",
+        "placeholder": "Enter technical specifications"
+      }
+    }
+  },
+  "sections_names": {
+    "neva": "Neva",
+    "x_solution": "X-Solution"
+  },
+  "loading": {
+    "categories": "categories",
+    "subcategories": "subcategories",
+    "brands": "brands"
+  }
+}

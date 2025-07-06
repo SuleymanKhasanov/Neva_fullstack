@@ -1,0 +1,8 @@
+{
+  "title": "Progress",
+  "completed": "Completed",
+  "createProduct": "Create Product",
+  "reset": "Reset",
+  "resetMessage": "Fields successfully reset!",
+  "successMessage": "Product created successfully!"
+}

@@ -1,0 +1,69 @@
+/* frontend/src/pages/ProductCreatePage/ui/ProductCreatePage.module.css */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  overflow-x: hidden;
+  padding-bottom: 12rem; /* Отступ для фиксированной панели прогресса */
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 1rem;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: var(--muted-foreground);
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0;
+  }
+}
+
+/* Темная тема */
+.dark .container {
+  background: var(--background);
+}
+
+/* ==================== ОТЛАДОЧНАЯ ИНФОРМАЦИЯ ==================== */
+
+.debugInfo {
+  margin-top: 2rem;
+  padding: 1.6rem;
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
+  border-radius: var(--radius);
+}
+
+.debugData {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 1.2rem;
+  color: var(--foreground);
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .container {
+    padding-bottom: 10rem; /* Меньший отступ на мобильных */
+  }
+}

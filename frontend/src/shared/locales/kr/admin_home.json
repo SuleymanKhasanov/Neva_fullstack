@@ -1,0 +1,28 @@
+{
+  "title": "대시보드",
+  "subtitle": "제품, 카테고리 및 시스템 관리",
+  "stats": {
+    "products": {
+      "title": "제품",
+      "description": "카탈로그의 총 제품 수"
+    },
+    "categories": {
+      "title": "카테고리",
+      "description": "주요 카테고리 수"
+    },
+    "subcategories": {
+      "title": "하위 카테고리",
+      "description": "모든 섹션의 하위 카테고리 수"
+    },
+    "brands": {
+      "title": "브랜드",
+      "description": "시스템의 총 브랜드 수"
+    }
+  },
+  "loading": "로딩 중...",
+  "error": {
+    "title": "로딩 오류",
+    "description": "통계를 불러오는데 실패했습니다",
+    "demo": "데모 데이터가 표시됩니다"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Products List",
+  "totalProducts": "Total products",
+  "loadedProducts": "products loaded",
+  "deleteModeActive": "Delete Mode Active",
+  "loadMore": "Load More",
+  "loading": "Loading...",
+  "authCheck": "Checking authorization...",
+  "confirmDelete": {
+    "title": "Confirm Delete",
+    "message": "Are you sure you want to delete this product?",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  },
+  "productDeleted": "Product successfully deleted",
+  "hint": {
+    "title": "Delete Mode",
+    "description": "Hold Shift and click on products to delete them"
+  },
+  "modeInfo": "Press Shift to activate delete mode"
+}

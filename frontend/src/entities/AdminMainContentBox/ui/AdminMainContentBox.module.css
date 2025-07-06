@@ -1,0 +1,93 @@
+/* frontend/src/entities/AdminMainContentBox/ui/AdminMainContentBox.module.css */
+.mainContent {
+  width: 100%;
+  height: calc(100vh - 2rem);
+  background-color: var(--content-box);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px var(--shadow-content);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Стили для закрепленного header - первый дочерний элемент */
+.contentWrapper > :first-child {
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+/* Стили для прокручиваемого контента - все элементы кроме первого */
+.contentWrapper > :nth-child(n + 2) {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .mainContent {
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .contentWrapper > :nth-child(n + 2) {
+    padding: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentWrapper > :nth-child(n + 2) {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentWrapper > :nth-child(n + 2) {
+    padding: 1.5rem;
+  }
+}
+
+/* Темная тема */
+.dark .mainContent {
+  background-color: var(--content-box);
+  border-color: var(--border);
+  box-shadow: 0 4px 16px var(--shadow-content);
+}
+
+.dark .contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.dark .contentWrapper > :nth-child(n + 2)::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}

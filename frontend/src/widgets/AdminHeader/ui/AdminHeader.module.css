@@ -1,0 +1,102 @@
+/* frontend/src/widgets/AdminHeader/ui/AdminHeader.module.css */
+.header {
+  display: flex;
+  align-items: center;
+  background-color: var(--content-box);
+  z-index: 10;
+  padding: 1rem;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: calc(100% - 1rem);
+  margin: 0 auto;
+  padding: 0.5rem;
+  position: relative;
+}
+
+.headerContent::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem; /* Отступ снизу */
+  left: 0;
+  right: 0;
+  height: 0.08rem;
+  background-color: var(--border);
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary);
+  border: 0.1rem solid var(--border);
+  padding: 1rem;
+  border-radius: 1.5rem;
+  width: 4.1rem;
+  height: 4.1rem;
+  cursor: pointer;
+}
+
+.menuButton > * {
+  font-size: 4rem;
+  color: var(--foreground);
+}
+
+.menuButton:active {
+  transform: scale(0.95);
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1.5rem;
+    height: 5.5rem;
+  }
+
+  .rightSection {
+    gap: 1rem;
+  }
+
+  .logoutText {
+    font-weight: bold;
+  }
+
+  .logoutButton {
+    padding: 2rem;
+    min-width: auto;
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .rightSection {
+    gap: 0.8rem;
+  }
+}

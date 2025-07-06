@@ -1,0 +1,21 @@
+{
+  "title": "제품 목록",
+  "totalProducts": "총 제품 수",
+  "loadedProducts": "제품이 로드됨",
+  "deleteModeActive": "삭제 모드 활성화",
+  "loadMore": "더 보기",
+  "loading": "로딩 중...",
+  "authCheck": "인증 확인 중...",
+  "confirmDelete": {
+    "title": "삭제 확인",
+    "message": "이 제품을 삭제하시겠습니까?",
+    "cancel": "취소",
+    "confirm": "삭제"
+  },
+  "productDeleted": "제품이 성공적으로 삭제되었습니다",
+  "hint": {
+    "title": "삭제 모드",
+    "description": "Shift를 누른 상태로 제품을 클릭하여 삭제하세요"
+  },
+  "modeInfo": "삭제 모드를 활성화하려면 Shift를 누르세요"
+}

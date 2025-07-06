@@ -1,0 +1,349 @@
+/* CustomSelect.module.css - Без использования :global() */
+
+.container {
+  position: relative;
+  width: 100%;
+}
+
+/* ==================== ЛЕЙБЛ ==================== */
+.label {
+  display: block;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+}
+
+/* ==================== ТРИГГЕР ==================== */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  padding: 0.3rem 1rem;
+  background-color: var(--content-box);
+  border: 0.1rem solid var(--border);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.5rem;
+}
+
+.trigger.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--secondary);
+}
+
+/* ==================== ОТОБРАЖЕНИЕ ВЫБРАННОГО ЗНАЧЕНИЯ ==================== */
+.selectedText {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.selectedValue {
+  font-weight: 500;
+  color: var(--foreground);
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  background-color: var(--secondary);
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius);
+  border: 0.1rem solid var(--border);
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  animation: selectedValueAppear 0.3s ease-out;
+}
+
+.placeholder {
+  color: var(--muted-foreground);
+  font-weight: 400;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.disabled .selectedValue,
+.disabled .placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.7;
+}
+
+/* ==================== СТРЕЛКА ==================== */
+.arrow {
+  width: 2rem;
+  height: 2rem;
+  color: var(--foreground);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+/* ==================== DROPDOWN ==================== */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background-color: var(--content-box);
+  border: 0.1rem solid var(--border);
+  border-radius: 1rem;
+  box-shadow:
+    0 1rem 4rem rgba(0, 0, 0, 0.12),
+    0 0.4rem 1.6rem rgba(0, 0, 0, 0.08);
+  max-height: 32rem;
+  width: 100%;
+  overflow: hidden;
+  animation: dropdownSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==================== ПОИСК ==================== */
+.searchContainer {
+  padding: 1.2rem 1rem;
+  border-bottom: 0.1rem solid var(--border);
+  display: flex;
+  justify-content: center;
+}
+
+.searchInput {
+  width: 90%;
+  padding: 1.2rem;
+  border: 0.1rem solid var(--border);
+  border-radius: 0.8rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 1.4rem;
+  font-weight: 400;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==================== СПИСОК ОПЦИЙ ==================== */
+.optionsList {
+  max-height: 24rem;
+  overflow-y: auto;
+  padding: 0.8rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.optionsList::-webkit-scrollbar {
+  width: 0.6rem;
+}
+
+.optionsList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.optionsList::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 0.3rem;
+}
+
+.optionsList::-webkit-scrollbar-thumb:hover {
+  background-color: var(--muted-foreground);
+}
+
+/* ==================== ОПЦИЯ ==================== */
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--foreground);
+  user-select: none;
+  letter-spacing: -0.01em;
+  border-radius: 0.8rem;
+  margin-bottom: 0.2rem;
+  animation: optionAppear 0.2s ease-out backwards;
+}
+
+.option:hover {
+  background-color: var(--secondary);
+}
+
+.option.selected {
+  background-color: var(--secondary);
+  color: var(--foreground);
+  font-weight: 600;
+  padding-left: 1.3rem;
+}
+
+/* ==================== НЕТ РЕЗУЛЬТАТОВ ==================== */
+.noResults {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--foreground);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ==================== АНИМАЦИИ ==================== */
+@keyframes selectedValueAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes optionAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.option:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.option:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.option:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.option:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.option:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+/* ==================== АДАПТИВНОСТЬ ==================== */
+@media (max-width: 768px) {
+  .trigger {
+    padding: 1.2rem 1.4rem;
+    min-height: 4.8rem;
+    font-size: 1.4rem;
+  }
+
+  .selectedValue {
+    font-size: 1.4rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .placeholder {
+    font-size: 1.4rem;
+  }
+
+  .searchInput {
+    font-size: 1.4rem;
+    padding: 1rem;
+  }
+
+  .option {
+    padding: 1rem 1.4rem;
+    font-size: 1.4rem;
+  }
+
+  .optionsList {
+    max-height: 20rem;
+  }
+
+  .arrow {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trigger {
+    padding: 1rem 1.2rem;
+    min-height: 4.4rem;
+    font-size: 1.3rem;
+  }
+
+  .selectedValue {
+    font-size: 1.3rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .placeholder {
+    font-size: 1.3rem;
+  }
+
+  .searchInput {
+    font-size: 1.3rem;
+    padding: 0.8rem;
+  }
+
+  .option {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.3rem;
+  }
+
+  .optionsList {
+    max-height: 18rem;
+  }
+
+  .checkMark {
+    font-size: 1.4rem;
+  }
+}
+
+/* ==================== УЛУЧШЕННЫЕ ПЕРЕХОДЫ ==================== */
+.container * {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* ==================== СОСТОЯНИЯ ЗАГРУЗКИ ==================== */
+.trigger.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.trigger.loading .arrow {
+  animation: loadingRotate 1s linear infinite;
+}
+
+@keyframes loadingRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
